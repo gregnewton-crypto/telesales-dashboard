@@ -663,9 +663,9 @@ async function fetchAllRecords(token, tableName, fields) {
   let page = 0;
 
   do {
-    let url = `${API_BASE}/${BASE_ID}/${tableName}?`;
-    fields.forEach(f => { url += `fields[]=${encodeURIComponent(f)}&`; });
-    url += 'pageSize=100';
+    // Don't filter by field names - Airtable rejects if any emoji encoding
+    // doesn't match exactly. Fetch all fields instead (safe for our table sizes).
+    let url = `${API_BASE}/${BASE_ID}/${tableName}?pageSize=100`;
     if (offset) url += `&offset=${encodeURIComponent(offset)}`;
 
     page++;
