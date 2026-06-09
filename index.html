@@ -572,7 +572,7 @@ function gs(record, fieldName) {
 function weekToNum(weekStr) {
   if (!weekStr) return 0;
   const s = typeof weekStr === 'string' ? weekStr : String(weekStr);
-  const m = s.match(/W(\d+)/i);
+  const m = s.match(/W?(\d+)/i);
   return m ? parseInt(m[1], 10) : 0;
 }
 
