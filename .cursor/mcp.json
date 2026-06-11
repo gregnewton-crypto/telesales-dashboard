@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "airtable": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "airtable-mcp-server"],
+      "env": {
+        "AIRTABLE_API_KEY": "${env:AIRTABLE_API_KEY}"
+      }
+    }
+  }
+}
