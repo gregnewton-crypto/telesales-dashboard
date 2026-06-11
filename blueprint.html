@@ -4,59 +4,33 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Base Splitting — Visual Blueprint</title>
-<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
 <style>
   :root{
-    --bg:#FBF7F0;        /* soft off-white, easier than pure white */
-    --card:#FFFFFF;
-    --ink:#2E2A26;       /* dark warm grey, softer than black */
-    --muted:#6B655E;
-    --good:#2E8B57;
-    --goodbg:#E6F4EC;
-    --bad:#C0492F;
-    --badbg:#FBEAE5;
-    --warn:#B7791F;
-    --warnbg:#FBF1DC;
-    --blue:#10507C;
-    --bluebg:#E4EEF5;
-    --line:#E3DACB;
-    --gold:#FFD54D;
+    --bg:#FBF7F0; --card:#FFFFFF; --ink:#2E2A26; --muted:#6B655E;
+    --good:#2E8B57; --goodbg:#E6F4EC; --goodbd:#BFE0CC;
+    --bad:#C0492F;  --badbg:#FBEAE5; --badbd:#EAC4B9;
+    --warn:#B7791F; --warnbg:#FBF1DC; --warnbd:#ECD9A8;
+    --blue:#10507C; --bluebg:#E4EEF5; --bluebd:#C9DEEC;
+    --grey:#6B655E; --greybg:#EFEAE2; --greybd:#D9D0C2;
+    --line:#E3DACB; --gold:#FFD54D;
   }
   *{box-sizing:border-box}
   body{
-    margin:0;
-    background:var(--bg);
-    color:var(--ink);
+    margin:0;background:var(--bg);color:var(--ink);
     font-family:"Segoe UI",Verdana,Tahoma,Arial,sans-serif;
-    font-size:19px;
-    line-height:1.7;
-    letter-spacing:.2px;
+    font-size:19px;line-height:1.7;letter-spacing:.2px;
   }
   .wrap{max-width:1000px;margin:0 auto;padding:24px 18px 80px}
-  header.top{
-    text-align:center;padding:26px 18px;background:var(--blue);color:#fff;
-    border-radius:18px;margin-bottom:22px;
-  }
+  header.top{text-align:center;padding:26px 18px;background:var(--blue);color:#fff;border-radius:18px;margin-bottom:22px}
   header.top h1{margin:0 0 6px;font-size:30px}
   header.top p{margin:0;opacity:.92;font-size:18px}
 
-  section{
-    background:var(--card);border:1px solid var(--line);border-radius:18px;
-    padding:22px 22px 26px;margin:18px 0;box-shadow:0 2px 10px rgba(0,0,0,.04);
-  }
+  section{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px 22px 26px;margin:18px 0;box-shadow:0 2px 10px rgba(0,0,0,.04)}
   .sechead{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:10px}
-  .secnum{
-    background:var(--gold);color:#3a2b00;font-weight:700;border-radius:50%;
-    width:42px;height:42px;display:flex;align-items:center;justify-content:center;
-    font-size:20px;flex:0 0 auto;
-  }
+  .secnum{background:var(--gold);color:#3a2b00;font-weight:700;border-radius:50%;width:42px;height:42px;display:flex;align-items:center;justify-content:center;font-size:20px;flex:0 0 auto}
   h2{font-size:24px;margin:0;flex:1 1 240px}
 
-  .listen{
-    border:none;background:var(--blue);color:#fff;border-radius:999px;
-    padding:10px 18px;font-size:16px;font-weight:600;cursor:pointer;
-    display:inline-flex;align-items:center;gap:8px;
-  }
+  .listen{border:none;background:var(--blue);color:#fff;border-radius:999px;padding:10px 18px;font-size:16px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:8px}
   .listen:hover{filter:brightness(1.08)}
   .listen.stop{background:var(--bad)}
 
@@ -64,28 +38,39 @@
   @media(max-width:760px){.cards{grid-template-columns:1fr}}
   .card{border-radius:14px;padding:18px;border:2px solid var(--line)}
   .card h3{margin:0 0 10px;font-size:20px;display:flex;align-items:center;gap:8px}
-  .card.no{background:var(--badbg);border-color:#EAC4B9}
-  .card.yes{background:var(--goodbg);border-color:#BFE0CC}
+  .card.no{background:var(--badbg);border-color:var(--badbd)}
+  .card.yes{background:var(--goodbg);border-color:var(--goodbd)}
   .verdict{font-weight:700;margin-top:12px;font-size:17px}
-  .verdict.no{color:var(--bad)}
-  .verdict.yes{color:var(--good)}
-
+  .verdict.no{color:var(--bad)} .verdict.yes{color:var(--good)}
   ul.clean{list-style:none;padding:0;margin:8px 0 0}
   ul.clean li{display:flex;gap:10px;align-items:flex-start;margin:8px 0}
   .ic{flex:0 0 auto;font-size:18px;line-height:1.5}
-
-  .mermaid{background:#fff;border-radius:12px;padding:10px;margin-top:8px;text-align:center}
-
-  .principles{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
-  @media(max-width:760px){.principles{grid-template-columns:1fr}}
-  .pill{
-    background:var(--bluebg);border:1px solid #C9DEEC;border-radius:12px;
-    padding:12px 14px;font-size:17px;display:flex;gap:10px;align-items:flex-start;
-  }
-  .pill .ic{font-size:22px}
   .keyline{font-size:17px;color:var(--muted);margin-top:6px}
-  .legend{font-size:15px;color:var(--muted);margin-top:8px}
-  .tip{background:var(--warnbg);border:1px solid #ECD9A8;border-radius:12px;padding:14px 16px;margin-top:14px;font-size:17px}
+  .legend{font-size:15px;color:var(--muted);margin-top:10px}
+
+  /* ---- CSS flow diagrams (no external library) ---- */
+  .flow{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:6px;margin-top:14px}
+  .flow.vert{flex-direction:column;align-items:center;gap:0}
+  .node{border-radius:12px;padding:12px 16px;border:2px solid var(--line);text-align:center;min-width:150px;max-width:280px;font-size:17px;line-height:1.45}
+  .node small{display:block;color:var(--muted);font-size:14px;margin-top:3px}
+  .node.live{background:var(--goodbg);border-color:var(--good)}
+  .node.rep{background:var(--bluebg);border-color:var(--blue)}
+  .node.arc{background:var(--warnbg);border-color:var(--warn)}
+  .node.step{background:var(--bluebg);border-color:var(--blue)}
+  .node.gate{background:var(--warnbg);border-color:var(--warn);font-weight:700;border-radius:999px}
+  .node.danger{background:var(--badbg);border-color:var(--bad);font-weight:700}
+  .node.done{background:var(--goodbg);border-color:var(--good);font-weight:700}
+  .node.raw{background:var(--greybg);border-color:var(--greybd)}
+  .arrow{font-size:26px;color:var(--muted);padding:0 4px;line-height:1}
+  .arrow.down{padding:4px 0}
+  .arrowlbl{font-size:13px;color:var(--muted);text-align:center;padding:2px 0}
+
+  .principles{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px}
+  @media(max-width:760px){.principles{grid-template-columns:1fr}}
+  .pill{background:var(--bluebg);border:1px solid var(--bluebd);border-radius:12px;padding:12px 14px;font-size:17px;display:flex;gap:10px;align-items:flex-start}
+  .pill .ic{font-size:22px}
+  .tip{background:var(--warnbg);border:1px solid var(--warnbd);border-radius:12px;padding:14px 16px;margin-top:16px;font-size:17px}
+  .tip.red{background:var(--badbg);border-color:var(--badbd)}
 </style>
 </head>
 <body>
@@ -94,12 +79,10 @@
   <header class="top">
     <h1>📦 Splitting the Base — Visual Blueprint</h1>
     <p>Made for quick scanning. Tap <strong>🔊 Listen</strong> on any box to hear it instead of reading.</p>
-    <div style="margin-top:14px">
-      <button class="listen" id="readAll">🔊 Listen to the whole page</button>
-    </div>
+    <div style="margin-top:14px"><button class="listen" id="readAll">🔊 Listen to the whole page</button></div>
   </header>
 
-  <!-- 1: THE TWO IDEAS -->
+  <!-- 1 -->
   <section>
     <div class="sechead">
       <div class="secnum">1</div>
@@ -119,7 +102,6 @@
         </ul>
         <div class="verdict no">Verdict: Not recommended</div>
       </div>
-
       <div class="card yes">
         <h3>🅱️ Split by temperature</h3>
         <div class="keyline">Live · Reporting · Archive (per year)</div>
@@ -133,59 +115,51 @@
       </div>
     </div>
 
-    <div class="mermaid">
-flowchart LR
-    classDef live fill:#E6F4EC,stroke:#2E8B57,color:#1f3d2b,stroke-width:2px;
-    classDef rep fill:#E4EEF5,stroke:#10507C,color:#0c2f49,stroke-width:2px;
-    classDef arc fill:#FBF1DC,stroke:#B7791F,color:#5b3d08,stroke-width:2px;
-
-    A["🟢 LIVE base<br/>recent leads + calls<br/>(links work here)"]:::live
-    R["🔵 REPORTING<br/>tiny summary tables<br/>(dashboard reads these)"]:::rep
-    Y1["🟠 Archive 2025"]:::arc
-    Y2["🟠 Archive 2026"]:::arc
-
-    A -- "weekly: write summary numbers" --> R
-    A -- "old data: move out safely" --> Y1
-    A -- "old data: move out safely" --> Y2
+    <div class="flow">
+      <div class="node live">🟢 LIVE base<small>recent leads + calls · links work here</small></div>
+      <span class="arrow">→</span>
+      <div class="node rep">🔵 REPORTING<small>tiny summary tables · dashboard reads these</small></div>
+    </div>
+    <div class="flow">
+      <div class="node live">🟢 LIVE base<small>old data moves out safely</small></div>
+      <span class="arrow">→</span>
+      <div class="node arc">🟠 Archive 2025</div>
+      <div class="node arc">🟠 Archive 2026</div>
     </div>
     <div class="legend">Green = where people work · Blue = what the dashboard reads · Orange = cold storage by year</div>
   </section>
 
-  <!-- 2: BULLETPROOF ARCHIVE -->
+  <!-- 2 -->
   <section>
     <div class="sechead">
       <div class="secnum">2</div>
       <h2>Making archiving bulletproof</h2>
-      <button class="listen" data-say="Now, how to make archiving bulletproof, so we never lose data. The golden rule is: never delete anything until a verified copy exists somewhere else. The routine works in small batches. Step one: pick a batch of old data, for example a closed lead together with all of its calls. Step two: freeze it — copy any calculated values onto the record as plain text, so they can't change later. Step three: copy the batch into the archive base. Step four: read it back and check the count and the key fields match exactly. Step five, the safety gate: if it does not match, stop and retry — do not delete. Only if it matches perfectly do we move on. Step six: now delete it from the live base. Step seven: tick the batch off in a log, then repeat. Because of the log, the job is safe to stop and restart at any time, and safe to run twice.">🔊 Listen</button>
+      <button class="listen" data-say="Now, how to make archiving bulletproof, so we never lose data. The golden rule is: never delete anything until a verified copy exists somewhere else. The routine works in small batches. Step one: pick a batch of old data, for example a closed lead together with all of its calls. Step two: freeze it — copy any calculated values onto the record as plain text, so they can't change later. Step three: copy the batch into the archive base. Step four: read it back and check the count and the key fields match exactly. If it does not match, stop and retry, and do not delete. Only if it matches perfectly do we move on. Step five: now delete it from the live base. Step six: tick the batch off in a log, then repeat. Because of the log, the job is safe to stop and restart at any time, and safe to run twice.">🔊 Listen</button>
     </div>
 
     <div class="tip">🔑 <strong>Golden rule:</strong> never delete anything until a <em>verified copy</em> exists in the archive.</div>
 
-    <div class="mermaid">
-flowchart TD
-    classDef step fill:#E4EEF5,stroke:#10507C,color:#0c2f49,stroke-width:2px;
-    classDef gate fill:#FBF1DC,stroke:#B7791F,color:#5b3d08,stroke-width:2px;
-    classDef danger fill:#FBEAE5,stroke:#C0492F,color:#5e1d11,stroke-width:2px;
-    classDef done fill:#E6F4EC,stroke:#2E8B57,color:#1f3d2b,stroke-width:2px;
-
-    S1["1️⃣ Pick a small batch<br/>(a closed lead + its calls)"]:::step
-    S2["2️⃣ Freeze values<br/>(turn formulas into plain numbers)"]:::step
-    S3["3️⃣ Copy into Archive base"]:::step
-    S4["4️⃣ Read it back &amp; check<br/>count + key fields match?"]:::gate
-    G{"Match exactly?"}:::gate
-    BAD["🛑 Stop &amp; retry<br/>DO NOT delete"]:::danger
-    S6["6️⃣ Delete from Live"]:::step
-    S7["7️⃣ Tick batch off in log ✅<br/>(safe to stop / re-run)"]:::done
-
-    S1 --> S2 --> S3 --> S4 --> G
-    G -- "No ❌" --> BAD
-    G -- "Yes ✅" --> S6 --> S7
-    S7 -- "next batch" --> S1
+    <div class="flow vert">
+      <div class="node step">1️⃣ Pick a small batch<small>a closed lead + its calls</small></div>
+      <span class="arrow down">↓</span>
+      <div class="node step">2️⃣ Freeze values<small>turn formulas into plain numbers</small></div>
+      <span class="arrow down">↓</span>
+      <div class="node step">3️⃣ Copy into Archive base</div>
+      <span class="arrow down">↓</span>
+      <div class="node step">4️⃣ Read it back &amp; check<small>count + key fields</small></div>
+      <span class="arrow down">↓</span>
+      <div class="node gate">◆ Match exactly?</div>
+      <div class="arrowlbl">✅ Yes ↓</div>
+      <div class="node step">5️⃣ Delete from Live</div>
+      <span class="arrow down">↓</span>
+      <div class="node done">6️⃣ Tick batch off in log ✅<small>↻ then repeat with next batch</small></div>
     </div>
+
+    <div class="tip red">🛑 <strong>If it does NOT match:</strong> stop &amp; retry. <strong>Never delete.</strong></div>
 
     <div class="principles">
       <div class="pill"><span class="ic">🧱</span><div><strong>Verify before delete</strong><br/>Copy + check first, always.</div></div>
-      <div class="pill"><span class="ic">🔁</span><div><strong>Safe to re-run</strong><br/>Running twice can't double‑up or harm.</div></div>
+      <div class="pill"><span class="ic">🔁</span><div><strong>Safe to re-run</strong><br/>Running twice can't double-up or harm.</div></div>
       <div class="pill"><span class="ic">⏸️</span><div><strong>Resumable</strong><br/>A log remembers what's done.</div></div>
       <div class="pill"><span class="ic">🐢</span><div><strong>Gentle speed</strong><br/>Throttled so it never blocks live work.</div></div>
       <div class="pill"><span class="ic">🔗</span><div><strong>Move as a pair</strong><br/>A lead and its calls travel together.</div></div>
@@ -193,7 +167,7 @@ flowchart TD
     </div>
   </section>
 
-  <!-- 3: LOCKING IN REPORTING -->
+  <!-- 3 -->
   <section>
     <div class="sechead">
       <div class="secnum">3</div>
@@ -203,49 +177,40 @@ flowchart TD
 
     <div class="keyline">Today some numbers are <strong>live</strong> (retention, boxes, LTV). Live numbers can change if raw data moves. We need them <strong>sealed</strong>.</div>
 
-    <div class="mermaid">
-flowchart LR
-    classDef raw fill:#EFEAE2,stroke:#6B655E,color:#2E2A26,stroke-width:2px;
-    classDef job fill:#E4EEF5,stroke:#10507C,color:#0c2f49,stroke-width:2px;
-    classDef seal fill:#E6F4EC,stroke:#2E8B57,color:#1f3d2b,stroke-width:2px;
-
-    RAW["📊 Raw sales / calls<br/>(big, changing)"]:::raw
-    JOB["⚙️ Weekly job<br/>counts &amp; calculates"]:::job
-    SEAL["🔒 Reporting table<br/>plain fixed numbers<br/>(the dashboard reads these)"]:::seal
-
-    RAW --> JOB --> SEAL
+    <div class="flow">
+      <div class="node raw">📊 Raw sales / calls<small>big, always changing</small></div>
+      <span class="arrow">→</span>
+      <div class="node step">⚙️ Weekly job<small>counts &amp; calculates</small></div>
+      <span class="arrow">→</span>
+      <div class="node done">🔒 Reporting table<small>plain fixed numbers · dashboard reads these</small></div>
     </div>
 
-    <div class="mermaid">
-flowchart LR
-    classDef sealed fill:#E6F4EC,stroke:#2E8B57,color:#1f3d2b,stroke-width:2px;
-    classDef openw fill:#FBF1DC,stroke:#B7791F,color:#5b3d08,stroke-width:2px;
-
-    W1["🔒 Week 1<br/>sealed"]:::sealed
-    W2["🔒 Week 2<br/>sealed"]:::sealed
-    W3["🔒 Week 3<br/>sealed"]:::sealed
-    W4["🟠 This week<br/>still updating"]:::openw
-
-    W1 --> W2 --> W3 --> W4
+    <div class="flow">
+      <div class="node done">🔒 Week 1<small>sealed</small></div>
+      <span class="arrow">→</span>
+      <div class="node done">🔒 Week 2<small>sealed</small></div>
+      <span class="arrow">→</span>
+      <div class="node done">🔒 Week 3<small>sealed</small></div>
+      <span class="arrow">→</span>
+      <div class="node arc">🟠 This week<small>still updating</small></div>
     </div>
 
     <div class="tip">📸 <strong>Picture it:</strong> each finished week is a photo placed in a locked album. Archiving the raw data afterwards can't change the photos.</div>
   </section>
 
-  <!-- ORDER -->
+  <!-- 4 -->
   <section>
     <div class="sechead">
       <div class="secnum">✓</div>
       <h2>The safe order to do it in</h2>
       <button class="listen" data-say="Here is the safe order to do everything in. First, seal the reporting: make every weekly number a fixed, plain value. Second, test the archive routine on a tiny sample and confirm nothing is lost. Third, once sealing and testing both look perfect, start the real archiving in small batches. Never archive raw data before the reporting is sealed.">🔊 Listen</button>
     </div>
-    <div class="mermaid">
-flowchart LR
-    classDef a fill:#E6F4EC,stroke:#2E8B57,color:#1f3d2b,stroke-width:2px;
-    s1["1. Seal reporting<br/>(fix the numbers)"]:::a
-    s2["2. Test archive<br/>on a tiny sample"]:::a
-    s3["3. Archive for real<br/>small batches"]:::a
-    s1 --> s2 --> s3
+    <div class="flow">
+      <div class="node done">1. Seal reporting<small>fix the numbers</small></div>
+      <span class="arrow">→</span>
+      <div class="node done">2. Test archive<small>on a tiny sample</small></div>
+      <span class="arrow">→</span>
+      <div class="node done">3. Archive for real<small>small batches</small></div>
     </div>
     <div class="legend">⚠️ Never do step 3 before step 1.</div>
   </section>
@@ -253,33 +218,26 @@ flowchart LR
 </div>
 
 <script>
-  mermaid.initialize({startOnLoad:true, theme:"base", flowchart:{useMaxWidth:true, htmlLabels:true}, securityLevel:"loose"});
-
-  // ---- Audio (uses the browser's built-in voice; no internet service needed) ----
-  let current = null;
-  function stopSpeak(){ window.speechSynthesis.cancel(); current=null; resetButtons(); }
+  // Audio uses the browser's built-in voice. No internet service needed.
   function resetButtons(){
     document.querySelectorAll('.listen').forEach(b=>{
       if(b.dataset.orig){ b.textContent=b.dataset.orig; b.classList.remove('stop'); }
     });
   }
+  function stopSpeak(){ try{window.speechSynthesis.cancel();}catch(e){} resetButtons(); }
   function speak(text, btn){
-    if(!('speechSynthesis' in window)){ alert('Sorry, this browser can\'t read aloud.'); return; }
+    if(!('speechSynthesis' in window)){ alert("Sorry, this browser can't read aloud. Try Chrome, Edge or Safari."); return; }
     if(btn && btn.classList.contains('stop')){ stopSpeak(); return; }
-    window.speechSynthesis.cancel();
-    resetButtons();
+    window.speechSynthesis.cancel(); resetButtons();
     const u = new SpeechSynthesisUtterance(text);
     u.rate = 0.95; u.pitch = 1;
-    u.onend = ()=>{ resetButtons(); };
+    u.onend = resetButtons;
     if(btn){ btn.dataset.orig = btn.dataset.orig || btn.textContent; btn.textContent='⏹ Stop'; btn.classList.add('stop'); }
     window.speechSynthesis.speak(u);
   }
-
   document.querySelectorAll('.listen[data-say]').forEach(btn=>{
     btn.addEventListener('click', ()=> speak(btn.dataset.say, btn));
   });
-
-  // Read whole page = stitch every section's script together
   document.getElementById('readAll').addEventListener('click', function(){
     if(this.classList.contains('stop')){ stopSpeak(); return; }
     const parts = Array.from(document.querySelectorAll('.listen[data-say]')).map(b=>b.dataset.say);
