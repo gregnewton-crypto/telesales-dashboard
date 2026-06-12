@@ -1,6 +1,6 @@
 # Telesales Agent — Butternut Box
 
-**Hybrid (office + home) · Flexible shifts · Competitive hourly rate + uncapped commission**
+**Remote (UK) · 4 days per week · £102 day rate + uncapped commission**
 
 > **Fresh Food, Happy Dogs.**
 
@@ -12,11 +12,11 @@ We've come a long way since our co-founders (Kev & Dave) hand-delivered the very
 
 ## ☎️ The job
 
-Looking for flexible hours, brilliant earnings and a product you'll genuinely love selling? As a **Telesales Agent**, you'll earn a competitive hourly rate **plus uncapped commission** while helping pet pawrents make the switch to fresh food that helps their dogs thrive.
+Looking for brilliant earnings, a great work-life balance and a product you'll genuinely love selling? As a **Telesales Agent**, you'll earn a **£102 day rate plus uncapped commission** while helping pet pawrents make the switch to fresh food that helps their dogs thrive. Our current top earner is taking home **£200 per shift** — and there's no ceiling on what you can make.
 
-You'll be a founding member of our growing telesales channel — calling **warm leads** (owners who have already told us they're interested in Butternut Box), building trust through great conversations, and turning that interest into happy new customers. No cold calling, no scripts to read robotically — just real conversations about something every dog lover cares about.
+This is a **fully remote, UK-based role**, working **4 days per week**. You'll be a founding member of our growing telesales channel — calling **warm leads** (owners who have already told us they're interested in Butternut Box), building trust through great conversations, and turning that interest into happy new customers. No cold calling, no scripts to read robotically — just real conversations about something every dog lover cares about.
 
-This is easy selling with a strong product and a supportive, ambitious team behind you. The best part? **Flexible shifts** let you build a high-earning career while keeping time for the rest of your life.
+This is easy selling with a strong product and a supportive, ambitious team behind you. The best part? You build a high-earning career from the comfort of home, while keeping time for the rest of your life.
 
 ## 🦴 What your role entails
 
@@ -46,14 +46,16 @@ At the end of your shift, you can see exactly what you've achieved: four new cli
 - You're comfortable on the phone and quick to pick up new tools and systems.
 - You're enthusiastic and driven to help build a brand-new sales channel from the ground up.
 - You're crazy about dogs and love talking about them with their owners. 🐶
-- You must be 18 years old or older.
+- You're UK-based and have a quiet, reliable home working setup (we'll provide the kit you need).
+- You're available to work 4 days per week.
+- You must be 18 years old or older and have the right to work in the UK.
 - **Sales experience is a plus** — but the right attitude, energy and coachability matter most.
 
 ## 🙌 Our benefits
 
-- A competitive hourly rate **plus uncapped commission** — top performers earn well above base.
-- **Flexible shifts** (typically 1–3 per week, 4–8 hours per shift) to fit around your life.
-- **Hybrid working**: start with training in the office, then work from home too.
+- **£102 day rate plus uncapped commission** — our current top earner takes home **£200 per shift**.
+- **4 days per week**, giving you a genuine work-life balance while building a high-earning career.
+- **Fully remote across the UK** — work from home, with access to one of our UK hubs if you live close by.
 - Intensive sales coaching from experienced team leads.
 - Easy selling: warm leads and a product people love.
 - Plenty of opportunities to develop yourself and progress your career.
@@ -83,7 +85,7 @@ We recommend getting your application in as soon as possible. We reserve the rig
 
 We're a small (but mighty!) recruitment team. We aim to respond to everyone personally, but if we're flooded with brilliant applications, we may need to close the role early. We appreciate your patience while we review applications.
 
-For this specific role, we're unable to offer visa sponsorship, so you'll need the right to work in the country where the role is based.
+For this specific role, we're unable to offer visa sponsorship, so you'll need the right to work in the UK.
 
 ## ❗️ We believe in a seat at the table for everyone
 
