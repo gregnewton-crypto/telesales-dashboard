@@ -84,16 +84,33 @@ function resolveCalledChoices(fieldMeta) {
     return { yes: yes, no: no };
 }
 
-async function syncLeadFields(leadRecordId) {
+async function syncLeadFields(leadRecordId, triggerAdversusRecordId) {
+    // Re-fetch after link — rollup/lookup can lag by a moment on the same run
     var loadFields = [
         FIELD.TIMES_CALLED_ROLLUP,
         FIELD.ADVERSUS_LOOKUP,
+        LINK_FIELD_ID,
     ];
     var lead = await leadsTable.selectRecordAsync(leadRecordId, { fields: loadFields });
     if (!lead) return "SYNC SKIP: lead not found";
 
     var timesCalled = lead.getCellValue(FIELD.TIMES_CALLED_ROLLUP) || 0;
+    var links = lead.getCellValue(LINK_FIELD_ID) || [];
+
+    // Backfill if rollup has not caught up yet after linking
+    if (timesCalled < links.length) {
+        timesCalled = links.length;
+    }
+
     var adversusText = lookupToText(lead.getCellValue(FIELD.ADVERSUS_LOOKUP));
+
+    // Backfill status from the call that just triggered this automation
+    if (!adversusText && triggerAdversusRecordId) {
+        var callRec = await adversusTable.selectRecordAsync(triggerAdversusRecordId);
+        if (callRec) {
+            adversusText = String(callRec.getCellValueAsString("Lead Status") || "").trim();
+        }
+    }
 
     var timesSelectMeta = leadsTable.getField(FIELD.TIMES_CALLED_SELECT);
     var adversusSelectMeta = leadsTable.getField(FIELD.ADVERSUS_SELECT);
@@ -227,7 +244,7 @@ try {
 
             // ---- JOB 3: SYNC LEAD FIELDS AFTER LINK ----
             try {
-                syncResult = await syncLeadFields(matchedLead.id);
+                syncResult = await syncLeadFields(matchedLead.id, recordId);
             } catch (syncErr) {
                 syncResult = "SYNC ERROR: " + syncErr.message;
             }

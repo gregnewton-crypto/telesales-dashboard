@@ -9,14 +9,12 @@
  * Table: tbllpLbEtTkmMQOY9  (☘ Databowl Leads)
  *
  * AUTOMATION SETUP
- *   Trigger: When record updated in ☘ Databowl Leads
- *   Watch:   fld3DeParsIUfU1FL  🔗 Adversus Calls (linked records)
- *            fldsKBO1ZpAImfV8C  Times Lead has been Called (rollup)
- *            fld0XrXF3YtWqWSAN  Adversus Lead Status (lookup)
+ *   Trigger: When record created in ☘ Databowl Leads
  *   Action:  Run script
  *   Input:   recordId = {{recordId}}
  *
- * Do NOT watch output fields (this script writes them every run).
+ * On create (no calls yet): sets Called?=No, Lead open/closed=Open, clears selects.
+ * When calls are linked later: "Linking Leads Adversus & Databowl" re-syncs fields.
  *
  * v5 fixes:
  *   - Unqualified + Shared callback in status sets
