@@ -29,10 +29,12 @@ const CONFIG = {
     
     dailyKpisTable: '📅 Daily KPIs',
     
-    // Map source table to region
+    // Map source table to region. These must match the ⚙️ Region single-select
+    // choices on 📅 Daily KPIs EXACTLY (no extra emojis). Current choices are
+    // "D2MS", "☘ Int. Telesales", "🇬🇧 Int. Telesales", "Model Pitch".
     tableToRegion: {
-        '⚙️ D2MS Looker': '🐶 D2MS',
-        '⚙️ Ireland Looker': '☘🐶 Int. Telesales'
+        '⚙️ D2MS Looker': 'D2MS',
+        '⚙️ Ireland Looker': '☘ Int. Telesales'
     },
     
     // Field names

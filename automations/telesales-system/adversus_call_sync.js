@@ -33,7 +33,13 @@ const KPI_CONTACTED = "flddzarL3AQclY3rP";  // Red Leads Contacted
 // --- ADVERSUS FIELD IDs ---
 const ADV_CAMPAIGN = "fldhUBZMgVCCtOvSQ";  // Campaign Name
 const ADV_DATE     = "fld3B9Tf9tHjvj7zj";  // Date
-const ADV_DURATION = "fldN5rcqjERGoFWkW";  // Call Duration Number (formula, seconds)
+// Was: fldN5rcqjERGoFWkW (Call Duration Number formula) — that field was
+// deleted from the table, causing every run to fail with
+// "No field matching 'fldN5rcqjERGoFWkW' found in table 'Adversus API'".
+// Use the native Call Duration field instead. For a `duration` field,
+// getCellValue returns the duration in seconds as a number, so the
+// downstream "durationNum > 60 seconds" comparison is unchanged.
+const ADV_DURATION = "fldBqKD0ROirYZeOf";  // Call Duration (duration, seconds)
 const ADV_LEAD_ID  = "fld2NtZbn2LQQ2mSH";  // Databowl LeadId (number)
 
 // --- CONNECTED CALL THRESHOLD ---

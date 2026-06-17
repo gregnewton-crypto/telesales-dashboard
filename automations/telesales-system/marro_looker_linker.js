@@ -29,10 +29,14 @@ const CONFIG = {
     
     dailyKpisTable: '📅 Daily KPIs',
     
-    // Map source table to region
+    // Map source table to region. These must match the ⚙️ Region single-select
+    // choices on 📅 Daily KPIs EXACTLY. Current choices are "D2MS",
+    // "☘ Int. Telesales", "🇬🇧 Int. Telesales", "Model Pitch".
+    // All D2MS sources (BNB + Marro) share the same Daily KPI rows tagged
+    // "D2MS" — the row has separate 🐶 and 🐱 rollups for each brand.
     tableToRegion: {
-        '⚙️ Marro D2MS Looker': '🐱 D2MS',
-        '⚙️ Ireland Looker': '☘🐶 Int. Telesales'
+        '⚙️ Marro D2MS Looker': 'D2MS',
+        '⚙️ Ireland Looker': '☘ Int. Telesales'
     },
     
     // Field names
