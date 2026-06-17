@@ -20,15 +20,34 @@ This is easy selling with a strong product and a supportive, ambitious team behi
 
 ## 💷 The pay
 
-We keep it simple, transparent and genuinely rewarding:
+Your earnings come from two parts: a **guaranteed day rate** plus **tiered commission** on the customers you sign up. The harder you push, the more every sale is worth — there's no cap.
 
-- **£102 day rate** — a guaranteed base for every shift you work, so you always know what you'll earn before commission.
-- **Uncapped commission** — earn on top for every new customer you sign up. The more dogs you help, the more you take home — there's no ceiling.
-- **£200+ per shift** — what our current top earner is taking home once commission is included.
-- Working **4 days per week**, your day rate alone provides a reliable monthly base, with commission stacked on top.
-- Day rate and commission are paid monthly, so your hard work shows up clearly on every payslip.
+**Day rate**
 
-The result: a high earning potential and a great work-life balance, with the people who put in the conversations earning the most.
+- **£102 per day**, guaranteed for every shift — so you always know your baseline before commission.
+
+**Tiered commission**
+
+Our commission rewards momentum: the more you sell, the more each sale pays out. It works on a simple daily benchmark of 3 and 5 sales:
+
+| Sales in a day | Commission per sale |
+| --- | --- |
+| 1–3 | £10 |
+| 4–5 | £20 |
+| 6+ | £40 |
+
+Across a typical **4-day week**, that builds into weekly tiers:
+
+- Your first **12 sales** → **£10** each
+- Sales **13–20** → **£20** each
+- Every sale **beyond 20** → **£40** each
+
+**What you could earn**
+
+- The key metric we focus on is **SPH (sales per hour)**.
+- Our target is **0.8 SPH** — that's around **23 sales a week** (7 hours × 4 days × 0.8), which adds up to roughly **£400 a week in commission** on top of your day rate.
+- That puts target earners at around **£200 per shift** all in (day rate + commission).
+- The current team average is **0.6 SPH** (~17 sales a week) — but we're not looking for average. We want people who are driven to push past it, and we'll coach you to get there.
 
 ## 🦴 What your role entails
 
