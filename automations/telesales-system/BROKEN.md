@@ -9,7 +9,7 @@ Last verified: 2026-06-17 against base `appZoN6xBB9mDv8h4`.
 
 ---
 
-## 1. `adversus_call_sync.js` — **FIXED in this PR**
+## 1. `adversus_call_sync.js` — **FIXED in this PR (v3)**
 
 **Original error**
 
@@ -18,23 +18,52 @@ Error: No field matching "fldN5rcqjERGoFWkW" found in table "Adversus API"
     at main on line 101
 ```
 
-**Cause**
+**Initial diagnosis (first attempt)**
 
 `ADV_DURATION` referenced field id `fldN5rcqjERGoFWkW` (a `Call Duration Number`
 formula returning seconds). That field has been deleted from the `Adversus API`
-table.
+table. We re-pointed it at the native `Call Duration` field
+(`fldBqKD0ROirYZeOf`, type `duration`).
 
-**Fix applied**
+**That fix wasn't enough — deeper investigation revealed two more problems**
 
-Re-pointed `ADV_DURATION` at the native `Call Duration` field
-(`fldBqKD0ROirYZeOf`, type `duration`). In Airtable scripting, `getCellValue` on
-a `duration` field returns the number of seconds, so the existing
-`durationNum > 60` threshold logic is unchanged.
+When the patched v2 ran in Airtable, Total Calls and Leads Attempted populated
+correctly, but **Connected Calls, Talk Time and Leads Contacted came back as 0**
+for every channel. Inspecting the data showed:
+
+1. The native `Call Duration` field is **empty on every Adversus call since
+   ~2026-06-15**. Whatever ingests Adversus data into Airtable (webhook / sync
+   block / upstream script) stopped populating it around the same time the
+   broken `Call Duration Number` formula was deleted.
+2. On older records that *did* have `Call Duration` populated, the stored value
+   was **`actual_seconds × 60`**, not raw seconds. The deleted
+   `Call Duration Number` formula was presumably doing `{Call Duration} / 60`
+   to convert. So even if the field were still populated, comparing it to a
+   60-second threshold directly would mis-classify everything as connected
+   regardless of true length.
+
+**Final fix (v3)**
+
+Compute call duration from `Start of Call` (`fldP0BKlRqqAhqUUY`) and
+`End of Call` (`fldlpXIF03xP7i1nL`) directly inside the script. Those are
+text fields in `YYYY-MM-DD HH:MM:SS` format, reliably populated, and parsing
+both gives a real-second duration. The script no longer references
+`Call Duration` at all.
 
 **Deployment**
 
-After this PR is merged, copy the patched contents of
-`adversus_call_sync.js` into the matching automation in Airtable.
+After this PR is merged, copy the patched contents of `adversus_call_sync.js`
+into the matching automation in Airtable, run **Test**, and confirm that the
+W25 Internal Telesales rows in `📊 Weekly KPIs v2` now show non-zero
+Connected Calls, Talk Time Hrs, and Leads Contacted.
+
+**Follow-up worth investigating separately**
+
+Whatever pipeline imports Adversus calls into the `Adversus API` table stopped
+populating `Call Duration` around 2026-06-15. That field isn't required for
+this script anymore, but other workflows or reports may depend on it. Worth
+checking the Adversus → Airtable sync (webhook, integration block, or external
+script) to see why it broke, and whether it should resume.
 
 ---
 

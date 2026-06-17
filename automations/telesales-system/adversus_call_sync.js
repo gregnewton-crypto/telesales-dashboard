@@ -1,5 +1,5 @@
 // ============================================================
-// AUTOMATION: Adversus Call Sync to Weekly KPIs v2 (v2)
+// AUTOMATION: Adversus Call Sync to Weekly KPIs v2 (v3)
 // ============================================================
 // Runs on a schedule (e.g. daily).
 // Scans Adversus API table, aggregates call metrics per week
@@ -12,8 +12,19 @@
 //   - Red Leads Attempted (unique leads called, any outcome)
 //   - Red Leads Contacted (unique leads with a connected call)
 //
-// Connected call = Call Duration > 60 seconds (Greg confirmed)
+// Connected call = call duration > 60 seconds.
 // Connect Rate and Contact CVR are formula fields - auto-calculate.
+//
+// v3 change: compute call duration from Start of Call / End of Call
+// fields directly, because:
+//   (a) the previous "Call Duration Number" formula field
+//       (fldN5rcqjERGoFWkW) was deleted, AND
+//   (b) the underlying "Call Duration" field is empty on every call
+//       since ~2026-06-15, AND historic values are stored in the
+//       wrong unit (seconds × 60).
+// Start of Call / End of Call are reliably populated text fields
+// in "YYYY-MM-DD HH:MM:SS" format. Parsing both and subtracting
+// always yields a real-second duration.
 //
 // All tables and fields referenced by ID, not name.
 // ============================================================
@@ -33,24 +44,34 @@ const KPI_CONTACTED = "flddzarL3AQclY3rP";  // Red Leads Contacted
 // --- ADVERSUS FIELD IDs ---
 const ADV_CAMPAIGN = "fldhUBZMgVCCtOvSQ";  // Campaign Name
 const ADV_DATE     = "fld3B9Tf9tHjvj7zj";  // Date
-// Was: fldN5rcqjERGoFWkW (Call Duration Number formula) — that field was
-// deleted from the table, causing every run to fail with
-// "No field matching 'fldN5rcqjERGoFWkW' found in table 'Adversus API'".
-// Use the native Call Duration field instead. For a `duration` field,
-// getCellValue returns the duration in seconds as a number, so the
-// downstream "durationNum > 60 seconds" comparison is unchanged.
-const ADV_DURATION = "fldBqKD0ROirYZeOf";  // Call Duration (duration, seconds)
+const ADV_START    = "fldP0BKlRqqAhqUUY";  // Start of Call (text "YYYY-MM-DD HH:MM:SS")
+const ADV_END      = "fldlpXIF03xP7i1nL";  // End of Call   (text "YYYY-MM-DD HH:MM:SS")
 const ADV_LEAD_ID  = "fld2NtZbn2LQQ2mSH";  // Databowl LeadId (number)
 
 // --- CONNECTED CALL THRESHOLD ---
 const CONNECTED_THRESHOLD = 60;  // seconds
 
 // --- CAMPAIGN MAPPING ---
-// Maps Adversus Campaign Name to KPI Key components
 const CAMPAIGN_MAP = {
     "UK Butternut Main":      { channel: "Internal Telesales", brand: "Butternut", region: "UK" },
     "Ireland Butternut Main": { channel: "Internal Telesales", brand: "Butternut", region: "IE" },
 };
+
+// --- COMPUTE CALL DURATION IN SECONDS ---
+// Start/End are stored as text like "2026-06-17 12:53:47".
+// new Date(s.replace(" ", "T")) parses them as local time, but since
+// both sides use the same timezone interpretation, the difference is
+// correct in real seconds.
+function callDurationSeconds(rec) {
+    const startStr = rec.getCellValueAsString(ADV_START);
+    const endStr   = rec.getCellValueAsString(ADV_END);
+    if (!startStr || !endStr) return 0;
+    const start = new Date(startStr.replace(" ", "T"));
+    const end   = new Date(endStr.replace(" ", "T"));
+    if (isNaN(start.getTime()) || isNaN(end.getTime())) return 0;
+    const diffSec = (end - start) / 1000;
+    return diffSec > 0 ? diffSec : 0;
+}
 
 // --- ISO WEEK ---
 function getISOWeek(dateStr) {
@@ -105,7 +126,7 @@ console.log(`KPI rows loaded: ${Object.keys(kpiLookup).length}`);
 // 2. Scan Adversus table
 const advTable = base.getTable(TBL_ADVERSUS);
 const advQuery = await advTable.selectRecordsAsync({
-    fields: [ADV_CAMPAIGN, ADV_DATE, ADV_DURATION, ADV_LEAD_ID]
+    fields: [ADV_CAMPAIGN, ADV_DATE, ADV_START, ADV_END, ADV_LEAD_ID]
 });
 
 const buckets = {};
@@ -138,8 +159,7 @@ for (const rec of advQuery.records) {
     const b = buckets[kpiKey];
     b.totalCalls++;
 
-    const duration = rec.getCellValue(ADV_DURATION);
-    const durationNum = typeof duration === "number" ? duration : Number(duration) || 0;
+    const durationNum = callDurationSeconds(rec);
 
     if (durationNum > CONNECTED_THRESHOLD) b.connected++;
     b.talkTimeSecs += durationNum;
