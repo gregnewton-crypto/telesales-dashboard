@@ -18,6 +18,18 @@ This is a **fully remote, UK-based role**, working **4 days per week**. You'll b
 
 This is easy selling with a strong product and a supportive, ambitious team behind you. The best part? You build a high-earning career from the comfort of home, while keeping time for the rest of your life.
 
+## 💷 The pay
+
+We keep it simple, transparent and genuinely rewarding:
+
+- **£102 day rate** — a guaranteed base for every shift you work, so you always know what you'll earn before commission.
+- **Uncapped commission** — earn on top for every new customer you sign up. The more dogs you help, the more you take home — there's no ceiling.
+- **£200+ per shift** — what our current top earner is taking home once commission is included.
+- Working **4 days per week**, your day rate alone provides a reliable monthly base, with commission stacked on top.
+- Day rate and commission are paid monthly, so your hard work shows up clearly on every payslip.
+
+The result: a high earning potential and a great work-life balance, with the people who put in the conversations earning the most.
+
 ## 🦴 What your role entails
 
 - Call warm leads and help pet owners make the switch to fresh food.
