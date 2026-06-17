@@ -1,6 +1,6 @@
 # Telesales Agent — Butternut Box
 
-**Remote (UK) · 4 days per week · £102 day rate + uncapped commission**
+**Remote (UK) · 4 days per week · £100 day rate + uncapped commission**
 
 > **Fresh Food, Happy Dogs.**
 
@@ -12,7 +12,7 @@ We've come a long way since our co-founders (Kev & Dave) hand-delivered the very
 
 ## ☎️ The job
 
-Looking for brilliant earnings, a great work-life balance and a product you'll genuinely love selling? As a **Telesales Agent**, you'll earn a **£102 day rate plus uncapped commission** while helping pet pawrents make the switch to fresh food that helps their dogs thrive. Our current top earner is taking home **£200 per shift** — and there's no ceiling on what you can make.
+Looking for brilliant earnings, a great work-life balance and a product you'll genuinely love selling? As a **Telesales Agent**, you'll earn a **£100 day rate plus uncapped commission** while helping pet pawrents make the switch to fresh food that helps their dogs thrive. Our current top earner is taking home **£200 per shift** — and there's no ceiling on what you can make.
 
 This is a **fully remote, UK-based role**, working **4 days per week**. You'll be a founding member of our growing telesales channel — calling **warm leads** (owners who have already told us they're interested in Butternut Box), building trust through great conversations, and turning that interest into happy new customers. No cold calling, no scripts to read robotically — just real conversations about something every dog lover cares about.
 
@@ -20,11 +20,11 @@ This is easy selling with a strong product and a supportive, ambitious team behi
 
 ## 💷 The pay
 
-Your earnings come from two parts: a **guaranteed day rate** plus **tiered commission** on the customers you sign up. The harder you push, the more every sale is worth — there's no cap.
+Your earnings come from three parts: a **guaranteed day rate**, **tiered commission** on the customers you sign up, and **retention pay** that rewards you for signing up customers who stay with us. The harder you push, the more every sale is worth — there's no cap.
 
 **Day rate**
 
-- **£102 per day**, guaranteed for every shift — so you always know your baseline before commission.
+- **£100 per day**, guaranteed for every shift — so you always know your baseline before commission.
 
 **Tiered commission**
 
@@ -41,6 +41,10 @@ Across a typical **4-day week**, that builds into weekly tiers:
 - Your first **12 sales** → **£10** each
 - Sales **13–20** → **£20** each
 - Every sale **beyond 20** → **£40** each
+
+**Retention pay**
+
+On top of your day rate and sales commission, you'll earn **retention pay** based on how many of your customers stay with Butternut Box. This is paid on **percentage brackets** — the higher the proportion of your customers that retain, the higher the bracket you're paid at. It rewards quality conversations and signing up the right customers, not just chasing volume.
 
 **What you could earn**
 
@@ -84,7 +88,7 @@ At the end of your shift, you can see exactly what you've achieved: four new cli
 
 ## 🙌 Our benefits
 
-- **£102 day rate plus uncapped commission** — our current top earner takes home **£200 per shift**.
+- **£100 day rate plus uncapped commission** — our current top earner takes home **£200 per shift**.
 - **4 days per week**, giving you a genuine work-life balance while building a high-earning career.
 - **Fully remote across the UK** — work from home, with access to one of our UK hubs if you live close by.
 - Intensive sales coaching from experienced team leads.
