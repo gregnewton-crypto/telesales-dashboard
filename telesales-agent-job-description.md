@@ -22,37 +22,6 @@ This is easy selling with a strong product and a supportive, ambitious team behi
 
 Your earnings come from three parts: a **guaranteed day rate**, **tiered commission** on the customers you sign up, and **retention pay** that rewards you for signing up customers who stay with us. The harder you push, the more every sale is worth — there's no cap.
 
-**Day rate**
-
-- **£100 per day**, guaranteed for every shift — so you always know your baseline before commission.
-
-**Tiered commission**
-
-Our commission rewards momentum: the more you sell, the more each sale pays out. It works on a simple daily benchmark of 3 and 5 sales:
-
-| Sales in a day | Commission per sale |
-| --- | --- |
-| 1–3 | £10 |
-| 4–5 | £20 |
-| 6+ | £40 |
-
-Across a typical **4-day week**, that builds into weekly tiers:
-
-- Your first **12 sales** → **£10** each
-- Sales **13–20** → **£20** each
-- Every sale **beyond 20** → **£40** each
-
-**Retention pay**
-
-On top of your day rate and sales commission, you'll earn **retention pay** based on how many of your customers stay with Butternut Box. This is paid on **percentage brackets** — the higher the proportion of your customers that retain, the higher the bracket you're paid at. It rewards quality conversations and signing up the right customers, not just chasing volume.
-
-**What you could earn**
-
-- The key metric we focus on is **SPH (sales per hour)**.
-- Our target is **0.8 SPH** — that's around **23 sales a week** (7 hours × 4 days × 0.8), which adds up to roughly **£400 a week in commission** on top of your day rate.
-- That puts target earners at around **£200 per shift** all in (day rate + commission).
-- The current team average is **0.6 SPH** (~17 sales a week) — but we're not looking for average. We want people who are driven to push past it, and we'll coach you to get there.
-
 ## 🦴 What your role entails
 
 - Call warm leads and help pet owners make the switch to fresh food.
