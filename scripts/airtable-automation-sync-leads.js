@@ -67,18 +67,24 @@ if (times > 0) {
   updates[FIELD_TIME_CALLED] = null;
 }
 
-const lookup = record.getCellValue(FIELD_STATUS_LOOKUP) || [];
-const status = latestLookupStatus(lookup.map((entry) => entry.name ?? entry));
-if (status && VALID_STATUSES.has(status)) {
-  if (record.getCellValueAsString(FIELD_STATUS) !== status) {
-    updates[FIELD_STATUS] = { name: status };
+const lookupRaw = record.getCellValue(FIELD_STATUS_LOOKUP) || [];
+const lookupValues = lookupRaw.map((entry) =>
+  typeof entry === "string" ? entry : entry?.name ?? String(entry)
+);
+const lookupStatus = latestLookupStatus(lookupValues);
+
+if (lookupStatus && VALID_STATUSES.has(lookupStatus)) {
+  if (record.getCellValueAsString(FIELD_STATUS) !== lookupStatus) {
+    updates[FIELD_STATUS] = { name: lookupStatus };
   }
 } else if (record.getCellValue(FIELD_STATUS)) {
   updates[FIELD_STATUS] = null;
 }
 
 const effectiveStatus =
-  updates[FIELD_STATUS]?.name ?? record.getCellValueAsString(FIELD_STATUS);
+  lookupStatus ||
+  updates[FIELD_STATUS]?.name ||
+  record.getCellValueAsString(FIELD_STATUS);
 const openClosed = computeOpenClosed(effectiveStatus);
 if (record.getCellValueAsString(FIELD_OPEN_CLOSED) !== openClosed) {
   updates[FIELD_OPEN_CLOSED] = { name: openClosed };

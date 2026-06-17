@@ -114,14 +114,16 @@ def compute_updates(fields: dict) -> dict:
     elif fields.get(FIELD_TIME_CALLED) is not None:
         updates[FIELD_TIME_CALLED] = None
 
-    status = latest_lookup_status(fields.get(FIELD_STATUS_LOOKUP))
-    if status in VALID_STATUSES:
-        if fields.get(FIELD_STATUS) != status:
-            updates[FIELD_STATUS] = status
+    lookup_status = latest_lookup_status(fields.get(FIELD_STATUS_LOOKUP))
+    if lookup_status in VALID_STATUSES:
+        if fields.get(FIELD_STATUS) != lookup_status:
+            updates[FIELD_STATUS] = lookup_status
     elif fields.get(FIELD_STATUS) is not None:
         updates[FIELD_STATUS] = None
 
-    effective_status = updates.get(FIELD_STATUS, fields.get(FIELD_STATUS))
+    # Open/closed must follow the lookup (what the grid shows), not only the
+    # single-select copy which often lags behind when automations miss a run.
+    effective_status = lookup_status or updates.get(FIELD_STATUS) or fields.get(FIELD_STATUS)
     open_closed = compute_open_closed(effective_status)
     if fields.get(FIELD_OPEN_CLOSED) != open_closed:
         updates[FIELD_OPEN_CLOSED] = open_closed
