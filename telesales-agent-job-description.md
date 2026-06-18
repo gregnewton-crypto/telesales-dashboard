@@ -14,7 +14,7 @@ We've come a long way since our co-founders (Kev & Dave) hand-delivered the very
 
 Looking for brilliant earnings, a great work-life balance and a product you'll genuinely love selling? As a **Telesales Agent**, you'll earn a **£100 day rate plus uncapped commission** while helping pet pawrents make the switch to fresh food that helps their dogs thrive. Our current top earner is taking home **£200 per shift** — and there's no ceiling on what you can make.
 
-This is a **fully remote, UK-based role**, working **4 days per week, Monday to Friday, 10 AM to 6 PM**. You'll be a founding member of our growing telesales channel — calling **warm leads** (owners who have already told us they're interested in Butternut Box), building trust through great conversations, and turning that interest into happy new customers. No cold calling, no scripts to read robotically — just real conversations about something every dog lover cares about.
+This is a **fully remote, UK-based role**, working **4 days per week, Monday to Thursday, 10 AM to 6 PM**. You'll be a founding member of our growing telesales channel — calling **warm leads** (owners who have already told us they're interested in Butternut Box), building trust through great conversations, and turning that interest into happy new customers. No cold calling, no scripts to read robotically — just real conversations about something every dog lover cares about.
 
 This is easy selling with a strong product and a supportive, ambitious team behind you. The best part? You build a high-earning career from the comfort of home, while keeping time for the rest of your life.
 
@@ -51,14 +51,14 @@ At the end of your shift, you can see exactly what you've achieved: four new cli
 - You're enthusiastic and driven to help build a brand-new sales channel from the ground up.
 - You're crazy about dogs and love talking about them with their owners. 🐶
 - You're UK-based and have a quiet, reliable home working setup (we'll provide the kit you need).
-- You're available to work 4 days per week, with shifts falling Monday to Friday, 10 AM to 6 PM.
+- You're available to work 4 days per week, Monday to Thursday, 10 AM to 6 PM.
 - You must be 18 years old or older and have the right to work in the UK.
 - **Sales experience is a plus** — but the right attitude, energy and coachability matter most.
 
 ## 🙌 Our benefits
 
 - **£100 day rate plus uncapped commission** — our current top earner takes home **£200 per shift**.
-- **4 days per week** (shifts fall Monday to Friday, 10 AM to 6 PM), giving you a genuine work-life balance while building a high-earning career.
+- **4 days per week, Monday to Thursday** (10 AM to 6 PM), giving you a genuine work-life balance while building a high-earning career.
 - **Fully remote across the UK** — work from home, with access to one of our UK hubs if you live close by.
 - Intensive sales coaching from experienced team leads.
 - Easy selling: warm leads and a product people love.
