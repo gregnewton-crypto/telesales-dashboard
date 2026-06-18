@@ -16,15 +16,18 @@
  * On create (no calls yet): sets Called?=No, Lead open/closed=Open, clears selects.
  * When calls are linked later: "Linking Leads Adversus & Databowl" re-syncs fields.
  *
- * v5 fixes:
- *   - Unqualified + Shared callback in status sets
- *   - Use latest lookup value (not first)
- *   - Lead open/closed follows lookup terminal statuses first
+ * v6 adds:
+ *   - Date, ⚙ Lead Week, ⚙ Lead Period from Lead Date (Europe/Dublin)
  */
 
 const TABLE_ID = 'tbllpLbEtTkmMQOY9';
+const DUBLIN_TZ = 'Europe/Dublin';
 
 const FIELD = {
+    LEAD_DATE: 'fldWONi9bjOIJBmqq',
+    DATE: 'fldFocENqMzcn3ySq',
+    LEAD_WEEK: 'fldhCZiJZKHL7jMa2',
+    LEAD_PERIOD: 'fldR9ZWZC427boXv1',
     TIMES_CALLED_ROLLUP: 'fldsKBO1ZpAImfV8C',
     TIMES_CALLED_SELECT: 'fldpGvpBn2J2DbXop',
     ADVERSUS_LOOKUP: 'fld0XrXF3YtWqWSAN',
@@ -130,6 +133,56 @@ function resolveTimesCalledChoiceId(fieldMeta, timesCalled) {
     return null;
 }
 
+function getISOWeekInDublin(dateVal) {
+    if (!dateVal) return null;
+    const d = new Date(dateVal);
+    if (Number.isNaN(d.getTime())) return null;
+
+    const formatter = new Intl.DateTimeFormat('en-GB', {
+        timeZone: DUBLIN_TZ,
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+    });
+    const parts = formatter.formatToParts(d);
+    const year = Number(parts.find((p) => p.type === 'year')?.value);
+    const month = Number(parts.find((p) => p.type === 'month')?.value);
+    const day = Number(parts.find((p) => p.type === 'day')?.value);
+    const local = new Date(Date.UTC(year, month - 1, day));
+
+    const target = new Date(local);
+    target.setUTCDate(local.getUTCDate() + 4 - (local.getUTCDay() || 7));
+    const yearStart = new Date(Date.UTC(target.getUTCFullYear(), 0, 1));
+    const week = Math.ceil((((target - yearStart) / 86400000) + 1) / 7);
+    return { week, year, dateOnly: `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}` };
+}
+
+function leadCalendarUpdates(record, meta) {
+    const leadDate = record.getCellValue(FIELD.LEAD_DATE);
+    const calendar = getISOWeekInDublin(leadDate);
+    if (!calendar) return {};
+
+    const weekLabel = `W${calendar.week}`;
+    const periodLabel = `P${Math.min(13, Math.floor((calendar.week - 1) / 4) + 1)}`;
+    const updates = {};
+
+    if (record.getCellValue(FIELD.DATE) !== calendar.dateOnly) {
+        updates[FIELD.DATE] = calendar.dateOnly;
+    }
+
+    const weekId = resolveChoiceId(meta.weekSelectMeta, weekLabel);
+    if (weekId && record.getCellValueAsString(FIELD.LEAD_WEEK) !== weekLabel) {
+        updates[FIELD.LEAD_WEEK] = { id: weekId };
+    }
+
+    const periodId = resolveChoiceId(meta.periodSelectMeta, periodLabel);
+    if (periodId && record.getCellValueAsString(FIELD.LEAD_PERIOD) !== periodLabel) {
+        updates[FIELD.LEAD_PERIOD] = { id: periodId };
+    }
+
+    return updates;
+}
+
 function computeOpenClosed(adversusText, timesCalled) {
     const status = norm(adversusText);
 
@@ -224,6 +277,8 @@ function buildStatusUpdate(record, meta) {
     fields[FIELD.CALLED] = { id: targetCalledId };
     fields[FIELD.LEAD_OPEN_CLOSED] = { id: targetOpenClosedId };
 
+    Object.assign(fields, leadCalendarUpdates(record, meta));
+
     return {
         fields,
         timesCalled,
@@ -251,6 +306,8 @@ if (!recordId) {
 const table = base.getTable(TABLE_ID);
 
 const meta = {
+    weekSelectMeta: table.getField(FIELD.LEAD_WEEK),
+    periodSelectMeta: table.getField(FIELD.LEAD_PERIOD),
     timesSelectMeta: table.getField(FIELD.TIMES_CALLED_SELECT),
     adversusSelectMeta: table.getField(FIELD.ADVERSUS_SELECT),
     ...resolveCalledChoices(table.getField(FIELD.CALLED), FIELD.CALLED),
@@ -258,6 +315,10 @@ const meta = {
 };
 
 const loadFields = [
+    table.getField(FIELD.LEAD_DATE),
+    table.getField(FIELD.DATE),
+    table.getField(FIELD.LEAD_WEEK),
+    table.getField(FIELD.LEAD_PERIOD),
     table.getField(FIELD.TIMES_CALLED_ROLLUP),
     table.getField(FIELD.TIMES_CALLED_SELECT),
     table.getField(FIELD.ADVERSUS_LOOKUP),

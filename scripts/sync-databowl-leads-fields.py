@@ -6,9 +6,7 @@ Fields maintained:
   - Time lead has been called (single select)
   - Adversus Lead Status (single select)
   - Lead open/closed
-
-These fields mirror rollup/lookup values and should stay in sync whenever
-calls are linked or lead status changes. Run manually or on a schedule.
+  - Date, ⚙ Lead Week, ⚙ Lead Period (from Lead Date, Europe/Dublin)
 """
 
 from __future__ import annotations
@@ -20,6 +18,8 @@ import time
 import urllib.error
 import urllib.parse
 import urllib.request
+from datetime import datetime
+from zoneinfo import ZoneInfo
 
 BASE_ID = "appZoN6xBB9mDv8h4"
 TABLE_ID = "tbllpLbEtTkmMQOY9"
@@ -30,6 +30,12 @@ FIELD_STATUS = "Adversus Lead Status (single select)"
 FIELD_OPEN_CLOSED = "Lead open/closed"
 FIELD_TIMES_CALLED = "Times Lead has been Called"
 FIELD_STATUS_LOOKUP = "Adversus Lead Status"
+FIELD_LEAD_DATE = "Lead Date"
+FIELD_DATE = "Date"
+FIELD_LEAD_WEEK = "\u2699\ufe0f Lead Week"
+FIELD_LEAD_PERIOD = "\u2699\ufe0f Lead Period"
+
+DUBLIN = ZoneInfo("Europe/Dublin")
 
 CLOSED_STATUSES = frozenset({"Not interested", "Invalid", "Success", "Unqualified"})
 OPEN_STATUSES = frozenset(
@@ -91,6 +97,23 @@ def latest_lookup_status(lookup: object) -> str | None:
     return str(lookup)
 
 
+def lead_calendar_fields(lead_date_raw: object) -> dict[str, str] | None:
+    if not lead_date_raw:
+        return None
+    if isinstance(lead_date_raw, str):
+        parsed = datetime.fromisoformat(lead_date_raw.replace("Z", "+00:00"))
+    else:
+        parsed = datetime.fromisoformat(str(lead_date_raw))
+    local = parsed.astimezone(DUBLIN)
+    week = local.isocalendar()[1]
+    period = min(13, (week - 1) // 4 + 1)
+    return {
+        FIELD_DATE: local.date().isoformat(),
+        FIELD_LEAD_WEEK: f"W{week}",
+        FIELD_LEAD_PERIOD: f"P{period}",
+    }
+
+
 def compute_open_closed(status: str | None) -> str:
     if status in CLOSED_STATUSES:
         return "Closed "
@@ -127,6 +150,12 @@ def compute_updates(fields: dict) -> dict:
     open_closed = compute_open_closed(effective_status)
     if fields.get(FIELD_OPEN_CLOSED) != open_closed:
         updates[FIELD_OPEN_CLOSED] = open_closed
+
+    calendar = lead_calendar_fields(fields.get(FIELD_LEAD_DATE))
+    if calendar:
+        for field_name, value in calendar.items():
+            if fields.get(field_name) != value:
+                updates[field_name] = value
 
     return updates
 
