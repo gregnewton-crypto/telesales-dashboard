@@ -10,6 +10,30 @@ Each run does a full refresh: the sheet tab is cleared and rewritten with the la
 
 ---
 
+## Option A: Google Apps Script (no billing required) — recommended
+
+Use this if Google Cloud is asking for billing info. No service account needed.
+
+1. Open your [Google Sheet](https://docs.google.com/spreadsheets/d/1zW6TYsaIuYNBLX8PDL7UPOWUk-_24vLfjktZkOk9vZk/edit)
+2. Go to **Extensions → Apps Script**
+3. Delete any code in the editor and paste the contents of [`sync/apps-script/Code.gs`](apps-script/Code.gs)
+4. At the top of the file, replace `pat_PASTE_YOUR_TOKEN_HERE` with your Airtable token
+5. Click **Save**, then run **`setup`** from the function dropdown
+6. Approve permissions when Google asks (this is your own script accessing your own sheet + Airtable)
+7. Refresh the sheet — you should see **Adversus API** and **Sync Status** tabs
+
+The script syncs every **15 minutes** automatically after `setup()` runs.
+
+To change the token later: edit `CONFIG.AIRTABLE_TOKEN` and run `setup()` again.
+
+---
+
+## Option B: GitHub Actions + Google Cloud (requires billing account)
+
+Use this if you want the sync to run from GitHub instead of inside Google Sheets. Google Cloud requires a billing account to enable APIs, but a small sync like this typically costs **$0** (Sheets API free tier is generous).
+
+---
+
 ## 1. Create a Google Sheet
 
 1. Create a new Google Spreadsheet (or use an existing one).
