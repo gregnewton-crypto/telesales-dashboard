@@ -1,14 +1,10 @@
 # Airtable → Google Sheets Sync
 
-This sync pushes your telesales Airtable base into a Google Sheet and keeps it updated automatically.
+This sync pushes the **Adversus API** Airtable table (`tblQcfo7qgQCv7o3n`) into a Google Sheet and keeps it updated automatically.
 
-**Default tables synced**
-
-| Airtable table | Google Sheet tab |
-|---|---|
-| 📊 Weekly KPIs v2 | Weekly KPIs |
-| 💷 Spend Tracker | Spend Tracker |
-| 🔍 Pause Reason Analysis | Pause Reasons |
+| Airtable table | Table ID | Google Sheet tab |
+|---|---|---|
+| Adversus API | `tblQcfo7qgQCv7o3n` | Adversus API |
 
 Each run does a full refresh: the sheet tab is cleared and rewritten with the latest Airtable data. A **Sync Status** tab records the last run time and row counts.
 
@@ -50,6 +46,7 @@ In your GitHub repo, go to **Settings → Secrets and variables → Actions** an
 |---|---|
 | `AIRTABLE_API_KEY` | Your Airtable personal access token |
 | `AIRTABLE_BASE_ID` | `appZoN6xBB9mDv8h4` (or your base ID) |
+| `AIRTABLE_TABLE_ID` | `tblQcfo7qgQCv7o3n` (Adversus API — this is the default) |
 | `GOOGLE_SHEET_ID` | Spreadsheet ID from step 1 |
 | `GOOGLE_SERVICE_ACCOUNT_JSON` | Full contents of the service account JSON file (paste as one line) |
 
@@ -57,8 +54,9 @@ Optional secrets:
 
 | Secret | Purpose |
 |---|---|
-| `SYNC_TABLES_JSON` | Custom table/sheet mapping (JSON array) |
+| `GOOGLE_SHEET_TAB` | Name of the sheet tab (default: `Adversus API`) |
 | `AIRTABLE_VIEW` | Sync only records from a specific Airtable view |
+| `SYNC_TABLES_JSON` | Advanced: sync multiple tables (JSON array) |
 
 Once secrets are set, the workflow in `.github/workflows/airtable-sheets-sync.yml` runs **every 15 minutes**. You can also trigger it manually from the **Actions** tab.
 
@@ -96,21 +94,19 @@ Ensure the same environment variables from `config.example.env` are available to
 
 ## Customising tables
 
-Set `SYNC_TABLES_JSON` to control which tables sync and what each sheet tab is called:
+By default only **Adversus API** (`tblQcfo7qgQCv7o3n`) is synced. To change the target tab name, set:
 
-```json
-[
-  {"name": "📊 Weekly KPIs v2", "sheet": "Weekly KPIs"},
-  {"name": "💷 Spend Tracker", "sheet": "Spend Tracker"},
-  {"name": "🔍 Pause Reason Analysis", "sheet": "Pause Reasons"}
-]
+```
+GOOGLE_SHEET_TAB=My Calls Data
 ```
 
-Per-table views are also supported:
+To sync a different table, set `AIRTABLE_TABLE_ID` to the table ID from Airtable.
+
+For advanced use (multiple tables), set `SYNC_TABLES_JSON`:
 
 ```json
 [
-  {"name": "📊 Weekly KPIs v2", "sheet": "Weekly KPIs", "view": "Grid view"}
+  {"id": "tblQcfo7qgQCv7o3n", "name": "Adversus API", "sheet": "Adversus API"}
 ]
 ```
 

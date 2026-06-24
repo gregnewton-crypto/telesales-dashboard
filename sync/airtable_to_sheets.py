@@ -19,11 +19,11 @@ SCOPES = [
     "https://www.googleapis.com/auth/drive",
 ]
 
-DEFAULT_TABLES = [
-    {"name": "Weekly KPIs v2", "sheet": "Weekly KPIs"},
-    {"name": "Spend Tracker", "sheet": "Spend Tracker"},
-    {"name": "Pause Reason Analysis", "sheet": "Pause Reasons"},
-]
+DEFAULT_TABLE = {
+    "id": "tblQcfo7qgQCv7o3n",
+    "name": "Adversus API",
+    "sheet": "Adversus API",
+}
 
 
 def env(name: str, default: str | None = None, required: bool = False) -> str:
@@ -34,16 +34,22 @@ def env(name: str, default: str | None = None, required: bool = False) -> str:
 
 
 def load_tables_config() -> list[dict[str, str]]:
+    table_id = env("AIRTABLE_TABLE_ID")
+    sheet_tab = env("GOOGLE_SHEET_TAB", default=DEFAULT_TABLE["sheet"])
+    if table_id:
+        return [{"id": table_id, "sheet": sheet_tab}]
+
     raw = env("SYNC_TABLES_JSON")
-    if not raw:
-        return DEFAULT_TABLES
-    try:
-        tables = json.loads(raw)
-    except json.JSONDecodeError as exc:
-        raise SystemExit(f"Invalid SYNC_TABLES_JSON: {exc}") from exc
-    if not isinstance(tables, list) or not tables:
-        raise SystemExit("SYNC_TABLES_JSON must be a non-empty JSON array")
-    return tables
+    if raw:
+        try:
+            tables = json.loads(raw)
+        except json.JSONDecodeError as exc:
+            raise SystemExit(f"Invalid SYNC_TABLES_JSON: {exc}") from exc
+        if not isinstance(tables, list) or not tables:
+            raise SystemExit("SYNC_TABLES_JSON must be a non-empty JSON array")
+        return tables
+
+    return [DEFAULT_TABLE]
 
 
 def flatten_value(value: Any) -> str:
@@ -252,25 +258,27 @@ def main() -> int:
     errors: list[str] = []
 
     for table in tables:
-        table_name = table["name"]
-        sheet_name = table.get("sheet", table_name)
+        table_ref = table.get("id") or table.get("name", "")
+        table_label = table.get("name") or table_ref
+        sheet_name = table.get("sheet", table_label)
         view = table.get("view", default_view)
         try:
             result = sync_table(
                 token=token,
                 base_id=base_id,
                 spreadsheet=spreadsheet,
-                table_name=table_name,
+                table_name=table_ref,
                 sheet_name=sheet_name,
                 view=view,
             )
+            result["table"] = table_label
             results.append(result)
             print(
-                f"Synced {result['records']} records from '{table_name}' "
+                f"Synced {result['records']} records from '{table_label}' "
                 f"to sheet '{sheet_name}'"
             )
         except Exception as exc:  # noqa: BLE001 - report all table failures
-            message = f"{table_name}: {exc}"
+            message = f"{table_label}: {exc}"
             errors.append(message)
             print(f"ERROR: {message}", file=sys.stderr)
 
