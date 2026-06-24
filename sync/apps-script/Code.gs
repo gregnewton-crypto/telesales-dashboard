@@ -4,11 +4,9 @@
  * Setup:
  * 1. Open your Google Sheet
  * 2. Extensions → Apps Script
- * 3. Paste this entire file, save
- * 4. Run "setup" once — approve permissions when prompted
- * 5. Run "syncNow" to test
- *
- * The script creates a 15-minute automatic sync after setup().
+ * 3. Select ALL existing code, delete it, paste this entire file
+ * 4. Replace pat_PASTE_YOUR_TOKEN_HERE with your Airtable token
+ * 5. Save, then run "setup" once
  */
 
 const CONFIG = {
@@ -35,12 +33,14 @@ function setup() {
 
 function syncNow() {
   const token = PropertiesService.getScriptProperties().getProperty('AIRTABLE_TOKEN') || CONFIG.AIRTABLE_TOKEN;
-  if (!token || token.includes('PASTE_YOUR_TOKEN')) {
+  if (!token || token.indexOf('PASTE_YOUR_TOKEN') !== -1) {
     throw new Error('Set your Airtable token in CONFIG.AIRTABLE_TOKEN, then run setup() again.');
   }
 
   const records = fetchAllAirtableRecords_(token, CONFIG.BASE_ID, CONFIG.TABLE_ID);
-  const { headers, rows } = recordsToRows_(records);
+  const parsed = recordsToRows_(records);
+  const headers = parsed.headers;
+  const rows = parsed.rows;
 
   const ss = SpreadsheetApp.getActiveSpreadsheet();
   const sheet = getOrCreateSheet_(ss, CONFIG.SHEET_NAME);
@@ -70,17 +70,19 @@ function fetchAllAirtableRecords_(token, baseId, tableId) {
   let offset = null;
 
   do {
-    let url = `https://api.airtable.com/v0/${baseId}/${tableId}?pageSize=100`;
-    if (offset) url += `&offset=${encodeURIComponent(offset)}`;
+    let url = 'https://api.airtable.com/v0/' + baseId + '/' + tableId + '?pageSize=100';
+    if (offset) {
+      url += '&offset=' + encodeURIComponent(offset);
+    }
 
     const response = UrlFetchApp.fetch(url, {
       method: 'get',
       muteHttpExceptions: true,
-      headers: { Authorization: `Bearer ${token}` },
+      headers: { Authorization: 'Bearer ' + token },
     });
 
     if (response.getResponseCode() !== 200) {
-      throw new Error(`Airtable error ${response.getResponseCode()}: ${response.getContentText()}`);
+      throw new Error('Airtable error ' + response.getResponseCode() + ': ' + response.getContentText());
     }
 
     const data = JSON.parse(response.getContentText());
@@ -141,7 +143,9 @@ function flattenValue_(value) {
 
 function getOrCreateSheet_(ss, name) {
   let sheet = ss.getSheetByName(name);
-  if (!sheet) sheet = ss.insertSheet(name);
+  if (!sheet) {
+    sheet = ss.insertSheet(name);
+  }
   return sheet;
 }
 
