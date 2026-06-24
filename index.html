@@ -480,9 +480,13 @@ body {
 
   <!-- Tab 5: Daily -->
   <div class="tab-panel" id="tab-daily">
-    <div class="notice-box">
-      <h3>Daily Performance View</h3>
-      <p>Daily data requires individual sales records. This feature is coming in v2.<br>We will connect directly to the Butternut Box and Marro sales tables to provide<br>daily breakdowns of sales, CPA, and conversion rates.</p>
+    <div class="kpi-row" id="dailyKpis"></div>
+    <div class="chart-row full">
+      <div class="chart-box">
+        <h3>Lead Status by Day</h3>
+        <p id="dailyChartStatus" style="font-size:12px;color:#8a7a5a;margin:-6px 0 12px">Open this tab to load Adversus call data.</p>
+        <canvas id="chartLeadStatusDaily" height="100"></canvas>
+      </div>
     </div>
   </div>
 
@@ -524,6 +528,33 @@ const BASE_ID = 'appZoN6xBB9mDv8h4';
 const TABLE_WEEKLY = encodeURIComponent('\u{1F4CA} Weekly KPIs v2');
 const TABLE_SPEND = encodeURIComponent('\u{1F4B7} Spend Tracker');
 const TABLE_PAUSE = encodeURIComponent('\u{1F50D} Pause Reason Analysis');
+const TABLE_ADVERSUS = 'tblQcfo7qgQCv7o3n';
+const FIELD_LEAD_STATUS = 'Lead Status';
+const FIELD_ADVERSUS_DATE = 'Date';
+
+const LEAD_STATUS_COLORS = {
+  'Success': { bg: '#4CAF50CC', border: '#4CAF50' },
+  'Automatic redial': { bg: '#FFD54DCC', border: '#FFD54D' },
+  'Not interested': { bg: '#ED6961CC', border: '#ED6961' },
+  'Private callback': { bg: '#10507CCC', border: '#10507C' },
+  'VIP callback': { bg: '#7B1FA2CC', border: '#7B1FA2' },
+  'Shared callback': { bg: '#29B6F6CC', border: '#29B6F6' },
+  'Invalid': { bg: '#9E9E9ECC', border: '#9E9E9E' },
+  'Unqualified': { bg: '#795548CC', border: '#795548' },
+  '(blank)': { bg: '#E0E0E0CC', border: '#BDBDBD' }
+};
+
+const LEAD_STATUS_ORDER = [
+  'Automatic redial',
+  'Not interested',
+  'Private callback',
+  'VIP callback',
+  'Invalid',
+  'Shared callback',
+  'Unqualified',
+  'Success',
+  '(blank)'
+];
 const API_BASE = 'https://api.airtable.com/v0';
 const REFRESH_INTERVAL = 5 * 60 * 1000; // 5 minutes
 
@@ -537,9 +568,13 @@ let airtableToken = '';
 let rawWeeklyData = [];
 let rawSpendData = [];
 let rawPauseData = [];
+let rawAdversusData = [];
 let filteredWeekly = [];
 let filteredSpend = [];
 let filteredPause = [];
+let filteredAdversus = [];
+let adversusLoaded = false;
+let adversusLoading = false;
 let allCharts = {};
 let refreshTimer = null;
 
@@ -585,6 +620,24 @@ function periodWeeks(period) {
   const start = (p - 1) * 4 + 1;
   const end = p * 4;
   return [start, end];
+}
+
+/** ISO week number from YYYY-MM-DD date string */
+function isoWeekFromDate(dateStr) {
+  if (!dateStr) return 0;
+  const d = new Date(dateStr + 'T12:00:00');
+  if (isNaN(d.getTime())) return 0;
+  const dayNum = d.getDay() || 7;
+  d.setDate(d.getDate() + 4 - dayNum);
+  const yearStart = new Date(d.getFullYear(), 0, 1);
+  return Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
+}
+
+/** Short label for chart axis: "18 Mar" */
+function formatDayLabel(dateStr) {
+  const d = new Date(dateStr + 'T12:00:00');
+  if (isNaN(d.getTime())) return dateStr;
+  return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
 }
 
 /** Format number by type: 'int', 'pct', 'gbp', 'dec' */
@@ -688,6 +741,79 @@ async function fetchAllRecords(token, tableName, fields) {
   } while (offset);
 
   return allRecords;
+}
+
+/** Fetch records from a table by ID, optionally limiting to specific fields */
+async function fetchTableById(token, tableId, fieldNames, loadingLabel) {
+  let allRecords = [];
+  let offset = null;
+  let page = 0;
+
+  do {
+    let url = `${API_BASE}/${BASE_ID}/${tableId}?pageSize=100`;
+    if (fieldNames && fieldNames.length) {
+      fieldNames.forEach(f => { url += `&fields[]=${encodeURIComponent(f)}`; });
+    }
+    if (offset) url += `&offset=${encodeURIComponent(offset)}`;
+
+    page++;
+    if (loadingLabel) {
+      updateLoadingText(`${loadingLabel} (page ${page})...`);
+    }
+
+    const resp = await enqueueFetch(url, {
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+
+    if (!resp.ok) {
+      const errBody = await resp.text();
+      let msg = `Airtable API error ${resp.status}`;
+      try { msg = JSON.parse(errBody).error.message || msg; } catch(e) {}
+      throw new Error(msg);
+    }
+
+    const data = await resp.json();
+    allRecords = allRecords.concat(data.records || []);
+    offset = data.offset || null;
+  } while (offset);
+
+  return allRecords;
+}
+
+async function loadAdversusData(force) {
+  if (!airtableToken) return;
+  if (adversusLoading) return;
+  if (adversusLoaded && !force) return;
+
+  adversusLoading = true;
+  const statusEl = document.getElementById('dailyChartStatus');
+  if (statusEl) statusEl.textContent = 'Loading Adversus call data...';
+  showLoading(true);
+
+  try {
+    const adversus = await fetchTableById(
+      airtableToken,
+      TABLE_ADVERSUS,
+      [FIELD_ADVERSUS_DATE, FIELD_LEAD_STATUS],
+      'Fetching Adversus API'
+    );
+
+    rawAdversusData = adversus;
+    adversusLoaded = true;
+    filterAdversus();
+    renderDaily();
+
+    if (statusEl) {
+      statusEl.textContent = `${adversus.length.toLocaleString('en-GB')} call records loaded`;
+    }
+  } catch (err) {
+    if (statusEl) statusEl.textContent = 'Error loading call data: ' + err.message;
+    showToast('Error loading Adversus data: ' + err.message, true);
+    console.error(err);
+  } finally {
+    adversusLoading = false;
+    showLoading(false);
+  }
 }
 
 // ══════════════════════════════════════════════════════════════
@@ -805,7 +931,22 @@ function applyFilters() {
     return true;
   });
 
+  filterAdversus();
+
   renderAll();
+}
+
+function filterAdversus() {
+  const period = document.getElementById('periodFilter').value;
+  const [ws, we] = periodWeeks(period);
+
+  filteredAdversus = rawAdversusData.filter(r => {
+    const dateStr = gs(r, FIELD_ADVERSUS_DATE);
+    if (!dateStr) return false;
+    if (period === 'all') return true;
+    const w = isoWeekFromDate(dateStr);
+    return w >= ws && w <= we;
+  });
 }
 
 // ══════════════════════════════════════════════════════════════
@@ -961,6 +1102,7 @@ function renderAll() {
   renderRetention();
   renderLeads();
   renderCosts();
+  renderDaily();
   renderStaffing();
 }
 
@@ -1637,6 +1779,119 @@ function renderCosts() {
 }
 
 // ══════════════════════════════════════════════════════════════
+// TAB 5: DAILY
+// ══════════════════════════════════════════════════════════════
+
+function leadStatusLabel(record) {
+  const status = gs(record, FIELD_LEAD_STATUS);
+  return status || '(blank)';
+}
+
+function leadStatusColor(status) {
+  return LEAD_STATUS_COLORS[status] || { bg: '#BDBDBDCC', border: '#9E9E9E' };
+}
+
+function groupAdversusByDay(records) {
+  const map = {};
+  records.forEach(r => {
+    const day = gs(r, FIELD_ADVERSUS_DATE);
+    if (!day) return;
+    const status = leadStatusLabel(r);
+    if (!map[day]) map[day] = {};
+    map[day][status] = (map[day][status] || 0) + 1;
+  });
+  return map;
+}
+
+function renderDaily() {
+  const kpiEl = document.getElementById('dailyKpis');
+  const canvas = document.getElementById('chartLeadStatusDaily');
+  if (!kpiEl || !canvas) return;
+
+  if (!adversusLoaded) {
+    kpiEl.innerHTML = '';
+    destroyChart('leadStatusDaily');
+    return;
+  }
+
+  const grouped = groupAdversusByDay(filteredAdversus);
+  const days = Object.keys(grouped).sort();
+  const labels = days.map(formatDayLabel);
+
+  const statusTotals = {};
+  filteredAdversus.forEach(r => {
+    const status = leadStatusLabel(r);
+    statusTotals[status] = (statusTotals[status] || 0) + 1;
+  });
+
+  const statuses = LEAD_STATUS_ORDER.filter(s => statusTotals[s]);
+  Object.keys(statusTotals).forEach(s => {
+    if (!statuses.includes(s)) statuses.push(s);
+  });
+
+  const successCount = statusTotals['Success'] || 0;
+  const totalCalls = filteredAdversus.length;
+
+  kpiEl.innerHTML = [
+    buildKpiCard('Total Calls', fmt(totalCalls, 'int'), '', null, null, true),
+    buildKpiCard('Successes', fmt(successCount, 'int'),
+      totalCalls ? `${((successCount / totalCalls) * 100).toFixed(1)}% of calls` : '',
+      null, null, true),
+    buildKpiCard('Days', fmt(days.length, 'int'), '', null, null, true),
+    buildKpiCard('Statuses', fmt(statuses.length, 'int'), '', null, null, true)
+  ].join('');
+
+  const datasets = statuses.map(status => {
+    const colors = leadStatusColor(status);
+    return {
+      label: status,
+      data: days.map(day => grouped[day][status] || 0),
+      backgroundColor: colors.bg,
+      borderColor: colors.border,
+      borderWidth: 1,
+      borderRadius: 2
+    };
+  });
+
+  const ctx = canvas.getContext('2d');
+  createChart('leadStatusDaily', ctx, {
+    type: 'bar',
+    data: { labels, datasets },
+    options: mergeOpts({
+      plugins: {
+        legend: { position: 'top' },
+        datalabels: { display: false },
+        tooltip: {
+          callbacks: {
+            footer: items => {
+              const total = items.reduce((sum, item) => sum + (item.parsed.y || 0), 0);
+              return 'Total: ' + total.toLocaleString('en-GB');
+            }
+          }
+        }
+      },
+      scales: {
+        x: {
+          stacked: true,
+          grid: { display: false },
+          ticks: {
+            maxRotation: 45,
+            minRotation: 45,
+            autoSkip: true,
+            maxTicksLimit: days.length > 45 ? 20 : undefined
+          }
+        },
+        y: {
+          stacked: true,
+          grid: { color: '#f0e6cc' },
+          ticks: { callback: v => Number.isInteger(v) ? v : '' }
+        }
+      }
+    })
+  });
+}
+
+// ══════════════════════════════════════════════════════════════
 // TAB 6: STAFFING
 // ══════════════════════════════════════════════════════════════
 
@@ -1790,6 +2045,10 @@ function switchTab(tabId, btn) {
   document.getElementById('tab-' + tabId).classList.add('active');
   btn.classList.add('active');
 
+  if (tabId === 'daily' && !adversusLoaded && !adversusLoading) {
+    loadAdversusData(false);
+  }
+
   // Re-render active tab charts to fix canvas sizing
   setTimeout(() => {
     Object.values(allCharts).forEach(c => c.resize());
@@ -1881,7 +2140,10 @@ function clearToken() {
 
 function refreshData() {
   if (!airtableToken) return;
-  loadAllData();
+  const reloadAdversus = adversusLoaded;
+  loadAllData().then(() => {
+    if (reloadAdversus) loadAdversusData(true);
+  });
 }
 
 function startAutoRefresh() {
