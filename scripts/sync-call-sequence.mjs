@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Links Adversus calls to Irish Databowl leads (when missing) and sets
+ * Links Adversus calls to Databowl leads (Irish or UK when missing) and sets
  * "Call # for Lead" — the call's position in that lead's call history.
  *
  * Usage:
@@ -10,9 +10,11 @@
 
 const BASE_ID = 'appZoN6xBB9mDv8h4';
 const TABLE_CALLS = 'tblQcfo7qgQCv7o3n';
-const TABLE_LEADS = 'tbllpLbEtTkmMQOY9';
+const TABLE_LEADS_IE = 'tbllpLbEtTkmMQOY9';
+const TABLE_LEADS_UK = 'tblKCC8nxriWKXrEG';
 
-const FIELD_LEAD_LINK = '☘ Databowl Leads';
+const FIELD_LEAD_LINK_IE = '☘ Databowl Leads';
+const FIELD_LEAD_LINK_UK = '🇬🇧 UK Databowl leads';
 const FIELD_DATABOWL_LEAD_ID = 'Databowl LeadId';
 const FIELD_CALL_NUMBER = 'Call # for Lead';
 const FIELD_SESSION_START = 'Session Start (No Offset)';
@@ -92,9 +94,17 @@ function parseCallTime(record) {
   return Number.isNaN(created) ? 0 : created;
 }
 
-function leadIdFromCall(record) {
-  const links = record.fields[FIELD_LEAD_LINK];
-  return links?.[0] || null;
+/** Stable key per linked lead (Irish or UK). */
+function leadKeyFromCall(record) {
+  const irish = record.fields[FIELD_LEAD_LINK_IE]?.[0];
+  if (irish) return `ie:${irish}`;
+  const uk = record.fields[FIELD_LEAD_LINK_UK]?.[0];
+  if (uk) return `uk:${uk}`;
+  return null;
+}
+
+function hasLeadLink(record) {
+  return Boolean(leadKeyFromCall(record));
 }
 
 async function patchRecords(tableId, updates) {
@@ -116,44 +126,65 @@ async function patchRecords(tableId, updates) {
 async function main() {
   console.log(DRY_RUN ? 'Dry run — no writes.' : 'Syncing call links and call sequence numbers...');
 
-  const [calls, leads] = await Promise.all([
+  const [calls, leadsIe, leadsUk] = await Promise.all([
     fetchAllRecords(TABLE_CALLS, [
-      FIELD_LEAD_LINK,
+      FIELD_LEAD_LINK_IE,
+      FIELD_LEAD_LINK_UK,
       FIELD_DATABOWL_LEAD_ID,
       FIELD_CALL_NUMBER,
       FIELD_SESSION_START,
       FIELD_TIMESTAMP,
     ]),
-    fetchAllRecords(TABLE_LEADS, [FIELD_LEAD_DATABOWL_ID]),
+    fetchAllRecords(TABLE_LEADS_IE, [FIELD_LEAD_DATABOWL_ID]),
+    fetchAllRecords(TABLE_LEADS_UK, [FIELD_LEAD_DATABOWL_ID]),
   ]);
 
-  const leadByDatabowlId = new Map();
-  for (const lead of leads) {
+  const leadByDatabowlIdIe = new Map();
+  for (const lead of leadsIe) {
     const databowlId = lead.fields[FIELD_LEAD_DATABOWL_ID];
-    if (databowlId != null) leadByDatabowlId.set(databowlId, lead.id);
+    if (databowlId != null) leadByDatabowlIdIe.set(databowlId, lead.id);
+  }
+
+  const leadByDatabowlIdUk = new Map();
+  for (const lead of leadsUk) {
+    const databowlId = lead.fields[FIELD_LEAD_DATABOWL_ID];
+    if (databowlId != null) leadByDatabowlIdUk.set(databowlId, lead.id);
   }
 
   const linkUpdates = [];
-  let linkedNow = 0;
+  let linkedIe = 0;
+  let linkedUk = 0;
   for (const call of calls) {
-    if (leadIdFromCall(call)) continue;
+    if (hasLeadLink(call)) continue;
     const databowlId = call.fields[FIELD_DATABOWL_LEAD_ID];
-    const leadId = databowlId != null ? leadByDatabowlId.get(databowlId) : null;
-    if (!leadId) continue;
-    linkUpdates.push({
-      id: call.id,
-      fields: { [FIELD_LEAD_LINK]: [leadId] },
-    });
-    call.fields[FIELD_LEAD_LINK] = [leadId];
-    linkedNow++;
+    if (databowlId == null) continue;
+
+    const ieLeadId = leadByDatabowlIdIe.get(databowlId);
+    const ukLeadId = leadByDatabowlIdUk.get(databowlId);
+
+    if (ieLeadId) {
+      linkUpdates.push({
+        id: call.id,
+        fields: { [FIELD_LEAD_LINK_IE]: [ieLeadId] },
+      });
+      call.fields[FIELD_LEAD_LINK_IE] = [ieLeadId];
+      linkedIe++;
+    } else if (ukLeadId) {
+      linkUpdates.push({
+        id: call.id,
+        fields: { [FIELD_LEAD_LINK_UK]: [ukLeadId] },
+      });
+      call.fields[FIELD_LEAD_LINK_UK] = [ukLeadId];
+      linkedUk++;
+    }
   }
 
   const callsByLead = new Map();
   for (const call of calls) {
-    const leadId = leadIdFromCall(call);
-    if (!leadId) continue;
-    if (!callsByLead.has(leadId)) callsByLead.set(leadId, []);
-    callsByLead.get(leadId).push(call);
+    const leadKey = leadKeyFromCall(call);
+    if (!leadKey) continue;
+    if (!callsByLead.has(leadKey)) callsByLead.set(leadKey, []);
+    callsByLead.get(leadKey).push(call);
   }
 
   const sequenceUpdates = [];
@@ -177,9 +208,12 @@ async function main() {
     });
   }
 
+  const alreadyLinked = calls.filter(hasLeadLink).length - linkUpdates.length;
+
   console.log(`Calls: ${calls.length}`);
-  console.log(`Leads: ${leads.length}`);
-  console.log(`Calls linked to leads: ${calls.length - linkUpdates.length} existing, ${linkedNow} to link`);
+  console.log(`Irish leads: ${leadsIe.length}, UK leads: ${leadsUk.length}`);
+  console.log(`Already linked: ${alreadyLinked}`);
+  console.log(`New links — Irish: ${linkedIe}, UK: ${linkedUk}`);
   console.log(`Call # updates needed: ${sequenceChanges}`);
 
   await patchRecords(TABLE_CALLS, linkUpdates);
