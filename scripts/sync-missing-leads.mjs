@@ -1,7 +1,11 @@
 #!/usr/bin/env node
 /**
- * Copies leads present in appwocx9mhLR8Mh33 but missing from appZoN6xBB9mDv8h4
+ * Keeps Irish Databowl leads in sync between both Airtable bases
  * (matched by Databowl Lead ID).
+ *
+ * Usage:
+ *   AIRTABLE_API_KEY=pat_xxx node scripts/sync-missing-leads.mjs
+ *   AIRTABLE_API_KEY=pat_xxx node scripts/sync-missing-leads.mjs --dry-run
  */
 
 const BASE_MAIN = 'appZoN6xBB9mDv8h4';
@@ -90,48 +94,62 @@ function pickWritableFields(fields) {
   return out;
 }
 
+function recordsMissingFrom(sourceRecords, targetIds) {
+  return sourceRecords.filter((r) => {
+    const id = r.fields[KEY_FIELD];
+    return id != null && !targetIds.has(id);
+  });
+}
+
+async function createRecords(targetBase, records, label) {
+  if (!records.length) {
+    console.log(`Nothing to add to ${label}.`);
+    return 0;
+  }
+
+  const payloads = records.map((r) => ({ fields: pickWritableFields(r.fields) }));
+
+  if (DRY_RUN) {
+    console.log(`[dry-run] Would create ${payloads.length} in ${label}:`, payloads.map((p) => p.fields[KEY_FIELD]).join(', '));
+    return payloads.length;
+  }
+
+  for (let i = 0; i < payloads.length; i += BATCH_SIZE) {
+    const chunk = payloads.slice(i, i + BATCH_SIZE);
+    const result = await airtableFetch(targetBase, TABLE, {
+      method: 'POST',
+      body: JSON.stringify({ records: chunk }),
+    });
+    console.log(`Created in ${label}: ${Math.min(i + BATCH_SIZE, payloads.length)}/${payloads.length}`);
+    for (const rec of result.records || []) {
+      console.log(`  + ${rec.fields[KEY_FIELD]} ${rec.fields['First Name'] || ''} ${rec.fields['Last Name'] || ''}`.trim());
+    }
+  }
+
+  return payloads.length;
+}
+
 async function main() {
   const [mainRecords, otherRecords] = await Promise.all([
     fetchAllRecords(BASE_MAIN),
     fetchAllRecords(BASE_OTHER),
   ]);
 
-  const mainIds = new Set(
-    mainRecords.map((r) => r.fields[KEY_FIELD]).filter((v) => v != null)
-  );
+  const mainIds = new Set(mainRecords.map((r) => r.fields[KEY_FIELD]).filter((v) => v != null));
+  const otherIds = new Set(otherRecords.map((r) => r.fields[KEY_FIELD]).filter((v) => v != null));
 
-  const toCreate = otherRecords.filter((r) => {
-    const id = r.fields[KEY_FIELD];
-    return id != null && !mainIds.has(id);
-  });
+  const missingInMain = recordsMissingFrom(otherRecords, mainIds);
+  const missingInOther = recordsMissingFrom(mainRecords, otherIds);
 
-  console.log(`Main: ${mainRecords.length}, Other: ${otherRecords.length}`);
-  console.log(`Missing in main: ${toCreate.length}`);
+  console.log(`Main (${BASE_MAIN}): ${mainRecords.length} records, ${mainIds.size} Databowl IDs`);
+  console.log(`Other (${BASE_OTHER}): ${otherRecords.length} records, ${otherIds.size} Databowl IDs`);
+  console.log(`Missing in main: ${missingInMain.length}`);
+  console.log(`Missing in other: ${missingInOther.length}`);
 
-  if (!toCreate.length) {
-    console.log('Nothing to add.');
-    return;
-  }
+  const addedToMain = await createRecords(BASE_MAIN, missingInMain, 'main');
+  const addedToOther = await createRecords(BASE_OTHER, missingInOther, 'other');
 
-  const payloads = toCreate.map((r) => ({ fields: pickWritableFields(r.fields) }));
-
-  if (DRY_RUN) {
-    console.log('[dry-run] Would create:', payloads.map((p) => p.fields[KEY_FIELD]).join(', '));
-    return;
-  }
-
-  for (let i = 0; i < payloads.length; i += BATCH_SIZE) {
-    const chunk = payloads.slice(i, i + BATCH_SIZE);
-    const result = await airtableFetch(BASE_MAIN, TABLE, {
-      method: 'POST',
-      body: JSON.stringify({ records: chunk }),
-    });
-    console.log(`Created ${Math.min(i + BATCH_SIZE, payloads.length)}/${payloads.length}`);
-    for (const rec of result.records || []) {
-      console.log(`  + ${rec.fields[KEY_FIELD]} ${rec.fields['First Name'] || ''} ${rec.fields['Last Name'] || ''}`.trim());
-    }
-  }
-
+  console.log(`Summary: added ${addedToMain} to main, ${addedToOther} to other`);
   console.log('Done.');
 }
 
