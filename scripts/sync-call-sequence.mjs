@@ -20,6 +20,7 @@ const TABLE_LEADS_UK = 'tblKCC8nxriWKXrEG';
 const FIELD_LEAD_LINK_IE_ID = 'fldXoPVNNChnJBYJE';
 const FIELD_LEAD_LINK_UK_ID = 'fldsqdT38k8fgtUom';
 const FIELD_DATABOWL_LEAD_ID_ID = 'fld2NtZbn2LQQ2mSH';
+const FIELD_LEAD_ID_ID = 'fld51LngNnwaIRJfn';
 const FIELD_CALL_NUMBER_ID = 'fldMSlD63aHqYAjPG';
 const FIELD_SESSION_START_ID = 'fldUFKmef3lg0sRLn';
 const FIELD_TIMESTAMP_ID = 'fldXQGEGMg4gxxPhI';
@@ -28,6 +29,7 @@ const FIELD_TIMESTAMP_ID = 'fldXQGEGMg4gxxPhI';
 const FIELD_LEAD_LINK_IE = '☘ Databowl Leads';
 const FIELD_LEAD_LINK_UK = '🇬🇧 UK Databowl leads';
 const FIELD_DATABOWL_LEAD_ID = 'Databowl LeadId';
+const FIELD_LEAD_ID = 'Lead ID';
 const FIELD_CALL_NUMBER = 'Call # for Lead';
 const FIELD_SESSION_START = 'Session Start (No Offset)';
 const FIELD_TIMESTAMP = 'Timestamp';
@@ -106,10 +108,12 @@ function parseCallTime(record) {
   return Number.isNaN(created) ? 0 : created;
 }
 
-/** Group key — prefer Databowl LeadId so linked + unlinked calls align. */
+/** Group key — Databowl LeadId, then Adversus Lead ID, then lead link. */
 function groupKeyFromCall(record) {
   const databowlId = record.fields[FIELD_DATABOWL_LEAD_ID];
   if (databowlId != null) return `db:${databowlId}`;
+  const leadId = record.fields[FIELD_LEAD_ID];
+  if (leadId != null) return `adv:${leadId}`;
   const irish = record.fields[FIELD_LEAD_LINK_IE]?.[0];
   if (irish) return `ie:${irish}`;
   const uk = record.fields[FIELD_LEAD_LINK_UK]?.[0];
@@ -148,6 +152,7 @@ async function main() {
       FIELD_LEAD_LINK_IE,
       FIELD_LEAD_LINK_UK,
       FIELD_DATABOWL_LEAD_ID,
+      FIELD_LEAD_ID,
       FIELD_CALL_NUMBER,
       FIELD_SESSION_START,
       FIELD_TIMESTAMP,
