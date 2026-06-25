@@ -1,6 +1,6 @@
 // ============================================================
 // LINK ADVERSUS CALLS ↔ DATABOWL LEADS + BACKFILL + STATUS SYNC
-// v6
+// v6.1
 //
 // PASTE INTO: automation named "Linking Leads Adversus & Databowl"
 // Trigger: When record created in Adversus API
@@ -95,24 +95,26 @@ function parseCallTime(rec) {
     return 0;
 }
 
-function getPeriodForDate(dateStr) {
+function isoWeekNumber(dateStr) {
     var d = new Date(dateStr);
     if (isNaN(d.getTime())) return null;
     var temp = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
     temp.setUTCDate(temp.getUTCDate() + 4 - (temp.getUTCDay() || 7));
     var yearStart = new Date(Date.UTC(temp.getUTCFullYear(), 0, 1));
-    var weekNo = Math.ceil(((temp - yearStart) / 86400000) + 1) / 7;
+    var diffDays = (temp - yearStart) / 86400000;
+    return Math.ceil((diffDays + 1) / 7);
+}
+
+function getPeriodForDate(dateStr) {
+    var weekNo = isoWeekNumber(dateStr);
+    if (!weekNo) return null;
     var periodNum = Math.floor((weekNo - 1) / 4) + 1;
     return "P" + (periodNum > 13 ? 13 : periodNum);
 }
 
 function getISOWeek(dateStr) {
-    var d = new Date(dateStr);
-    if (isNaN(d.getTime())) return null;
-    var temp = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
-    temp.setUTCDate(temp.getUTCDate() + 4 - (temp.getUTCDay() || 7));
-    var yearStart = new Date(Date.UTC(temp.getUTCFullYear(), 0, 1));
-    var weekNo = Math.ceil(((temp - yearStart) / 86400000) + 1) / 7;
+    var weekNo = isoWeekNumber(dateStr);
+    if (!weekNo) return null;
     return "W" + weekNo;
 }
 
@@ -162,8 +164,11 @@ function computeOpenClosed(adversusText, timesCalled) {
 
 function setsEqual(a, b) {
     if (a.size !== b.size) return false;
-    for (var id of a) {
-        if (!b.has(id)) return false;
+    var iter = a.values();
+    var next = iter.next();
+    while (!next.done) {
+        if (!b.has(next.value)) return false;
+        next = iter.next();
     }
     return true;
 }
@@ -337,10 +342,8 @@ try {
     });
 
     var advByLeadId = {};
-    var advByRecordId = {};
     for (var i = 0; i < advQuery.records.length; i++) {
         var advRec = advQuery.records[i];
-        advByRecordId[advRec.id] = advRec;
         var leadIdVal = advRec.getCellValue(ADV_LEAD_ID);
         if (leadIdVal === null || leadIdVal === undefined) continue;
         var key = String(leadIdVal);
