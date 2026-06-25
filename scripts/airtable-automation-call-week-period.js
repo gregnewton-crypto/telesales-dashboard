@@ -6,12 +6,15 @@
  *
  * Input variable:
  *   record → Airtable record ID (from the trigger step)
+ *
+ * Uses field IDs (not names) for stability.
  */
 const CALLS_TABLE = 'Adversus API';
-const FIELD_WEEK_FORMULA = '⚙️ Call Week (formula)';
-const FIELD_PERIOD_FORMULA = '⚙️ Call Period (formula)';
-const FIELD_WEEK_SELECT = '⚙️ Call Week';
-const FIELD_PERIOD_SELECT = '⚙️ Call Period';
+
+const FIELD_WEEK_FORMULA_ID = 'fldKqkIw6F4fSn7G0';   // ⚙️ Call Week (formula)
+const FIELD_PERIOD_FORMULA_ID = 'fldOBCNahqAV4qzoq'; // ⚙️ Call Period (formula)
+const FIELD_WEEK_SELECT_ID = 'flddaroXPNRnG4ZWB';   // ⚙️ Call Week
+const FIELD_PERIOD_SELECT_ID = 'fld9AlkEM7bzxck6c';  // ⚙️ Call Period
 
 const config = input.config();
 
@@ -28,28 +31,37 @@ if (!recordId) {
 }
 
 const callsTable = base.getTable(CALLS_TABLE);
+const weekFormulaField = callsTable.getField(FIELD_WEEK_FORMULA_ID);
+const periodFormulaField = callsTable.getField(FIELD_PERIOD_FORMULA_ID);
+const weekSelectField = callsTable.getField(FIELD_WEEK_SELECT_ID);
+const periodSelectField = callsTable.getField(FIELD_PERIOD_SELECT_ID);
 
 const record = await callsTable.selectRecordAsync(recordId, {
-  fields: [FIELD_WEEK_FORMULA, FIELD_PERIOD_FORMULA, FIELD_WEEK_SELECT, FIELD_PERIOD_SELECT],
+  fields: [
+    weekFormulaField,
+    periodFormulaField,
+    weekSelectField,
+    periodSelectField,
+  ],
 });
 
 if (!record) {
   output.set('status', 'Trigger record not found');
 } else {
-  const week = record.getCellValue(FIELD_WEEK_FORMULA);
-  const period = record.getCellValue(FIELD_PERIOD_FORMULA);
+  const week = record.getCellValue(weekFormulaField);
+  const period = record.getCellValue(periodFormulaField);
   const fields = {};
 
   if (week) {
-    fields[FIELD_WEEK_SELECT] = { name: week };
-  } else if (record.getCellValue(FIELD_WEEK_SELECT)) {
-    fields[FIELD_WEEK_SELECT] = null;
+    fields[weekSelectField.id] = { name: week };
+  } else if (record.getCellValue(weekSelectField)) {
+    fields[weekSelectField.id] = null;
   }
 
   if (period) {
-    fields[FIELD_PERIOD_SELECT] = { name: period };
-  } else if (record.getCellValue(FIELD_PERIOD_SELECT)) {
-    fields[FIELD_PERIOD_SELECT] = null;
+    fields[periodSelectField.id] = { name: period };
+  } else if (record.getCellValue(periodSelectField)) {
+    fields[periodSelectField.id] = null;
   }
 
   if (Object.keys(fields).length) {
