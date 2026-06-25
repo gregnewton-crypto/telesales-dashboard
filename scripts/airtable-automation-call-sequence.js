@@ -2,16 +2,21 @@
  * Airtable Automation script — paste into Automations → Run script
  *
  * Trigger: When a record is created or updated in "Adversus API"
+ *   (especially when lead link or Databowl LeadId / session time changes)
  *
  * Input variable:
  *   record → Airtable record ID (from the trigger step)
+ *
+ * Uses field IDs (not names) for stability.
  */
 const CALLS_TABLE = 'Adversus API';
-const LEAD_LINK_IE = '☘ Databowl Leads';
-const LEAD_LINK_UK = '🇬🇧 UK Databowl leads';
-const CALL_NUMBER_FIELD = 'Call # for Lead';
-const SESSION_START_FIELD = 'Session Start (No Offset)';
-const TIMESTAMP_FIELD = 'Timestamp';
+
+const FIELD_LEAD_LINK_IE_ID = 'fldXoPVNNChnJBYJE';     // ☘ Databowl Leads
+const FIELD_LEAD_LINK_UK_ID = 'fldsqdT38k8fgtUom';     // 🇬🇧 UK Databowl leads
+const FIELD_DATABOWL_LEAD_ID = 'fld2NtZbn2LQQ2mSH';    // Databowl LeadId
+const FIELD_CALL_NUMBER_ID = 'fldMSlD63aHqYAjPG';      // Call # for Lead
+const FIELD_SESSION_START_ID = 'fldUFKmef3lg0sRLn';    // Session Start (No Offset)
+const FIELD_TIMESTAMP_ID = 'fldXQGEGMg4gxxPhI';         // Timestamp
 
 const config = input.config();
 
@@ -28,14 +33,29 @@ if (!recordId) {
 }
 
 const callsTable = base.getTable(CALLS_TABLE);
+const leadLinkIeField = callsTable.getField(FIELD_LEAD_LINK_IE_ID);
+const leadLinkUkField = callsTable.getField(FIELD_LEAD_LINK_UK_ID);
+const databowlLeadIdField = callsTable.getField(FIELD_DATABOWL_LEAD_ID);
+const callNumberField = callsTable.getField(FIELD_CALL_NUMBER_ID);
+const sessionStartField = callsTable.getField(FIELD_SESSION_START_ID);
+const timestampField = callsTable.getField(FIELD_TIMESTAMP_ID);
+
+const queryFields = [
+  leadLinkIeField,
+  leadLinkUkField,
+  databowlLeadIdField,
+  callNumberField,
+  sessionStartField,
+  timestampField,
+];
 
 function parseTime(record) {
-  const sessionStart = record.getCellValue(SESSION_START_FIELD);
+  const sessionStart = record.getCellValue(sessionStartField);
   if (sessionStart) {
     const parsed = Date.parse(sessionStart);
     if (!Number.isNaN(parsed)) return parsed;
   }
-  const timestamp = record.getCellValue(TIMESTAMP_FIELD);
+  const timestamp = record.getCellValue(timestampField);
   if (timestamp) {
     const parsed = Date.parse(timestamp);
     if (!Number.isNaN(parsed)) return parsed;
@@ -43,34 +63,38 @@ function parseTime(record) {
   return 0;
 }
 
-function leadKeyFromRecord(record) {
-  const irish = record.getCellValue(LEAD_LINK_IE);
+function groupKeyFromRecord(record) {
+  const databowlId = record.getCellValue(databowlLeadIdField);
+  if (databowlId != null) return `db:${databowlId}`;
+  const irish = record.getCellValue(leadLinkIeField);
   if (irish?.length) return `ie:${irish[0].id}`;
-  const uk = record.getCellValue(LEAD_LINK_UK);
+  const uk = record.getCellValue(leadLinkUkField);
   if (uk?.length) return `uk:${uk[0].id}`;
   return null;
 }
 
 const triggerRecord = await callsTable.selectRecordAsync(recordId, {
-  fields: [LEAD_LINK_IE, LEAD_LINK_UK, SESSION_START_FIELD, TIMESTAMP_FIELD, CALL_NUMBER_FIELD],
+  fields: queryFields,
 });
 
 if (!triggerRecord) {
   output.set('status', 'Trigger record not found');
 } else {
-  const leadKey = leadKeyFromRecord(triggerRecord);
-  if (!leadKey) {
-    if (triggerRecord.getCellValue(CALL_NUMBER_FIELD) !== null) {
-      await callsTable.updateRecordAsync(recordId, { [CALL_NUMBER_FIELD]: null });
+  const groupKey = groupKeyFromRecord(triggerRecord);
+  if (!groupKey) {
+    if (triggerRecord.getCellValue(callNumberField) !== null) {
+      await callsTable.updateRecordAsync(recordId, {
+        [callNumberField.id]: null,
+      });
     }
-    output.set('status', 'No lead linked — call number cleared');
+    output.set('status', 'No Databowl LeadId or lead link — call number cleared');
   } else {
     const query = await callsTable.selectRecordsAsync({
-      fields: [LEAD_LINK_IE, LEAD_LINK_UK, SESSION_START_FIELD, TIMESTAMP_FIELD, CALL_NUMBER_FIELD],
+      fields: queryFields,
     });
 
-    const leadCalls = query.records
-      .filter((record) => leadKeyFromRecord(record) === leadKey)
+    const groupCalls = query.records
+      .filter((record) => groupKeyFromRecord(record) === groupKey)
       .sort((a, b) => {
         const diff = parseTime(a) - parseTime(b);
         if (diff !== 0) return diff;
@@ -78,12 +102,12 @@ if (!triggerRecord) {
       });
 
     const updates = [];
-    leadCalls.forEach((record, index) => {
+    groupCalls.forEach((record, index) => {
       const callNumber = index + 1;
-      if (record.getCellValue(CALL_NUMBER_FIELD) !== callNumber) {
+      if (record.getCellValue(callNumberField) !== callNumber) {
         updates.push({
           id: record.id,
-          fields: { [CALL_NUMBER_FIELD]: callNumber },
+          fields: { [callNumberField.id]: callNumber },
         });
       }
     });
@@ -92,6 +116,6 @@ if (!triggerRecord) {
       await callsTable.updateRecordsAsync(updates.splice(0, 50));
     }
 
-    output.set('status', `Updated ${leadCalls.length} call(s) for ${leadKey}`);
+    output.set('status', `Updated ${groupCalls.length} call(s) for ${groupKey}`);
   }
 }

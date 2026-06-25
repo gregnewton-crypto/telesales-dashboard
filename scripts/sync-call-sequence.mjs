@@ -3,6 +3,9 @@
  * Links Adversus calls to Databowl leads (Irish or UK when missing) and sets
  * "Call # for Lead" — the call's position in that lead's call history.
  *
+ * Groups by Databowl LeadId when present so linked and unlinked calls for the
+ * same lead share one sequence.
+ *
  * Usage:
  *   AIRTABLE_API_KEY=pat_xxx node scripts/sync-call-sequence.mjs
  *   AIRTABLE_API_KEY=pat_xxx node scripts/sync-call-sequence.mjs --dry-run
@@ -13,6 +16,15 @@ const TABLE_CALLS = 'tblQcfo7qgQCv7o3n';
 const TABLE_LEADS_IE = 'tbllpLbEtTkmMQOY9';
 const TABLE_LEADS_UK = 'tblKCC8nxriWKXrEG';
 
+// Field IDs on Adversus API (tblQcfo7qgQCv7o3n) — use IDs for writes
+const FIELD_LEAD_LINK_IE_ID = 'fldXoPVNNChnJBYJE';
+const FIELD_LEAD_LINK_UK_ID = 'fldsqdT38k8fgtUom';
+const FIELD_DATABOWL_LEAD_ID_ID = 'fld2NtZbn2LQQ2mSH';
+const FIELD_CALL_NUMBER_ID = 'fldMSlD63aHqYAjPG';
+const FIELD_SESSION_START_ID = 'fldUFKmef3lg0sRLn';
+const FIELD_TIMESTAMP_ID = 'fldXQGEGMg4gxxPhI';
+
+// Field names — Airtable returns these as keys in record.fields
 const FIELD_LEAD_LINK_IE = '☘ Databowl Leads';
 const FIELD_LEAD_LINK_UK = '🇬🇧 UK Databowl leads';
 const FIELD_DATABOWL_LEAD_ID = 'Databowl LeadId';
@@ -94,8 +106,10 @@ function parseCallTime(record) {
   return Number.isNaN(created) ? 0 : created;
 }
 
-/** Stable key per linked lead (Irish or UK). */
-function leadKeyFromCall(record) {
+/** Group key — prefer Databowl LeadId so linked + unlinked calls align. */
+function groupKeyFromCall(record) {
+  const databowlId = record.fields[FIELD_DATABOWL_LEAD_ID];
+  if (databowlId != null) return `db:${databowlId}`;
   const irish = record.fields[FIELD_LEAD_LINK_IE]?.[0];
   if (irish) return `ie:${irish}`;
   const uk = record.fields[FIELD_LEAD_LINK_UK]?.[0];
@@ -104,7 +118,10 @@ function leadKeyFromCall(record) {
 }
 
 function hasLeadLink(record) {
-  return Boolean(leadKeyFromCall(record));
+  return Boolean(
+    record.fields[FIELD_LEAD_LINK_IE]?.length ||
+      record.fields[FIELD_LEAD_LINK_UK]?.length
+  );
 }
 
 async function patchRecords(tableId, updates) {
@@ -165,55 +182,57 @@ async function main() {
     if (ieLeadId) {
       linkUpdates.push({
         id: call.id,
-        fields: { [FIELD_LEAD_LINK_IE]: [ieLeadId] },
+        fields: { [FIELD_LEAD_LINK_IE_ID]: [ieLeadId] },
       });
       call.fields[FIELD_LEAD_LINK_IE] = [ieLeadId];
       linkedIe++;
     } else if (ukLeadId) {
       linkUpdates.push({
         id: call.id,
-        fields: { [FIELD_LEAD_LINK_UK]: [ukLeadId] },
+        fields: { [FIELD_LEAD_LINK_UK_ID]: [ukLeadId] },
       });
       call.fields[FIELD_LEAD_LINK_UK] = [ukLeadId];
       linkedUk++;
     }
   }
 
-  const callsByLead = new Map();
+  const callsByGroup = new Map();
   for (const call of calls) {
-    const leadKey = leadKeyFromCall(call);
-    if (!leadKey) continue;
-    if (!callsByLead.has(leadKey)) callsByLead.set(leadKey, []);
-    callsByLead.get(leadKey).push(call);
+    const groupKey = groupKeyFromCall(call);
+    if (!groupKey) continue;
+    if (!callsByGroup.has(groupKey)) callsByGroup.set(groupKey, []);
+    callsByGroup.get(groupKey).push(call);
   }
 
   const sequenceUpdates = [];
   let sequenceChanges = 0;
-  for (const [, leadCalls] of callsByLead) {
-    leadCalls.sort((a, b) => {
+  for (const [, groupCalls] of callsByGroup) {
+    groupCalls.sort((a, b) => {
       const diff = parseCallTime(a) - parseCallTime(b);
       if (diff !== 0) return diff;
       return a.id.localeCompare(b.id);
     });
 
-    leadCalls.forEach((call, index) => {
+    groupCalls.forEach((call, index) => {
       const callNumber = index + 1;
       const current = call.fields[FIELD_CALL_NUMBER];
       if (current === callNumber) return;
       sequenceUpdates.push({
         id: call.id,
-        fields: { [FIELD_CALL_NUMBER]: callNumber },
+        fields: { [FIELD_CALL_NUMBER_ID]: callNumber },
       });
       sequenceChanges++;
     });
   }
 
   const alreadyLinked = calls.filter(hasLeadLink).length - linkUpdates.length;
+  const groupable = calls.filter((c) => groupKeyFromCall(c)).length;
 
   console.log(`Calls: ${calls.length}`);
   console.log(`Irish leads: ${leadsIe.length}, UK leads: ${leadsUk.length}`);
   console.log(`Already linked: ${alreadyLinked}`);
   console.log(`New links — Irish: ${linkedIe}, UK: ${linkedUk}`);
+  console.log(`Groupable calls (by Databowl LeadId or link): ${groupable}`);
   console.log(`Call # updates needed: ${sequenceChanges}`);
 
   await patchRecords(TABLE_CALLS, linkUpdates);
