@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
-"""Sync one KPI row: count Marro sales in Live, write 🔴 Sales to Reporting.
+"""Sync one KPI row: count sales in Live, write 🔴 Sales to Reporting.
 
 First bridge between Live and Reporting bases. Defaults to W26 D2MS Marro UK.
 
 Usage:
   export AIRTABLE_PAT="pat_..."
   python3 scripts/sync_marro_sales_one_row.py
+  python3 scripts/sync_marro_sales_one_row.py 26 2026 D2MS Butternut UK
 
 Optional args: week year channel brand market
-  python3 scripts/sync_marro_sales_one_row.py 26 2026 D2MS Marro UK
 """
 import json
 import os
@@ -20,7 +20,6 @@ import urllib.request
 LIVE_BASE = "appwocx9mhLR8Mh33"
 REPORTING_BASE = "appmGv8xrLQ7RaeIa"
 
-LIVE_TABLE = "Marro Sales"
 REPORTING_TABLE = "📊 Weekly KPIs v2"
 
 WEEK = int(sys.argv[1]) if len(sys.argv) > 1 else 26
@@ -29,10 +28,22 @@ CHANNEL = sys.argv[3] if len(sys.argv) > 3 else "D2MS"
 BRAND = sys.argv[4] if len(sys.argv) > 4 else "Marro"
 MARKET = sys.argv[5] if len(sys.argv) > 5 else "UK"
 
-# Maps Reporting Channel to Live Direct Sales Team Name
+# Maps Reporting Channel to Live team name value
 TEAM_FOR_CHANNEL = {
     "D2MS": "D2MS",
     "Internal Telesales": None,  # multiple teams — not supported in this minimal script
+}
+
+# Live table + team field per brand
+BRAND_CONFIG = {
+    "Marro": {
+        "table": "Marro Sales",
+        "team_field": "Direct Sales Team Name",
+    },
+    "Butternut": {
+        "table": "Snowflake Butternut Sales",
+        "team_field": "DIRECT_SALES_TEAM_NAME",
+    },
 }
 
 
@@ -58,13 +69,15 @@ def api(method, url, pat, body=None):
         return json.loads(resp.read())
 
 
-def count_live_sales(pat, team):
-    formula = f"AND({{⚙️ ISO Week}}={WEEK}, {{⚙️ Year}}={YEAR}, {{Direct Sales Team Name}}='{team}')"
+def count_live_sales(pat, live_table, team_field, team):
+    formula = (
+        f"AND({{⚙️ ISO Week}}={WEEK}, {{⚙️ Year}}={YEAR}, {{{team_field}}}='{team}')"
+    )
     total = 0
     offset = None
     while True:
         url = (
-            f"https://api.airtable.com/v0/{LIVE_BASE}/{urllib.parse.quote(LIVE_TABLE)}"
+            f"https://api.airtable.com/v0/{LIVE_BASE}/{urllib.parse.quote(live_table)}"
             f"?pageSize=100&filterByFormula={urllib.parse.quote(formula)}"
         )
         if offset:
@@ -106,9 +119,16 @@ def main():
     team = TEAM_FOR_CHANNEL.get(CHANNEL)
     if not team:
         raise SystemExit(f"Channel '{CHANNEL}' needs team mapping — use D2MS for this script.")
+    brand_cfg = BRAND_CONFIG.get(BRAND)
+    if not brand_cfg:
+        raise SystemExit(f"Brand '{BRAND}' not supported. Use: {', '.join(BRAND_CONFIG)}")
 
-    print(f"Reading Live: {BRAND} sales, W{WEEK} {YEAR}, team={team}...")
-    sales_count = count_live_sales(pat, team)
+    print(
+        f"Reading Live: {brand_cfg['table']}, W{WEEK} {YEAR}, team={team}..."
+    )
+    sales_count = count_live_sales(
+        pat, brand_cfg["table"], brand_cfg["team_field"], team
+    )
     print(f"  Live count: {sales_count}")
 
     row = find_reporting_row(pat)
