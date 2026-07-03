@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>D2MS Retention Data Plan</title>
+  <style>
+    :root {
+      --brown: #522A10;
+      --cream: #FFF6D8;
+      --gold: #FFE180;
+      --coral: #ED6961;
+      --blue: #10507C;
+      --green: #2E7D32;
+      --paper: #FFFFFF;
+      --line: #E8D9B0;
+      --text: #2E261F;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--cream);
+      color: var(--text);
+      font-family: Arial, Verdana, sans-serif;
+      line-height: 1.45;
+    }
+
+    header {
+      background: var(--brown);
+      color: var(--gold);
+      padding: 24px;
+    }
+
+    header h1 {
+      margin: 0 0 8px;
+      font-size: clamp(24px, 4vw, 40px);
+    }
+
+    header p {
+      max-width: 760px;
+      margin: 0;
+      color: #F8D98D;
+      font-size: 18px;
+    }
+
+    main {
+      width: min(1180px, calc(100% - 32px));
+      margin: 24px auto 48px;
+    }
+
+    .card {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      box-shadow: 0 8px 24px rgba(82, 42, 16, 0.08);
+      margin-bottom: 22px;
+      padding: 22px;
+    }
+
+    h2 {
+      color: var(--brown);
+      font-size: 24px;
+      margin: 0 0 16px;
+    }
+
+    h3 {
+      color: var(--brown);
+      font-size: 18px;
+      margin: 18px 0 8px;
+    }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+    }
+
+    .summary-box {
+      border-left: 6px solid var(--coral);
+      background: #FFF9E8;
+      border-radius: 12px;
+      padding: 16px;
+    }
+
+    .summary-box strong {
+      display: block;
+      color: var(--brown);
+      font-size: 18px;
+      margin-bottom: 5px;
+    }
+
+    .pill-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      padding: 0;
+      list-style: none;
+    }
+
+    .pill-list li {
+      background: #F8E9B8;
+      border: 1px solid #E4C670;
+      border-radius: 999px;
+      color: var(--brown);
+      font-weight: 700;
+      padding: 9px 14px;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+    }
+
+    table {
+      border-collapse: collapse;
+      min-width: 980px;
+      width: 100%;
+    }
+
+    th,
+    td {
+      border: 1px solid var(--line);
+      padding: 12px;
+      text-align: left;
+      vertical-align: middle;
+    }
+
+    th {
+      background: var(--brown);
+      color: var(--gold);
+      font-size: 14px;
+    }
+
+    tbody tr:nth-child(even) {
+      background: #FFFBEF;
+    }
+
+    .stage {
+      color: var(--brown);
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .bar {
+      display: block;
+      min-width: 70px;
+      border-radius: 999px;
+      color: #fff;
+      font-weight: 700;
+      padding: 8px 10px;
+      text-align: center;
+    }
+
+    .bar.setup { background: var(--blue); }
+    .bar.pull { background: var(--coral); }
+    .bar.analysis { background: #B65A17; }
+    .bar.output { background: var(--green); }
+
+    .empty {
+      background: #FAF0CF;
+    }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 14px;
+    }
+
+    .step-card {
+      background: #FFF9E8;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 16px;
+    }
+
+    .step-card h3 {
+      margin-top: 0;
+    }
+
+    ul {
+      margin: 8px 0 0;
+      padding-left: 22px;
+    }
+
+    li {
+      margin: 6px 0;
+    }
+
+    .formula {
+      background: #2E261F;
+      border-radius: 12px;
+      color: #fff;
+      font-family: "Courier New", monospace;
+      overflow-x: auto;
+      padding: 14px;
+      white-space: nowrap;
+    }
+
+    .note {
+      background: #EAF4FA;
+      border-left: 6px solid var(--blue);
+      border-radius: 12px;
+      padding: 16px;
+    }
+
+    footer {
+      color: #7A5A3A;
+      font-size: 14px;
+      margin-top: 26px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>D2MS Retention Data Plan</h1>
+    <p>Stage 1 plan for measuring retention, pause behaviour, and early churn risk.</p>
+  </header>
+
+  <main>
+    <section class="card">
+      <h2>Simple Aim</h2>
+      <div class="summary-grid">
+        <div class="summary-box">
+          <strong>Who stays?</strong>
+          Measure 28-day and 84-day retention.
+        </div>
+        <div class="summary-box">
+          <strong>Who pauses?</strong>
+          Track customers who pause before box 1 arrives.
+        </div>
+        <div class="summary-box">
+          <strong>What changes?</strong>
+          Turn findings into clear D2MS actions.
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Key Measures</h2>
+      <ul class="pill-list">
+        <li>28 Day Retention</li>
+        <li>84 Day Retention</li>
+        <li>Paused Before First Box</li>
+        <li>Cancellation Reason</li>
+        <li>Payment Failure</li>
+        <li>Agent Performance</li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <h2>Gantt Chart</h2>
+      <div class="table-wrap">
+        <table aria-label="D2MS retention data analytics Gantt chart">
+          <thead>
+            <tr>
+              <th>Stage</th>
+              <th>Step</th>
+              <th>Block 1</th>
+              <th>Block 2</th>
+              <th>Block 3</th>
+              <th>Block 4</th>
+              <th>Block 5</th>
+              <th>Block 6</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="stage">Data Setup</td>
+              <td>Confirm key metrics</td>
+              <td><span class="bar setup">Plan</span></td>
+              <td class="empty"></td>
+              <td class="empty"></td>
+              <td class="empty"></td>
+              <td class="empty"></td>
+              <td class="empty"></td>
+            </tr>
+            <tr>
+              <td class="stage">Data Setup</td>
+              <td>Check 28-day retention field</td>
+              <td><span class="bar setup">Check</span></td>
+              <td class="empty"></td>
+              <td class="empty"></td>
+              <td class="empty"></td>
+              <td class="empty"></td>
+              <td class="empty"></td>
+            </tr>
+            <tr>
+              <td class="stage">Data Setup</td>
+              <td>Check 84-day retention field</td>
+              <td><span class="bar setup">Check</span></td>
+              <td class="empty"></td>
+              <td class="empty"></td>
+              <td class="empty"></td>
+              <td class="empty"></td>
+              <td class="empty"></td>
+            </tr>
+            <tr>
+              <td class="stage">Data Setup</td>
+              <td>Add paused-before-first-box field</td>
+              <td><span class="bar setup">Add</span></td>
+              <td><span class="bar setup">Test</span></td>
+              <td class="empty"></td>
+              <td class="empty"></td>
+              <td class="empty"></td>
+              <td class="empty"></td>
+            </tr>
+            <tr>
+              <td class="stage">Data Pull</td>
+              <td>Pull D2MS customer data</td>
+              <td class="empty"></td>
+              <td><span class="bar pull">Pull</span></td>
+              <td class="empty"></td>
+              <td class="empty"></td>
+              <td class="empty"></td>
+              <td class="empty"></td>
+            </tr>
+            <tr>
+              <td class="stage">Data Pull</td>
+              <td>Pull payment, delivery, and pause data</td>
+              <td class="empty"></td>
+              <td><span class="bar pull">Pull</span></td>
+              <td><span class="bar pull">Clean</span></td>
+              <td class="empty"></td>
+              <td class="empty"></td>
+              <td class="empty"></td>
+            </tr>
+            <tr>
+              <td class="stage">Analysis</td>
+              <td>Compare 28-day retention</td>
+              <td class="empty"></td>
+              <td class="empty"></td>
+              <td><span class="bar analysis">Analyse</span></td>
+              <td><span class="bar analysis">Review</span></td>
+              <td class="empty"></td>
+              <td class="empty"></td>
+            </tr>
+            <tr>
+              <td class="stage">Analysis</td>
+              <td>Compare 84-day retention</td>
+              <td class="empty"></td>
+              <td class="empty"></td>
+              <td><span class="bar analysis">Analyse</span></td>
+              <td><span class="bar analysis">Review</span></td>
+              <td class="empty"></td>
+              <td class="empty"></td>
+            </tr>
+            <tr>
+              <td class="stage">Analysis</td>
+              <td>Analyse paused before first box</td>
+              <td class="empty"></td>
+              <td class="empty"></td>
+              <td class="empty"></td>
+              <td><span class="bar analysis">Analyse</span></td>
+              <td><span class="bar analysis">Review</span></td>
+              <td class="empty"></td>
+            </tr>
+            <tr>
+              <td class="stage">Analysis</td>
+              <td>Compare by agent, offer, product</td>
+              <td class="empty"></td>
+              <td class="empty"></td>
+              <td class="empty"></td>
+              <td><span class="bar analysis">Analyse</span></td>
+              <td><span class="bar analysis">Review</span></td>
+              <td class="empty"></td>
+            </tr>
+            <tr>
+              <td class="stage">Output</td>
+              <td>Build high-risk customer list</td>
+              <td class="empty"></td>
+              <td class="empty"></td>
+              <td class="empty"></td>
+              <td class="empty"></td>
+              <td><span class="bar output">Build</span></td>
+              <td><span class="bar output">Share</span></td>
+            </tr>
+            <tr>
+              <td class="stage">Output</td>
+              <td>Create dashboard view and action list</td>
+              <td class="empty"></td>
+              <td class="empty"></td>
+              <td class="empty"></td>
+              <td class="empty"></td>
+              <td><span class="bar output">Build</span></td>
+              <td><span class="bar output">Actions</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Steps Inside the Steps</h2>
+      <div class="steps">
+        <div class="step-card">
+          <h3>1. Set Metrics</h3>
+          <ul>
+            <li>28-day retention</li>
+            <li>84-day retention</li>
+            <li>Paused before first box</li>
+          </ul>
+        </div>
+        <div class="step-card">
+          <h3>2. Pull Data</h3>
+          <ul>
+            <li>Customer ID</li>
+            <li>Agent</li>
+            <li>Product</li>
+            <li>Offer</li>
+            <li>Delivery date</li>
+            <li>Pause date</li>
+          </ul>
+        </div>
+        <div class="step-card">
+          <h3>3. Clean Data</h3>
+          <ul>
+            <li>Remove duplicates</li>
+            <li>Check missing dates</li>
+            <li>Match customer records</li>
+          </ul>
+        </div>
+        <div class="step-card">
+          <h3>4. Analyse</h3>
+          <ul>
+            <li>By agent</li>
+            <li>By product</li>
+            <li>By offer</li>
+            <li>By payment type</li>
+          </ul>
+        </div>
+        <div class="step-card">
+          <h3>5. Output</h3>
+          <ul>
+            <li>Risk list</li>
+            <li>Dashboard</li>
+            <li>Action list</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Paused Before First Box Formula</h2>
+      <p>Use this if the sheet has <strong>Order 1 Delivery Date</strong> and <strong>Pause Date</strong>.</p>
+      <div class="formula">=IF(AND(PauseDate&lt;&gt;"",Order1DeliveryDate&lt;&gt;"",PauseDate&lt;Order1DeliveryDate),"Yes","No")</div>
+    </section>
+
+    <section class="card">
+      <h2>Best Short Summary</h2>
+      <div class="note">
+        Measure whether D2MS customers stay to 28 days, stay to 84 days,
+        or pause before their first box arrives. Then turn the findings into
+        a risk list, dashboard, and clear action plan.
+      </div>
+    </section>
+
+    <footer>
+      Standalone page. It does not change the existing dashboard homepage.
+    </footer>
+  </main>
+</body>
+</html>
