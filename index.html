@@ -1159,6 +1159,9 @@
 
     let state = loadState();
     let selectedMeetingId = state.selectedMeetingId || state.meetings[0].id;
+    if (!state.meetings.some(meeting => meeting.id === selectedMeetingId)) {
+      selectedMeetingId = state.meetings[0].id;
+    }
     let editingMode = "edit";
     let toastTimer = null;
 
@@ -1266,8 +1269,13 @@
     function saveState(showSavedToast = false) {
       state.selectedMeetingId = selectedMeetingId;
       state.meetings = normalizeMeetings(state.meetings);
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-      if (showSavedToast) showToast("Saved locally", "success");
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        if (showSavedToast) showToast("Saved locally", "success");
+      } catch (error) {
+        console.warn("Unable to save meetings locally", error);
+        showToast("Local save unavailable in this browser", "warn");
+      }
     }
 
     function render() {
@@ -1631,7 +1639,7 @@
     }
 
     function cryptoId() {
-      if (window.crypto && crypto.randomUUID) return crypto.randomUUID();
+      if (window.crypto && window.crypto.randomUUID) return window.crypto.randomUUID();
       return `id-${Date.now()}-${Math.random().toString(16).slice(2)}`;
     }
 
