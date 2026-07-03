@@ -1,1683 +1,1923 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>1-on-1 Meeting Space</title>
-  <style>
-    :root {
-      --bg: #f5f7fb;
-      --surface: #ffffff;
-      --surface-soft: #f8fafc;
-      --text: #162033;
-      --muted: #65758b;
-      --border: #dce4ef;
-      --primary: #2563eb;
-      --primary-dark: #1d4ed8;
-      --primary-soft: #dbeafe;
-      --accent: #7c3aed;
-      --complete: #16a34a;
-      --complete-soft: #dcfce7;
-      --progress: #d97706;
-      --progress-soft: #fef3c7;
-      --behind: #dc2626;
-      --behind-soft: #fee2e2;
-      --shadow: 0 20px 60px rgba(15, 23, 42, 0.08);
-      --shadow-soft: 0 12px 30px rgba(15, 23, 42, 0.06);
-      --radius-xl: 28px;
-      --radius-lg: 20px;
-      --radius-md: 14px;
-      --radius-sm: 10px;
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
-    body {
-      margin: 0;
-      min-height: 100vh;
-      font-family: Inter, Roboto, "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-      color: var(--text);
-      background:
-        radial-gradient(circle at top left, rgba(37, 99, 235, 0.16), transparent 34rem),
-        radial-gradient(circle at 85% 0%, rgba(124, 58, 237, 0.12), transparent 28rem),
-        var(--bg);
-    }
-
-    button,
-    input,
-    textarea,
-    select {
-      font: inherit;
-    }
-
-    button {
-      border: 0;
-    }
-
-    .app-shell {
-      min-height: 100vh;
-      display: grid;
-      grid-template-columns: 330px minmax(0, 1fr);
-    }
-
-    .sidebar {
-      position: sticky;
-      top: 0;
-      height: 100vh;
-      padding: 26px 22px;
-      background: rgba(255, 255, 255, 0.84);
-      border-right: 1px solid rgba(220, 228, 239, 0.86);
-      backdrop-filter: blur(18px);
-      overflow-y: auto;
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      margin-bottom: 28px;
-    }
-
-    .brand-mark {
-      width: 48px;
-      height: 48px;
-      display: grid;
-      place-items: center;
-      border-radius: 16px;
-      color: #fff;
-      background: linear-gradient(135deg, var(--primary), var(--accent));
-      box-shadow: 0 16px 34px rgba(37, 99, 235, 0.25);
-      font-weight: 800;
-      letter-spacing: -0.08em;
-    }
-
-    .brand h1 {
-      margin: 0;
-      font-size: 20px;
-      line-height: 1.05;
-      letter-spacing: -0.035em;
-    }
-
-    .brand p {
-      margin: 5px 0 0;
-      color: var(--muted);
-      font-size: 13px;
-    }
-
-    .primary-button,
-    .secondary-button,
-    .ghost-button,
-    .icon-button {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      border-radius: 999px;
-      cursor: pointer;
-      transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease, color 180ms ease, border-color 180ms ease;
-      user-select: none;
-    }
-
-    .primary-button {
-      width: 100%;
-      padding: 13px 18px;
-      color: #fff;
-      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-      box-shadow: 0 16px 30px rgba(37, 99, 235, 0.25);
-      font-weight: 750;
-    }
-
-    .primary-button:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 20px 38px rgba(37, 99, 235, 0.32);
-    }
-
-    .secondary-button,
-    .ghost-button {
-      padding: 10px 14px;
-      font-weight: 700;
-    }
-
-    .secondary-button {
-      color: var(--primary);
-      background: var(--primary-soft);
-    }
-
-    .secondary-button:hover,
-    .ghost-button:hover {
-      transform: translateY(-1px);
-      background: #e8efff;
-    }
-
-    .ghost-button {
-      color: var(--muted);
-      background: transparent;
-    }
-
-    .icon-button {
-      width: 34px;
-      height: 34px;
-      color: var(--muted);
-      background: var(--surface-soft);
-      border: 1px solid var(--border);
-      flex: 0 0 auto;
-    }
-
-    .icon-button:hover {
-      color: var(--primary);
-      transform: translateY(-1px) scale(1.03);
-      border-color: #bfdbfe;
-    }
-
-    .primary-button:active,
-    .secondary-button:active,
-    .ghost-button:active,
-    .icon-button:active,
-    .history-card:active {
-      transform: scale(0.97);
-    }
-
-    .sidebar-section-title {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin: 26px 4px 12px;
-      color: var(--muted);
-      font-size: 12px;
-      font-weight: 800;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-    }
-
-    .history-list {
-      display: grid;
-      gap: 10px;
-    }
-
-    .history-card {
-      width: 100%;
-      padding: 15px;
-      text-align: left;
-      border: 1px solid transparent;
-      border-radius: var(--radius-md);
-      background: transparent;
-      cursor: pointer;
-      transition: transform 180ms ease, background 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
-    }
-
-    .history-card:hover {
-      transform: translateX(3px);
-      background: var(--surface-soft);
-      border-color: var(--border);
-    }
-
-    .history-card.active {
-      background: #fff;
-      border-color: #bfdbfe;
-      box-shadow: var(--shadow-soft);
-    }
-
-    .history-card-top {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 10px;
-      margin-bottom: 9px;
-    }
-
-    .history-card h2 {
-      margin: 0;
-      font-size: 14px;
-      letter-spacing: -0.01em;
-    }
-
-    .history-card time,
-    .history-card p {
-      display: block;
-      margin: 0;
-      color: var(--muted);
-      font-size: 12px;
-      line-height: 1.45;
-    }
-
-    .mini-progress {
-      width: 100%;
-      height: 6px;
-      margin-top: 12px;
-      overflow: hidden;
-      border-radius: 999px;
-      background: #e2e8f0;
-    }
-
-    .mini-progress span {
-      display: block;
-      height: 100%;
-      border-radius: inherit;
-      background: linear-gradient(90deg, var(--primary), var(--complete));
-      transition: width 320ms ease;
-    }
-
-    .app-main {
-      min-width: 0;
-      padding: 30px;
-    }
-
-    .hero {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) auto;
-      gap: 18px;
-      align-items: start;
-      margin-bottom: 22px;
-      padding: 30px;
-      border: 1px solid rgba(220, 228, 239, 0.84);
-      border-radius: var(--radius-xl);
-      background:
-        linear-gradient(135deg, rgba(255, 255, 255, 0.96), rgba(248, 250, 252, 0.92)),
-        radial-gradient(circle at top right, rgba(37, 99, 235, 0.12), transparent 26rem);
-      box-shadow: var(--shadow);
-    }
-
-    .eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 12px;
-      padding: 7px 10px;
-      border: 1px solid #bfdbfe;
-      border-radius: 999px;
-      color: var(--primary-dark);
-      background: rgba(219, 234, 254, 0.76);
-      font-size: 12px;
-      font-weight: 800;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-    }
-
-    .hero h2 {
-      margin: 0;
-      font-size: clamp(30px, 5vw, 56px);
-      line-height: 0.96;
-      letter-spacing: -0.065em;
-    }
-
-    .hero-meta {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 9px;
-      margin-top: 16px;
-    }
-
-    .pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 7px;
-      padding: 8px 11px;
-      border-radius: 999px;
-      color: var(--muted);
-      background: #fff;
-      border: 1px solid var(--border);
-      font-size: 13px;
-      font-weight: 700;
-      box-shadow: 0 8px 22px rgba(15, 23, 42, 0.04);
-    }
-
-    .hero-actions {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: flex-end;
-      gap: 10px;
-    }
-
-    .metrics-grid {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 14px;
-      margin-bottom: 22px;
-    }
-
-    .metric-card,
-    .panel {
-      border: 1px solid rgba(220, 228, 239, 0.9);
-      border-radius: var(--radius-lg);
-      background: rgba(255, 255, 255, 0.92);
-      box-shadow: var(--shadow-soft);
-    }
-
-    .metric-card {
-      padding: 18px;
-      transition: transform 180ms ease, box-shadow 180ms ease;
-    }
-
-    .metric-card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 20px 36px rgba(15, 23, 42, 0.1);
-    }
-
-    .metric-label {
-      color: var(--muted);
-      font-size: 12px;
-      font-weight: 800;
-      letter-spacing: 0.07em;
-      text-transform: uppercase;
-    }
-
-    .metric-value {
-      margin-top: 8px;
-      font-size: 30px;
-      font-weight: 850;
-      letter-spacing: -0.05em;
-    }
-
-    .metric-sub {
-      margin-top: 4px;
-      color: var(--muted);
-      font-size: 12px;
-    }
-
-    .content-grid {
-      display: grid;
-      grid-template-columns: minmax(0, 1.15fr) minmax(340px, 0.85fr);
-      gap: 22px;
-      align-items: start;
-    }
-
-    .panel {
-      padding: 22px;
-      margin-bottom: 22px;
-    }
-
-    .panel-header {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 16px;
-      margin-bottom: 18px;
-    }
-
-    .panel-header h3 {
-      margin: 0;
-      font-size: 18px;
-      letter-spacing: -0.02em;
-    }
-
-    .panel-header p {
-      margin: 6px 0 0;
-      color: var(--muted);
-      font-size: 13px;
-      line-height: 1.55;
-    }
-
-    .form-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 14px;
-    }
-
-    .field {
-      display: grid;
-      gap: 7px;
-    }
-
-    .field.full {
-      grid-column: 1 / -1;
-    }
-
-    label {
-      color: var(--muted);
-      font-size: 12px;
-      font-weight: 800;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-    }
-
-    input,
-    textarea,
-    select {
-      width: 100%;
-      border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
-      color: var(--text);
-      background: #fff;
-      transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
-    }
-
-    input,
-    select {
-      min-height: 43px;
-      padding: 0 12px;
-    }
-
-    textarea {
-      min-height: 122px;
-      padding: 12px;
-      resize: vertical;
-      line-height: 1.55;
-    }
-
-    input:focus,
-    textarea:focus,
-    select:focus {
-      outline: none;
-      border-color: #93c5fd;
-      box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
-    }
-
-    .summary-card {
-      position: relative;
-      padding: 18px;
-      overflow: hidden;
-      border-radius: var(--radius-md);
-      background:
-        linear-gradient(135deg, rgba(37, 99, 235, 0.1), rgba(124, 58, 237, 0.09)),
-        #fff;
-      border: 1px solid #c7d2fe;
-    }
-
-    .summary-card::before {
-      content: "";
-      position: absolute;
-      inset: -60px auto auto -60px;
-      width: 170px;
-      height: 170px;
-      border-radius: 999px;
-      background: rgba(37, 99, 235, 0.12);
-    }
-
-    .summary-list,
-    .discussion-list,
-    .goal-list {
-      position: relative;
-      display: grid;
-      gap: 10px;
-      margin: 0;
-      padding: 0;
-      list-style: none;
-    }
-
-    .summary-list li,
-    .discussion-item {
-      display: flex;
-      align-items: flex-start;
-      gap: 10px;
-      padding: 12px;
-      border: 1px solid rgba(220, 228, 239, 0.8);
-      border-radius: var(--radius-sm);
-      background: rgba(255, 255, 255, 0.72);
-      line-height: 1.45;
-    }
-
-    .summary-list li::before,
-    .discussion-item::before {
-      content: "";
-      width: 8px;
-      height: 8px;
-      margin-top: 7px;
-      border-radius: 999px;
-      background: var(--primary);
-      box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
-      flex: 0 0 auto;
-    }
-
-    .inline-add {
-      display: flex;
-      gap: 10px;
-      margin-top: 14px;
-    }
-
-    .inline-add input {
-      flex: 1;
-    }
-
-    .progress-box {
-      padding: 18px;
-      border-radius: var(--radius-lg);
-      background: linear-gradient(135deg, #0f172a, #1e3a8a);
-      color: #fff;
-    }
-
-    .progress-top {
-      display: flex;
-      justify-content: space-between;
-      gap: 14px;
-      align-items: flex-end;
-      margin-bottom: 13px;
-    }
-
-    .progress-score {
-      font-size: 42px;
-      font-weight: 900;
-      letter-spacing: -0.06em;
-    }
-
-    .progress-label {
-      color: rgba(255, 255, 255, 0.72);
-      font-size: 12px;
-      font-weight: 800;
-      letter-spacing: 0.07em;
-      text-transform: uppercase;
-    }
-
-    .progress-track {
-      height: 12px;
-      overflow: hidden;
-      border-radius: 999px;
-      background: rgba(255, 255, 255, 0.18);
-    }
-
-    .progress-fill {
-      width: 0;
-      height: 100%;
-      border-radius: inherit;
-      background: linear-gradient(90deg, #60a5fa, #22c55e);
-      transition: width 420ms cubic-bezier(.2, .8, .2, 1);
-    }
-
-    .status-stack {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-      margin-top: 14px;
-    }
-
-    .status-chip {
-      padding: 11px;
-      border-radius: var(--radius-sm);
-      background: rgba(255, 255, 255, 0.12);
-      text-align: center;
-    }
-
-    .status-chip strong {
-      display: block;
-      font-size: 22px;
-    }
-
-    .status-chip span {
-      color: rgba(255, 255, 255, 0.7);
-      font-size: 11px;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-    }
-
-    .goal-item {
-      display: grid;
-      grid-template-columns: auto minmax(0, 1fr) 144px auto;
-      gap: 10px;
-      align-items: center;
-      padding: 12px;
-      border: 1px solid var(--border);
-      border-radius: var(--radius-md);
-      background: #fff;
-      transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
-    }
-
-    .goal-item:hover {
-      transform: translateY(-2px);
-      border-color: #bfdbfe;
-      box-shadow: 0 16px 26px rgba(15, 23, 42, 0.07);
-    }
-
-    .goal-check {
-      width: 26px;
-      height: 26px;
-      border: 2px solid #cbd5e1;
-      border-radius: 9px;
-      background: #fff;
-      cursor: pointer;
-      display: grid;
-      place-items: center;
-      color: #fff;
-      transition: all 180ms ease;
-    }
-
-    .goal-check.completed {
-      border-color: var(--complete);
-      background: var(--complete);
-    }
-
-    .goal-text {
-      min-width: 0;
-      line-height: 1.4;
-    }
-
-    .goal-text.completed {
-      color: var(--muted);
-      text-decoration: line-through;
-    }
-
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      padding: 6px 10px;
-      border-radius: 999px;
-      font-size: 11px;
-      font-weight: 850;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-      white-space: nowrap;
-    }
-
-    .badge.completed,
-    .badge.status-completed {
-      color: #166534;
-      background: var(--complete-soft);
-    }
-
-    .badge.in-progress,
-    .badge.status-in-progress {
-      color: #92400e;
-      background: var(--progress-soft);
-    }
-
-    .badge.behind,
-    .badge.status-behind {
-      color: #991b1b;
-      background: var(--behind-soft);
-    }
-
-    .badge.default {
-      color: var(--primary-dark);
-      background: var(--primary-soft);
-    }
-
-    .goal-status {
-      min-height: 36px;
-      border-radius: 999px;
-      font-size: 12px;
-      font-weight: 750;
-    }
-
-    .notes-card textarea {
-      min-height: 180px;
-      background: linear-gradient(#fff, #fff) padding-box, linear-gradient(135deg, #bfdbfe, transparent) border-box;
-    }
-
-    .empty-state {
-      padding: 22px;
-      border: 1px dashed #cbd5e1;
-      border-radius: var(--radius-md);
-      color: var(--muted);
-      background: var(--surface-soft);
-      text-align: center;
-      line-height: 1.5;
-    }
-
-    .toast {
-      position: fixed;
-      right: 22px;
-      bottom: 22px;
-      z-index: 50;
-      padding: 13px 16px;
-      border-radius: 999px;
-      color: #fff;
-      background: #0f172a;
-      box-shadow: var(--shadow);
-      transform: translateY(24px);
-      opacity: 0;
-      pointer-events: none;
-      transition: transform 240ms ease, opacity 240ms ease;
-      font-size: 14px;
-      font-weight: 750;
-    }
-
-    .toast.show {
-      transform: translateY(0);
-      opacity: 1;
-    }
-
-    .toast.success {
-      background: var(--complete);
-    }
-
-    .toast.warn {
-      background: var(--progress);
-    }
-
-    .modal-backdrop {
-      position: fixed;
-      inset: 0;
-      z-index: 40;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-      background: rgba(15, 23, 42, 0.44);
-      backdrop-filter: blur(10px);
-    }
-
-    .modal-backdrop.open {
-      display: flex;
-    }
-
-    .modal {
-      width: min(720px, 100%);
-      max-height: min(760px, 92vh);
-      overflow: auto;
-      border-radius: var(--radius-xl);
-      background: #fff;
-      box-shadow: 0 34px 90px rgba(15, 23, 42, 0.3);
-      animation: modalIn 220ms ease;
-    }
-
-    .modal header,
-    .modal-body,
-    .modal footer {
-      padding: 22px;
-    }
-
-    .modal header {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 18px;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .modal h3 {
-      margin: 0;
-      font-size: 22px;
-      letter-spacing: -0.035em;
-    }
-
-    .modal p {
-      margin: 7px 0 0;
-      color: var(--muted);
-      line-height: 1.5;
-    }
-
-    .modal footer {
-      display: flex;
-      justify-content: flex-end;
-      gap: 10px;
-      border-top: 1px solid var(--border);
-    }
-
-    @keyframes modalIn {
-      from {
-        transform: translateY(18px) scale(0.97);
-        opacity: 0;
-      }
-      to {
-        transform: translateY(0) scale(1);
-        opacity: 1;
-      }
-    }
-
-    @media (max-width: 1180px) {
-      .app-shell {
-        grid-template-columns: 1fr;
-      }
-
-      .sidebar {
-        position: static;
-        height: auto;
-        border-right: 0;
-        border-bottom: 1px solid var(--border);
-      }
-
-      .history-list {
-        grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-      }
-
-      .content-grid,
-      .hero {
-        grid-template-columns: 1fr;
-      }
-
-      .hero-actions {
-        justify-content: flex-start;
-      }
-    }
-
-    @media (max-width: 780px) {
-      .app-main,
-      .sidebar {
-        padding: 18px;
-      }
-
-      .hero,
-      .panel {
-        padding: 20px;
-      }
-
-      .metrics-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-
-      .form-grid,
-      .status-stack {
-        grid-template-columns: 1fr;
-      }
-
-      .goal-item {
-        grid-template-columns: auto minmax(0, 1fr) auto;
-      }
-
-      .goal-status {
-        grid-column: 2 / -1;
-      }
-    }
-
-    @media (max-width: 520px) {
-      .metrics-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .inline-add {
-        flex-direction: column;
-      }
-
-      .hero h2 {
-        font-size: 34px;
-      }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Telesales Dashboard | Butternut Box & Marro</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
+<style>
+/* ── Reset & Base ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background: #FFF6D8;
+  color: #333;
+  min-height: 100vh;
+}
+
+/* ── Header ── */
+.header {
+  background: #522A10;
+  color: #FFE180;
+  padding: 14px 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  box-shadow: 0 2px 8px rgba(82,42,16,0.25);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.header-left { display: flex; align-items: center; gap: 14px; }
+.header h1 { font-size: 20px; font-weight: 700; letter-spacing: 0.3px; }
+.header-sub { font-size: 12px; color: #d4b87a; font-weight: 400; }
+.header-right { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.header-right label { font-size: 12px; color: #d4b87a; }
+.header-right select, .header-right button {
+  background: #3a1c0a;
+  color: #FFE180;
+  border: 1px solid #7a5a3a;
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.header-right select:hover, .header-right button:hover { background: #5a3a1a; }
+.header-right button:active { transform: scale(0.97); }
+.btn-refresh { display: flex; align-items: center; gap: 5px; }
+.last-updated { font-size: 11px; color: #b89a60; white-space: nowrap; }
+
+/* ── Token Input Overlay ── */
+.token-overlay {
+  position: fixed; inset: 0;
+  background: rgba(82,42,16,0.85);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 1000;
+}
+.token-box {
+  background: #fff;
+  border-radius: 14px;
+  padding: 40px;
+  max-width: 460px;
+  width: 90%;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+  text-align: center;
+}
+.token-box h2 { color: #522A10; margin-bottom: 8px; font-size: 22px; }
+.token-box p { color: #666; font-size: 14px; margin-bottom: 20px; line-height: 1.5; }
+.token-box input {
+  width: 100%;
+  padding: 12px 14px;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  font-size: 14px;
+  margin-bottom: 16px;
+  transition: border-color 0.2s;
+}
+.token-box input:focus { outline: none; border-color: #522A10; }
+.token-box .btn-connect {
+  background: #522A10;
+  color: #FFE180;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 32px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+  width: 100%;
+}
+.token-box .btn-connect:hover { background: #3a1c0a; }
+.token-box .btn-connect:disabled { opacity: 0.6; cursor: not-allowed; }
+.token-box .error-msg { color: #ED6961; font-size: 13px; margin-top: 10px; display: none; }
+.token-box .btn-clear {
+  background: none; border: none; color: #999; font-size: 12px;
+  margin-top: 12px; cursor: pointer; text-decoration: underline;
+}
+
+/* ── Tabs ── */
+.tab-bar {
+  display: flex;
+  background: #fff;
+  border-bottom: 2px solid #e8d9b0;
+  padding: 0 20px;
+  overflow-x: auto;
+}
+.tab-btn {
+  padding: 14px 22px;
+  background: none;
+  border: none;
+  font-size: 14px;
+  font-weight: 500;
+  color: #8a7a5a;
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.tab-btn:hover { color: #522A10; }
+.tab-btn.active {
+  color: #522A10;
+  border-bottom-color: #ED6961;
+  font-weight: 600;
+}
+
+/* ── Main Content ── */
+.main { padding: 20px 24px; max-width: 1400px; margin: 0 auto; }
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+/* ── KPI Cards ── */
+.kpi-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.kpi-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 2px 10px rgba(82,42,16,0.08);
+  border-left: 5px solid #ccc;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.kpi-card:hover { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(82,42,16,0.13); }
+.kpi-card.status-green { border-left-color: #4CAF50; }
+.kpi-card.status-amber { border-left-color: #FF9800; }
+.kpi-card.status-red { border-left-color: #ED6961; }
+.kpi-card.status-neutral { border-left-color: #10507C; }
+.kpi-label { font-size: 12px; color: #8a7a5a; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; }
+.kpi-value { font-size: 28px; font-weight: 700; color: #522A10; margin: 6px 0 4px; }
+.kpi-sub { font-size: 12px; color: #999; }
+.kpi-sub .actual { color: #ED6961; font-weight: 600; }
+.kpi-sub .budget { color: #10507C; font-weight: 600; }
+.kpi-sub .forecast { color: #c5a000; font-weight: 600; }
+.kpi-var { font-size: 13px; font-weight: 600; margin-top: 4px; }
+.kpi-var.positive { color: #4CAF50; }
+.kpi-var.negative { color: #ED6961; }
+
+/* ── Chart Containers ── */
+.chart-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-bottom: 24px;
+}
+.chart-row.full { grid-template-columns: 1fr; }
+.chart-box {
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 2px 10px rgba(82,42,16,0.08);
+}
+.chart-box h3 {
+  font-size: 15px;
+  color: #522A10;
+  margin-bottom: 14px;
+  font-weight: 600;
+}
+.chart-box canvas { width: 100% !important; }
+
+/* ── Tables ── */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+.data-table th {
+  text-align: left;
+  padding: 10px 12px;
+  background: #522A10;
+  color: #FFE180;
+  font-weight: 600;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+.data-table td {
+  padding: 9px 12px;
+  border-bottom: 1px solid #f0e6cc;
+}
+.data-table tr:hover td { background: #fdf5e0; }
+.data-table th:first-child { border-radius: 8px 0 0 0; }
+.data-table th:last-child { border-radius: 0 8px 0 0; }
+
+/* ── Funnel ── */
+.funnel-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  padding: 20px 10px;
+}
+.funnel-stage {
+  text-align: center;
+  flex: 1;
+  max-width: 200px;
+}
+.funnel-bar {
+  height: 60px;
+  background: #ED6961;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: 700;
+  font-size: 18px;
+  margin: 0 2px;
+  transition: width 0.3s;
+}
+.funnel-bar.stage-0 { background: #10507C; }
+.funnel-bar.stage-1 { background: #3a7cb8; }
+.funnel-bar.stage-2 { background: #ED6961; }
+.funnel-bar.stage-3 { background: #4CAF50; }
+.funnel-label {
+  font-size: 11px;
+  color: #8a7a5a;
+  margin-top: 6px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+.funnel-arrow {
+  font-size: 24px;
+  color: #ccc;
+  margin: 0 4px;
+  flex-shrink: 0;
+}
+
+/* ── Loading ── */
+.loading-overlay {
+  display: none;
+  position: fixed; inset: 0;
+  background: rgba(255,246,216,0.85);
+  z-index: 500;
+  align-items: center; justify-content: center;
+  flex-direction: column; gap: 16px;
+}
+.loading-overlay.active { display: flex; }
+.spinner {
+  width: 48px; height: 48px;
+  border: 5px solid #e8d9b0;
+  border-top-color: #522A10;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.loading-text { color: #522A10; font-size: 15px; font-weight: 500; }
+
+/* ── Notice Box ── */
+.notice-box {
+  background: #fff;
+  border-radius: 12px;
+  padding: 40px;
+  text-align: center;
+  box-shadow: 0 2px 10px rgba(82,42,16,0.08);
+}
+.notice-box h3 { color: #522A10; margin-bottom: 10px; }
+.notice-box p { color: #8a7a5a; font-size: 14px; line-height: 1.6; }
+
+/* ── Error Toast ── */
+.toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: #522A10;
+  color: #FFE180;
+  padding: 14px 22px;
+  border-radius: 10px;
+  font-size: 14px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+  z-index: 2000;
+  transform: translateY(100px);
+  opacity: 0;
+  transition: all 0.3s;
+  max-width: 400px;
+}
+.toast.show { transform: translateY(0); opacity: 1; }
+.toast.error { background: #ED6961; color: #fff; }
+
+/* ── Responsive ── */
+@media (max-width: 900px) {
+  .chart-row { grid-template-columns: 1fr; }
+  .header { padding: 12px 16px; }
+  .main { padding: 16px; }
+  .kpi-row { grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); }
+  .funnel-container { flex-direction: column; gap: 8px; }
+  .funnel-arrow { transform: rotate(90deg); }
+}
+@media (max-width: 600px) {
+  .header h1 { font-size: 16px; }
+  .tab-btn { padding: 10px 14px; font-size: 13px; }
+  .kpi-value { font-size: 22px; }
+}
+</style>
 </head>
 <body>
-  <div class="app-shell">
-    <aside class="sidebar">
-      <div class="brand">
-        <div class="brand-mark">1:1</div>
-        <div>
-          <h1>Meeting Space</h1>
-          <p>Weekly 1-on-1 command center</p>
-        </div>
-      </div>
 
-      <button class="primary-button" id="newMeetingButton" type="button">+ Create This Week</button>
-
-      <div class="sidebar-section-title">
-        <span>Meeting History</span>
-        <span id="meetingCount">0</span>
-      </div>
-      <div class="history-list" id="historyList"></div>
-    </aside>
-
-    <main class="app-main">
-      <section class="hero">
-        <div>
-          <div class="eyebrow">Gemini-ready meeting record</div>
-          <h2 id="meetingTitle">1-on-1 Meeting</h2>
-          <div class="hero-meta">
-            <span class="pill" id="meetingDatePill">Date</span>
-            <span class="pill" id="meetingLabelPill">This Week</span>
-            <span class="pill" id="meetingPersonPill">Manager / Direct Report</span>
-          </div>
-        </div>
-        <div class="hero-actions">
-          <button class="secondary-button" id="editMeetingButton" type="button">Edit Details</button>
-          <button class="ghost-button" id="exportButton" type="button">Export JSON</button>
-          <button class="ghost-button" id="resetButton" type="button">Reset Demo</button>
-        </div>
-      </section>
-
-      <section class="metrics-grid" aria-label="Goal metrics">
-        <div class="metric-card">
-          <div class="metric-label">Goals</div>
-          <div class="metric-value" id="metricGoals">0</div>
-          <div class="metric-sub">Action items in this session</div>
-        </div>
-        <div class="metric-card">
-          <div class="metric-label">Completed</div>
-          <div class="metric-value" id="metricCompleted">0</div>
-          <div class="metric-sub">Checked off and closed</div>
-        </div>
-        <div class="metric-card">
-          <div class="metric-label">In Progress</div>
-          <div class="metric-value" id="metricProgress">0</div>
-          <div class="metric-sub">Currently moving forward</div>
-        </div>
-        <div class="metric-card">
-          <div class="metric-label">Behind</div>
-          <div class="metric-value" id="metricBehind">0</div>
-          <div class="metric-sub">Needs attention next week</div>
-        </div>
-      </section>
-
-      <div class="content-grid">
-        <section>
-          <article class="panel">
-            <div class="panel-header">
-              <div>
-                <h3>Gemini Transcript Summary</h3>
-                <p>Paste or edit a transcript, then generate a simulated AI summary for crisp takeaways.</p>
-              </div>
-              <button class="secondary-button" id="summarizeButton" type="button">Generate Summary</button>
-            </div>
-            <div class="summary-card">
-              <ul class="summary-list" id="summaryList"></ul>
-            </div>
-            <div class="field full" style="margin-top: 16px;">
-              <label for="transcriptInput">Meeting transcript</label>
-              <textarea id="transcriptInput" placeholder="Paste transcript notes here..."></textarea>
-            </div>
-          </article>
-
-          <article class="panel">
-            <div class="panel-header">
-              <div>
-                <h3>Discussion Points</h3>
-                <p>Keep a concise record of topics covered during the selected meeting.</p>
-              </div>
-            </div>
-            <ul class="discussion-list" id="discussionList"></ul>
-            <form class="inline-add" id="discussionForm">
-              <input id="discussionInput" type="text" placeholder="Add a discussion point...">
-              <button class="secondary-button" type="submit">Add Point</button>
-            </form>
-          </article>
-
-          <article class="panel notes-card">
-            <div class="panel-header">
-              <div>
-                <h3>Private Notes</h3>
-                <p>Saved automatically for this meeting only, preserving previous weeks.</p>
-              </div>
-            </div>
-            <label for="notesInput">Notes</label>
-            <textarea id="notesInput" placeholder="Capture coaching notes, observations, and follow-ups..."></textarea>
-          </article>
-        </section>
-
-        <aside>
-          <article class="panel">
-            <div class="panel-header">
-              <div>
-                <h3>Goal Tracking</h3>
-                <p>Update goal statuses and watch the session progress recalculate instantly.</p>
-              </div>
-            </div>
-            <div class="progress-box">
-              <div class="progress-top">
-                <div>
-                  <div class="progress-label">Completion score</div>
-                  <div class="progress-score" id="progressScore">0%</div>
-                </div>
-                <span class="badge default" id="progressMood">No goals yet</span>
-              </div>
-              <div class="progress-track">
-                <div class="progress-fill" id="progressFill"></div>
-              </div>
-              <div class="status-stack">
-                <div class="status-chip">
-                  <strong id="statusCompleted">0</strong>
-                  <span>Completed</span>
-                </div>
-                <div class="status-chip">
-                  <strong id="statusInProgress">0</strong>
-                  <span>In Progress</span>
-                </div>
-                <div class="status-chip">
-                  <strong id="statusBehind">0</strong>
-                  <span>Behind</span>
-                </div>
-              </div>
-            </div>
-            <ul class="goal-list" id="goalList" style="margin-top: 16px;"></ul>
-            <form class="inline-add" id="goalForm">
-              <input id="goalInput" type="text" placeholder="Add an action item or goal...">
-              <button class="secondary-button" type="submit">Add Goal</button>
-            </form>
-          </article>
-        </aside>
-      </div>
-    </main>
+<!-- Token Input Overlay -->
+<div class="token-overlay" id="tokenOverlay">
+  <div class="token-box">
+    <h2>Telesales Dashboard</h2>
+    <p>Enter your Airtable Personal Access Token to connect.<br>Your token is stored locally in your browser and never sent anywhere except Airtable.</p>
+    <input type="password" id="tokenInput" placeholder="pat_xxxxxxxxxxxx.xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" autocomplete="off">
+    <button class="btn-connect" id="btnConnect" onclick="connectWithToken()">Connect to Airtable</button>
+    <div class="error-msg" id="tokenError"></div>
+    <button class="btn-clear" id="btnClearToken" style="display:none" onclick="clearToken()">Clear saved token &amp; reconnect</button>
   </div>
+</div>
 
-  <div class="modal-backdrop" id="meetingModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-    <div class="modal">
-      <header>
-        <div>
-          <h3 id="modalTitle">Meeting Details</h3>
-          <p>Create or update a historical 1-on-1 entry.</p>
-        </div>
-        <button class="icon-button" id="closeModalButton" type="button" aria-label="Close">x</button>
-      </header>
-      <form id="meetingForm">
-        <div class="modal-body">
-          <div class="form-grid">
-            <div class="field">
-              <label for="meetingDateInput">Meeting date</label>
-              <input id="meetingDateInput" type="date" required>
-            </div>
-            <div class="field">
-              <label for="meetingLabelInput">Timeline label</label>
-              <input id="meetingLabelInput" type="text" placeholder="This Week" required>
-            </div>
-            <div class="field full">
-              <label for="meetingTitleInput">Title</label>
-              <input id="meetingTitleInput" type="text" placeholder="Weekly growth and priorities" required>
-            </div>
-            <div class="field">
-              <label for="managerInput">Manager</label>
-              <input id="managerInput" type="text" placeholder="Alex Morgan">
-            </div>
-            <div class="field">
-              <label for="reportInput">Direct report</label>
-              <input id="reportInput" type="text" placeholder="Jordan Lee">
-            </div>
-          </div>
-        </div>
-        <footer>
-          <button class="ghost-button" id="cancelModalButton" type="button">Cancel</button>
-          <button class="primary-button" style="width: auto;" type="submit">Save Meeting</button>
-        </footer>
-      </form>
+<!-- Loading Overlay -->
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="spinner"></div>
+  <div class="loading-text" id="loadingText">Fetching data from Airtable...</div>
+</div>
+
+<!-- Header -->
+<div class="header">
+  <div class="header-left">
+    <div>
+      <h1>Telesales Dashboard</h1>
+      <span class="header-sub">Butternut Box &amp; Marro</span>
+    </div>
+  </div>
+  <div class="header-right">
+    <div>
+      <label>Period</label><br>
+      <select id="periodFilter" onchange="applyFilters()">
+        <option value="all">All Periods</option>
+      </select>
+    </div>
+    <div>
+      <label>Channel</label><br>
+      <select id="channelFilter" onchange="applyFilters()">
+        <option value="all">All Channels</option>
+        <option value="Internal Telesales">Internal Telesales</option>
+        <option value="D2MS">D2MS</option>
+      </select>
+    </div>
+    <button class="btn-refresh" onclick="refreshData()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 4v6h6"/><path d="M23 20v-6h-6"/><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/></svg>
+      Refresh
+    </button>
+    <div>
+      <span class="last-updated" id="lastUpdated">Not loaded</span><br>
+      <button class="btn-clear" style="color:#d4b87a;font-size:11px;text-decoration:underline;background:none;border:none;cursor:pointer;padding:0;margin-top:2px" onclick="clearToken()">Change token</button>
+    </div>
+  </div>
+</div>
+
+<!-- Tabs -->
+<div class="tab-bar">
+  <button class="tab-btn active" data-tab="overview" onclick="switchTab('overview', this)">Team Overview</button>
+  <button class="tab-btn" data-tab="retention" onclick="switchTab('retention', this)">Retention</button>
+  <button class="tab-btn" data-tab="leads" onclick="switchTab('leads', this)">Leads</button>
+  <button class="tab-btn" data-tab="costs" onclick="switchTab('costs', this)">Costs</button>
+  <button class="tab-btn" data-tab="daily" onclick="switchTab('daily', this)">Daily</button>
+  <button class="tab-btn" data-tab="staffing" onclick="switchTab('staffing', this)">Staffing</button>
+</div>
+
+<!-- Main Content -->
+<div class="main">
+
+  <!-- Tab 1: Team Overview -->
+  <div class="tab-panel active" id="tab-overview">
+    <div class="kpi-row" id="overviewKpis"></div>
+    <div class="chart-row full">
+      <div class="chart-box">
+        <h3>Weekly Sales: Actual vs Budget vs Forecast</h3>
+        <canvas id="chartOverviewSales" height="90"></canvas>
+      </div>
+    </div>
+    <div class="chart-row">
+      <div class="chart-box">
+        <h3>Sales by Channel (Selected Period)</h3>
+        <canvas id="chartChannelBreakdown" height="120"></canvas>
+      </div>
+      <div class="chart-box">
+        <h3>CPA Trend: Actual vs Budget</h3>
+        <canvas id="chartOverviewCPA" height="120"></canvas>
+      </div>
     </div>
   </div>
 
-  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <!-- Tab 2: Retention -->
+  <div class="tab-panel" id="tab-retention">
+    <div class="kpi-row" id="retentionKpis"></div>
+    <div class="chart-row">
+      <div class="chart-box">
+        <h3>B2 Retention Rate (Weekly)</h3>
+        <canvas id="chartRetentionB2" height="120"></canvas>
+      </div>
+      <div class="chart-box">
+        <h3>Retention Active % (Weekly)</h3>
+        <canvas id="chartRetentionActive" height="120"></canvas>
+      </div>
+    </div>
+    <div class="chart-row">
+      <div class="chart-box">
+        <h3>Paused Count (Weekly)</h3>
+        <canvas id="chartPaused" height="120"></canvas>
+      </div>
+      <div class="chart-box">
+        <h3>Top 5 Pause Reasons</h3>
+        <div style="overflow-x:auto">
+          <table class="data-table" id="pauseReasonsTable">
+            <thead><tr><th>Reason</th><th>Count</th><th>% of Paused</th><th>% of Sales</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
 
-  <script>
-    const STORAGE_KEY = "oneOnOneMeetingSpace:v1";
-    const todayIso = new Date().toISOString().slice(0, 10);
+  <!-- Tab 3: Leads -->
+  <div class="tab-panel" id="tab-leads">
+    <div class="kpi-row" id="leadsKpis"></div>
+    <div class="chart-row full">
+      <div class="chart-box">
+        <h3>Lead Funnel (Selected Period)</h3>
+        <div class="funnel-container" id="leadFunnel"></div>
+      </div>
+    </div>
+    <div class="chart-row">
+      <div class="chart-box">
+        <h3>CVR Trend (Weekly)</h3>
+        <canvas id="chartCVR" height="120"></canvas>
+      </div>
+      <div class="chart-box">
+        <h3>Fresh Leads % (New Leads / Available)</h3>
+        <canvas id="chartFreshLeads" height="120"></canvas>
+      </div>
+    </div>
+  </div>
 
-    const sampleMeetings = [
-      {
-        id: cryptoId(),
-        date: todayIso,
-        label: "This Week",
-        title: "Execution focus and role clarity",
-        manager: "Alex Morgan",
-        report: "Jordan Lee",
-        transcript: "Alex and Jordan reviewed progress on the onboarding playbook, discussed blockers around stakeholder feedback, and agreed to tighten scope before the next sprint planning session. Jordan wants more visibility into roadmap decisions and will draft questions for product leadership. They also discussed energy levels and agreed to protect two focus blocks each week.",
-        summary: [
-          "Onboarding playbook is moving forward, but stakeholder feedback needs clearer ownership.",
-          "Jordan wants more visibility into roadmap decisions before committing delivery dates.",
-          "Both agreed to protect two weekly focus blocks to reduce context switching."
-        ],
-        discussionPoints: [
-          "Reviewed progress on the onboarding playbook and open stakeholder comments.",
-          "Discussed roadmap visibility and where decisions are being made.",
-          "Checked in on workload, energy levels, and focus time."
-        ],
-        goals: [
-          { id: cryptoId(), text: "Consolidate stakeholder comments into three decisions needed.", status: "in-progress" },
-          { id: cryptoId(), text: "Block two 90-minute focus sessions on the calendar.", status: "completed" },
-          { id: cryptoId(), text: "Draft roadmap questions for product leadership.", status: "behind" }
-        ],
-        notes: "Follow up on whether Jordan gets enough context before cross-functional asks land."
-      },
-      {
-        id: cryptoId(),
-        date: offsetDate(-7),
-        label: "Last Week",
-        title: "Feedback loops and delivery confidence",
-        manager: "Alex Morgan",
-        report: "Jordan Lee",
-        transcript: "The pair discussed the pilot launch, where Jordan felt confident about technical execution but less confident about late scope changes. Alex encouraged written decision logs and a stronger definition of done. They agreed to close two lingering bugs and ask design for final copy by Thursday.",
-        summary: [
-          "Pilot launch execution is healthy, with scope change management as the biggest risk.",
-          "Written decision logs should reduce ambiguity across design, product, and engineering.",
-          "Two bugs and final copy approval are the critical follow-ups."
-        ],
-        discussionPoints: [
-          "Pilot launch confidence and risks.",
-          "Handling late scope changes.",
-          "Decision logs and definition of done."
-        ],
-        goals: [
-          { id: cryptoId(), text: "Close the two pilot bugs.", status: "completed" },
-          { id: cryptoId(), text: "Create a decision log template.", status: "completed" },
-          { id: cryptoId(), text: "Confirm final copy with design.", status: "completed" }
-        ],
-        notes: "Strong week. Jordan responded well to converting ambiguity into explicit artifacts."
-      },
-      {
-        id: cryptoId(),
-        date: offsetDate(-14),
-        label: "Two Weeks Ago",
-        title: "Career goals and operating rhythm",
-        manager: "Alex Morgan",
-        report: "Jordan Lee",
-        transcript: "Jordan shared interest in taking on more architecture work and mentoring newer teammates. Alex suggested pairing on the integration design review and documenting a growth goal for the quarter. They discussed weekly planning rituals and agreed to move the Monday planning block earlier.",
-        summary: [
-          "Jordan is aiming for more architecture ownership and mentoring opportunities.",
-          "Integration design review is a useful near-term stretch opportunity.",
-          "Moving Monday planning earlier should improve weekly prioritization."
-        ],
-        discussionPoints: [
-          "Longer-term architecture ownership.",
-          "Mentoring newer teammates.",
-          "Weekly planning rhythm."
-        ],
-        goals: [
-          { id: cryptoId(), text: "Pair on integration design review.", status: "in-progress" },
-          { id: cryptoId(), text: "Document quarterly growth goal.", status: "completed" },
-          { id: cryptoId(), text: "Move Monday planning block to 9:30.", status: "completed" }
-        ],
-        notes: "Potential promotion narrative: architecture scope plus multiplier behavior."
-      }
+  <!-- Tab 4: Costs -->
+  <div class="tab-panel" id="tab-costs">
+    <div class="kpi-row" id="costsKpis"></div>
+    <div class="chart-row full">
+      <div class="chart-box">
+        <h3>Weekly Spend Breakdown</h3>
+        <canvas id="chartSpendBreakdown" height="90"></canvas>
+      </div>
+    </div>
+    <div class="chart-row">
+      <div class="chart-box">
+        <h3>CPA Trend: Actual vs Budget</h3>
+        <canvas id="chartCostCPA" height="120"></canvas>
+      </div>
+      <div class="chart-box">
+        <h3>Spend vs Budget Variance</h3>
+        <canvas id="chartSpendVariance" height="120"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tab 5: Daily -->
+  <div class="tab-panel" id="tab-daily">
+    <div class="notice-box">
+      <h3>Daily Performance View</h3>
+      <p>Daily data requires individual sales records. This feature is coming in v2.<br>We will connect directly to the Butternut Box and Marro sales tables to provide<br>daily breakdowns of sales, CPA, and conversion rates.</p>
+    </div>
+  </div>
+
+  <!-- Tab 6: Staffing -->
+  <div class="tab-panel" id="tab-staffing">
+    <div class="kpi-row" id="staffingKpis"></div>
+    <div class="chart-row">
+      <div class="chart-box">
+        <h3>Connected Calls (Weekly)</h3>
+        <canvas id="chartConnectedCalls" height="120"></canvas>
+      </div>
+      <div class="chart-box">
+        <h3>SPH &amp; CPH Trends</h3>
+        <canvas id="chartSPHCPH" height="120"></canvas>
+      </div>
+    </div>
+    <div class="chart-row">
+      <div class="chart-box">
+        <h3>Connect Rate (Weekly)</h3>
+        <canvas id="chartConnectRate" height="120"></canvas>
+      </div>
+      <div class="chart-box">
+        <h3>Talk Time Hours (Weekly)</h3>
+        <canvas id="chartTalkTime" height="120"></canvas>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ══════════════════════════════════════════════════════════════
+// CONFIGURATION
+// ══════════════════════════════════════════════════════════════
+const BASE_ID = 'appZoN6xBB9mDv8h4';
+const TABLE_WEEKLY = encodeURIComponent('\u{1F4CA} Weekly KPIs v2');
+const TABLE_SPEND = encodeURIComponent('\u{1F4B7} Spend Tracker');
+const TABLE_PAUSE = encodeURIComponent('\u{1F50D} Pause Reason Analysis');
+const API_BASE = 'https://api.airtable.com/v0';
+const REFRESH_INTERVAL = 5 * 60 * 1000; // 5 minutes
+
+const COLOR_ACTUAL = '#ED6961';
+const COLOR_BUDGET = '#10507C';
+const COLOR_FORECAST = '#FFD54D';
+const COLOR_BROWN = '#522A10';
+const COLOR_GOLD = '#FFE180';
+
+let airtableToken = '';
+let rawWeeklyData = [];
+let rawSpendData = [];
+let rawPauseData = [];
+let filteredWeekly = [];
+let filteredSpend = [];
+let filteredPause = [];
+let allCharts = {};
+let refreshTimer = null;
+
+// ══════════════════════════════════════════════════════════════
+// HELPER FUNCTIONS
+// ══════════════════════════════════════════════════════════════
+
+/** Get value from Airtable record, handling lookup arrays */
+function gv(record, fieldName) {
+  const val = record.fields[fieldName];
+  if (val === undefined || val === null) return null;
+  if (Array.isArray(val)) {
+    if (val.length === 0) return null;
+    if (val[0] && typeof val[0] === 'object' && 'value' in val[0]) return val[0].value;
+    return val[0];
+  }
+  return val;
+}
+
+/** Get string value from singleSelect field */
+function gs(record, fieldName) {
+  const val = record.fields[fieldName];
+  if (val === undefined || val === null) return '';
+  if (typeof val === 'object' && val.name) return val.name;
+  if (typeof val === 'string') return val;
+  return String(val);
+}
+
+/** Parse week string "W1" or "1" or "16" to number */
+function weekToNum(weekStr) {
+  if (!weekStr) return 0;
+  const s = typeof weekStr === 'string' ? weekStr : String(weekStr);
+  const m = s.match(/W?(\d+)/i);
+  return m ? parseInt(m[1], 10) : 0;
+}
+
+/** Returns [startWeek, endWeek] for a period (P1=W1-W4, P2=W5-W8, ...) */
+function periodWeeks(period) {
+  if (!period || period === 'all') return [1, 52];
+  const m = period.match(/P(\d+)/i);
+  if (!m) return [1, 52];
+  const p = parseInt(m[1], 10);
+  const start = (p - 1) * 4 + 1;
+  const end = p * 4;
+  return [start, end];
+}
+
+/** Format number by type: 'int', 'pct', 'gbp', 'dec' */
+function fmt(num, type) {
+  if (num === null || num === undefined || isNaN(num)) return '-';
+  switch (type) {
+    case 'int': return Math.round(num).toLocaleString('en-GB');
+    case 'pct': return (num * 100).toFixed(1) + '%';
+    case 'pct_raw': return Number(num).toFixed(1) + '%';
+    case 'gbp': return '£' + Number(num).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    case 'gbp_int': return '£' + Math.round(num).toLocaleString('en-GB');
+    case 'dec': return Number(num).toFixed(2);
+    default: return String(num);
+  }
+}
+
+/** Aggregate an array of numbers: sum or average */
+function agg(arr, mode) {
+  const valid = arr.filter(v => v !== null && v !== undefined && !isNaN(v));
+  if (valid.length === 0) return null;
+  const sum = valid.reduce((a, b) => a + b, 0);
+  return mode === 'avg' ? sum / valid.length : sum;
+}
+
+/** Safe division */
+function safeDivide(a, b) {
+  if (!b || b === 0) return null;
+  return a / b;
+}
+
+// ══════════════════════════════════════════════════════════════
+// AIRTABLE DATA FETCHING
+// ══════════════════════════════════════════════════════════════
+
+/** Rate-limited fetch queue */
+const fetchQueue = [];
+let fetchInProgress = 0;
+const MAX_CONCURRENT = 4;
+const MIN_DELAY = 220; // ms between requests to stay under 5/s
+
+function enqueueFetch(url, options) {
+  return new Promise((resolve, reject) => {
+    fetchQueue.push({ url, options, resolve, reject });
+    processQueue();
+  });
+}
+
+let lastFetchTime = 0;
+function processQueue() {
+  if (fetchInProgress >= MAX_CONCURRENT || fetchQueue.length === 0) return;
+  const now = Date.now();
+  const wait = Math.max(0, MIN_DELAY - (now - lastFetchTime));
+  setTimeout(() => {
+    if (fetchQueue.length === 0) return;
+    const item = fetchQueue.shift();
+    fetchInProgress++;
+    lastFetchTime = Date.now();
+    fetch(item.url, item.options)
+      .then(r => {
+        fetchInProgress--;
+        item.resolve(r);
+        processQueue();
+      })
+      .catch(e => {
+        fetchInProgress--;
+        item.reject(e);
+        processQueue();
+      });
+  }, wait);
+}
+
+/** Fetch all records from an Airtable table with pagination */
+async function fetchAllRecords(token, tableName, fields) {
+  let allRecords = [];
+  let offset = null;
+  let page = 0;
+
+  do {
+    // Don't filter by field names - Airtable rejects if any emoji encoding
+    // doesn't match exactly. Fetch all fields instead (safe for our table sizes).
+    let url = `${API_BASE}/${BASE_ID}/${tableName}?pageSize=100`;
+    if (offset) url += `&offset=${encodeURIComponent(offset)}`;
+
+    page++;
+    updateLoadingText(`Fetching ${decodeURIComponent(tableName)} (page ${page})...`);
+
+    const resp = await enqueueFetch(url, {
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+
+    if (!resp.ok) {
+      const errBody = await resp.text();
+      let msg = `Airtable API error ${resp.status}`;
+      try { msg = JSON.parse(errBody).error.message || msg; } catch(e) {}
+      throw new Error(msg);
+    }
+
+    const data = await resp.json();
+    allRecords = allRecords.concat(data.records || []);
+    offset = data.offset || null;
+  } while (offset);
+
+  return allRecords;
+}
+
+// ══════════════════════════════════════════════════════════════
+// DATA LOADING & PROCESSING
+// ══════════════════════════════════════════════════════════════
+
+async function loadAllData() {
+  showLoading(true);
+  try {
+    const weeklyFields = [
+      'KPI Key',
+      '⚙️ Week Number', '\u{1F4E1} Channel', '\u{1F3AF} Brand', '\u{1F30D} Market',
+      '\u{1F534} Sales', '\u{1F534} CPA', '\u{1F534} Retention',
+      '\u{1F534} CVR Leads Available', '\u{1F534} Contact CVR', '\u{1F534} Connect Rate',
+      '\u{1F534} SPH', '\u{1F534} CPH',
+      '\u{1F534} Total Calls', '\u{1F534} Connected Calls', '\u{1F534} Talk Time Hrs',
+      '\u{1F534} Leads Available', '\u{1F534} New Leads in Week',
+      '\u{1F534} Leads Attempted', '\u{1F534} Leads Contacted',
+      '\u{1F534} B1 Avg Discount', '\u{1F534} B2 Avg Discount',
+      '\u{1F534} Retained', '\u{1F534} Paused',
+      '\u{1F534} Box 1 Count', '\u{1F534} Box 2 Count',
+      '\u{1F534} Retention Active %',
+      '\u{1F7E1} Forecast Sales', '\u{1F7E1} Forecast CPA',
+      '\u{1F535} Budget Sales', '\u{1F535} Budget CPA', '\u{1F535} Budget CVR', '\u{1F535} Budget B2 Retention',
+      '\u{1F4CA} Sales Var', '\u{1F4CA} Sales Var %', '\u{1F4CA} CPA Var',
+      '\u{1F6A6} Sales Status', '\u{1F6A6} CPA Status',
+      '⚙️ Period Sales Pace'
     ];
 
-    let state = loadState();
-    let selectedMeetingId = state.selectedMeetingId || state.meetings[0].id;
-    if (!state.meetings.some(meeting => meeting.id === selectedMeetingId)) {
-      selectedMeetingId = state.meetings[0].id;
-    }
-    let editingMode = "edit";
-    let toastTimer = null;
+    const spendFields = [
+      'Spend Key',
+      '⚙️ Week Number', '\u{1F4E1} Channel', '\u{1F3AF} Brand',
+      '\u{1F4B7} Lead Spend', '\u{1F4B7} System Spend', '\u{1F4B7} Incentive Spend',
+      '\u{1F4B0} D2MS Commission', '\u{1F4B7} Total Spend',
+      '\u{1F4CA} Leads In', '⚙️ CPL Rate'
+    ];
 
-    const elements = {
-      historyList: document.getElementById("historyList"),
-      meetingCount: document.getElementById("meetingCount"),
-      meetingTitle: document.getElementById("meetingTitle"),
-      meetingDatePill: document.getElementById("meetingDatePill"),
-      meetingLabelPill: document.getElementById("meetingLabelPill"),
-      meetingPersonPill: document.getElementById("meetingPersonPill"),
-      summaryList: document.getElementById("summaryList"),
-      transcriptInput: document.getElementById("transcriptInput"),
-      discussionList: document.getElementById("discussionList"),
-      discussionForm: document.getElementById("discussionForm"),
-      discussionInput: document.getElementById("discussionInput"),
-      notesInput: document.getElementById("notesInput"),
-      goalList: document.getElementById("goalList"),
-      goalForm: document.getElementById("goalForm"),
-      goalInput: document.getElementById("goalInput"),
-      progressScore: document.getElementById("progressScore"),
-      progressFill: document.getElementById("progressFill"),
-      progressMood: document.getElementById("progressMood"),
-      metricGoals: document.getElementById("metricGoals"),
-      metricCompleted: document.getElementById("metricCompleted"),
-      metricProgress: document.getElementById("metricProgress"),
-      metricBehind: document.getElementById("metricBehind"),
-      statusCompleted: document.getElementById("statusCompleted"),
-      statusInProgress: document.getElementById("statusInProgress"),
-      statusBehind: document.getElementById("statusBehind"),
-      meetingModal: document.getElementById("meetingModal"),
-      modalTitle: document.getElementById("modalTitle"),
-      meetingForm: document.getElementById("meetingForm"),
-      meetingDateInput: document.getElementById("meetingDateInput"),
-      meetingLabelInput: document.getElementById("meetingLabelInput"),
-      meetingTitleInput: document.getElementById("meetingTitleInput"),
-      managerInput: document.getElementById("managerInput"),
-      reportInput: document.getElementById("reportInput"),
-      toast: document.getElementById("toast")
-    };
+    const pauseFields = [
+      '\u{1F4C5} ISO Week', '\u{1F4CA} Channel', '\u{1F436}\u{1F431} Brand',
+      '\u{1F4DD} Pause Reason', '\u{1F534} Count',
+      '\u{1F534} % of Paused', '\u{1F534} % of Sales'
+    ];
 
-    document.getElementById("newMeetingButton").addEventListener("click", openCreateModal);
-    document.getElementById("editMeetingButton").addEventListener("click", openEditModal);
-    document.getElementById("closeModalButton").addEventListener("click", closeModal);
-    document.getElementById("cancelModalButton").addEventListener("click", closeModal);
-    document.getElementById("summarizeButton").addEventListener("click", generateSummary);
-    document.getElementById("exportButton").addEventListener("click", exportJson);
-    document.getElementById("resetButton").addEventListener("click", resetDemo);
-    elements.meetingModal.addEventListener("click", event => {
-      if (event.target === elements.meetingModal) closeModal();
-    });
+    const [weekly, spend, pause] = await Promise.all([
+      fetchAllRecords(airtableToken, TABLE_WEEKLY, weeklyFields),
+      fetchAllRecords(airtableToken, TABLE_SPEND, spendFields),
+      fetchAllRecords(airtableToken, TABLE_PAUSE, pauseFields)
+    ]);
 
-    elements.meetingForm.addEventListener("submit", saveMeetingDetails);
-    elements.discussionForm.addEventListener("submit", addDiscussionPoint);
-    elements.goalForm.addEventListener("submit", addGoal);
-    elements.transcriptInput.addEventListener("input", event => {
-      updateCurrentMeeting({ transcript: event.target.value });
-    });
-    elements.notesInput.addEventListener("input", event => {
-      updateCurrentMeeting({ notes: event.target.value });
-    });
+    rawWeeklyData = weekly;
+    rawSpendData = spend;
+    rawPauseData = pause;
 
-    render();
+    // Debug: show record counts
+    const debugMsg = `Loaded: ${weekly.length} weekly, ${spend.length} spend, ${pause.length} pause records`;
+    console.log(debugMsg);
+    showDebugBar(debugMsg, false);
 
-    function loadState() {
-      try {
-        const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
-        if (saved && Array.isArray(saved.meetings) && saved.meetings.length) {
-          saved.meetings = normalizeMeetings(saved.meetings);
-          return saved;
+    buildPeriodFilter();
+    applyFilters();
+    updateLastUpdated();
+    showToast('Data loaded successfully', false);
+  } catch (err) {
+    showDebugBar('ERROR: ' + err.message, true);
+    showToast('Error: ' + err.message, true);
+    console.error(err);
+  } finally {
+    showLoading(false);
+  }
+}
+
+function buildPeriodFilter() {
+  const sel = document.getElementById('periodFilter');
+  const weeks = rawWeeklyData.map(r => weekToNum(gs(r, '⚙️ Week Number'))).filter(w => w > 0);
+  const maxWeek = weeks.length ? Math.max(...weeks) : 52;
+  const maxPeriod = Math.ceil(maxWeek / 4);
+
+  sel.innerHTML = '<option value="all">All Periods</option>';
+  for (let p = 1; p <= Math.max(maxPeriod, 13); p++) {
+    const [ws, we] = periodWeeks('P' + p);
+    const opt = document.createElement('option');
+    opt.value = 'P' + p;
+    opt.textContent = `P${p} (W${ws}-W${we})`;
+    sel.appendChild(opt);
+  }
+}
+
+function applyFilters() {
+  const period = document.getElementById('periodFilter').value;
+  const channel = document.getElementById('channelFilter').value;
+  const [ws, we] = periodWeeks(period);
+
+  filteredWeekly = rawWeeklyData.filter(r => {
+    const w = weekToNum(gs(r, '⚙️ Week Number'));
+    const ch = gs(r, '\u{1F4E1} Channel');
+    if (w < ws || w > we) return false;
+    if (channel !== 'all' && ch !== channel) return false;
+    return true;
+  });
+
+  filteredSpend = rawSpendData.filter(r => {
+    const w = weekToNum(gs(r, '⚙️ Week Number'));
+    const ch = gs(r, '\u{1F4E1} Channel');
+    if (w < ws || w > we) return false;
+    if (channel !== 'all' && ch !== channel) return false;
+    return true;
+  });
+
+  filteredPause = rawPauseData.filter(r => {
+    const wStr = gs(r, '\u{1F4C5} ISO Week');
+    const w = weekToNum(wStr);
+    const ch = gs(r, '\u{1F4CA} Channel');
+    if (w < ws || w > we) return false;
+    if (channel !== 'all' && ch !== channel) return false;
+    return true;
+  });
+
+  renderAll();
+}
+
+// ══════════════════════════════════════════════════════════════
+// DATA AGGREGATION HELPERS
+// ══════════════════════════════════════════════════════════════
+
+/** Group weekly data by week number, aggregating across channels/brands/markets */
+function groupByWeek(data) {
+  const map = {};
+  data.forEach(r => {
+    const w = weekToNum(gs(r, '⚙️ Week Number'));
+    if (!w) return;
+    if (!map[w]) map[w] = [];
+    map[w].push(r);
+  });
+  return map;
+}
+
+/** Get sorted week numbers from grouped data */
+function sortedWeeks(grouped) {
+  return Object.keys(grouped).map(Number).sort((a, b) => a - b);
+}
+
+/** Sum a numeric field across records */
+function sumField(records, field) {
+  return agg(records.map(r => gv(r, field)), 'sum');
+}
+
+/** Average a numeric field across records */
+function avgField(records, field) {
+  return agg(records.map(r => gv(r, field)), 'avg');
+}
+
+/** Weighted average for CPA = total spend / total sales */
+function weightedCPA(records) {
+  const sales = sumField(records, '\u{1F534} Sales');
+  // CPA is per-row, so we need total spend / total sales
+  // But we don't have spend in weekly, so average the CPAs weighted by sales
+  let totalCost = 0;
+  let totalSales = 0;
+  records.forEach(r => {
+    const s = gv(r, '\u{1F534} Sales') || 0;
+    const c = gv(r, '\u{1F534} CPA') || 0;
+    totalCost += s * c;
+    totalSales += s;
+  });
+  return safeDivide(totalCost, totalSales);
+}
+
+/** Get total for a period: sum sales, weighted avg CPA, etc. */
+function periodTotals(records) {
+  const sales = sumField(records, '\u{1F534} Sales') || 0;
+  const budgetSales = agg(records.map(r => gv(r, '\u{1F535} Budget Sales')), 'sum') || 0;
+  const forecastSales = sumField(records, '\u{1F7E1} Forecast Sales') || 0;
+  const cpa = weightedCPA(records);
+  const budgetCPA = agg(records.map(r => gv(r, '\u{1F535} Budget CPA')).filter(v => v !== null), 'avg');
+  const cvr = avgField(records, '\u{1F534} CVR Leads Available');
+  const budgetCVR = agg(records.map(r => gv(r, '\u{1F535} Budget CVR')).filter(v => v !== null), 'avg');
+  const retention = avgField(records, '\u{1F534} Retention');
+  const budgetRetention = agg(records.map(r => gv(r, '\u{1F535} Budget B2 Retention')).filter(v => v !== null), 'avg');
+  const salesVar = sales - budgetSales;
+  const salesVarPct = safeDivide(salesVar, budgetSales);
+
+  // Determine overall status from most common status
+  const statuses = records.map(r => gv(r, '\u{1F6A6} Sales Status')).filter(Boolean);
+  const statusCount = {};
+  statuses.forEach(s => { statusCount[s] = (statusCount[s] || 0) + 1; });
+  const salesStatus = Object.entries(statusCount).sort((a, b) => b[1] - a[1])[0]?.[0] || '';
+
+  const cpaStatuses = records.map(r => gv(r, '\u{1F6A6} CPA Status')).filter(Boolean);
+  const cpaStatusCount = {};
+  cpaStatuses.forEach(s => { cpaStatusCount[s] = (cpaStatusCount[s] || 0) + 1; });
+  const cpaStatus = Object.entries(cpaStatusCount).sort((a, b) => b[1] - a[1])[0]?.[0] || '';
+
+  return {
+    sales, budgetSales, forecastSales,
+    cpa, budgetCPA,
+    cvr, budgetCVR,
+    retention, budgetRetention,
+    salesVar, salesVarPct,
+    salesStatus, cpaStatus,
+    totalCalls: sumField(records, '\u{1F534} Total Calls'),
+    connectedCalls: sumField(records, '\u{1F534} Connected Calls'),
+    talkTimeHrs: sumField(records, '\u{1F534} Talk Time Hrs'),
+    sph: avgField(records, '\u{1F534} SPH'),
+    cph: avgField(records, '\u{1F534} CPH'),
+    connectRate: avgField(records, '\u{1F534} Connect Rate'),
+    leadsAvailable: sumField(records, '\u{1F534} Leads Available'),
+    newLeads: sumField(records, '\u{1F534} New Leads in Week'),
+    leadsAttempted: sumField(records, '\u{1F534} Leads Attempted'),
+    leadsContacted: sumField(records, '\u{1F534} Leads Contacted'),
+    contactCVR: avgField(records, '\u{1F534} Contact CVR'),
+    paused: sumField(records, '\u{1F534} Paused'),
+    retained: sumField(records, '\u{1F534} Retained'),
+    retentionActivePct: avgField(records, '\u{1F534} Retention Active %')
+  };
+}
+
+// ══════════════════════════════════════════════════════════════
+// CHART UTILITIES
+// ══════════════════════════════════════════════════════════════
+
+function destroyChart(key) {
+  if (allCharts[key]) {
+    allCharts[key].destroy();
+    delete allCharts[key];
+  }
+}
+
+function createChart(key, ctx, config) {
+  destroyChart(key);
+  // Disable datalabels globally by default
+  if (!config.options) config.options = {};
+  if (!config.options.plugins) config.options.plugins = {};
+  if (config.options.plugins.datalabels === undefined) {
+    config.options.plugins.datalabels = { display: false };
+  }
+  allCharts[key] = new Chart(ctx, config);
+  return allCharts[key];
+}
+
+const defaultChartOptions = {
+  responsive: true,
+  maintainAspectRatio: true,
+  interaction: { mode: 'index', intersect: false },
+  plugins: {
+    legend: { position: 'top', labels: { usePointStyle: true, padding: 14, font: { size: 12 } } },
+    tooltip: {
+      backgroundColor: '#522A10',
+      titleFont: { size: 13 },
+      bodyFont: { size: 12 },
+      padding: 10,
+      cornerRadius: 8
+    },
+    datalabels: { display: false }
+  },
+  scales: {
+    x: { grid: { display: false }, ticks: { font: { size: 11 } } },
+    y: { grid: { color: '#f0e6cc' }, ticks: { font: { size: 11 } }, beginAtZero: true }
+  }
+};
+
+function mergeOpts(overrides) {
+  return JSON.parse(JSON.stringify({ ...defaultChartOptions, ...overrides }));
+}
+
+// ══════════════════════════════════════════════════════════════
+// RENDERING
+// ══════════════════════════════════════════════════════════════
+
+function renderAll() {
+  renderOverview();
+  renderRetention();
+  renderLeads();
+  renderCosts();
+  renderStaffing();
+}
+
+// ── KPI Card Builder ──
+function buildKpiCard(label, value, subs, status, varValue, varPositiveIsGood) {
+  const statusClass = status ? `status-${status}` : 'status-neutral';
+  let varHtml = '';
+  if (varValue !== null && varValue !== undefined && !isNaN(varValue)) {
+    const isPositive = varValue >= 0;
+    const colorClass = varPositiveIsGood
+      ? (isPositive ? 'positive' : 'negative')
+      : (isPositive ? 'negative' : 'positive');
+    varHtml = `<div class="kpi-var ${colorClass}">${isPositive ? '+' : ''}${typeof varValue === 'string' ? varValue : fmt(varValue, 'dec')}</div>`;
+  }
+  let subsHtml = '';
+  if (subs) {
+    subsHtml = `<div class="kpi-sub">${subs}</div>`;
+  }
+  return `
+    <div class="kpi-card ${statusClass}">
+      <div class="kpi-label">${label}</div>
+      <div class="kpi-value">${value}</div>
+      ${subsHtml}
+      ${varHtml}
+    </div>
+  `;
+}
+
+// ══════════════════════════════════════════════════════════════
+// TAB 1: TEAM OVERVIEW
+// ══════════════════════════════════════════════════════════════
+
+function renderOverview() {
+  const totals = periodTotals(filteredWeekly);
+
+  // KPI Cards
+  const salesVarStr = totals.salesVarPct !== null ? (totals.salesVarPct * 100).toFixed(1) + '%' : '-';
+  const cards = [
+    buildKpiCard('Sales',
+      fmt(totals.sales, 'int'),
+      `<span class="actual">Actual</span> vs <span class="budget">Budget ${fmt(totals.budgetSales, 'int')}</span>`,
+      totals.salesStatus,
+      totals.salesVarPct !== null ? salesVarStr : null,
+      true
+    ),
+    buildKpiCard('CPA',
+      fmt(totals.cpa, 'gbp'),
+      `<span class="budget">Budget ${fmt(totals.budgetCPA, 'gbp')}</span>`,
+      totals.cpaStatus,
+      totals.cpa && totals.budgetCPA ? (totals.cpa - totals.budgetCPA).toFixed(2) : null,
+      false // lower CPA is better
+    ),
+    buildKpiCard('CVR (Leads Available)',
+      totals.cvr !== null ? fmt(totals.cvr, 'pct') : '-',
+      totals.budgetCVR !== null ? `<span class="budget">Budget ${fmt(totals.budgetCVR, 'pct')}</span>` : '',
+      null, null, true
+    ),
+    buildKpiCard('B2 Retention',
+      totals.retention !== null ? fmt(totals.retention, 'pct') : '-',
+      totals.budgetRetention !== null ? `<span class="budget">Budget ${fmt(totals.budgetRetention, 'pct')}</span>` : '',
+      null, null, true
+    )
+  ];
+  document.getElementById('overviewKpis').innerHTML = cards.join('');
+
+  // Weekly Sales Chart
+  const grouped = groupByWeek(filteredWeekly);
+  const weeks = sortedWeeks(grouped);
+  const labels = weeks.map(w => 'W' + w);
+  const actualSales = weeks.map(w => sumField(grouped[w], '\u{1F534} Sales') || 0);
+  const budgetSales = weeks.map(w => agg(grouped[w].map(r => gv(r, '\u{1F535} Budget Sales')), 'sum') || 0);
+  const forecastSales = weeks.map(w => sumField(grouped[w], '\u{1F7E1} Forecast Sales') || 0);
+
+  const ctx1 = document.getElementById('chartOverviewSales').getContext('2d');
+  createChart('overviewSales', ctx1, {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [
+        {
+          label: 'Actual Sales',
+          data: actualSales,
+          backgroundColor: COLOR_ACTUAL + 'CC',
+          borderColor: COLOR_ACTUAL,
+          borderWidth: 1,
+          borderRadius: 4,
+          order: 2
+        },
+        {
+          label: 'Budget',
+          data: budgetSales,
+          type: 'line',
+          borderColor: COLOR_BUDGET,
+          backgroundColor: 'transparent',
+          borderWidth: 2,
+          pointRadius: 3,
+          pointBackgroundColor: COLOR_BUDGET,
+          tension: 0.3,
+          order: 1
+        },
+        {
+          label: 'Forecast',
+          data: forecastSales,
+          type: 'line',
+          borderColor: COLOR_FORECAST,
+          backgroundColor: 'transparent',
+          borderWidth: 2,
+          borderDash: [6, 4],
+          pointRadius: 3,
+          pointBackgroundColor: COLOR_FORECAST,
+          tension: 0.3,
+          order: 0
         }
-      } catch (error) {
-        console.warn("Unable to load saved meetings", error);
+      ]
+    },
+    options: mergeOpts({})
+  });
+
+  // Channel Breakdown
+  const channelMap = {};
+  filteredWeekly.forEach(r => {
+    const ch = gs(r, '\u{1F4E1} Channel') || 'Unknown';
+    if (!channelMap[ch]) channelMap[ch] = 0;
+    channelMap[ch] += gv(r, '\u{1F534} Sales') || 0;
+  });
+  const channelLabels = Object.keys(channelMap);
+  const channelValues = channelLabels.map(k => channelMap[k]);
+  const channelColors = channelLabels.map((_, i) => [COLOR_ACTUAL, COLOR_BUDGET, COLOR_FORECAST, '#8BC34A', '#9C27B0'][i % 5]);
+
+  const ctx2 = document.getElementById('chartChannelBreakdown').getContext('2d');
+  createChart('channelBreakdown', ctx2, {
+    type: 'bar',
+    data: {
+      labels: channelLabels,
+      datasets: [{
+        label: 'Sales',
+        data: channelValues,
+        backgroundColor: channelColors.map(c => c + 'CC'),
+        borderColor: channelColors,
+        borderWidth: 1,
+        borderRadius: 4
+      }]
+    },
+    options: mergeOpts({
+      indexAxis: 'y',
+      plugins: {
+        legend: { display: false },
+        datalabels: {
+          display: true,
+          anchor: 'end',
+          align: 'end',
+          color: COLOR_BROWN,
+          font: { weight: 'bold', size: 12 },
+          formatter: v => fmt(v, 'int')
+        }
+      },
+      scales: {
+        x: { grid: { color: '#f0e6cc' }, beginAtZero: true },
+        y: { grid: { display: false } }
       }
+    })
+  });
 
-      return {
-        meetings: normalizeMeetings(sampleMeetings),
-        selectedMeetingId: sampleMeetings[0].id
-      };
-    }
+  // CPA Trend
+  const actualCPAs = weeks.map(w => weightedCPA(grouped[w]));
+  const budgetCPAs = weeks.map(w => agg(grouped[w].map(r => gv(r, '\u{1F535} Budget CPA')).filter(v => v !== null), 'avg'));
 
-    function normalizeMeetings(meetings) {
-      return meetings
-        .map(meeting => ({
-          id: meeting.id || cryptoId(),
-          date: meeting.date || todayIso,
-          label: meeting.label || "1-on-1",
-          title: meeting.title || "Weekly 1-on-1",
-          manager: meeting.manager || "",
-          report: meeting.report || "",
-          transcript: meeting.transcript || "",
-          summary: Array.isArray(meeting.summary) ? meeting.summary : [],
-          discussionPoints: Array.isArray(meeting.discussionPoints) ? meeting.discussionPoints : [],
-          goals: Array.isArray(meeting.goals)
-            ? meeting.goals.map(goal => ({
-                id: goal.id || cryptoId(),
-                text: goal.text || "Untitled goal",
-                status: normalizeStatus(goal.status)
-              }))
-            : [],
-          notes: meeting.notes || ""
-        }))
-        .sort((a, b) => new Date(b.date) - new Date(a.date));
-    }
-
-    function saveState(showSavedToast = false) {
-      state.selectedMeetingId = selectedMeetingId;
-      state.meetings = normalizeMeetings(state.meetings);
-      try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-        if (showSavedToast) showToast("Saved locally", "success");
-      } catch (error) {
-        console.warn("Unable to save meetings locally", error);
-        showToast("Local save unavailable in this browser", "warn");
+  const ctx3 = document.getElementById('chartOverviewCPA').getContext('2d');
+  createChart('overviewCPA', ctx3, {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [
+        {
+          label: 'Actual CPA',
+          data: actualCPAs,
+          borderColor: COLOR_ACTUAL,
+          backgroundColor: COLOR_ACTUAL + '20',
+          borderWidth: 2,
+          pointRadius: 4,
+          pointBackgroundColor: COLOR_ACTUAL,
+          tension: 0.3,
+          fill: true
+        },
+        {
+          label: 'Budget CPA',
+          data: budgetCPAs,
+          borderColor: COLOR_BUDGET,
+          backgroundColor: 'transparent',
+          borderWidth: 2,
+          borderDash: [5, 3],
+          pointRadius: 3,
+          pointBackgroundColor: COLOR_BUDGET,
+          tension: 0.3
+        }
+      ]
+    },
+    options: mergeOpts({
+      scales: {
+        x: { grid: { display: false } },
+        y: {
+          grid: { color: '#f0e6cc' },
+          ticks: { callback: v => '£' + v }
+        }
       }
-    }
+    })
+  });
+}
 
-    function render() {
-      const current = getCurrentMeeting();
-      if (!current) return;
+// ══════════════════════════════════════════════════════════════
+// TAB 2: RETENTION
+// ══════════════════════════════════════════════════════════════
 
-      renderHistory();
-      renderHero(current);
-      renderSummary(current);
-      renderDiscussion(current);
-      renderGoals(current);
-      renderFields(current);
-    }
+function renderRetention() {
+  const totals = periodTotals(filteredWeekly);
 
-    function renderHistory() {
-      elements.meetingCount.textContent = state.meetings.length;
-      elements.historyList.innerHTML = state.meetings.map(meeting => {
-        const stats = calculateStats(meeting.goals);
-        return `
-          <button class="history-card ${meeting.id === selectedMeetingId ? "active" : ""}" type="button" data-meeting-id="${escapeAttr(meeting.id)}">
-            <div class="history-card-top">
-              <div>
-                <h2>${escapeHtml(meeting.label)}</h2>
-                <time>${formatDate(meeting.date)}</time>
-              </div>
-              <span class="badge ${stats.badgeClass}">${stats.percent}%</span>
-            </div>
-            <p>${escapeHtml(meeting.title)}</p>
-            <div class="mini-progress"><span style="width:${stats.percent}%"></span></div>
-          </button>
-        `;
-      }).join("");
+  const cards = [
+    buildKpiCard('B2 Retention',
+      totals.retention !== null ? fmt(totals.retention, 'pct') : '-',
+      totals.budgetRetention !== null ? `<span class="budget">Budget ${fmt(totals.budgetRetention, 'pct')}</span>` : '',
+      null, null, true
+    ),
+    buildKpiCard('Retention Active %',
+      totals.retentionActivePct !== null ? fmt(totals.retentionActivePct, 'pct') : '-',
+      '', null, null, true
+    ),
+    buildKpiCard('Retained',
+      fmt(totals.retained, 'int'),
+      '', null, null, true
+    ),
+    buildKpiCard('Paused',
+      fmt(totals.paused, 'int'),
+      '', null, null, false
+    )
+  ];
+  document.getElementById('retentionKpis').innerHTML = cards.join('');
 
-      elements.historyList.querySelectorAll(".history-card").forEach(button => {
-        button.addEventListener("click", () => {
-          selectedMeetingId = button.dataset.meetingId;
-          saveState();
-          render();
-        });
-      });
-    }
+  const grouped = groupByWeek(filteredWeekly);
+  const weeks = sortedWeeks(grouped);
+  const labels = weeks.map(w => 'W' + w);
 
-    function renderHero(meeting) {
-      elements.meetingTitle.textContent = meeting.title;
-      elements.meetingDatePill.textContent = formatDate(meeting.date);
-      elements.meetingLabelPill.textContent = meeting.label;
-      elements.meetingPersonPill.textContent = [meeting.manager, meeting.report].filter(Boolean).join(" / ") || "Manager / Direct Report";
-    }
+  // B2 Retention
+  const retData = weeks.map(w => avgField(grouped[w], '\u{1F534} Retention'));
+  const budgetRet = weeks.map(w => agg(grouped[w].map(r => gv(r, '\u{1F535} Budget B2 Retention')).filter(v => v !== null), 'avg'));
 
-    function renderSummary(meeting) {
-      elements.summaryList.innerHTML = meeting.summary.length
-        ? meeting.summary.map(item => `<li>${escapeHtml(item)}</li>`).join("")
-        : `<li>No summary yet. Add a transcript and click Generate Summary.</li>`;
-    }
-
-    function renderDiscussion(meeting) {
-      elements.discussionList.innerHTML = meeting.discussionPoints.length
-        ? meeting.discussionPoints.map((point, index) => `
-            <li class="discussion-item">
-              <span style="flex:1;">${escapeHtml(point)}</span>
-              <button class="icon-button" type="button" data-edit-discussion="${index}" aria-label="Edit discussion point">...</button>
-              <button class="icon-button" type="button" data-delete-discussion="${index}" aria-label="Delete discussion point">x</button>
-            </li>
-          `).join("")
-        : `<li class="empty-state">No discussion points captured yet.</li>`;
-
-      elements.discussionList.querySelectorAll("[data-edit-discussion]").forEach(button => {
-        button.addEventListener("click", () => editDiscussionPoint(Number(button.dataset.editDiscussion)));
-      });
-      elements.discussionList.querySelectorAll("[data-delete-discussion]").forEach(button => {
-        button.addEventListener("click", () => deleteDiscussionPoint(Number(button.dataset.deleteDiscussion)));
-      });
-    }
-
-    function renderGoals(meeting) {
-      const stats = calculateStats(meeting.goals);
-      elements.metricGoals.textContent = meeting.goals.length;
-      elements.metricCompleted.textContent = stats.completed;
-      elements.metricProgress.textContent = stats.inProgress;
-      elements.metricBehind.textContent = stats.behind;
-      elements.statusCompleted.textContent = stats.completed;
-      elements.statusInProgress.textContent = stats.inProgress;
-      elements.statusBehind.textContent = stats.behind;
-      elements.progressScore.textContent = `${stats.percent}%`;
-      elements.progressFill.style.width = `${stats.percent}%`;
-      elements.progressMood.textContent = stats.mood;
-      elements.progressMood.className = `badge ${stats.badgeClass}`;
-
-      elements.goalList.innerHTML = meeting.goals.length
-        ? meeting.goals.map(goal => `
-            <li class="goal-item">
-              <button class="goal-check ${goal.status === "completed" ? "completed" : ""}" type="button" data-toggle-goal="${escapeAttr(goal.id)}" aria-label="Toggle goal completion">${goal.status === "completed" ? "✓" : ""}</button>
-              <span class="goal-text ${goal.status === "completed" ? "completed" : ""}">${escapeHtml(goal.text)}</span>
-              <select class="goal-status" data-status-goal="${escapeAttr(goal.id)}" aria-label="Goal status">
-                <option value="in-progress" ${goal.status === "in-progress" ? "selected" : ""}>In Progress</option>
-                <option value="completed" ${goal.status === "completed" ? "selected" : ""}>Completed</option>
-                <option value="behind" ${goal.status === "behind" ? "selected" : ""}>Behind</option>
-              </select>
-              <div style="display:flex; gap:8px;">
-                <button class="icon-button" type="button" data-edit-goal="${escapeAttr(goal.id)}" aria-label="Edit goal">...</button>
-                <button class="icon-button" type="button" data-delete-goal="${escapeAttr(goal.id)}" aria-label="Delete goal">x</button>
-              </div>
-            </li>
-          `).join("")
-        : `<li class="empty-state">No goals yet. Add an action item for this meeting.</li>`;
-
-      elements.goalList.querySelectorAll("[data-toggle-goal]").forEach(button => {
-        button.addEventListener("click", () => toggleGoal(button.dataset.toggleGoal));
-      });
-      elements.goalList.querySelectorAll("[data-status-goal]").forEach(select => {
-        select.addEventListener("change", () => updateGoalStatus(select.dataset.statusGoal, select.value));
-      });
-      elements.goalList.querySelectorAll("[data-edit-goal]").forEach(button => {
-        button.addEventListener("click", () => editGoal(button.dataset.editGoal));
-      });
-      elements.goalList.querySelectorAll("[data-delete-goal]").forEach(button => {
-        button.addEventListener("click", () => deleteGoal(button.dataset.deleteGoal));
-      });
-    }
-
-    function renderFields(meeting) {
-      if (document.activeElement !== elements.transcriptInput) {
-        elements.transcriptInput.value = meeting.transcript;
+  const ctx1 = document.getElementById('chartRetentionB2').getContext('2d');
+  createChart('retentionB2', ctx1, {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [
+        {
+          label: 'Actual B2 Retention',
+          data: retData.map(v => v !== null ? v * 100 : null),
+          borderColor: COLOR_ACTUAL,
+          backgroundColor: COLOR_ACTUAL + '20',
+          borderWidth: 2,
+          pointRadius: 4,
+          pointBackgroundColor: COLOR_ACTUAL,
+          tension: 0.3,
+          fill: true
+        },
+        {
+          label: 'Budget',
+          data: budgetRet.map(v => v !== null ? v * 100 : null),
+          borderColor: COLOR_BUDGET,
+          borderWidth: 2,
+          borderDash: [5, 3],
+          pointRadius: 3,
+          pointBackgroundColor: COLOR_BUDGET,
+          tension: 0.3,
+          backgroundColor: 'transparent'
+        }
+      ]
+    },
+    options: mergeOpts({
+      scales: {
+        x: { grid: { display: false } },
+        y: { grid: { color: '#f0e6cc' }, ticks: { callback: v => v + '%' } }
       }
-      if (document.activeElement !== elements.notesInput) {
-        elements.notesInput.value = meeting.notes;
+    })
+  });
+
+  // Retention Active %
+  const activeData = weeks.map(w => avgField(grouped[w], '\u{1F534} Retention Active %'));
+  const ctx2 = document.getElementById('chartRetentionActive').getContext('2d');
+  createChart('retentionActive', ctx2, {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [{
+        label: 'Retention Active %',
+        data: activeData.map(v => v !== null ? v * 100 : null),
+        borderColor: '#4CAF50',
+        backgroundColor: '#4CAF5020',
+        borderWidth: 2,
+        pointRadius: 4,
+        pointBackgroundColor: '#4CAF50',
+        tension: 0.3,
+        fill: true
+      }]
+    },
+    options: mergeOpts({
+      scales: {
+        x: { grid: { display: false } },
+        y: { grid: { color: '#f0e6cc' }, ticks: { callback: v => v + '%' } }
       }
-    }
+    })
+  });
 
-    function calculateStats(goals) {
-      const total = goals.length;
-      const completed = goals.filter(goal => goal.status === "completed").length;
-      const inProgress = goals.filter(goal => goal.status === "in-progress").length;
-      const behind = goals.filter(goal => goal.status === "behind").length;
-      const percent = total ? Math.round((completed / total) * 100) : 0;
-      let mood = "No goals yet";
-      let badgeClass = "default";
+  // Paused count
+  const pausedData = weeks.map(w => sumField(grouped[w], '\u{1F534} Paused') || 0);
+  const ctx3 = document.getElementById('chartPaused').getContext('2d');
+  createChart('paused', ctx3, {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [{
+        label: 'Paused',
+        data: pausedData,
+        backgroundColor: '#FF980080',
+        borderColor: '#FF9800',
+        borderWidth: 1,
+        borderRadius: 4
+      }]
+    },
+    options: mergeOpts({})
+  });
 
-      if (total && percent === 100) {
-        mood = "All goals complete";
-        badgeClass = "completed";
-      } else if (behind > 0) {
-        mood = "Needs attention";
-        badgeClass = "behind";
-      } else if (inProgress > 0) {
-        mood = "Tracking well";
-        badgeClass = "in-progress";
+  // Pause Reasons Table
+  const reasonMap = {};
+  filteredPause.forEach(r => {
+    const reason = gv(r, '\u{1F4DD} Pause Reason') || 'Unknown';
+    const count = gv(r, '\u{1F534} Count') || 0;
+    const pctPaused = gv(r, '\u{1F534} % of Paused') || 0;
+    const pctSales = gv(r, '\u{1F534} % of Sales') || 0;
+    if (!reasonMap[reason]) reasonMap[reason] = { count: 0, pctPaused: [], pctSales: [] };
+    reasonMap[reason].count += count;
+    reasonMap[reason].pctPaused.push(pctPaused);
+    reasonMap[reason].pctSales.push(pctSales);
+  });
+
+  const sorted = Object.entries(reasonMap)
+    .map(([reason, data]) => ({
+      reason,
+      count: data.count,
+      pctPaused: agg(data.pctPaused, 'avg') || 0,
+      pctSales: agg(data.pctSales, 'avg') || 0
+    }))
+    .sort((a, b) => b.count - a.count)
+    .slice(0, 5);
+
+  const tbody = document.querySelector('#pauseReasonsTable tbody');
+  if (sorted.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;color:#999;padding:20px">No pause reason data available</td></tr>';
+  } else {
+    tbody.innerHTML = sorted.map(r => `
+      <tr>
+        <td>${r.reason}</td>
+        <td>${fmt(r.count, 'int')}</td>
+        <td>${fmt(r.pctPaused, 'pct')}</td>
+        <td>${fmt(r.pctSales, 'pct')}</td>
+      </tr>
+    `).join('');
+  }
+}
+
+// ══════════════════════════════════════════════════════════════
+// TAB 3: LEADS
+// ══════════════════════════════════════════════════════════════
+
+function renderLeads() {
+  const totals = periodTotals(filteredWeekly);
+
+  const freshPct = safeDivide(totals.newLeads, totals.leadsAvailable);
+
+  const cards = [
+    buildKpiCard('Leads Available',
+      fmt(totals.leadsAvailable, 'int'), '', null, null, true
+    ),
+    buildKpiCard('New Leads',
+      fmt(totals.newLeads, 'int'),
+      freshPct !== null ? `Fresh: ${fmt(freshPct, 'pct')}` : '',
+      null, null, true
+    ),
+    buildKpiCard('Contact Rate',
+      totals.contactCVR !== null ? fmt(totals.contactCVR, 'pct') : '-',
+      '', null, null, true
+    ),
+    buildKpiCard('CVR (Leads Available)',
+      totals.cvr !== null ? fmt(totals.cvr, 'pct') : '-',
+      totals.budgetCVR !== null ? `<span class="budget">Budget ${fmt(totals.budgetCVR, 'pct')}</span>` : '',
+      null, null, true
+    )
+  ];
+  document.getElementById('leadsKpis').innerHTML = cards.join('');
+
+  // Funnel
+  const funnelData = [
+    { label: 'Available', value: totals.leadsAvailable || 0, stage: 0 },
+    { label: 'Attempted', value: totals.leadsAttempted || 0, stage: 1 },
+    { label: 'Contacted', value: totals.leadsContacted || 0, stage: 2 },
+    { label: 'Sale', value: totals.sales || 0, stage: 3 }
+  ];
+  const maxVal = Math.max(...funnelData.map(d => d.value), 1);
+
+  const funnelHtml = funnelData.map((d, i) => {
+    const widthPct = Math.max(30, (d.value / maxVal) * 100);
+    const arrow = i < funnelData.length - 1 ? '<div class="funnel-arrow">▶</div>' : '';
+    return `
+      <div class="funnel-stage">
+        <div class="funnel-bar stage-${d.stage}" style="width:${widthPct}%; margin: 0 auto;">
+          ${fmt(d.value, 'int')}
+        </div>
+        <div class="funnel-label">${d.label}</div>
+      </div>
+      ${arrow}
+    `;
+  }).join('');
+  document.getElementById('leadFunnel').innerHTML = funnelHtml;
+
+  // CVR Trend
+  const grouped = groupByWeek(filteredWeekly);
+  const weeks = sortedWeeks(grouped);
+  const labels = weeks.map(w => 'W' + w);
+
+  const cvrData = weeks.map(w => avgField(grouped[w], '\u{1F534} CVR Leads Available'));
+  const budgetCVR = weeks.map(w => agg(grouped[w].map(r => gv(r, '\u{1F535} Budget CVR')).filter(v => v !== null), 'avg'));
+
+  const ctx1 = document.getElementById('chartCVR').getContext('2d');
+  createChart('cvrTrend', ctx1, {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [
+        {
+          label: 'Actual CVR',
+          data: cvrData.map(v => v !== null ? v * 100 : null),
+          borderColor: COLOR_ACTUAL,
+          backgroundColor: COLOR_ACTUAL + '20',
+          borderWidth: 2,
+          pointRadius: 4,
+          pointBackgroundColor: COLOR_ACTUAL,
+          tension: 0.3,
+          fill: true
+        },
+        {
+          label: 'Budget CVR',
+          data: budgetCVR.map(v => v !== null ? v * 100 : null),
+          borderColor: COLOR_BUDGET,
+          borderWidth: 2,
+          borderDash: [5, 3],
+          pointRadius: 3,
+          pointBackgroundColor: COLOR_BUDGET,
+          tension: 0.3,
+          backgroundColor: 'transparent'
+        }
+      ]
+    },
+    options: mergeOpts({
+      scales: {
+        x: { grid: { display: false } },
+        y: { grid: { color: '#f0e6cc' }, ticks: { callback: v => v + '%' } }
       }
+    })
+  });
 
-      return { total, completed, inProgress, behind, percent, mood, badgeClass };
-    }
+  // Fresh Leads %
+  const freshData = weeks.map(w => {
+    const avail = sumField(grouped[w], '\u{1F534} Leads Available');
+    const newL = sumField(grouped[w], '\u{1F534} New Leads in Week');
+    return safeDivide(newL, avail);
+  });
 
-    function addDiscussionPoint(event) {
-      event.preventDefault();
-      const value = elements.discussionInput.value.trim();
-      if (!value) return;
-      const meeting = getCurrentMeeting();
-      meeting.discussionPoints.push(value);
-      elements.discussionInput.value = "";
-      saveState(true);
-      render();
-    }
-
-    function editDiscussionPoint(index) {
-      const meeting = getCurrentMeeting();
-      const next = prompt("Edit discussion point", meeting.discussionPoints[index]);
-      if (next === null) return;
-      const trimmed = next.trim();
-      if (!trimmed) return;
-      meeting.discussionPoints[index] = trimmed;
-      saveState(true);
-      render();
-    }
-
-    function deleteDiscussionPoint(index) {
-      const meeting = getCurrentMeeting();
-      meeting.discussionPoints.splice(index, 1);
-      saveState(true);
-      render();
-    }
-
-    function addGoal(event) {
-      event.preventDefault();
-      const value = elements.goalInput.value.trim();
-      if (!value) return;
-      const meeting = getCurrentMeeting();
-      meeting.goals.push({ id: cryptoId(), text: value, status: "in-progress" });
-      elements.goalInput.value = "";
-      saveState(true);
-      render();
-    }
-
-    function toggleGoal(goalId) {
-      const goal = findGoal(goalId);
-      if (!goal) return;
-      goal.status = goal.status === "completed" ? "in-progress" : "completed";
-      saveState(true);
-      render();
-    }
-
-    function updateGoalStatus(goalId, status) {
-      const goal = findGoal(goalId);
-      if (!goal) return;
-      goal.status = normalizeStatus(status);
-      saveState(true);
-      render();
-    }
-
-    function editGoal(goalId) {
-      const goal = findGoal(goalId);
-      if (!goal) return;
-      const next = prompt("Edit goal", goal.text);
-      if (next === null) return;
-      const trimmed = next.trim();
-      if (!trimmed) return;
-      goal.text = trimmed;
-      saveState(true);
-      render();
-    }
-
-    function deleteGoal(goalId) {
-      const meeting = getCurrentMeeting();
-      meeting.goals = meeting.goals.filter(goal => goal.id !== goalId);
-      saveState(true);
-      render();
-    }
-
-    function generateSummary() {
-      const meeting = getCurrentMeeting();
-      const transcript = elements.transcriptInput.value.trim();
-      if (!transcript) {
-        showToast("Add transcript text first", "warn");
-        return;
+  const ctx2 = document.getElementById('chartFreshLeads').getContext('2d');
+  createChart('freshLeads', ctx2, {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [{
+        label: 'Fresh Leads %',
+        data: freshData.map(v => v !== null ? v * 100 : null),
+        borderColor: '#4CAF50',
+        backgroundColor: '#4CAF5020',
+        borderWidth: 2,
+        pointRadius: 4,
+        pointBackgroundColor: '#4CAF50',
+        tension: 0.3,
+        fill: true
+      }]
+    },
+    options: mergeOpts({
+      scales: {
+        x: { grid: { display: false } },
+        y: { grid: { color: '#f0e6cc' }, ticks: { callback: v => v + '%' } }
       }
+    })
+  });
+}
 
-      const sentences = transcript
-        .replace(/\s+/g, " ")
-        .split(/(?<=[.!?])\s+/)
-        .map(sentence => sentence.trim())
-        .filter(Boolean);
+// ══════════════════════════════════════════════════════════════
+// TAB 4: COSTS
+// ══════════════════════════════════════════════════════════════
 
-      const keywords = ["agreed", "blocker", "risk", "goal", "next", "follow", "review", "discussed", "needs", "wants"];
-      const ranked = sentences
-        .map(sentence => ({
-          sentence,
-          score: keywords.reduce((sum, keyword) => sum + (sentence.toLowerCase().includes(keyword) ? 1 : 0), 0) + Math.min(sentence.length / 220, 1)
-        }))
-        .sort((a, b) => b.score - a.score)
-        .slice(0, 4)
-        .map(item => item.sentence.replace(/^(alex|jordan|manager|employee):\s*/i, ""));
+function renderCosts() {
+  // Aggregate spend data
+  let totalLeadSpend = 0, totalSystemSpend = 0, totalIncentiveSpend = 0, totalD2MSComm = 0, totalSpend = 0;
+  filteredSpend.forEach(r => {
+    totalLeadSpend += gv(r, '\u{1F4B7} Lead Spend') || 0;
+    totalSystemSpend += gv(r, '\u{1F4B7} System Spend') || 0;
+    totalIncentiveSpend += gv(r, '\u{1F4B7} Incentive Spend') || 0;
+    totalD2MSComm += gv(r, '\u{1F4B0} D2MS Commission') || 0;
+    totalSpend += gv(r, '\u{1F4B7} Total Spend') || 0;
+  });
 
-      meeting.transcript = transcript;
-      meeting.summary = ranked.length ? ranked : [transcript.slice(0, 180) + (transcript.length > 180 ? "..." : "")];
-      saveState(true);
-      render();
-      showToast("Gemini-style summary generated", "success");
-    }
+  const weeklyTotals = periodTotals(filteredWeekly);
 
-    function openCreateModal() {
-      editingMode = "create";
-      elements.modalTitle.textContent = "Create This Week";
-      elements.meetingDateInput.value = todayIso;
-      elements.meetingLabelInput.value = "This Week";
-      elements.meetingTitleInput.value = "Weekly 1-on-1";
-      elements.managerInput.value = getCurrentMeeting()?.manager || "";
-      elements.reportInput.value = getCurrentMeeting()?.report || "";
-      elements.meetingModal.classList.add("open");
-      elements.meetingTitleInput.focus();
-    }
+  const cards = [
+    buildKpiCard('Total Spend', fmt(totalSpend, 'gbp_int'), '', null, null, false),
+    buildKpiCard('CPA',
+      fmt(weeklyTotals.cpa, 'gbp'),
+      weeklyTotals.budgetCPA ? `<span class="budget">Budget ${fmt(weeklyTotals.budgetCPA, 'gbp')}</span>` : '',
+      weeklyTotals.cpaStatus, null, false
+    ),
+    buildKpiCard('Lead Spend', fmt(totalLeadSpend, 'gbp_int'), '', null, null, false),
+    buildKpiCard('D2MS Commission', fmt(totalD2MSComm, 'gbp_int'), '', null, null, false)
+  ];
+  document.getElementById('costsKpis').innerHTML = cards.join('');
 
-    function openEditModal() {
-      const meeting = getCurrentMeeting();
-      editingMode = "edit";
-      elements.modalTitle.textContent = "Edit Meeting Details";
-      elements.meetingDateInput.value = meeting.date;
-      elements.meetingLabelInput.value = meeting.label;
-      elements.meetingTitleInput.value = meeting.title;
-      elements.managerInput.value = meeting.manager;
-      elements.reportInput.value = meeting.report;
-      elements.meetingModal.classList.add("open");
-      elements.meetingTitleInput.focus();
-    }
+  // Spend breakdown by week
+  const spendGrouped = {};
+  filteredSpend.forEach(r => {
+    const w = weekToNum(gs(r, '⚙️ Week Number'));
+    if (!w) return;
+    if (!spendGrouped[w]) spendGrouped[w] = { lead: 0, system: 0, incentive: 0, d2ms: 0 };
+    spendGrouped[w].lead += gv(r, '\u{1F4B7} Lead Spend') || 0;
+    spendGrouped[w].system += gv(r, '\u{1F4B7} System Spend') || 0;
+    spendGrouped[w].incentive += gv(r, '\u{1F4B7} Incentive Spend') || 0;
+    spendGrouped[w].d2ms += gv(r, '\u{1F4B0} D2MS Commission') || 0;
+  });
+  const spendWeeks = Object.keys(spendGrouped).map(Number).sort((a, b) => a - b);
+  const spendLabels = spendWeeks.map(w => 'W' + w);
 
-    function closeModal() {
-      elements.meetingModal.classList.remove("open");
-    }
-
-    function saveMeetingDetails(event) {
-      event.preventDefault();
-      const payload = {
-        date: elements.meetingDateInput.value,
-        label: elements.meetingLabelInput.value.trim(),
-        title: elements.meetingTitleInput.value.trim(),
-        manager: elements.managerInput.value.trim(),
-        report: elements.reportInput.value.trim()
-      };
-
-      if (editingMode === "create") {
-        const newMeeting = {
-          id: cryptoId(),
-          ...payload,
-          transcript: "",
-          summary: [],
-          discussionPoints: [],
-          goals: [],
-          notes: ""
-        };
-        state.meetings.push(newMeeting);
-        selectedMeetingId = newMeeting.id;
-      } else {
-        updateCurrentMeeting(payload);
+  const ctx1 = document.getElementById('chartSpendBreakdown').getContext('2d');
+  createChart('spendBreakdown', ctx1, {
+    type: 'bar',
+    data: {
+      labels: spendLabels,
+      datasets: [
+        {
+          label: 'Lead Spend',
+          data: spendWeeks.map(w => spendGrouped[w].lead),
+          backgroundColor: '#10507CCC',
+          borderColor: '#10507C',
+          borderWidth: 1,
+          borderRadius: 2
+        },
+        {
+          label: 'System Spend',
+          data: spendWeeks.map(w => spendGrouped[w].system),
+          backgroundColor: '#ED6961CC',
+          borderColor: '#ED6961',
+          borderWidth: 1,
+          borderRadius: 2
+        },
+        {
+          label: 'Incentive Spend',
+          data: spendWeeks.map(w => spendGrouped[w].incentive),
+          backgroundColor: '#FFD54DCC',
+          borderColor: '#FFD54D',
+          borderWidth: 1,
+          borderRadius: 2
+        },
+        {
+          label: 'D2MS Commission',
+          data: spendWeeks.map(w => spendGrouped[w].d2ms),
+          backgroundColor: '#4CAF50CC',
+          borderColor: '#4CAF50',
+          borderWidth: 1,
+          borderRadius: 2
+        }
+      ]
+    },
+    options: mergeOpts({
+      plugins: {
+        legend: { position: 'top' },
+        datalabels: { display: false }
+      },
+      scales: {
+        x: { stacked: true, grid: { display: false } },
+        y: { stacked: true, grid: { color: '#f0e6cc' }, ticks: { callback: v => '£' + (v / 1000).toFixed(0) + 'k' } }
       }
+    })
+  });
 
-      closeModal();
-      saveState(true);
-      render();
-    }
+  // CPA Trend
+  const grouped = groupByWeek(filteredWeekly);
+  const weeks = sortedWeeks(grouped);
+  const chartLabels = weeks.map(w => 'W' + w);
+  const actualCPAs = weeks.map(w => weightedCPA(grouped[w]));
+  const budgetCPAs = weeks.map(w => agg(grouped[w].map(r => gv(r, '\u{1F535} Budget CPA')).filter(v => v !== null), 'avg'));
 
-    function updateCurrentMeeting(patch) {
-      const meeting = getCurrentMeeting();
-      Object.assign(meeting, patch);
-      saveState();
-    }
+  const ctx2 = document.getElementById('chartCostCPA').getContext('2d');
+  createChart('costCPA', ctx2, {
+    type: 'line',
+    data: {
+      labels: chartLabels,
+      datasets: [
+        {
+          label: 'Actual CPA',
+          data: actualCPAs,
+          borderColor: COLOR_ACTUAL,
+          backgroundColor: COLOR_ACTUAL + '20',
+          borderWidth: 2,
+          pointRadius: 4,
+          pointBackgroundColor: COLOR_ACTUAL,
+          tension: 0.3,
+          fill: true
+        },
+        {
+          label: 'Budget CPA',
+          data: budgetCPAs,
+          borderColor: COLOR_BUDGET,
+          borderWidth: 2,
+          borderDash: [5, 3],
+          pointRadius: 3,
+          pointBackgroundColor: COLOR_BUDGET,
+          tension: 0.3,
+          backgroundColor: 'transparent'
+        }
+      ]
+    },
+    options: mergeOpts({
+      scales: {
+        x: { grid: { display: false } },
+        y: { grid: { color: '#f0e6cc' }, ticks: { callback: v => '£' + v } }
+      }
+    })
+  });
 
-    function exportJson() {
-      const blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json" });
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = "one-on-one-meetings.json";
-      link.click();
-      URL.revokeObjectURL(url);
-      showToast("Export downloaded", "success");
-    }
+  // Spend vs Budget Variance (use CPA variance as proxy since we have per-week budget CPA)
+  const cpaVarData = weeks.map(w => {
+    const actual = weightedCPA(grouped[w]);
+    const budget = agg(grouped[w].map(r => gv(r, '\u{1F535} Budget CPA')).filter(v => v !== null), 'avg');
+    if (actual === null || budget === null) return null;
+    return actual - budget;
+  });
 
-    function resetDemo() {
-      if (!confirm("Reset the dashboard to demo data? This clears saved local changes.")) return;
-      state = {
-        meetings: normalizeMeetings(sampleMeetings.map(meeting => ({
-          ...meeting,
-          id: cryptoId(),
-          goals: meeting.goals.map(goal => ({ ...goal, id: cryptoId() }))
-        }))),
-        selectedMeetingId: ""
-      };
-      selectedMeetingId = state.meetings[0].id;
-      saveState(true);
-      render();
-    }
+  const ctx3 = document.getElementById('chartSpendVariance').getContext('2d');
+  createChart('spendVariance', ctx3, {
+    type: 'bar',
+    data: {
+      labels: chartLabels,
+      datasets: [{
+        label: 'CPA Variance (£)',
+        data: cpaVarData,
+        backgroundColor: cpaVarData.map(v => v !== null && v <= 0 ? '#4CAF5080' : '#ED696180'),
+        borderColor: cpaVarData.map(v => v !== null && v <= 0 ? '#4CAF50' : '#ED6961'),
+        borderWidth: 1,
+        borderRadius: 4
+      }]
+    },
+    options: mergeOpts({
+      plugins: {
+        legend: { display: false },
+        datalabels: { display: false }
+      },
+      scales: {
+        x: { grid: { display: false } },
+        y: { grid: { color: '#f0e6cc' }, ticks: { callback: v => '£' + v } }
+      }
+    })
+  });
+}
 
-    function getCurrentMeeting() {
-      return state.meetings.find(meeting => meeting.id === selectedMeetingId) || state.meetings[0];
-    }
+// ══════════════════════════════════════════════════════════════
+// TAB 6: STAFFING
+// ══════════════════════════════════════════════════════════════
 
-    function findGoal(goalId) {
-      return getCurrentMeeting().goals.find(goal => goal.id === goalId);
-    }
+function renderStaffing() {
+  const totals = periodTotals(filteredWeekly);
 
-    function normalizeStatus(status) {
-      return ["completed", "in-progress", "behind"].includes(status) ? status : "in-progress";
-    }
+  const cards = [
+    buildKpiCard('Talk Time (Hrs)', fmt(totals.talkTimeHrs, 'int'), '', null, null, true),
+    buildKpiCard('Total Calls', fmt(totals.totalCalls, 'int'), '', null, null, true),
+    buildKpiCard('SPH (Sales/Hr)', totals.sph !== null ? fmt(totals.sph, 'dec') : '-', '', null, null, true),
+    buildKpiCard('CPH (Calls/Hr)', totals.cph !== null ? fmt(totals.cph, 'dec') : '-', '', null, null, true)
+  ];
+  document.getElementById('staffingKpis').innerHTML = cards.join('');
 
-    function cryptoId() {
-      if (window.crypto && window.crypto.randomUUID) return window.crypto.randomUUID();
-      return `id-${Date.now()}-${Math.random().toString(16).slice(2)}`;
-    }
+  const grouped = groupByWeek(filteredWeekly);
+  const weeks = sortedWeeks(grouped);
+  const labels = weeks.map(w => 'W' + w);
 
-    function offsetDate(days) {
-      const date = new Date();
-      date.setDate(date.getDate() + days);
-      return date.toISOString().slice(0, 10);
-    }
+  // Connected Calls
+  const connectedData = weeks.map(w => sumField(grouped[w], '\u{1F534} Connected Calls') || 0);
+  const ctx1 = document.getElementById('chartConnectedCalls').getContext('2d');
+  createChart('connectedCalls', ctx1, {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [{
+        label: 'Connected Calls',
+        data: connectedData,
+        backgroundColor: COLOR_BUDGET + 'CC',
+        borderColor: COLOR_BUDGET,
+        borderWidth: 1,
+        borderRadius: 4
+      }]
+    },
+    options: mergeOpts({})
+  });
 
-    function formatDate(value) {
-      return new Intl.DateTimeFormat("en", {
-        weekday: "short",
-        month: "short",
-        day: "numeric",
-        year: "numeric"
-      }).format(new Date(`${value}T12:00:00`));
-    }
+  // SPH & CPH
+  const sphData = weeks.map(w => avgField(grouped[w], '\u{1F534} SPH'));
+  const cphData = weeks.map(w => avgField(grouped[w], '\u{1F534} CPH'));
 
-    function escapeHtml(value) {
-      return String(value)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
-    }
+  const ctx2 = document.getElementById('chartSPHCPH').getContext('2d');
+  createChart('sphcph', ctx2, {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [
+        {
+          label: 'SPH',
+          data: sphData,
+          borderColor: COLOR_ACTUAL,
+          backgroundColor: COLOR_ACTUAL + '20',
+          borderWidth: 2,
+          pointRadius: 4,
+          pointBackgroundColor: COLOR_ACTUAL,
+          tension: 0.3,
+          fill: false,
+          yAxisID: 'y'
+        },
+        {
+          label: 'CPH',
+          data: cphData,
+          borderColor: COLOR_BUDGET,
+          backgroundColor: COLOR_BUDGET + '20',
+          borderWidth: 2,
+          pointRadius: 4,
+          pointBackgroundColor: COLOR_BUDGET,
+          tension: 0.3,
+          fill: false,
+          yAxisID: 'y1'
+        }
+      ]
+    },
+    options: mergeOpts({
+      scales: {
+        x: { grid: { display: false } },
+        y: {
+          type: 'linear',
+          position: 'left',
+          grid: { color: '#f0e6cc' },
+          title: { display: true, text: 'SPH', color: COLOR_ACTUAL, font: { weight: 'bold' } },
+          ticks: { color: COLOR_ACTUAL }
+        },
+        y1: {
+          type: 'linear',
+          position: 'right',
+          grid: { drawOnChartArea: false },
+          title: { display: true, text: 'CPH', color: COLOR_BUDGET, font: { weight: 'bold' } },
+          ticks: { color: COLOR_BUDGET }
+        }
+      }
+    })
+  });
 
-    function escapeAttr(value) {
-      return escapeHtml(value);
-    }
+  // Connect Rate
+  const connectRateData = weeks.map(w => avgField(grouped[w], '\u{1F534} Connect Rate'));
+  const ctx3 = document.getElementById('chartConnectRate').getContext('2d');
+  createChart('connectRate', ctx3, {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [{
+        label: 'Connect Rate',
+        data: connectRateData.map(v => v !== null ? v * 100 : null),
+        borderColor: '#4CAF50',
+        backgroundColor: '#4CAF5020',
+        borderWidth: 2,
+        pointRadius: 4,
+        pointBackgroundColor: '#4CAF50',
+        tension: 0.3,
+        fill: true
+      }]
+    },
+    options: mergeOpts({
+      scales: {
+        x: { grid: { display: false } },
+        y: { grid: { color: '#f0e6cc' }, ticks: { callback: v => v + '%' } }
+      }
+    })
+  });
 
-    function showToast(message, type = "") {
-      clearTimeout(toastTimer);
-      elements.toast.textContent = message;
-      elements.toast.className = `toast ${type}`;
-      requestAnimationFrame(() => elements.toast.classList.add("show"));
-      toastTimer = setTimeout(() => elements.toast.classList.remove("show"), 2300);
-    }
-  </script>
+  // Talk Time Hrs
+  const talkTimeData = weeks.map(w => sumField(grouped[w], '\u{1F534} Talk Time Hrs') || 0);
+  const ctx4 = document.getElementById('chartTalkTime').getContext('2d');
+  createChart('talkTime', ctx4, {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [{
+        label: 'Talk Time (Hrs)',
+        data: talkTimeData,
+        backgroundColor: COLOR_GOLD + 'CC',
+        borderColor: '#c5a000',
+        borderWidth: 1,
+        borderRadius: 4
+      }]
+    },
+    options: mergeOpts({
+      plugins: { legend: { display: false }, datalabels: { display: false } }
+    })
+  });
+}
+
+// ══════════════════════════════════════════════════════════════
+// TAB NAVIGATION
+// ══════════════════════════════════════════════════════════════
+
+function switchTab(tabId, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + tabId).classList.add('active');
+  btn.classList.add('active');
+
+  // Re-render active tab charts to fix canvas sizing
+  setTimeout(() => {
+    Object.values(allCharts).forEach(c => c.resize());
+  }, 50);
+}
+
+// ══════════════════════════════════════════════════════════════
+// UI UTILITIES
+// ══════════════════════════════════════════════════════════════
+
+function showLoading(show) {
+  document.getElementById('loadingOverlay').classList.toggle('active', show);
+}
+
+function updateLoadingText(text) {
+  document.getElementById('loadingText').textContent = text;
+}
+
+function showToast(msg, isError) {
+  const toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.className = 'toast' + (isError ? ' error' : '');
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 4000);
+}
+
+function showDebugBar(msg, isError) {
+  let bar = document.getElementById('debugBar');
+  if (!bar) {
+    bar = document.createElement('div');
+    bar.id = 'debugBar';
+    bar.style.cssText = 'position:fixed;bottom:0;left:0;right:0;padding:8px 20px;font-size:13px;font-family:monospace;z-index:9999;';
+    document.body.appendChild(bar);
+  }
+  bar.style.background = isError ? '#ED6961' : '#4CAF50';
+  bar.style.color = '#fff';
+  bar.textContent = msg;
+}
+
+function updateLastUpdated() {
+  const now = new Date();
+  document.getElementById('lastUpdated').textContent =
+    'Updated ' + now.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+}
+
+// ══════════════════════════════════════════════════════════════
+// TOKEN MANAGEMENT & INITIALISATION
+// ══════════════════════════════════════════════════════════════
+
+function connectWithToken() {
+  const input = document.getElementById('tokenInput');
+  const token = input.value.trim();
+  const errEl = document.getElementById('tokenError');
+
+  if (!token) {
+    errEl.textContent = 'Please enter your Airtable Personal Access Token.';
+    errEl.style.display = 'block';
+    return;
+  }
+
+  if (!token.startsWith('pat')) {
+    errEl.textContent = 'Token should start with "pat". Please check and try again.';
+    errEl.style.display = 'block';
+    return;
+  }
+
+  errEl.style.display = 'none';
+  airtableToken = token;
+
+  try {
+    localStorage.setItem('airtable_pat', token);
+  } catch(e) {
+    // localStorage may be unavailable; proceed anyway
+  }
+
+  document.getElementById('tokenOverlay').style.display = 'none';
+  loadAllData();
+  startAutoRefresh();
+}
+
+function clearToken() {
+  try { localStorage.removeItem('airtable_pat'); } catch(e) {}
+  airtableToken = '';
+  document.getElementById('tokenInput').value = '';
+  document.getElementById('tokenOverlay').style.display = 'flex';
+  document.getElementById('btnClearToken').style.display = 'none';
+  stopAutoRefresh();
+}
+
+function refreshData() {
+  if (!airtableToken) return;
+  loadAllData();
+}
+
+function startAutoRefresh() {
+  stopAutoRefresh();
+  refreshTimer = setInterval(() => {
+    if (airtableToken) loadAllData();
+  }, REFRESH_INTERVAL);
+}
+
+function stopAutoRefresh() {
+  if (refreshTimer) {
+    clearInterval(refreshTimer);
+    refreshTimer = null;
+  }
+}
+
+// ── Init ──
+(function init() {
+  // Register datalabels plugin globally
+  Chart.register(ChartDataLabels);
+
+  // Check for saved token
+  let savedToken = '';
+  try { savedToken = localStorage.getItem('airtable_pat') || ''; } catch(e) {}
+
+  if (savedToken) {
+    document.getElementById('tokenInput').value = savedToken;
+    document.getElementById('btnClearToken').style.display = 'inline';
+    airtableToken = savedToken;
+    document.getElementById('tokenOverlay').style.display = 'none';
+    loadAllData();
+    startAutoRefresh();
+  } else {
+    document.getElementById('tokenOverlay').style.display = 'flex';
+  }
+})();
+</script>
 </body>
 </html>
