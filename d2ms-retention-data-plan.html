@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>D2MS Retention Data Plan</title>
+  <title>D2MS Retention Project Plan</title>
   <style>
     :root {
       --brown: #522A10;
@@ -158,6 +158,10 @@
     .bar.pull { background: var(--coral); }
     .bar.analysis { background: #B65A17; }
     .bar.output { background: var(--green); }
+    .bar.qa { background: #7B3FA0; }
+    .bar.call { background: #00897B; }
+    .bar.money { background: #6D4C41; }
+    .bar.training { background: #C2185B; }
 
     .empty {
       background: #FAF0CF;
@@ -206,6 +210,43 @@
       padding: 16px;
     }
 
+    .timeline {
+      display: grid;
+      gap: 14px;
+    }
+
+    .timeline-item {
+      display: grid;
+      grid-template-columns: 140px 1fr;
+      gap: 14px;
+      align-items: start;
+      background: #FFF9E8;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 16px;
+    }
+
+    .timeline-item strong {
+      color: var(--brown);
+      font-size: 18px;
+    }
+
+    .tag {
+      display: inline-block;
+      background: var(--brown);
+      border-radius: 999px;
+      color: var(--gold);
+      font-weight: 700;
+      margin-bottom: 8px;
+      padding: 7px 12px;
+    }
+
+    @media (max-width: 700px) {
+      .timeline-item {
+        grid-template-columns: 1fr;
+      }
+    }
+
     footer {
       color: #7A5A3A;
       font-size: 14px;
@@ -216,8 +257,8 @@
 </head>
 <body>
   <header>
-    <h1>D2MS Retention Data Plan</h1>
-    <p>Stage 1 plan for measuring retention, pause behaviour, and early churn risk.</p>
+    <h1>D2MS Retention Project Plan</h1>
+    <p>A simple, staged plan to improve D2MS customer retention.</p>
   </header>
 
   <main>
@@ -225,34 +266,181 @@
       <h2>Simple Aim</h2>
       <div class="summary-grid">
         <div class="summary-box">
-          <strong>Who stays?</strong>
-          Measure 28-day and 84-day retention.
+          <strong>Measure</strong>
+          Find who stays, pauses, or cancels.
         </div>
         <div class="summary-box">
-          <strong>Who pauses?</strong>
-          Track customers who pause before box 1 arrives.
+          <strong>Coach</strong>
+          Improve calls and agent habits.
         </div>
         <div class="summary-box">
-          <strong>What changes?</strong>
-          Turn findings into clear D2MS actions.
+          <strong>Support</strong>
+          Help customers after sign-up.
+        </div>
+        <div class="summary-box">
+          <strong>Align</strong>
+          Reward D2MS for retained sales.
         </div>
       </div>
     </section>
 
     <section class="card">
-      <h2>Key Measures</h2>
+      <h2>Main Project Stages</h2>
       <ul class="pill-list">
-        <li>28 Day Retention</li>
-        <li>84 Day Retention</li>
-        <li>Paused Before First Box</li>
-        <li>Cancellation Reason</li>
-        <li>Payment Failure</li>
-        <li>Agent Performance</li>
+        <li>1. Data Analytics</li>
+        <li>2. Retention Scorecard</li>
+        <li>3. First Box Calls</li>
+        <li>4. Early Life Rescue</li>
+        <li>5. Commission Model</li>
+        <li>6. Dashboard</li>
+        <li>7. Training</li>
       </ul>
     </section>
 
     <section class="card">
-      <h2>Gantt Chart</h2>
+      <h2>Project Roadmap</h2>
+      <div class="timeline">
+        <div class="timeline-item">
+          <div><span class="tag">Stage 1</span><br><strong>Data</strong></div>
+          <div>Measure 28-day retention, 84-day retention, and pauses before box 1.</div>
+        </div>
+        <div class="timeline-item">
+          <div><span class="tag">Stage 2</span><br><strong>Scorecard</strong></div>
+          <div>Listen to calls and score behaviours that drive retained customers.</div>
+        </div>
+        <div class="timeline-item">
+          <div><span class="tag">Stage 3</span><br><strong>First Box Calls</strong></div>
+          <div>Call customers after box 1 to check confidence, clarity, and risk.</div>
+        </div>
+        <div class="timeline-item">
+          <div><span class="tag">Stage 4</span><br><strong>Rescue</strong></div>
+          <div>Flag risky customers early and send help before they cancel.</div>
+        </div>
+        <div class="timeline-item">
+          <div><span class="tag">Stage 5</span><br><strong>Commission</strong></div>
+          <div>Move D2MS rewards toward retained sales, not just sign-ups.</div>
+        </div>
+        <div class="timeline-item">
+          <div><span class="tag">Stage 6</span><br><strong>Dashboard</strong></div>
+          <div>Show simple performance, risks, and next actions.</div>
+        </div>
+        <div class="timeline-item">
+          <div><span class="tag">Stage 7</span><br><strong>Training</strong></div>
+          <div>Turn F2F skills into telephone-based retention skills.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Full Project Gantt</h2>
+      <div class="table-wrap">
+        <table aria-label="D2MS full retention project Gantt chart">
+          <thead>
+            <tr>
+              <th>Stage</th>
+              <th>Main Work</th>
+              <th>Block 1</th>
+              <th>Block 2</th>
+              <th>Block 3</th>
+              <th>Block 4</th>
+              <th>Block 5</th>
+              <th>Block 6</th>
+              <th>Block 7</th>
+              <th>Block 8</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="stage">1. Data</td>
+              <td>Retention, pause, and risk analysis</td>
+              <td><span class="bar setup">Plan</span></td>
+              <td><span class="bar pull">Pull</span></td>
+              <td><span class="bar analysis">Analyse</span></td>
+              <td><span class="bar output">Actions</span></td>
+              <td class="empty"></td>
+              <td class="empty"></td>
+              <td class="empty"></td>
+              <td class="empty"></td>
+            </tr>
+            <tr>
+              <td class="stage">2. Scorecard</td>
+              <td>Call listening and retention scoring</td>
+              <td class="empty"></td>
+              <td><span class="bar qa">Design</span></td>
+              <td><span class="bar qa">Listen</span></td>
+              <td><span class="bar qa">Calibrate</span></td>
+              <td><span class="bar qa">Coach</span></td>
+              <td class="empty"></td>
+              <td class="empty"></td>
+              <td class="empty"></td>
+            </tr>
+            <tr>
+              <td class="stage">3. First Box Calls</td>
+              <td>Account-manager style check-in</td>
+              <td class="empty"></td>
+              <td class="empty"></td>
+              <td><span class="bar call">Script</span></td>
+              <td><span class="bar call">Test</span></td>
+              <td><span class="bar call">Review</span></td>
+              <td><span class="bar call">Scale</span></td>
+              <td class="empty"></td>
+              <td class="empty"></td>
+            </tr>
+            <tr>
+              <td class="stage">4. Rescue</td>
+              <td>Early risk flags and interventions</td>
+              <td class="empty"></td>
+              <td class="empty"></td>
+              <td class="empty"></td>
+              <td><span class="bar output">Flags</span></td>
+              <td><span class="bar output">Triggers</span></td>
+              <td><span class="bar output">Measure</span></td>
+              <td class="empty"></td>
+              <td class="empty"></td>
+            </tr>
+            <tr>
+              <td class="stage">5. Commission</td>
+              <td>Reward retained sales</td>
+              <td class="empty"></td>
+              <td class="empty"></td>
+              <td class="empty"></td>
+              <td><span class="bar money">Model</span></td>
+              <td><span class="bar money">Review</span></td>
+              <td><span class="bar money">Agree</span></td>
+              <td><span class="bar money">Launch</span></td>
+              <td class="empty"></td>
+            </tr>
+            <tr>
+              <td class="stage">6. Dashboard</td>
+              <td>Performance and risk view</td>
+              <td class="empty"></td>
+              <td class="empty"></td>
+              <td><span class="bar output">Spec</span></td>
+              <td><span class="bar output">Build</span></td>
+              <td><span class="bar output">Test</span></td>
+              <td><span class="bar output">Share</span></td>
+              <td><span class="bar output">Improve</span></td>
+              <td class="empty"></td>
+            </tr>
+            <tr>
+              <td class="stage">7. Training</td>
+              <td>Phone-based retention skills</td>
+              <td class="empty"></td>
+              <td class="empty"></td>
+              <td class="empty"></td>
+              <td class="empty"></td>
+              <td><span class="bar training">Adapt</span></td>
+              <td><span class="bar training">Train</span></td>
+              <td><span class="bar training">Practice</span></td>
+              <td><span class="bar training">Refresh</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Stage 1 Gantt: Data Analytics</h2>
       <div class="table-wrap">
         <table aria-label="D2MS retention data analytics Gantt chart">
           <thead>
@@ -394,7 +582,7 @@
     </section>
 
     <section class="card">
-      <h2>Steps Inside the Steps</h2>
+      <h2>Stage 1: Steps Inside the Steps</h2>
       <div class="steps">
         <div class="step-card">
           <h3>1. Set Metrics</h3>
@@ -444,6 +632,199 @@
     </section>
 
     <section class="card">
+      <h2>Stage 2: Retention Scorecard</h2>
+      <div class="steps">
+        <div class="step-card">
+          <h3>Build</h3>
+          <ul>
+            <li>Clear price</li>
+            <li>Clear product</li>
+            <li>No overpromising</li>
+            <li>Strong next steps</li>
+          </ul>
+        </div>
+        <div class="step-card">
+          <h3>Test</h3>
+          <ul>
+            <li>Listen to retained calls</li>
+            <li>Listen to churned calls</li>
+            <li>Compare patterns</li>
+          </ul>
+        </div>
+        <div class="step-card">
+          <h3>Use</h3>
+          <ul>
+            <li>Coach agents</li>
+            <li>Share good call clips</li>
+            <li>Track score vs retention</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Stage 3: First Box Follow-Up Calls</h2>
+      <div class="steps">
+        <div class="step-card">
+          <h3>Call Timing</h3>
+          <ul>
+            <li>Call after box 1 arrives</li>
+            <li>Best window: 2-5 days after delivery</li>
+            <li>Keep it helpful, not salesy</li>
+          </ul>
+        </div>
+        <div class="step-card">
+          <h3>Call Checks</h3>
+          <ul>
+            <li>Did it arrive?</li>
+            <li>Is the customer happy?</li>
+            <li>Do they understand next steps?</li>
+            <li>Any reason they may cancel?</li>
+          </ul>
+        </div>
+        <div class="step-card">
+          <h3>Measure</h3>
+          <ul>
+            <li>Called vs not called</li>
+            <li>28-day retention</li>
+            <li>84-day retention</li>
+            <li>Pause and cancel rate</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Stage 4: Early Life Rescue</h2>
+      <div class="steps">
+        <div class="step-card">
+          <h3>Risk Flags</h3>
+          <ul>
+            <li>Paused before box 1</li>
+            <li>Failed payment</li>
+            <li>Short sales call</li>
+            <li>No app launch</li>
+            <li>No dog photo</li>
+          </ul>
+        </div>
+        <div class="step-card">
+          <h3>Rescue Actions</h3>
+          <ul>
+            <li>Welcome SMS</li>
+            <li>Helpful email</li>
+            <li>Payment reminder</li>
+            <li>Support call</li>
+          </ul>
+        </div>
+        <div class="step-card">
+          <h3>Success Measures</h3>
+          <ul>
+            <li>Lower early pause rate</li>
+            <li>Lower cancellation rate</li>
+            <li>Higher 28-day retention</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Stage 5: D2MS Commission Model</h2>
+      <div class="steps">
+        <div class="step-card">
+          <h3>Reward</h3>
+          <ul>
+            <li>Valid sale</li>
+            <li>Second payment</li>
+            <li>28-day retention</li>
+            <li>84-day retention</li>
+          </ul>
+        </div>
+        <div class="step-card">
+          <h3>Protect</h3>
+          <ul>
+            <li>Reduce reward for early churn</li>
+            <li>Track complaints</li>
+            <li>Track refunds</li>
+            <li>Track payment failures</li>
+          </ul>
+        </div>
+        <div class="step-card">
+          <h3>Goal</h3>
+          <ul>
+            <li>Fewer weak sales</li>
+            <li>More retained customers</li>
+            <li>Better agency alignment</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Stage 6: Dashboard</h2>
+      <div class="steps">
+        <div class="step-card">
+          <h3>Show</h3>
+          <ul>
+            <li>Sales</li>
+            <li>28-day retention</li>
+            <li>84-day retention</li>
+            <li>Paused before box 1</li>
+          </ul>
+        </div>
+        <div class="step-card">
+          <h3>Break Down</h3>
+          <ul>
+            <li>By agent</li>
+            <li>By offer</li>
+            <li>By product</li>
+            <li>By payment type</li>
+          </ul>
+        </div>
+        <div class="step-card">
+          <h3>Avoid</h3>
+          <ul>
+            <li>Public shame lists</li>
+            <li>Raw rankings only</li>
+            <li>Ignoring lead quality</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Stage 7: Training</h2>
+      <div class="steps">
+        <div class="step-card">
+          <h3>Take from F2F</h3>
+          <ul>
+            <li>Trust building</li>
+            <li>Objection handling</li>
+            <li>Confidence</li>
+            <li>Clear close</li>
+          </ul>
+        </div>
+        <div class="step-card">
+          <h3>Turn into Phone Skills</h3>
+          <ul>
+            <li>Tone</li>
+            <li>Pace</li>
+            <li>Listening</li>
+            <li>Spotting doubt</li>
+          </ul>
+        </div>
+        <div class="step-card">
+          <h3>Train</h3>
+          <ul>
+            <li>Short sessions</li>
+            <li>Real call clips</li>
+            <li>Role play</li>
+            <li>Weekly refresh</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
       <h2>Paused Before First Box Formula</h2>
       <p>Use this if the sheet has <strong>Order 1 Delivery Date</strong> and <strong>Pause Date</strong>.</p>
       <div class="formula">=IF(AND(PauseDate&lt;&gt;"",Order1DeliveryDate&lt;&gt;"",PauseDate&lt;Order1DeliveryDate),"Yes","No")</div>
@@ -452,9 +833,9 @@
     <section class="card">
       <h2>Best Short Summary</h2>
       <div class="note">
-        Measure whether D2MS customers stay to 28 days, stay to 84 days,
-        or pause before their first box arrives. Then turn the findings into
-        a risk list, dashboard, and clear action plan.
+        Improve D2MS retention by measuring early risk, improving calls,
+        supporting customers after box 1, rescuing risky customers, and
+        rewarding D2MS for retained sales.
       </div>
     </section>
 
