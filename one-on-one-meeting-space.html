@@ -1,0 +1,1683 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>1-on-1 Meeting Space</title>
+  <style>
+    :root {
+      --bg: #f5f7fb;
+      --surface: #ffffff;
+      --surface-soft: #f8fafc;
+      --text: #162033;
+      --muted: #65758b;
+      --border: #dce4ef;
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --primary-soft: #dbeafe;
+      --accent: #7c3aed;
+      --complete: #16a34a;
+      --complete-soft: #dcfce7;
+      --progress: #d97706;
+      --progress-soft: #fef3c7;
+      --behind: #dc2626;
+      --behind-soft: #fee2e2;
+      --shadow: 0 20px 60px rgba(15, 23, 42, 0.08);
+      --shadow-soft: 0 12px 30px rgba(15, 23, 42, 0.06);
+      --radius-xl: 28px;
+      --radius-lg: 20px;
+      --radius-md: 14px;
+      --radius-sm: 10px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Inter, Roboto, "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(37, 99, 235, 0.16), transparent 34rem),
+        radial-gradient(circle at 85% 0%, rgba(124, 58, 237, 0.12), transparent 28rem),
+        var(--bg);
+    }
+
+    button,
+    input,
+    textarea,
+    select {
+      font: inherit;
+    }
+
+    button {
+      border: 0;
+    }
+
+    .app-shell {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 330px minmax(0, 1fr);
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      padding: 26px 22px;
+      background: rgba(255, 255, 255, 0.84);
+      border-right: 1px solid rgba(220, 228, 239, 0.86);
+      backdrop-filter: blur(18px);
+      overflow-y: auto;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 28px;
+    }
+
+    .brand-mark {
+      width: 48px;
+      height: 48px;
+      display: grid;
+      place-items: center;
+      border-radius: 16px;
+      color: #fff;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      box-shadow: 0 16px 34px rgba(37, 99, 235, 0.25);
+      font-weight: 800;
+      letter-spacing: -0.08em;
+    }
+
+    .brand h1 {
+      margin: 0;
+      font-size: 20px;
+      line-height: 1.05;
+      letter-spacing: -0.035em;
+    }
+
+    .brand p {
+      margin: 5px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .primary-button,
+    .secondary-button,
+    .ghost-button,
+    .icon-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease, color 180ms ease, border-color 180ms ease;
+      user-select: none;
+    }
+
+    .primary-button {
+      width: 100%;
+      padding: 13px 18px;
+      color: #fff;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      box-shadow: 0 16px 30px rgba(37, 99, 235, 0.25);
+      font-weight: 750;
+    }
+
+    .primary-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 20px 38px rgba(37, 99, 235, 0.32);
+    }
+
+    .secondary-button,
+    .ghost-button {
+      padding: 10px 14px;
+      font-weight: 700;
+    }
+
+    .secondary-button {
+      color: var(--primary);
+      background: var(--primary-soft);
+    }
+
+    .secondary-button:hover,
+    .ghost-button:hover {
+      transform: translateY(-1px);
+      background: #e8efff;
+    }
+
+    .ghost-button {
+      color: var(--muted);
+      background: transparent;
+    }
+
+    .icon-button {
+      width: 34px;
+      height: 34px;
+      color: var(--muted);
+      background: var(--surface-soft);
+      border: 1px solid var(--border);
+      flex: 0 0 auto;
+    }
+
+    .icon-button:hover {
+      color: var(--primary);
+      transform: translateY(-1px) scale(1.03);
+      border-color: #bfdbfe;
+    }
+
+    .primary-button:active,
+    .secondary-button:active,
+    .ghost-button:active,
+    .icon-button:active,
+    .history-card:active {
+      transform: scale(0.97);
+    }
+
+    .sidebar-section-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 26px 4px 12px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .history-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .history-card {
+      width: 100%;
+      padding: 15px;
+      text-align: left;
+      border: 1px solid transparent;
+      border-radius: var(--radius-md);
+      background: transparent;
+      cursor: pointer;
+      transition: transform 180ms ease, background 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+    }
+
+    .history-card:hover {
+      transform: translateX(3px);
+      background: var(--surface-soft);
+      border-color: var(--border);
+    }
+
+    .history-card.active {
+      background: #fff;
+      border-color: #bfdbfe;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .history-card-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 9px;
+    }
+
+    .history-card h2 {
+      margin: 0;
+      font-size: 14px;
+      letter-spacing: -0.01em;
+    }
+
+    .history-card time,
+    .history-card p {
+      display: block;
+      margin: 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .mini-progress {
+      width: 100%;
+      height: 6px;
+      margin-top: 12px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: #e2e8f0;
+    }
+
+    .mini-progress span {
+      display: block;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--primary), var(--complete));
+      transition: width 320ms ease;
+    }
+
+    .app-main {
+      min-width: 0;
+      padding: 30px;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 18px;
+      align-items: start;
+      margin-bottom: 22px;
+      padding: 30px;
+      border: 1px solid rgba(220, 228, 239, 0.84);
+      border-radius: var(--radius-xl);
+      background:
+        linear-gradient(135deg, rgba(255, 255, 255, 0.96), rgba(248, 250, 252, 0.92)),
+        radial-gradient(circle at top right, rgba(37, 99, 235, 0.12), transparent 26rem);
+      box-shadow: var(--shadow);
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+      padding: 7px 10px;
+      border: 1px solid #bfdbfe;
+      border-radius: 999px;
+      color: var(--primary-dark);
+      background: rgba(219, 234, 254, 0.76);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .hero h2 {
+      margin: 0;
+      font-size: clamp(30px, 5vw, 56px);
+      line-height: 0.96;
+      letter-spacing: -0.065em;
+    }
+
+    .hero-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-top: 16px;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 8px 11px;
+      border-radius: 999px;
+      color: var(--muted);
+      background: #fff;
+      border: 1px solid var(--border);
+      font-size: 13px;
+      font-weight: 700;
+      box-shadow: 0 8px 22px rgba(15, 23, 42, 0.04);
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+      margin-bottom: 22px;
+    }
+
+    .metric-card,
+    .panel {
+      border: 1px solid rgba(220, 228, 239, 0.9);
+      border-radius: var(--radius-lg);
+      background: rgba(255, 255, 255, 0.92);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .metric-card {
+      padding: 18px;
+      transition: transform 180ms ease, box-shadow 180ms ease;
+    }
+
+    .metric-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 20px 36px rgba(15, 23, 42, 0.1);
+    }
+
+    .metric-label {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+    }
+
+    .metric-value {
+      margin-top: 8px;
+      font-size: 30px;
+      font-weight: 850;
+      letter-spacing: -0.05em;
+    }
+
+    .metric-sub {
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .content-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(340px, 0.85fr);
+      gap: 22px;
+      align-items: start;
+    }
+
+    .panel {
+      padding: 22px;
+      margin-bottom: 22px;
+    }
+
+    .panel-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    .panel-header h3 {
+      margin: 0;
+      font-size: 18px;
+      letter-spacing: -0.02em;
+    }
+
+    .panel-header p {
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .field {
+      display: grid;
+      gap: 7px;
+    }
+
+    .field.full {
+      grid-column: 1 / -1;
+    }
+
+    label {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    input,
+    textarea,
+    select {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--text);
+      background: #fff;
+      transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+    }
+
+    input,
+    select {
+      min-height: 43px;
+      padding: 0 12px;
+    }
+
+    textarea {
+      min-height: 122px;
+      padding: 12px;
+      resize: vertical;
+      line-height: 1.55;
+    }
+
+    input:focus,
+    textarea:focus,
+    select:focus {
+      outline: none;
+      border-color: #93c5fd;
+      box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
+    }
+
+    .summary-card {
+      position: relative;
+      padding: 18px;
+      overflow: hidden;
+      border-radius: var(--radius-md);
+      background:
+        linear-gradient(135deg, rgba(37, 99, 235, 0.1), rgba(124, 58, 237, 0.09)),
+        #fff;
+      border: 1px solid #c7d2fe;
+    }
+
+    .summary-card::before {
+      content: "";
+      position: absolute;
+      inset: -60px auto auto -60px;
+      width: 170px;
+      height: 170px;
+      border-radius: 999px;
+      background: rgba(37, 99, 235, 0.12);
+    }
+
+    .summary-list,
+    .discussion-list,
+    .goal-list {
+      position: relative;
+      display: grid;
+      gap: 10px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .summary-list li,
+    .discussion-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 12px;
+      border: 1px solid rgba(220, 228, 239, 0.8);
+      border-radius: var(--radius-sm);
+      background: rgba(255, 255, 255, 0.72);
+      line-height: 1.45;
+    }
+
+    .summary-list li::before,
+    .discussion-item::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      margin-top: 7px;
+      border-radius: 999px;
+      background: var(--primary);
+      box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
+      flex: 0 0 auto;
+    }
+
+    .inline-add {
+      display: flex;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .inline-add input {
+      flex: 1;
+    }
+
+    .progress-box {
+      padding: 18px;
+      border-radius: var(--radius-lg);
+      background: linear-gradient(135deg, #0f172a, #1e3a8a);
+      color: #fff;
+    }
+
+    .progress-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      align-items: flex-end;
+      margin-bottom: 13px;
+    }
+
+    .progress-score {
+      font-size: 42px;
+      font-weight: 900;
+      letter-spacing: -0.06em;
+    }
+
+    .progress-label {
+      color: rgba(255, 255, 255, 0.72);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+    }
+
+    .progress-track {
+      height: 12px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.18);
+    }
+
+    .progress-fill {
+      width: 0;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, #60a5fa, #22c55e);
+      transition: width 420ms cubic-bezier(.2, .8, .2, 1);
+    }
+
+    .status-stack {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .status-chip {
+      padding: 11px;
+      border-radius: var(--radius-sm);
+      background: rgba(255, 255, 255, 0.12);
+      text-align: center;
+    }
+
+    .status-chip strong {
+      display: block;
+      font-size: 22px;
+    }
+
+    .status-chip span {
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .goal-item {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr) 144px auto;
+      gap: 10px;
+      align-items: center;
+      padding: 12px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      background: #fff;
+      transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+    }
+
+    .goal-item:hover {
+      transform: translateY(-2px);
+      border-color: #bfdbfe;
+      box-shadow: 0 16px 26px rgba(15, 23, 42, 0.07);
+    }
+
+    .goal-check {
+      width: 26px;
+      height: 26px;
+      border: 2px solid #cbd5e1;
+      border-radius: 9px;
+      background: #fff;
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+      color: #fff;
+      transition: all 180ms ease;
+    }
+
+    .goal-check.completed {
+      border-color: var(--complete);
+      background: var(--complete);
+    }
+
+    .goal-text {
+      min-width: 0;
+      line-height: 1.4;
+    }
+
+    .goal-text.completed {
+      color: var(--muted);
+      text-decoration: line-through;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 850;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .badge.completed,
+    .badge.status-completed {
+      color: #166534;
+      background: var(--complete-soft);
+    }
+
+    .badge.in-progress,
+    .badge.status-in-progress {
+      color: #92400e;
+      background: var(--progress-soft);
+    }
+
+    .badge.behind,
+    .badge.status-behind {
+      color: #991b1b;
+      background: var(--behind-soft);
+    }
+
+    .badge.default {
+      color: var(--primary-dark);
+      background: var(--primary-soft);
+    }
+
+    .goal-status {
+      min-height: 36px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 750;
+    }
+
+    .notes-card textarea {
+      min-height: 180px;
+      background: linear-gradient(#fff, #fff) padding-box, linear-gradient(135deg, #bfdbfe, transparent) border-box;
+    }
+
+    .empty-state {
+      padding: 22px;
+      border: 1px dashed #cbd5e1;
+      border-radius: var(--radius-md);
+      color: var(--muted);
+      background: var(--surface-soft);
+      text-align: center;
+      line-height: 1.5;
+    }
+
+    .toast {
+      position: fixed;
+      right: 22px;
+      bottom: 22px;
+      z-index: 50;
+      padding: 13px 16px;
+      border-radius: 999px;
+      color: #fff;
+      background: #0f172a;
+      box-shadow: var(--shadow);
+      transform: translateY(24px);
+      opacity: 0;
+      pointer-events: none;
+      transition: transform 240ms ease, opacity 240ms ease;
+      font-size: 14px;
+      font-weight: 750;
+    }
+
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .toast.success {
+      background: var(--complete);
+    }
+
+    .toast.warn {
+      background: var(--progress);
+    }
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 40;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: rgba(15, 23, 42, 0.44);
+      backdrop-filter: blur(10px);
+    }
+
+    .modal-backdrop.open {
+      display: flex;
+    }
+
+    .modal {
+      width: min(720px, 100%);
+      max-height: min(760px, 92vh);
+      overflow: auto;
+      border-radius: var(--radius-xl);
+      background: #fff;
+      box-shadow: 0 34px 90px rgba(15, 23, 42, 0.3);
+      animation: modalIn 220ms ease;
+    }
+
+    .modal header,
+    .modal-body,
+    .modal footer {
+      padding: 22px;
+    }
+
+    .modal header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 18px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .modal h3 {
+      margin: 0;
+      font-size: 22px;
+      letter-spacing: -0.035em;
+    }
+
+    .modal p {
+      margin: 7px 0 0;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .modal footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      border-top: 1px solid var(--border);
+    }
+
+    @keyframes modalIn {
+      from {
+        transform: translateY(18px) scale(0.97);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+      }
+    }
+
+    @media (max-width: 1180px) {
+      .app-shell {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        position: static;
+        height: auto;
+        border-right: 0;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .history-list {
+        grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      }
+
+      .content-grid,
+      .hero {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-actions {
+        justify-content: flex-start;
+      }
+    }
+
+    @media (max-width: 780px) {
+      .app-main,
+      .sidebar {
+        padding: 18px;
+      }
+
+      .hero,
+      .panel {
+        padding: 20px;
+      }
+
+      .metrics-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .form-grid,
+      .status-stack {
+        grid-template-columns: 1fr;
+      }
+
+      .goal-item {
+        grid-template-columns: auto minmax(0, 1fr) auto;
+      }
+
+      .goal-status {
+        grid-column: 2 / -1;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .metrics-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .inline-add {
+        flex-direction: column;
+      }
+
+      .hero h2 {
+        font-size: 34px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark">1:1</div>
+        <div>
+          <h1>Meeting Space</h1>
+          <p>Weekly 1-on-1 command center</p>
+        </div>
+      </div>
+
+      <button class="primary-button" id="newMeetingButton" type="button">+ Create This Week</button>
+
+      <div class="sidebar-section-title">
+        <span>Meeting History</span>
+        <span id="meetingCount">0</span>
+      </div>
+      <div class="history-list" id="historyList"></div>
+    </aside>
+
+    <main class="app-main">
+      <section class="hero">
+        <div>
+          <div class="eyebrow">Gemini-ready meeting record</div>
+          <h2 id="meetingTitle">1-on-1 Meeting</h2>
+          <div class="hero-meta">
+            <span class="pill" id="meetingDatePill">Date</span>
+            <span class="pill" id="meetingLabelPill">This Week</span>
+            <span class="pill" id="meetingPersonPill">Manager / Direct Report</span>
+          </div>
+        </div>
+        <div class="hero-actions">
+          <button class="secondary-button" id="editMeetingButton" type="button">Edit Details</button>
+          <button class="ghost-button" id="exportButton" type="button">Export JSON</button>
+          <button class="ghost-button" id="resetButton" type="button">Reset Demo</button>
+        </div>
+      </section>
+
+      <section class="metrics-grid" aria-label="Goal metrics">
+        <div class="metric-card">
+          <div class="metric-label">Goals</div>
+          <div class="metric-value" id="metricGoals">0</div>
+          <div class="metric-sub">Action items in this session</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Completed</div>
+          <div class="metric-value" id="metricCompleted">0</div>
+          <div class="metric-sub">Checked off and closed</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">In Progress</div>
+          <div class="metric-value" id="metricProgress">0</div>
+          <div class="metric-sub">Currently moving forward</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Behind</div>
+          <div class="metric-value" id="metricBehind">0</div>
+          <div class="metric-sub">Needs attention next week</div>
+        </div>
+      </section>
+
+      <div class="content-grid">
+        <section>
+          <article class="panel">
+            <div class="panel-header">
+              <div>
+                <h3>Gemini Transcript Summary</h3>
+                <p>Paste or edit a transcript, then generate a simulated AI summary for crisp takeaways.</p>
+              </div>
+              <button class="secondary-button" id="summarizeButton" type="button">Generate Summary</button>
+            </div>
+            <div class="summary-card">
+              <ul class="summary-list" id="summaryList"></ul>
+            </div>
+            <div class="field full" style="margin-top: 16px;">
+              <label for="transcriptInput">Meeting transcript</label>
+              <textarea id="transcriptInput" placeholder="Paste transcript notes here..."></textarea>
+            </div>
+          </article>
+
+          <article class="panel">
+            <div class="panel-header">
+              <div>
+                <h3>Discussion Points</h3>
+                <p>Keep a concise record of topics covered during the selected meeting.</p>
+              </div>
+            </div>
+            <ul class="discussion-list" id="discussionList"></ul>
+            <form class="inline-add" id="discussionForm">
+              <input id="discussionInput" type="text" placeholder="Add a discussion point...">
+              <button class="secondary-button" type="submit">Add Point</button>
+            </form>
+          </article>
+
+          <article class="panel notes-card">
+            <div class="panel-header">
+              <div>
+                <h3>Private Notes</h3>
+                <p>Saved automatically for this meeting only, preserving previous weeks.</p>
+              </div>
+            </div>
+            <label for="notesInput">Notes</label>
+            <textarea id="notesInput" placeholder="Capture coaching notes, observations, and follow-ups..."></textarea>
+          </article>
+        </section>
+
+        <aside>
+          <article class="panel">
+            <div class="panel-header">
+              <div>
+                <h3>Goal Tracking</h3>
+                <p>Update goal statuses and watch the session progress recalculate instantly.</p>
+              </div>
+            </div>
+            <div class="progress-box">
+              <div class="progress-top">
+                <div>
+                  <div class="progress-label">Completion score</div>
+                  <div class="progress-score" id="progressScore">0%</div>
+                </div>
+                <span class="badge default" id="progressMood">No goals yet</span>
+              </div>
+              <div class="progress-track">
+                <div class="progress-fill" id="progressFill"></div>
+              </div>
+              <div class="status-stack">
+                <div class="status-chip">
+                  <strong id="statusCompleted">0</strong>
+                  <span>Completed</span>
+                </div>
+                <div class="status-chip">
+                  <strong id="statusInProgress">0</strong>
+                  <span>In Progress</span>
+                </div>
+                <div class="status-chip">
+                  <strong id="statusBehind">0</strong>
+                  <span>Behind</span>
+                </div>
+              </div>
+            </div>
+            <ul class="goal-list" id="goalList" style="margin-top: 16px;"></ul>
+            <form class="inline-add" id="goalForm">
+              <input id="goalInput" type="text" placeholder="Add an action item or goal...">
+              <button class="secondary-button" type="submit">Add Goal</button>
+            </form>
+          </article>
+        </aside>
+      </div>
+    </main>
+  </div>
+
+  <div class="modal-backdrop" id="meetingModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal">
+      <header>
+        <div>
+          <h3 id="modalTitle">Meeting Details</h3>
+          <p>Create or update a historical 1-on-1 entry.</p>
+        </div>
+        <button class="icon-button" id="closeModalButton" type="button" aria-label="Close">x</button>
+      </header>
+      <form id="meetingForm">
+        <div class="modal-body">
+          <div class="form-grid">
+            <div class="field">
+              <label for="meetingDateInput">Meeting date</label>
+              <input id="meetingDateInput" type="date" required>
+            </div>
+            <div class="field">
+              <label for="meetingLabelInput">Timeline label</label>
+              <input id="meetingLabelInput" type="text" placeholder="This Week" required>
+            </div>
+            <div class="field full">
+              <label for="meetingTitleInput">Title</label>
+              <input id="meetingTitleInput" type="text" placeholder="Weekly growth and priorities" required>
+            </div>
+            <div class="field">
+              <label for="managerInput">Manager</label>
+              <input id="managerInput" type="text" placeholder="Alex Morgan">
+            </div>
+            <div class="field">
+              <label for="reportInput">Direct report</label>
+              <input id="reportInput" type="text" placeholder="Jordan Lee">
+            </div>
+          </div>
+        </div>
+        <footer>
+          <button class="ghost-button" id="cancelModalButton" type="button">Cancel</button>
+          <button class="primary-button" style="width: auto;" type="submit">Save Meeting</button>
+        </footer>
+      </form>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    const STORAGE_KEY = "oneOnOneMeetingSpace:v1";
+    const todayIso = new Date().toISOString().slice(0, 10);
+
+    const sampleMeetings = [
+      {
+        id: cryptoId(),
+        date: todayIso,
+        label: "This Week",
+        title: "Execution focus and role clarity",
+        manager: "Alex Morgan",
+        report: "Jordan Lee",
+        transcript: "Alex and Jordan reviewed progress on the onboarding playbook, discussed blockers around stakeholder feedback, and agreed to tighten scope before the next sprint planning session. Jordan wants more visibility into roadmap decisions and will draft questions for product leadership. They also discussed energy levels and agreed to protect two focus blocks each week.",
+        summary: [
+          "Onboarding playbook is moving forward, but stakeholder feedback needs clearer ownership.",
+          "Jordan wants more visibility into roadmap decisions before committing delivery dates.",
+          "Both agreed to protect two weekly focus blocks to reduce context switching."
+        ],
+        discussionPoints: [
+          "Reviewed progress on the onboarding playbook and open stakeholder comments.",
+          "Discussed roadmap visibility and where decisions are being made.",
+          "Checked in on workload, energy levels, and focus time."
+        ],
+        goals: [
+          { id: cryptoId(), text: "Consolidate stakeholder comments into three decisions needed.", status: "in-progress" },
+          { id: cryptoId(), text: "Block two 90-minute focus sessions on the calendar.", status: "completed" },
+          { id: cryptoId(), text: "Draft roadmap questions for product leadership.", status: "behind" }
+        ],
+        notes: "Follow up on whether Jordan gets enough context before cross-functional asks land."
+      },
+      {
+        id: cryptoId(),
+        date: offsetDate(-7),
+        label: "Last Week",
+        title: "Feedback loops and delivery confidence",
+        manager: "Alex Morgan",
+        report: "Jordan Lee",
+        transcript: "The pair discussed the pilot launch, where Jordan felt confident about technical execution but less confident about late scope changes. Alex encouraged written decision logs and a stronger definition of done. They agreed to close two lingering bugs and ask design for final copy by Thursday.",
+        summary: [
+          "Pilot launch execution is healthy, with scope change management as the biggest risk.",
+          "Written decision logs should reduce ambiguity across design, product, and engineering.",
+          "Two bugs and final copy approval are the critical follow-ups."
+        ],
+        discussionPoints: [
+          "Pilot launch confidence and risks.",
+          "Handling late scope changes.",
+          "Decision logs and definition of done."
+        ],
+        goals: [
+          { id: cryptoId(), text: "Close the two pilot bugs.", status: "completed" },
+          { id: cryptoId(), text: "Create a decision log template.", status: "completed" },
+          { id: cryptoId(), text: "Confirm final copy with design.", status: "completed" }
+        ],
+        notes: "Strong week. Jordan responded well to converting ambiguity into explicit artifacts."
+      },
+      {
+        id: cryptoId(),
+        date: offsetDate(-14),
+        label: "Two Weeks Ago",
+        title: "Career goals and operating rhythm",
+        manager: "Alex Morgan",
+        report: "Jordan Lee",
+        transcript: "Jordan shared interest in taking on more architecture work and mentoring newer teammates. Alex suggested pairing on the integration design review and documenting a growth goal for the quarter. They discussed weekly planning rituals and agreed to move the Monday planning block earlier.",
+        summary: [
+          "Jordan is aiming for more architecture ownership and mentoring opportunities.",
+          "Integration design review is a useful near-term stretch opportunity.",
+          "Moving Monday planning earlier should improve weekly prioritization."
+        ],
+        discussionPoints: [
+          "Longer-term architecture ownership.",
+          "Mentoring newer teammates.",
+          "Weekly planning rhythm."
+        ],
+        goals: [
+          { id: cryptoId(), text: "Pair on integration design review.", status: "in-progress" },
+          { id: cryptoId(), text: "Document quarterly growth goal.", status: "completed" },
+          { id: cryptoId(), text: "Move Monday planning block to 9:30.", status: "completed" }
+        ],
+        notes: "Potential promotion narrative: architecture scope plus multiplier behavior."
+      }
+    ];
+
+    let state = loadState();
+    let selectedMeetingId = state.selectedMeetingId || state.meetings[0].id;
+    if (!state.meetings.some(meeting => meeting.id === selectedMeetingId)) {
+      selectedMeetingId = state.meetings[0].id;
+    }
+    let editingMode = "edit";
+    let toastTimer = null;
+
+    const elements = {
+      historyList: document.getElementById("historyList"),
+      meetingCount: document.getElementById("meetingCount"),
+      meetingTitle: document.getElementById("meetingTitle"),
+      meetingDatePill: document.getElementById("meetingDatePill"),
+      meetingLabelPill: document.getElementById("meetingLabelPill"),
+      meetingPersonPill: document.getElementById("meetingPersonPill"),
+      summaryList: document.getElementById("summaryList"),
+      transcriptInput: document.getElementById("transcriptInput"),
+      discussionList: document.getElementById("discussionList"),
+      discussionForm: document.getElementById("discussionForm"),
+      discussionInput: document.getElementById("discussionInput"),
+      notesInput: document.getElementById("notesInput"),
+      goalList: document.getElementById("goalList"),
+      goalForm: document.getElementById("goalForm"),
+      goalInput: document.getElementById("goalInput"),
+      progressScore: document.getElementById("progressScore"),
+      progressFill: document.getElementById("progressFill"),
+      progressMood: document.getElementById("progressMood"),
+      metricGoals: document.getElementById("metricGoals"),
+      metricCompleted: document.getElementById("metricCompleted"),
+      metricProgress: document.getElementById("metricProgress"),
+      metricBehind: document.getElementById("metricBehind"),
+      statusCompleted: document.getElementById("statusCompleted"),
+      statusInProgress: document.getElementById("statusInProgress"),
+      statusBehind: document.getElementById("statusBehind"),
+      meetingModal: document.getElementById("meetingModal"),
+      modalTitle: document.getElementById("modalTitle"),
+      meetingForm: document.getElementById("meetingForm"),
+      meetingDateInput: document.getElementById("meetingDateInput"),
+      meetingLabelInput: document.getElementById("meetingLabelInput"),
+      meetingTitleInput: document.getElementById("meetingTitleInput"),
+      managerInput: document.getElementById("managerInput"),
+      reportInput: document.getElementById("reportInput"),
+      toast: document.getElementById("toast")
+    };
+
+    document.getElementById("newMeetingButton").addEventListener("click", openCreateModal);
+    document.getElementById("editMeetingButton").addEventListener("click", openEditModal);
+    document.getElementById("closeModalButton").addEventListener("click", closeModal);
+    document.getElementById("cancelModalButton").addEventListener("click", closeModal);
+    document.getElementById("summarizeButton").addEventListener("click", generateSummary);
+    document.getElementById("exportButton").addEventListener("click", exportJson);
+    document.getElementById("resetButton").addEventListener("click", resetDemo);
+    elements.meetingModal.addEventListener("click", event => {
+      if (event.target === elements.meetingModal) closeModal();
+    });
+
+    elements.meetingForm.addEventListener("submit", saveMeetingDetails);
+    elements.discussionForm.addEventListener("submit", addDiscussionPoint);
+    elements.goalForm.addEventListener("submit", addGoal);
+    elements.transcriptInput.addEventListener("input", event => {
+      updateCurrentMeeting({ transcript: event.target.value });
+    });
+    elements.notesInput.addEventListener("input", event => {
+      updateCurrentMeeting({ notes: event.target.value });
+    });
+
+    render();
+
+    function loadState() {
+      try {
+        const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
+        if (saved && Array.isArray(saved.meetings) && saved.meetings.length) {
+          saved.meetings = normalizeMeetings(saved.meetings);
+          return saved;
+        }
+      } catch (error) {
+        console.warn("Unable to load saved meetings", error);
+      }
+
+      return {
+        meetings: normalizeMeetings(sampleMeetings),
+        selectedMeetingId: sampleMeetings[0].id
+      };
+    }
+
+    function normalizeMeetings(meetings) {
+      return meetings
+        .map(meeting => ({
+          id: meeting.id || cryptoId(),
+          date: meeting.date || todayIso,
+          label: meeting.label || "1-on-1",
+          title: meeting.title || "Weekly 1-on-1",
+          manager: meeting.manager || "",
+          report: meeting.report || "",
+          transcript: meeting.transcript || "",
+          summary: Array.isArray(meeting.summary) ? meeting.summary : [],
+          discussionPoints: Array.isArray(meeting.discussionPoints) ? meeting.discussionPoints : [],
+          goals: Array.isArray(meeting.goals)
+            ? meeting.goals.map(goal => ({
+                id: goal.id || cryptoId(),
+                text: goal.text || "Untitled goal",
+                status: normalizeStatus(goal.status)
+              }))
+            : [],
+          notes: meeting.notes || ""
+        }))
+        .sort((a, b) => new Date(b.date) - new Date(a.date));
+    }
+
+    function saveState(showSavedToast = false) {
+      state.selectedMeetingId = selectedMeetingId;
+      state.meetings = normalizeMeetings(state.meetings);
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        if (showSavedToast) showToast("Saved locally", "success");
+      } catch (error) {
+        console.warn("Unable to save meetings locally", error);
+        showToast("Local save unavailable in this browser", "warn");
+      }
+    }
+
+    function render() {
+      const current = getCurrentMeeting();
+      if (!current) return;
+
+      renderHistory();
+      renderHero(current);
+      renderSummary(current);
+      renderDiscussion(current);
+      renderGoals(current);
+      renderFields(current);
+    }
+
+    function renderHistory() {
+      elements.meetingCount.textContent = state.meetings.length;
+      elements.historyList.innerHTML = state.meetings.map(meeting => {
+        const stats = calculateStats(meeting.goals);
+        return `
+          <button class="history-card ${meeting.id === selectedMeetingId ? "active" : ""}" type="button" data-meeting-id="${escapeAttr(meeting.id)}">
+            <div class="history-card-top">
+              <div>
+                <h2>${escapeHtml(meeting.label)}</h2>
+                <time>${formatDate(meeting.date)}</time>
+              </div>
+              <span class="badge ${stats.badgeClass}">${stats.percent}%</span>
+            </div>
+            <p>${escapeHtml(meeting.title)}</p>
+            <div class="mini-progress"><span style="width:${stats.percent}%"></span></div>
+          </button>
+        `;
+      }).join("");
+
+      elements.historyList.querySelectorAll(".history-card").forEach(button => {
+        button.addEventListener("click", () => {
+          selectedMeetingId = button.dataset.meetingId;
+          saveState();
+          render();
+        });
+      });
+    }
+
+    function renderHero(meeting) {
+      elements.meetingTitle.textContent = meeting.title;
+      elements.meetingDatePill.textContent = formatDate(meeting.date);
+      elements.meetingLabelPill.textContent = meeting.label;
+      elements.meetingPersonPill.textContent = [meeting.manager, meeting.report].filter(Boolean).join(" / ") || "Manager / Direct Report";
+    }
+
+    function renderSummary(meeting) {
+      elements.summaryList.innerHTML = meeting.summary.length
+        ? meeting.summary.map(item => `<li>${escapeHtml(item)}</li>`).join("")
+        : `<li>No summary yet. Add a transcript and click Generate Summary.</li>`;
+    }
+
+    function renderDiscussion(meeting) {
+      elements.discussionList.innerHTML = meeting.discussionPoints.length
+        ? meeting.discussionPoints.map((point, index) => `
+            <li class="discussion-item">
+              <span style="flex:1;">${escapeHtml(point)}</span>
+              <button class="icon-button" type="button" data-edit-discussion="${index}" aria-label="Edit discussion point">...</button>
+              <button class="icon-button" type="button" data-delete-discussion="${index}" aria-label="Delete discussion point">x</button>
+            </li>
+          `).join("")
+        : `<li class="empty-state">No discussion points captured yet.</li>`;
+
+      elements.discussionList.querySelectorAll("[data-edit-discussion]").forEach(button => {
+        button.addEventListener("click", () => editDiscussionPoint(Number(button.dataset.editDiscussion)));
+      });
+      elements.discussionList.querySelectorAll("[data-delete-discussion]").forEach(button => {
+        button.addEventListener("click", () => deleteDiscussionPoint(Number(button.dataset.deleteDiscussion)));
+      });
+    }
+
+    function renderGoals(meeting) {
+      const stats = calculateStats(meeting.goals);
+      elements.metricGoals.textContent = meeting.goals.length;
+      elements.metricCompleted.textContent = stats.completed;
+      elements.metricProgress.textContent = stats.inProgress;
+      elements.metricBehind.textContent = stats.behind;
+      elements.statusCompleted.textContent = stats.completed;
+      elements.statusInProgress.textContent = stats.inProgress;
+      elements.statusBehind.textContent = stats.behind;
+      elements.progressScore.textContent = `${stats.percent}%`;
+      elements.progressFill.style.width = `${stats.percent}%`;
+      elements.progressMood.textContent = stats.mood;
+      elements.progressMood.className = `badge ${stats.badgeClass}`;
+
+      elements.goalList.innerHTML = meeting.goals.length
+        ? meeting.goals.map(goal => `
+            <li class="goal-item">
+              <button class="goal-check ${goal.status === "completed" ? "completed" : ""}" type="button" data-toggle-goal="${escapeAttr(goal.id)}" aria-label="Toggle goal completion">${goal.status === "completed" ? "✓" : ""}</button>
+              <span class="goal-text ${goal.status === "completed" ? "completed" : ""}">${escapeHtml(goal.text)}</span>
+              <select class="goal-status" data-status-goal="${escapeAttr(goal.id)}" aria-label="Goal status">
+                <option value="in-progress" ${goal.status === "in-progress" ? "selected" : ""}>In Progress</option>
+                <option value="completed" ${goal.status === "completed" ? "selected" : ""}>Completed</option>
+                <option value="behind" ${goal.status === "behind" ? "selected" : ""}>Behind</option>
+              </select>
+              <div style="display:flex; gap:8px;">
+                <button class="icon-button" type="button" data-edit-goal="${escapeAttr(goal.id)}" aria-label="Edit goal">...</button>
+                <button class="icon-button" type="button" data-delete-goal="${escapeAttr(goal.id)}" aria-label="Delete goal">x</button>
+              </div>
+            </li>
+          `).join("")
+        : `<li class="empty-state">No goals yet. Add an action item for this meeting.</li>`;
+
+      elements.goalList.querySelectorAll("[data-toggle-goal]").forEach(button => {
+        button.addEventListener("click", () => toggleGoal(button.dataset.toggleGoal));
+      });
+      elements.goalList.querySelectorAll("[data-status-goal]").forEach(select => {
+        select.addEventListener("change", () => updateGoalStatus(select.dataset.statusGoal, select.value));
+      });
+      elements.goalList.querySelectorAll("[data-edit-goal]").forEach(button => {
+        button.addEventListener("click", () => editGoal(button.dataset.editGoal));
+      });
+      elements.goalList.querySelectorAll("[data-delete-goal]").forEach(button => {
+        button.addEventListener("click", () => deleteGoal(button.dataset.deleteGoal));
+      });
+    }
+
+    function renderFields(meeting) {
+      if (document.activeElement !== elements.transcriptInput) {
+        elements.transcriptInput.value = meeting.transcript;
+      }
+      if (document.activeElement !== elements.notesInput) {
+        elements.notesInput.value = meeting.notes;
+      }
+    }
+
+    function calculateStats(goals) {
+      const total = goals.length;
+      const completed = goals.filter(goal => goal.status === "completed").length;
+      const inProgress = goals.filter(goal => goal.status === "in-progress").length;
+      const behind = goals.filter(goal => goal.status === "behind").length;
+      const percent = total ? Math.round((completed / total) * 100) : 0;
+      let mood = "No goals yet";
+      let badgeClass = "default";
+
+      if (total && percent === 100) {
+        mood = "All goals complete";
+        badgeClass = "completed";
+      } else if (behind > 0) {
+        mood = "Needs attention";
+        badgeClass = "behind";
+      } else if (inProgress > 0) {
+        mood = "Tracking well";
+        badgeClass = "in-progress";
+      }
+
+      return { total, completed, inProgress, behind, percent, mood, badgeClass };
+    }
+
+    function addDiscussionPoint(event) {
+      event.preventDefault();
+      const value = elements.discussionInput.value.trim();
+      if (!value) return;
+      const meeting = getCurrentMeeting();
+      meeting.discussionPoints.push(value);
+      elements.discussionInput.value = "";
+      saveState(true);
+      render();
+    }
+
+    function editDiscussionPoint(index) {
+      const meeting = getCurrentMeeting();
+      const next = prompt("Edit discussion point", meeting.discussionPoints[index]);
+      if (next === null) return;
+      const trimmed = next.trim();
+      if (!trimmed) return;
+      meeting.discussionPoints[index] = trimmed;
+      saveState(true);
+      render();
+    }
+
+    function deleteDiscussionPoint(index) {
+      const meeting = getCurrentMeeting();
+      meeting.discussionPoints.splice(index, 1);
+      saveState(true);
+      render();
+    }
+
+    function addGoal(event) {
+      event.preventDefault();
+      const value = elements.goalInput.value.trim();
+      if (!value) return;
+      const meeting = getCurrentMeeting();
+      meeting.goals.push({ id: cryptoId(), text: value, status: "in-progress" });
+      elements.goalInput.value = "";
+      saveState(true);
+      render();
+    }
+
+    function toggleGoal(goalId) {
+      const goal = findGoal(goalId);
+      if (!goal) return;
+      goal.status = goal.status === "completed" ? "in-progress" : "completed";
+      saveState(true);
+      render();
+    }
+
+    function updateGoalStatus(goalId, status) {
+      const goal = findGoal(goalId);
+      if (!goal) return;
+      goal.status = normalizeStatus(status);
+      saveState(true);
+      render();
+    }
+
+    function editGoal(goalId) {
+      const goal = findGoal(goalId);
+      if (!goal) return;
+      const next = prompt("Edit goal", goal.text);
+      if (next === null) return;
+      const trimmed = next.trim();
+      if (!trimmed) return;
+      goal.text = trimmed;
+      saveState(true);
+      render();
+    }
+
+    function deleteGoal(goalId) {
+      const meeting = getCurrentMeeting();
+      meeting.goals = meeting.goals.filter(goal => goal.id !== goalId);
+      saveState(true);
+      render();
+    }
+
+    function generateSummary() {
+      const meeting = getCurrentMeeting();
+      const transcript = elements.transcriptInput.value.trim();
+      if (!transcript) {
+        showToast("Add transcript text first", "warn");
+        return;
+      }
+
+      const sentences = transcript
+        .replace(/\s+/g, " ")
+        .split(/(?<=[.!?])\s+/)
+        .map(sentence => sentence.trim())
+        .filter(Boolean);
+
+      const keywords = ["agreed", "blocker", "risk", "goal", "next", "follow", "review", "discussed", "needs", "wants"];
+      const ranked = sentences
+        .map(sentence => ({
+          sentence,
+          score: keywords.reduce((sum, keyword) => sum + (sentence.toLowerCase().includes(keyword) ? 1 : 0), 0) + Math.min(sentence.length / 220, 1)
+        }))
+        .sort((a, b) => b.score - a.score)
+        .slice(0, 4)
+        .map(item => item.sentence.replace(/^(alex|jordan|manager|employee):\s*/i, ""));
+
+      meeting.transcript = transcript;
+      meeting.summary = ranked.length ? ranked : [transcript.slice(0, 180) + (transcript.length > 180 ? "..." : "")];
+      saveState(true);
+      render();
+      showToast("Gemini-style summary generated", "success");
+    }
+
+    function openCreateModal() {
+      editingMode = "create";
+      elements.modalTitle.textContent = "Create This Week";
+      elements.meetingDateInput.value = todayIso;
+      elements.meetingLabelInput.value = "This Week";
+      elements.meetingTitleInput.value = "Weekly 1-on-1";
+      elements.managerInput.value = getCurrentMeeting()?.manager || "";
+      elements.reportInput.value = getCurrentMeeting()?.report || "";
+      elements.meetingModal.classList.add("open");
+      elements.meetingTitleInput.focus();
+    }
+
+    function openEditModal() {
+      const meeting = getCurrentMeeting();
+      editingMode = "edit";
+      elements.modalTitle.textContent = "Edit Meeting Details";
+      elements.meetingDateInput.value = meeting.date;
+      elements.meetingLabelInput.value = meeting.label;
+      elements.meetingTitleInput.value = meeting.title;
+      elements.managerInput.value = meeting.manager;
+      elements.reportInput.value = meeting.report;
+      elements.meetingModal.classList.add("open");
+      elements.meetingTitleInput.focus();
+    }
+
+    function closeModal() {
+      elements.meetingModal.classList.remove("open");
+    }
+
+    function saveMeetingDetails(event) {
+      event.preventDefault();
+      const payload = {
+        date: elements.meetingDateInput.value,
+        label: elements.meetingLabelInput.value.trim(),
+        title: elements.meetingTitleInput.value.trim(),
+        manager: elements.managerInput.value.trim(),
+        report: elements.reportInput.value.trim()
+      };
+
+      if (editingMode === "create") {
+        const newMeeting = {
+          id: cryptoId(),
+          ...payload,
+          transcript: "",
+          summary: [],
+          discussionPoints: [],
+          goals: [],
+          notes: ""
+        };
+        state.meetings.push(newMeeting);
+        selectedMeetingId = newMeeting.id;
+      } else {
+        updateCurrentMeeting(payload);
+      }
+
+      closeModal();
+      saveState(true);
+      render();
+    }
+
+    function updateCurrentMeeting(patch) {
+      const meeting = getCurrentMeeting();
+      Object.assign(meeting, patch);
+      saveState();
+    }
+
+    function exportJson() {
+      const blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "one-on-one-meetings.json";
+      link.click();
+      URL.revokeObjectURL(url);
+      showToast("Export downloaded", "success");
+    }
+
+    function resetDemo() {
+      if (!confirm("Reset the dashboard to demo data? This clears saved local changes.")) return;
+      state = {
+        meetings: normalizeMeetings(sampleMeetings.map(meeting => ({
+          ...meeting,
+          id: cryptoId(),
+          goals: meeting.goals.map(goal => ({ ...goal, id: cryptoId() }))
+        }))),
+        selectedMeetingId: ""
+      };
+      selectedMeetingId = state.meetings[0].id;
+      saveState(true);
+      render();
+    }
+
+    function getCurrentMeeting() {
+      return state.meetings.find(meeting => meeting.id === selectedMeetingId) || state.meetings[0];
+    }
+
+    function findGoal(goalId) {
+      return getCurrentMeeting().goals.find(goal => goal.id === goalId);
+    }
+
+    function normalizeStatus(status) {
+      return ["completed", "in-progress", "behind"].includes(status) ? status : "in-progress";
+    }
+
+    function cryptoId() {
+      if (window.crypto && window.crypto.randomUUID) return window.crypto.randomUUID();
+      return `id-${Date.now()}-${Math.random().toString(16).slice(2)}`;
+    }
+
+    function offsetDate(days) {
+      const date = new Date();
+      date.setDate(date.getDate() + days);
+      return date.toISOString().slice(0, 10);
+    }
+
+    function formatDate(value) {
+      return new Intl.DateTimeFormat("en", {
+        weekday: "short",
+        month: "short",
+        day: "numeric",
+        year: "numeric"
+      }).format(new Date(`${value}T12:00:00`));
+    }
+
+    function escapeHtml(value) {
+      return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function escapeAttr(value) {
+      return escapeHtml(value);
+    }
+
+    function showToast(message, type = "") {
+      clearTimeout(toastTimer);
+      elements.toast.textContent = message;
+      elements.toast.className = `toast ${type}`;
+      requestAnimationFrame(() => elements.toast.classList.add("show"));
+      toastTimer = setTimeout(() => elements.toast.classList.remove("show"), 2300);
+    }
+  </script>
+</body>
+</html>
