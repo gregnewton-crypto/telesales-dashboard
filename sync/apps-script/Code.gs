@@ -238,8 +238,8 @@ function writeStatus_(ss, results) {
   const now = Utilities.formatDate(new Date(), 'UTC', "yyyy-MM-dd HH:mm:ss 'UTC'");
 
   const rows = [
-    ['Last Sync (UTC)', now],
-    [],
+    ['Last Sync (UTC)', now, ''],
+    ['', '', ''],
     ['Sheet Tab', 'Records Synced', 'Status'],
   ];
 
