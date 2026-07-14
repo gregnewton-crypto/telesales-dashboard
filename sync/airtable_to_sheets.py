@@ -21,10 +21,7 @@ SCOPES = [
 
 DEFAULT_TABLES = [
     {"id": "tblQcfo7qgQCv7o3n", "name": "Adversus API", "sheet": "Adversus API"},
-    {"id": "tblKCC8nxriWKXrEG", "name": "UK Databowl leads", "sheet": "UK Leads"},
-    {"id": "tbllpLbEtTkmMQOY9", "name": "Databowl Leads", "sheet": "Ireland Leads"},
-    {"id": "tblaP748fEZbHYJHc", "name": "2026 Databowl BNB API", "sheet": "BNB Leads 2026"},
-    {"id": "tblPosmpZAiDpHAkS", "name": "2026 Databowl Marro API", "sheet": "Marro Leads 2026"},
+    {"id": "tbllpLbEtTkmMQOY9", "name": "Databowl Leads", "sheet": "Databowl Leads"},
 ]
 
 
@@ -37,7 +34,7 @@ def env(name: str, default: str | None = None, required: bool = False) -> str:
 
 def load_tables_config() -> list[dict[str, str]]:
     table_id = env("AIRTABLE_TABLE_ID")
-    sheet_tab = env("GOOGLE_SHEET_TAB", default=DEFAULT_TABLE["sheet"])
+    sheet_tab = env("GOOGLE_SHEET_TAB", default="Adversus API")
     if table_id:
         return [{"id": table_id, "sheet": sheet_tab}]
 
@@ -51,7 +48,7 @@ def load_tables_config() -> list[dict[str, str]]:
             raise SystemExit("SYNC_TABLES_JSON must be a non-empty JSON array")
         return tables
 
-    return [DEFAULT_TABLE]
+    return DEFAULT_TABLES
 
 
 def flatten_value(value: Any) -> str:

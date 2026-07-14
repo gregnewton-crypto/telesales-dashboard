@@ -5,10 +5,7 @@ This sync pushes call and lead data from Airtable into Google Sheets and keeps i
 | Airtable table | Google Sheet tab |
 |---|---|
 | Adversus API | Adversus API |
-| 🇬🇧 UK Databowl leads | UK Leads |
-| ☘ Databowl Leads | Ireland Leads |
-| 2026 Databowl BNB API | BNB Leads 2026 |
-| 2026 Databowl Marro API | Marro Leads 2026 |
+| ☘ Databowl Leads | Databowl Leads |
 
 Each run does a full refresh: the sheet tab is cleared and rewritten with the latest Airtable data. A **Sync Status** tab records the last run time and row counts.
 

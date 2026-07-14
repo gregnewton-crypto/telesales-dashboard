@@ -15,10 +15,7 @@ const CONFIG = {
   STATUS_SHEET: 'Sync Status',
   TABLES: [
     { id: 'tblQcfo7qgQCv7o3n', sheet: 'Adversus API' },
-    { id: 'tblKCC8nxriWKXrEG', sheet: 'UK Leads' },
-    { id: 'tbllpLbEtTkmMQOY9', sheet: 'Ireland Leads' },
-    { id: 'tblaP748fEZbHYJHc', sheet: 'BNB Leads 2026' },
-    { id: 'tblPosmpZAiDpHAkS', sheet: 'Marro Leads 2026' },
+    { id: 'tbllpLbEtTkmMQOY9', sheet: 'Databowl Leads' },
   ],
 };
 
