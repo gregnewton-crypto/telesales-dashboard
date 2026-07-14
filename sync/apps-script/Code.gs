@@ -2,17 +2,18 @@
  * Airtable → Google Sheets sync (Apps Script)
  *
  * Setup:
- * 1. Open your Google Sheet
- * 2. Extensions → Apps Script
- * 3. Select ALL existing code, delete it, paste this entire file
- * 4. Replace pat_PASTE_YOUR_TOKEN_HERE with your Airtable token
- * 5. Save, then run "setup" once
+ * 1. Paste this file, set your token, Save
+ * 2. Run "setup" once
+ *
+ * Large tables: each scheduled run syncs ONE tab only (alternates).
+ * To sync manually: run syncAdversusApi or syncDatabowlLeads
  */
 
 const CONFIG = {
   AIRTABLE_TOKEN: 'pat_PASTE_YOUR_TOKEN_HERE',
   BASE_ID: 'appZoN6xBB9mDv8h4',
   STATUS_SHEET: 'Sync Status',
+  WRITE_BATCH_SIZE: 500,
   TABLES: [
     { id: 'tblQcfo7qgQCv7o3n', sheet: 'Adversus API' },
     { id: 'tbllpLbEtTkmMQOY9', sheet: 'Databowl Leads' },
@@ -22,41 +23,79 @@ const CONFIG = {
 function setup() {
   const props = PropertiesService.getScriptProperties();
   props.setProperty('AIRTABLE_TOKEN', CONFIG.AIRTABLE_TOKEN);
+  props.setProperty('SYNC_INDEX', '0');
 
-  syncNow();
+  syncDatabowlLeads();
+
   createSyncTrigger_();
 
   SpreadsheetApp.getUi().alert(
     'Setup complete',
-    'Sync ran once and will repeat every 15 minutes.',
+    'Databowl Leads synced. Scheduled sync alternates tabs every 15 minutes.',
     SpreadsheetApp.getUi().ButtonSet.OK
   );
 }
 
+/** Scheduled trigger — syncs one table per run to avoid timeouts */
 function syncNow() {
+  runWithLock_(function () {
+    const props = PropertiesService.getScriptProperties();
+    const index = parseInt(props.getProperty('SYNC_INDEX') || '0', 10);
+    const table = CONFIG.TABLES[index % CONFIG.TABLES.length];
+
+    syncOneTable_(table);
+
+    props.setProperty('SYNC_INDEX', String((index + 1) % CONFIG.TABLES.length));
+  });
+}
+
+function syncAdversusApi() {
+  runWithLock_(function () {
+    syncOneTable_(CONFIG.TABLES[0]);
+  });
+}
+
+function syncDatabowlLeads() {
+  runWithLock_(function () {
+    syncOneTable_(CONFIG.TABLES[1]);
+  });
+}
+
+function syncOneTable_(table) {
+  const token = getToken_();
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  let result;
+
+  try {
+    const count = syncTable_(token, ss, table.id, table.sheet);
+    result = { sheet: table.sheet, records: count, status: 'OK' };
+  } catch (err) {
+    result = { sheet: table.sheet, records: 0, status: 'ERROR: ' + String(err.message || err) };
+    writeStatus_(ss, [result]);
+    throw err;
+  }
+
+  writeStatus_(ss, [result]);
+  SpreadsheetApp.flush();
+}
+
+function getToken_() {
   const token = PropertiesService.getScriptProperties().getProperty('AIRTABLE_TOKEN') || CONFIG.AIRTABLE_TOKEN;
   if (!token || token.indexOf('PASTE_YOUR_TOKEN') !== -1) {
     throw new Error('Set your Airtable token in CONFIG.AIRTABLE_TOKEN, then run setup() again.');
   }
+  return token;
+}
 
-  const ss = SpreadsheetApp.getActiveSpreadsheet();
-  const results = [];
-  const errors = [];
-
-  CONFIG.TABLES.forEach(function (table) {
-    try {
-      const count = syncTable_(token, ss, table.id, table.sheet);
-      results.push({ sheet: table.sheet, records: count, status: 'OK' });
-    } catch (err) {
-      errors.push({ sheet: table.sheet, message: String(err.message || err) });
-      results.push({ sheet: table.sheet, records: 0, status: 'ERROR: ' + String(err.message || err) });
-    }
-  });
-
-  writeStatus_(ss, results);
-
-  if (errors.length > 0) {
-    throw new Error(errors.map(function (e) { return e.sheet + ': ' + e.message; }).join('\n'));
+function runWithLock_(fn) {
+  const lock = LockService.getScriptLock();
+  if (!lock.tryLock(1000)) {
+    throw new Error('Sync already running. Wait for it to finish.');
+  }
+  try {
+    fn();
+  } finally {
+    lock.releaseLock();
   }
 }
 
@@ -67,11 +106,13 @@ function syncTable_(token, ss, tableId, sheetName) {
   const rows = parsed.rows;
 
   const sheet = getOrCreateSheet_(ss, sheetName);
-  sheet.clear();
 
   if (headers.length === 0) {
+    sheet.clearContents();
     return 0;
   }
+
+  sheet.clearContents();
 
   sheet.getRange(1, 1, 1, headers.length).setValues([headers]);
   sheet.getRange(1, 1, 1, headers.length)
@@ -81,17 +122,34 @@ function syncTable_(token, ss, tableId, sheetName) {
   sheet.setFrozenRows(1);
 
   if (rows.length > 0) {
-    sheet.getRange(2, 1, rows.length, headers.length).setValues(rows);
+    writeRowsInBatches_(sheet, 2, headers.length, rows);
   }
 
+  SpreadsheetApp.flush();
   return rows.length;
+}
+
+function writeRowsInBatches_(sheet, startRow, numCols, rows) {
+  const batchSize = CONFIG.WRITE_BATCH_SIZE;
+
+  for (let i = 0; i < rows.length; i += batchSize) {
+    const batch = rows.slice(i, i + batchSize);
+    sheet.getRange(startRow + i, 1, batch.length, numCols).setValues(batch);
+
+    if (i > 0 && i % (batchSize * 4) === 0) {
+      SpreadsheetApp.flush();
+      Utilities.sleep(250);
+    }
+  }
 }
 
 function fetchAllAirtableRecords_(token, baseId, tableId) {
   const records = [];
   let offset = null;
+  let page = 0;
 
   do {
+    page++;
     let url = 'https://api.airtable.com/v0/' + baseId + '/' + tableId + '?pageSize=100';
     if (offset) {
       url += '&offset=' + encodeURIComponent(offset);
@@ -110,6 +168,10 @@ function fetchAllAirtableRecords_(token, baseId, tableId) {
     const data = JSON.parse(response.getContentText());
     records.push.apply(records, data.records || []);
     offset = data.offset || null;
+
+    if (page % 10 === 0) {
+      Utilities.sleep(200);
+    }
   } while (offset);
 
   return records;
@@ -185,7 +247,7 @@ function writeStatus_(ss, results) {
     rows.push([result.sheet, result.records, result.status]);
   });
 
-  sheet.clear();
+  sheet.clearContents();
   sheet.getRange(1, 1, rows.length, 3).setValues(rows);
   sheet.getRange(1, 1, 1, 3)
     .setFontWeight('bold')
