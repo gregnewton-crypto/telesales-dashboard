@@ -19,11 +19,13 @@ SCOPES = [
     "https://www.googleapis.com/auth/drive",
 ]
 
-DEFAULT_TABLE = {
-    "id": "tblQcfo7qgQCv7o3n",
-    "name": "Adversus API",
-    "sheet": "Adversus API",
-}
+DEFAULT_TABLES = [
+    {"id": "tblQcfo7qgQCv7o3n", "name": "Adversus API", "sheet": "Adversus API"},
+    {"id": "tblKCC8nxriWKXrEG", "name": "UK Databowl leads", "sheet": "UK Leads"},
+    {"id": "tbllpLbEtTkmMQOY9", "name": "Databowl Leads", "sheet": "Ireland Leads"},
+    {"id": "tblaP748fEZbHYJHc", "name": "2026 Databowl BNB API", "sheet": "BNB Leads 2026"},
+    {"id": "tblPosmpZAiDpHAkS", "name": "2026 Databowl Marro API", "sheet": "Marro Leads 2026"},
+]
 
 
 def env(name: str, default: str | None = None, required: bool = False) -> str:

@@ -12,9 +12,14 @@
 const CONFIG = {
   AIRTABLE_TOKEN: 'pat_PASTE_YOUR_TOKEN_HERE',
   BASE_ID: 'appZoN6xBB9mDv8h4',
-  TABLE_ID: 'tblQcfo7qgQCv7o3n',
-  SHEET_NAME: 'Adversus API',
   STATUS_SHEET: 'Sync Status',
+  TABLES: [
+    { id: 'tblQcfo7qgQCv7o3n', sheet: 'Adversus API' },
+    { id: 'tblKCC8nxriWKXrEG', sheet: 'UK Leads' },
+    { id: 'tbllpLbEtTkmMQOY9', sheet: 'Ireland Leads' },
+    { id: 'tblaP748fEZbHYJHc', sheet: 'BNB Leads 2026' },
+    { id: 'tblPosmpZAiDpHAkS', sheet: 'Marro Leads 2026' },
+  ],
 };
 
 function setup() {
@@ -37,18 +42,38 @@ function syncNow() {
     throw new Error('Set your Airtable token in CONFIG.AIRTABLE_TOKEN, then run setup() again.');
   }
 
-  const records = fetchAllAirtableRecords_(token, CONFIG.BASE_ID, CONFIG.TABLE_ID);
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const results = [];
+  const errors = [];
+
+  CONFIG.TABLES.forEach(function (table) {
+    try {
+      const count = syncTable_(token, ss, table.id, table.sheet);
+      results.push({ sheet: table.sheet, records: count, status: 'OK' });
+    } catch (err) {
+      errors.push({ sheet: table.sheet, message: String(err.message || err) });
+      results.push({ sheet: table.sheet, records: 0, status: 'ERROR: ' + String(err.message || err) });
+    }
+  });
+
+  writeStatus_(ss, results);
+
+  if (errors.length > 0) {
+    throw new Error(errors.map(function (e) { return e.sheet + ': ' + e.message; }).join('\n'));
+  }
+}
+
+function syncTable_(token, ss, tableId, sheetName) {
+  const records = fetchAllAirtableRecords_(token, CONFIG.BASE_ID, tableId);
   const parsed = recordsToRows_(records);
   const headers = parsed.headers;
   const rows = parsed.rows;
 
-  const ss = SpreadsheetApp.getActiveSpreadsheet();
-  const sheet = getOrCreateSheet_(ss, CONFIG.SHEET_NAME);
-
+  const sheet = getOrCreateSheet_(ss, sheetName);
   sheet.clear();
+
   if (headers.length === 0) {
-    writeStatus_(ss, 0, 'No records returned from Airtable.');
-    return;
+    return 0;
   }
 
   sheet.getRange(1, 1, 1, headers.length).setValues([headers]);
@@ -62,7 +87,7 @@ function syncNow() {
     sheet.getRange(2, 1, rows.length, headers.length).setValues(rows);
   }
 
-  writeStatus_(ss, rows.length, 'OK');
+  return rows.length;
 }
 
 function fetchAllAirtableRecords_(token, baseId, tableId) {
@@ -149,16 +174,27 @@ function getOrCreateSheet_(ss, name) {
   return sheet;
 }
 
-function writeStatus_(ss, recordCount, message) {
+function writeStatus_(ss, results) {
   const sheet = getOrCreateSheet_(ss, CONFIG.STATUS_SHEET);
   const now = Utilities.formatDate(new Date(), 'UTC', "yyyy-MM-dd HH:mm:ss 'UTC'");
-  sheet.clear();
-  sheet.getRange(1, 1, 4, 2).setValues([
+
+  const rows = [
     ['Last Sync (UTC)', now],
-    ['Records Synced', recordCount],
-    ['Status', message],
-    ['Table', CONFIG.TABLE_ID],
-  ]);
+    [],
+    ['Sheet Tab', 'Records Synced', 'Status'],
+  ];
+
+  results.forEach(function (result) {
+    rows.push([result.sheet, result.records, result.status]);
+  });
+
+  sheet.clear();
+  sheet.getRange(1, 1, rows.length, 3).setValues(rows);
+  sheet.getRange(1, 1, 1, 3)
+    .setFontWeight('bold')
+    .setBackground('#522A10')
+    .setFontColor('#FFE180');
+  sheet.setFrozenRows(1);
 }
 
 function createSyncTrigger_() {
