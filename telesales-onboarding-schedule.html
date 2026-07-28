@@ -203,10 +203,11 @@
 
     .owner.ed { background: var(--blue); }
     .owner.paddy { background: var(--coral); }
-    .owner.holly { background: var(--teal); }
     .owner.paddy-holly { background: #B65A17; }
-    .owner.ops { background: #6D4C41; }
-    .owner.group { background: var(--purple); }
+    .owner.greg { background: var(--purple); }
+    .owner.greg-holly { background: var(--teal); }
+    .owner.greg-ed { background: #6D4C41; }
+    .owner.everyone { background: var(--brown); }
     .owner.none { background: var(--green); }
 
     .gantt-wrap {
@@ -282,12 +283,17 @@
       white-space: nowrap;
     }
 
+    .gantt.two-day .g-bar {
+      font-size: 11px;
+      padding: 9px 5px;
+    }
+
     .g-bar.ed { background: var(--blue); }
     .g-bar.paddy { background: var(--coral); }
-    .g-bar.holly { background: var(--teal); }
     .g-bar.paddy-holly { background: #B65A17; }
-    .g-bar.ops { background: #6D4C41; }
-    .g-bar.group { background: var(--purple); }
+    .g-bar.greg { background: var(--purple); }
+    .g-bar.greg-holly { background: var(--teal); }
+    .g-bar.greg-ed { background: #6D4C41; }
     .g-bar.none { background: var(--green); }
 
     .chart-key {
@@ -460,29 +466,29 @@
           <div class="g-hour" style="grid-column: 34 / span 4; grid-row: 1">17:00</div>
 
           <div class="g-label" style="grid-row: 2">Tue 4 Aug</div>
-          <div class="g-bar ed" style="grid-column: 18 / span 4; grid-row: 2" title="13:00-14:00 Kick-off, Ed">Kick-off</div>
-          <div class="g-bar paddy" style="grid-column: 22 / span 4; grid-row: 2" title="14:00-15:00 Product, Paddy">Product</div>
+          <div class="g-bar ed" style="grid-column: 18 / span 2; grid-row: 2" title="13:00-13:30 Welcome and kick-off, Ed">Intro</div>
+          <div class="g-bar paddy" style="grid-column: 20 / span 6; grid-row: 2" title="13:30-15:00 Product and competitor comparison, Paddy">Product &amp; Competitors</div>
           <div class="g-bar none" style="grid-column: 26 / span 1; grid-row: 2" title="15:00-15:15 Break"></div>
           <div class="g-bar paddy-holly" style="grid-column: 27 / span 4; grid-row: 2" title="15:15-16:15 Customers and pitch, Paddy and Holly">Customers</div>
-          <div class="g-bar ops" style="grid-column: 31 / span 4; grid-row: 2" title="16:15-17:15 Pay and logistics">Pay &amp; Logistics</div>
-          <div class="g-bar group" style="grid-column: 35 / span 3; grid-row: 2" title="17:15-18:00 Laptop and kit setup">Kit Setup</div>
+          <div class="g-bar ed" style="grid-column: 31 / span 4; grid-row: 2" title="16:15-17:15 The rep role, pay and logistics, Ed">Rep Role</div>
+          <div class="g-bar greg" style="grid-column: 35 / span 3; grid-row: 2" title="17:15-18:00 Laptop and kit setup, Greg">Kit Setup</div>
 
           <div class="g-label" style="grid-row: 3">Wed 5 Aug</div>
-          <div class="g-bar ops" style="grid-column: 2 / span 4; grid-row: 3" title="09:00-10:00 Systems and Adversus">Systems</div>
+          <div class="g-bar greg" style="grid-column: 2 / span 4; grid-row: 3" title="09:00-10:00 Hands on with the systems and Adversus, Greg">Systems</div>
           <div class="g-bar none" style="grid-column: 6 / span 2; grid-row: 3" title="10:00-10:30 Break">Break</div>
-          <div class="g-bar holly" style="grid-column: 8 / span 4; grid-row: 3" title="10:30-11:30 Call listening, three recorded calls, Holly">Call Listening</div>
-          <div class="g-bar holly" style="grid-column: 12 / span 2; grid-row: 3" title="11:30-12:00 Live call demo, Holly">Live</div>
-          <div class="g-bar paddy-holly" style="grid-column: 14 / span 3; grid-row: 3" title="12:00-12:45 Practice in the test environment">Practice</div>
-          <div class="g-bar group" style="grid-column: 17 / span 1; grid-row: 3" title="12:45-13:00 Wrap and next steps"></div>
+          <div class="g-bar greg-holly" style="grid-column: 8 / span 4; grid-row: 3" title="10:30-11:30 Call listening, three recorded calls, Greg and Holly">Call Listening</div>
+          <div class="g-bar greg-holly" style="grid-column: 12 / span 2; grid-row: 3" title="11:30-12:00 Live call demo, Greg and Holly">Live</div>
+          <div class="g-bar greg-holly" style="grid-column: 14 / span 3; grid-row: 3" title="12:00-12:45 Practice in the test environment, Greg and Holly">Practice</div>
+          <div class="g-bar greg-ed" style="grid-column: 17 / span 1; grid-row: 3" title="12:45-13:00 Wrap and next steps, Greg and Ed"></div>
         </div>
       </div>
       <div class="chart-key">
         <span><i class="swatch" style="background:#10507C"></i> Ed</span>
         <span><i class="swatch" style="background:#ED6961"></i> Paddy</span>
-        <span><i class="swatch" style="background:#00897B"></i> Holly</span>
         <span><i class="swatch" style="background:#B65A17"></i> Paddy + Holly</span>
-        <span><i class="swatch" style="background:#6D4C41"></i> Ops / Systems</span>
-        <span><i class="swatch" style="background:#7B3FA0"></i> Whole group</span>
+        <span><i class="swatch" style="background:#7B3FA0"></i> Greg</span>
+        <span><i class="swatch" style="background:#00897B"></i> Greg + Holly</span>
+        <span><i class="swatch" style="background:#6D4C41"></i> Greg + Ed</span>
         <span><i class="swatch" style="background:#2E7D32"></i> Break</span>
       </div>
 
@@ -496,13 +502,13 @@
       <div class="summary-grid">
         <div class="summary-box">
           <strong>Day 1 - Who We Are</strong>
-          Culture and structure, the product and why it beats the competition,
-          who our customers are, and how the pitch is built.
+          A half-hour welcome from Ed, then the longest session of the two days
+          on our food and how it stacks up against the competition.
         </div>
         <div class="summary-box">
-          <strong>Day 1 - Get Set Up</strong>
-          Pay and logistics questions answered, then laptops and kit checked so
-          nobody starts Day 2 blocked.
+          <strong>Day 1 - The Role &amp; Setup</strong>
+          Ed on the rep role, pay, and commission, then Greg making sure every
+          laptop and login works before anyone leaves.
         </div>
         <div class="summary-box">
           <strong>Day 2 - The Systems</strong>
@@ -532,12 +538,12 @@
       <div class="steps">
         <div class="step-card">
           <h3>Ed</h3>
-          <span class="meta">Day 1 kick-off</span>
+          <span class="meta">Welcome and the rep role</span>
           <ul>
-            <li>Culture and what we stand for</li>
-            <li>The team and reporting structure</li>
-            <li>How the week and the shift pattern work</li>
-            <li>Expectations and standards</li>
+            <li>Welcome and kick-off, 13:00 to 13:30</li>
+            <li>Culture, the team, and reporting structure</li>
+            <li>The rep role: pay, commission, and logistics</li>
+            <li>Closing the second day alongside Greg</li>
           </ul>
         </div>
         <div class="step-card">
@@ -545,8 +551,8 @@
           <span class="meta">Product and pitch</span>
           <ul>
             <li>Our food, in plain language</li>
-            <li>Our food versus competitor food</li>
-            <li>Pitch structure</li>
+            <li>Our food versus competitor food, in depth</li>
+            <li>Pitch structure, with Holly</li>
             <li>Objections that come up most</li>
           </ul>
         </div>
@@ -556,18 +562,18 @@
           <ul>
             <li>Who our customers are and what they care about</li>
             <li>Pitch structure alongside Paddy</li>
-            <li>Live call demo on Day 2</li>
+            <li>Call listening and the live call, with Greg</li>
             <li>Feedback during test-environment practice</li>
           </ul>
         </div>
         <div class="step-card">
-          <h3>Ops / People</h3>
-          <span class="meta">Logistics and kit</span>
+          <h3>Greg</h3>
+          <span class="meta">Setup, systems, and practice</span>
           <ul>
-            <li>Pay, commission, and payroll dates</li>
-            <li>Contracts, holiday, and policy questions</li>
-            <li>Laptops, headsets, and logins</li>
-            <li>Dinner booking</li>
+            <li>Laptops, headsets, and logins on Day 1</li>
+            <li>Hands on with the systems and Adversus</li>
+            <li>Call listening and practice, with Holly</li>
+            <li>Closing the second day alongside Ed</li>
           </ul>
         </div>
       </div>
@@ -595,11 +601,11 @@
           <div class="g-hour" style="grid-column: 14 / span 4; grid-row: 1">16:00</div>
           <div class="g-hour" style="grid-column: 18 / span 4; grid-row: 1">17:00</div>
 
-          <div class="g-label" style="grid-row: 2">13:00 - 14:00</div>
-          <div class="g-bar ed" style="grid-column: 2 / span 4; grid-row: 2">Kick-off: Who We Are - Ed</div>
+          <div class="g-label" style="grid-row: 2">13:00 - 13:30</div>
+          <div class="g-bar ed" style="grid-column: 2 / span 2; grid-row: 2">Welcome - Ed</div>
 
-          <div class="g-label" style="grid-row: 3">14:00 - 15:00</div>
-          <div class="g-bar paddy" style="grid-column: 6 / span 4; grid-row: 3">The Product - Paddy</div>
+          <div class="g-label" style="grid-row: 3">13:30 - 15:00</div>
+          <div class="g-bar paddy" style="grid-column: 4 / span 6; grid-row: 3">The Product &amp; Our Competitors - Paddy</div>
 
           <div class="g-label" style="grid-row: 4">15:00 - 15:15</div>
           <div class="g-bar none" style="grid-column: 10 / span 1; grid-row: 4" title="Break">Break</div>
@@ -608,18 +614,17 @@
           <div class="g-bar paddy-holly" style="grid-column: 11 / span 4; grid-row: 5">Customers &amp; Pitch</div>
 
           <div class="g-label" style="grid-row: 6">16:15 - 17:15</div>
-          <div class="g-bar ops" style="grid-column: 15 / span 4; grid-row: 6">Pay &amp; Logistics - Ops</div>
+          <div class="g-bar ed" style="grid-column: 15 / span 4; grid-row: 6">The Rep Role - Ed</div>
 
           <div class="g-label" style="grid-row: 7">17:15 - 18:00</div>
-          <div class="g-bar group" style="grid-column: 19 / span 3; grid-row: 7">Laptop &amp; Kit Setup</div>
+          <div class="g-bar greg" style="grid-column: 19 / span 3; grid-row: 7" title="Laptop and kit setup">Kit Setup - Greg</div>
         </div>
       </div>
       <div class="chart-key">
         <span><i class="swatch" style="background:#10507C"></i> Ed</span>
         <span><i class="swatch" style="background:#ED6961"></i> Paddy</span>
         <span><i class="swatch" style="background:#B65A17"></i> Paddy + Holly</span>
-        <span><i class="swatch" style="background:#6D4C41"></i> Ops / People</span>
-        <span><i class="swatch" style="background:#7B3FA0"></i> Whole group</span>
+        <span><i class="swatch" style="background:#7B3FA0"></i> Greg</span>
         <span><i class="swatch" style="background:#2E7D32"></i> Break</span>
       </div>
 
@@ -638,9 +643,9 @@
           </thead>
           <tbody>
             <tr>
-              <td class="time">13:00 - 14:00</td>
-              <td class="mins">60 min</td>
-              <td><strong>Kick-off: Who We Are</strong></td>
+              <td class="time">13:00 - 13:30</td>
+              <td class="mins">30 min</td>
+              <td><strong>Welcome &amp; Kick-off</strong></td>
               <td><span class="owner ed">Ed</span></td>
               <td>Welcome and introductions, our story and culture, the team and
                 who does what, the structure above and around the telesales floor,
@@ -648,14 +653,16 @@
               <td>Everyone knows the room, the culture, and who to ask for what.</td>
             </tr>
             <tr>
-              <td class="time">14:00 - 15:00</td>
-              <td class="mins">60 min</td>
-              <td><strong>The Product</strong></td>
+              <td class="time">13:30 - 15:00</td>
+              <td class="mins">90 min</td>
+              <td><strong>The Product &amp; Our Competitors</strong></td>
               <td><span class="owner paddy">Paddy</span></td>
               <td>What our food actually is and how it is made, the range and how
-                plans are built, our food versus competitor food, and the proof
-                points a rep can lean on.</td>
-              <td>Reps can explain the product and hold a fair comparison.</td>
+                plans are built, then the long look at competitor food: the main
+                alternatives a customer will already be feeding, how we compare on
+                each, and the proof points a rep can lean on.</td>
+              <td>Reps can explain the product and hold a confident, fair
+                comparison against anything a customer raises.</td>
             </tr>
             <tr class="is-break">
               <td class="time">15:00 - 15:15</td>
@@ -678,18 +685,19 @@
             <tr>
               <td class="time">16:15 - 17:15</td>
               <td class="mins">60 min</td>
-              <td><strong>Pay &amp; Logistics</strong></td>
-              <td><span class="owner ops">Ops / People</span></td>
-              <td>How pay works, what the package looks like, how commission is
-                earned and when it lands, payroll dates and payslips, holiday and
-                absence, then open questions.</td>
-              <td>No one leaves with an unanswered question about their pay.</td>
+              <td><strong>The Rep Role: Pay &amp; Logistics</strong></td>
+              <td><span class="owner ed">Ed</span></td>
+              <td>What the role actually involves day to day, how pay works and
+                what the package looks like, how commission is earned and when it
+                lands, payroll dates and payslips, holiday and absence, then open
+                questions.</td>
+              <td>No one leaves with an unanswered question about the role or their pay.</td>
             </tr>
             <tr>
               <td class="time">17:15 - 18:00</td>
               <td class="mins">45 min</td>
               <td><strong>Laptop &amp; Kit Setup</strong></td>
-              <td><span class="owner group">Whole group</span></td>
+              <td><span class="owner greg">Greg</span></td>
               <td>Laptops out and logged in, email and calendar working, headset
                 paired and tested, Adversus access confirmed, and any blockers
                 logged for overnight fixing.</td>
@@ -699,7 +707,7 @@
               <td class="time">18:00</td>
               <td class="mins">-</td>
               <td><strong>Close, then Team Dinner</strong></td>
-              <td><span class="owner group">Everyone</span></td>
+              <td><span class="owner everyone">Everyone</span></td>
               <td>Wrap the day, confirm the Day 2 start time, then head to dinner.</td>
               <td>The team leaves knowing each other, not just the material.</td>
             </tr>
@@ -710,32 +718,32 @@
       <h3>Day 1 Session Detail</h3>
       <div class="steps">
         <div class="step-card">
-          <span class="tag">13:00</span>
-          <h3>Kick-off - Ed</h3>
+          <span class="tag">13:00 - 13:30</span>
+          <h3>Welcome - Ed</h3>
           <ul>
             <li>Welcome, quick round of introductions</li>
             <li>Our story and why the business exists</li>
             <li>Culture: how we treat customers and each other</li>
             <li>The team: names, faces, and roles</li>
             <li>Structure: who a rep reports to and escalates to</li>
-            <li>Shift pattern, hours, and the shape of a normal week</li>
-            <li>What good looks like in the first month</li>
+            <li>Shift pattern and the shape of a normal week</li>
           </ul>
         </div>
         <div class="step-card">
-          <span class="tag">14:00</span>
-          <h3>Product - Paddy</h3>
+          <span class="tag">13:30 - 15:00</span>
+          <h3>Product &amp; Competitors - Paddy</h3>
           <ul>
             <li>What the food is and how it is made</li>
             <li>The range and how a customer plan is built</li>
-            <li>Us versus the main competitor types</li>
+            <li>Us versus each main competitor type, one at a time</li>
+            <li>What a customer is likely feeding now, and why they switch</li>
             <li>Honest strengths, and where we are not the cheapest</li>
             <li>Proof points a rep can use on a call</li>
             <li>Claims we must never make</li>
           </ul>
         </div>
         <div class="step-card">
-          <span class="tag">15:15</span>
+          <span class="tag">15:15 - 16:15</span>
           <h3>Customers &amp; Pitch - Paddy + Holly</h3>
           <ul>
             <li>Our main customer types and what motivates each</li>
@@ -746,9 +754,10 @@
           </ul>
         </div>
         <div class="step-card">
-          <span class="tag">16:15</span>
-          <h3>Pay &amp; Logistics - Ops</h3>
+          <span class="tag">16:15 - 17:15</span>
+          <h3>The Rep Role - Ed</h3>
           <ul>
+            <li>What the role involves day to day</li>
             <li>Base pay and what the package includes</li>
             <li>How commission is calculated</li>
             <li>What counts as a valid, payable sale</li>
@@ -758,8 +767,8 @@
           </ul>
         </div>
         <div class="step-card">
-          <span class="tag">17:15</span>
-          <h3>Kit Setup - All</h3>
+          <span class="tag">17:15 - 18:00</span>
+          <h3>Kit Setup - Greg</h3>
           <ul>
             <li>Laptop on, password set, updates done</li>
             <li>Email, calendar, and chat working</li>
@@ -799,29 +808,28 @@
           <div class="g-hour" style="grid-column: 14 / span 4; grid-row: 1">12:00</div>
 
           <div class="g-label" style="grid-row: 2">09:00 - 10:00</div>
-          <div class="g-bar ops" style="grid-column: 2 / span 4; grid-row: 2">Systems &amp; Adversus</div>
+          <div class="g-bar greg" style="grid-column: 2 / span 4; grid-row: 2">Systems &amp; Adversus - Greg</div>
 
           <div class="g-label" style="grid-row: 3">10:00 - 10:30</div>
           <div class="g-bar none" style="grid-column: 6 / span 2; grid-row: 3">Break</div>
 
           <div class="g-label" style="grid-row: 4">10:30 - 11:30</div>
-          <div class="g-bar holly" style="grid-column: 8 / span 4; grid-row: 4">Call Listening: 3 Calls - Holly</div>
+          <div class="g-bar greg-holly" style="grid-column: 8 / span 4; grid-row: 4">Call Listening: 3 Calls</div>
 
           <div class="g-label" style="grid-row: 5">11:30 - 12:00</div>
-          <div class="g-bar holly" style="grid-column: 12 / span 2; grid-row: 5">Live Call - Holly</div>
+          <div class="g-bar greg-holly" style="grid-column: 12 / span 2; grid-row: 5">Live Call</div>
 
           <div class="g-label" style="grid-row: 6">12:00 - 12:45</div>
-          <div class="g-bar paddy-holly" style="grid-column: 14 / span 3; grid-row: 6">Test Environment Practice</div>
+          <div class="g-bar greg-holly" style="grid-column: 14 / span 3; grid-row: 6">Test Environment Practice</div>
 
           <div class="g-label" style="grid-row: 7">12:45 - 13:00</div>
-          <div class="g-bar group" style="grid-column: 17 / span 1; grid-row: 7" title="Wrap and next steps">Wrap</div>
+          <div class="g-bar greg-ed" style="grid-column: 17 / span 1; grid-row: 7" title="Wrap and next steps">Wrap</div>
         </div>
       </div>
       <div class="chart-key">
-        <span><i class="swatch" style="background:#00897B"></i> Holly</span>
-        <span><i class="swatch" style="background:#B65A17"></i> Paddy + Holly</span>
-        <span><i class="swatch" style="background:#6D4C41"></i> Systems lead</span>
-        <span><i class="swatch" style="background:#7B3FA0"></i> Whole group</span>
+        <span><i class="swatch" style="background:#7B3FA0"></i> Greg</span>
+        <span><i class="swatch" style="background:#00897B"></i> Greg + Holly</span>
+        <span><i class="swatch" style="background:#6D4C41"></i> Greg + Ed</span>
         <span><i class="swatch" style="background:#2E7D32"></i> Break</span>
       </div>
 
@@ -842,8 +850,8 @@
             <tr>
               <td class="time">09:00 - 10:00</td>
               <td class="mins">60 min</td>
-              <td><strong>Systems &amp; Adversus</strong></td>
-              <td><span class="owner ops">Systems lead</span></td>
+              <td><strong>Hands On With the Systems</strong></td>
+              <td><span class="owner greg">Greg</span></td>
               <td>Straight in: what Adversus is and where it sits, logging in and
                 getting ready, campaigns and lead lists, taking and making a
                 call, dispositions and outcomes, notes and call-back scheduling,
@@ -862,7 +870,7 @@
               <td class="time">10:30 - 11:30</td>
               <td class="mins">60 min</td>
               <td><strong>Call Listening: Three Recorded Calls</strong></td>
-              <td><span class="owner holly">Holly</span></td>
+              <td><span class="owner greg-holly">Greg + Holly</span></td>
               <td>Three real calls played and unpacked: one successful sale, one
                 not interested, one call back. Each one listened to, then
                 discussed against the pitch structure from Day 1.</td>
@@ -872,16 +880,16 @@
               <td class="time">11:30 - 12:00</td>
               <td class="mins">30 min</td>
               <td><strong>Live Call Demo</strong></td>
-              <td><span class="owner holly">Holly</span></td>
-              <td>Holly takes live calls with the group listening in, then talks
-                through her decisions in the moment and answers questions.</td>
+              <td><span class="owner greg-holly">Greg + Holly</span></td>
+              <td>Holly takes live calls with the group listening in, then she and
+                Greg talk through the decisions in the moment and answer questions.</td>
               <td>Reps see the theory land on a real, unscripted call.</td>
             </tr>
             <tr>
               <td class="time">12:00 - 12:45</td>
               <td class="mins">45 min</td>
               <td><strong>Practice in the Test Environment</strong></td>
-              <td><span class="owner paddy-holly">Paddy + Holly</span></td>
+              <td><span class="owner greg-holly">Greg + Holly</span></td>
               <td>Reps work in the test environment: dial, pitch, handle an
                 objection, disposition the call, and log a practice order. Run in
                 pairs with a coach rotating and giving feedback.</td>
@@ -891,7 +899,7 @@
               <td class="time">12:45 - 13:00</td>
               <td class="mins">15 min</td>
               <td><strong>Wrap &amp; What Happens Next</strong></td>
-              <td><span class="owner group">Whole group</span></td>
+              <td><span class="owner greg-ed">Greg + Ed</span></td>
               <td>What we saw, individual strengths and focus areas, what the
                 first live shift looks like, and who to go to on day one.</td>
               <td>Everyone leaves knowing their next step.</td>
@@ -1004,7 +1012,7 @@
           <ul class="checklist">
             <li>Training room booked for both days</li>
             <li>Screen, sound, and enough power sockets</li>
-            <li>Refreshments for breaks, lunch on Day 2</li>
+            <li>Refreshments for the breaks on both days</li>
             <li>Dinner booked for Day 1 evening</li>
             <li>Listening-in set up for Holly's live call</li>
             <li>Joining instructions sent to reps</li>
@@ -1016,20 +1024,21 @@
     <section class="card">
       <h2>What Is Confirmed and What I Have Assumed</h2>
       <div class="good" style="margin-bottom:16px">
-        <strong>Confirmed by you:</strong> Day 1 runs 13:00-18:00 with dinner after.
-        Day 2 runs 09:00-13:00, with systems from 09:00 to 10:00 followed by a
-        30-minute break.
+        <strong>Confirmed by you:</strong> Day 1 runs 13:00-18:00 with dinner after,
+        opening with a 30-minute welcome from Ed. Day 2 runs 09:00-13:00, with
+        systems from 09:00 to 10:00 followed by a 30-minute break. Owners are set:
+        Ed on the welcome and the rep role, Paddy on product, Paddy and Holly on
+        customers and pitch, Greg on setup and systems, Greg and Holly on call
+        listening and practice, Greg and Ed to close.
       </div>
       <p>These are the gaps I have filled in to make the schedule run. Correct any that are wrong and the timings will shift accordingly.</p>
       <ul>
+        <li><strong>Where the freed 30 minutes went.</strong> Shortening the welcome to 30 minutes released half an hour, and you asked to extend the competitor session, so product now runs 13:30-15:00 at 90 minutes. Everything from the 15:00 break onwards is unchanged.</li>
         <li><strong>How the rest of Day 2 is split.</strong> The 30-minute break leaves 10:30-13:00, which I have divided as 60 minutes on the three recorded calls, 30 on the live call, 45 on test-environment practice, and 15 to wrap up.</li>
         <li><strong>No Day 1 recap slot.</strong> Since systems starts at 09:00 sharp, there is no separate recap. Leftover questions from Day 1 get picked up in the first few minutes of the systems hour.</li>
         <li><strong>Three calls at 20 minutes each.</strong> Tighter than ideal for a full debrief, so the calls want clipping to the relevant section rather than playing end to end.</li>
-        <li><strong>Session lengths on Day 1.</strong> Split as 60 / 60 / 60 / 60 minutes with a 15-minute break and 45 minutes for kit setup, which fills 13:00-18:00 exactly.</li>
-        <li><strong>Pay and logistics owner.</strong> Listed as Ops / People rather than Ed, Paddy, or Holly, since you did not name someone.</li>
-        <li><strong>Systems owner.</strong> The Day 2 systems hour has no named lead yet.</li>
+        <li><strong>The live call.</strong> Placed after the recorded calls so reps have the framework before they hear a real one, and kept to 30 minutes. Holly still takes the calls; Greg co-runs the debrief, same as the call listening either side of it.</li>
         <li><strong>Customers sits with the pitch.</strong> You mentioned pitch structure and who our customers are together with Paddy and Holly, so they are one 60-minute session.</li>
-        <li><strong>Live call slot.</strong> Placed after the recorded calls so reps have the framework before they hear a real one, and kept to 30 minutes.</li>
       </ul>
     </section>
 
@@ -1037,9 +1046,8 @@
       <h2>Open Questions</h2>
       <div class="warn">
         <ul>
-          <li>How many reps are in this intake? It matters most for the 45-minute practice session, which currently assumes pairs with a rotating coach. Much more than about six reps and that slot needs a second coach or more time.</li>
+          <li>How many reps are in this intake? It matters most for the 45-minute practice session. With you and Holly both on it that is two coaches, so up to about eight reps works in pairs; beyond that the slot needs more time.</li>
           <li>Does the systems hour need to cover order entry, or can that move to a later session? See the note on Day 2 above.</li>
-          <li>Who owns the pay and logistics session, and who runs the systems hour?</li>
           <li>Day 2 finishes at 13:00. Is the team going for lunch after, and do reps then go home or onto the floor?</li>
           <li>Is this the whole induction, or is there a Day 3 and a first live shift to schedule?</li>
           <li>Beyond Adversus, which systems do reps need on day one?</li>
