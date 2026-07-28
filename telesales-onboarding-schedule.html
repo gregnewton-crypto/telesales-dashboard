@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Telesales Rep Onboarding Schedule | 4-5 August</title>
+  <style>
+    :root {
+      --brown: #522A10;
+      --cream: #FFF6D8;
+      --gold: #FFE180;
+      --coral: #ED6961;
+      --blue: #10507C;
+      --green: #2E7D32;
+      --teal: #00897B;
+      --purple: #7B3FA0;
+      --paper: #FFFFFF;
+      --line: #E8D9B0;
+      --text: #2E261F;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--cream);
+      color: var(--text);
+      font-family: Arial, Verdana, sans-serif;
+      line-height: 1.45;
+    }
+
+    header {
+      background: var(--brown);
+      color: var(--gold);
+      padding: 24px;
+    }
+
+    header h1 {
+      margin: 0 0 8px;
+      font-size: clamp(24px, 4vw, 40px);
+    }
+
+    header p {
+      max-width: 780px;
+      margin: 0;
+      color: #F8D98D;
+      font-size: 18px;
+    }
+
+    .header-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .header-meta span {
+      background: #3A1C0A;
+      border: 1px solid #7A5A3A;
+      border-radius: 999px;
+      color: var(--gold);
+      font-size: 14px;
+      font-weight: 700;
+      padding: 7px 14px;
+    }
+
+    main {
+      width: min(1180px, calc(100% - 32px));
+      margin: 24px auto 48px;
+    }
+
+    .card {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      box-shadow: 0 8px 24px rgba(82, 42, 16, 0.08);
+      margin-bottom: 22px;
+      padding: 22px;
+    }
+
+    h2 {
+      color: var(--brown);
+      font-size: 24px;
+      margin: 0 0 16px;
+    }
+
+    h3 {
+      color: var(--brown);
+      font-size: 18px;
+      margin: 18px 0 8px;
+    }
+
+    .day-heading {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .day-heading h2 {
+      margin: 0;
+    }
+
+    .day-heading .when {
+      color: #7A5A3A;
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+    }
+
+    .summary-box {
+      border-left: 6px solid var(--coral);
+      background: #FFF9E8;
+      border-radius: 12px;
+      padding: 16px;
+    }
+
+    .summary-box strong {
+      display: block;
+      color: var(--brown);
+      font-size: 18px;
+      margin-bottom: 5px;
+    }
+
+    .pill-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      padding: 0;
+      list-style: none;
+    }
+
+    .pill-list li {
+      background: #F8E9B8;
+      border: 1px solid #E4C670;
+      border-radius: 999px;
+      color: var(--brown);
+      font-weight: 700;
+      padding: 9px 14px;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+    }
+
+    table {
+      border-collapse: collapse;
+      min-width: 900px;
+      width: 100%;
+    }
+
+    th,
+    td {
+      border: 1px solid var(--line);
+      padding: 12px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: var(--brown);
+      color: var(--gold);
+      font-size: 14px;
+    }
+
+    tbody tr:nth-child(even) {
+      background: #FFFBEF;
+    }
+
+    tbody tr.is-break {
+      background: #F3F8F0;
+    }
+
+    .time {
+      color: var(--brown);
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .mins {
+      color: #7A5A3A;
+      font-size: 13px;
+      white-space: nowrap;
+    }
+
+    .owner {
+      display: inline-block;
+      border-radius: 999px;
+      color: #fff;
+      font-size: 13px;
+      font-weight: 700;
+      padding: 6px 12px;
+      white-space: nowrap;
+    }
+
+    .owner.ed { background: var(--blue); }
+    .owner.paddy { background: var(--coral); }
+    .owner.holly { background: var(--teal); }
+    .owner.paddy-holly { background: #B65A17; }
+    .owner.ops { background: #6D4C41; }
+    .owner.group { background: var(--purple); }
+    .owner.none { background: var(--green); }
+
+    .strip {
+      display: flex;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 10px;
+      min-height: 54px;
+    }
+
+    .strip-block {
+      align-items: center;
+      color: #fff;
+      display: flex;
+      font-size: 12px;
+      font-weight: 700;
+      justify-content: center;
+      line-height: 1.2;
+      overflow: hidden;
+      padding: 6px 4px;
+      text-align: center;
+    }
+
+    .strip-block.ed { background: var(--blue); }
+    .strip-block.paddy { background: var(--coral); }
+    .strip-block.holly { background: var(--teal); }
+    .strip-block.paddy-holly { background: #B65A17; }
+    .strip-block.ops { background: #6D4C41; }
+    .strip-block.group { background: var(--purple); }
+    .strip-block.none { background: var(--green); }
+
+    .strip-key {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      font-size: 13px;
+      color: #5A4632;
+    }
+
+    .strip-key span {
+      align-items: center;
+      display: flex;
+      gap: 6px;
+    }
+
+    .swatch {
+      border-radius: 4px;
+      display: inline-block;
+      height: 13px;
+      width: 13px;
+    }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 14px;
+    }
+
+    .step-card {
+      background: #FFF9E8;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 16px;
+    }
+
+    .step-card h3 {
+      margin-top: 0;
+    }
+
+    .step-card .meta {
+      color: #7A5A3A;
+      display: block;
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    ul {
+      margin: 8px 0 0;
+      padding-left: 22px;
+    }
+
+    li {
+      margin: 6px 0;
+    }
+
+    .note {
+      background: #EAF4FA;
+      border-left: 6px solid var(--blue);
+      border-radius: 12px;
+      padding: 16px;
+    }
+
+    .warn {
+      background: #FDEFEE;
+      border-left: 6px solid var(--coral);
+      border-radius: 12px;
+      padding: 16px;
+    }
+
+    .good {
+      background: #EFF6EF;
+      border-left: 6px solid var(--green);
+      border-radius: 12px;
+      padding: 16px;
+    }
+
+    .tag {
+      display: inline-block;
+      background: var(--brown);
+      border-radius: 999px;
+      color: var(--gold);
+      font-weight: 700;
+      margin-bottom: 8px;
+      padding: 7px 12px;
+    }
+
+    .checklist {
+      list-style: none;
+      margin: 8px 0 0;
+      padding: 0;
+    }
+
+    .checklist li {
+      padding-left: 30px;
+      position: relative;
+    }
+
+    .checklist li::before {
+      border: 2px solid var(--brown);
+      border-radius: 4px;
+      content: "";
+      height: 15px;
+      left: 2px;
+      position: absolute;
+      top: 4px;
+      width: 15px;
+    }
+
+    footer {
+      color: #7A5A3A;
+      font-size: 14px;
+      margin-top: 26px;
+      text-align: center;
+    }
+
+    @media print {
+      body { background: #fff; }
+      .card { box-shadow: none; break-inside: avoid; }
+      header { color: #000; background: #fff; }
+      header h1, header p, .header-meta span { color: #000; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>New Telesales Rep Onboarding</h1>
+    <p>
+      Two-day induction for the new telesales intake. Day 1 is an afternoon of
+      company, product, and pitch grounding. Day 2 moves into systems, real call
+      listening, and hands-on practice in the test environment.
+    </p>
+    <div class="header-meta">
+      <span>Day 1: Tue 4 Aug, 13:00-18:00</span>
+      <span>Day 2: Wed 5 Aug, 09:30-17:00</span>
+      <span>Team dinner after Day 1</span>
+      <span>Leads: Ed, Paddy, Holly</span>
+    </div>
+  </header>
+
+  <main>
+    <section class="card">
+      <h2>The Two Days at a Glance</h2>
+      <div class="summary-grid">
+        <div class="summary-box">
+          <strong>Day 1 - Who We Are</strong>
+          Culture and structure, the product and why it beats the competition,
+          who our customers are, and how the pitch is built.
+        </div>
+        <div class="summary-box">
+          <strong>Day 1 - Get Set Up</strong>
+          Pay and logistics questions answered, then laptops and kit checked so
+          nobody starts Day 2 blocked.
+        </div>
+        <div class="summary-box">
+          <strong>Day 2 - The Systems</strong>
+          A full morning on Adversus and the wider tool stack, taught in the
+          order a rep will actually use it on a live shift.
+        </div>
+        <div class="summary-box">
+          <strong>Day 2 - Real Calls</strong>
+          Three recorded calls (a sale, a not interested, a call back), a live
+          call with Holly, then supervised practice in the test environment.
+        </div>
+      </div>
+      <h3>What Each Rep Should Be Able to Do by the End</h3>
+      <ul>
+        <li>Explain who we are, how the team is structured, and who to go to for what.</li>
+        <li>Describe our food and hold a confident comparison against the main competitors.</li>
+        <li>Talk through the pitch structure end to end and name our core customer types.</li>
+        <li>Understand their pay, how commission is earned, and when it is paid.</li>
+        <li>Log in and move through Adversus unaided: take a call, disposition it, and leave a clean note.</li>
+        <li>Recognise the difference between a good call and a weak call, and say why.</li>
+        <li>Have completed at least one full practice call in the test environment.</li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <h2>Who Runs What</h2>
+      <div class="steps">
+        <div class="step-card">
+          <h3>Ed</h3>
+          <span class="meta">Day 1 kick-off</span>
+          <ul>
+            <li>Culture and what we stand for</li>
+            <li>The team and reporting structure</li>
+            <li>How the week and the shift pattern work</li>
+            <li>Expectations and standards</li>
+          </ul>
+        </div>
+        <div class="step-card">
+          <h3>Paddy</h3>
+          <span class="meta">Product and pitch</span>
+          <ul>
+            <li>Our food, in plain language</li>
+            <li>Our food versus competitor food</li>
+            <li>Pitch structure</li>
+            <li>Objections that come up most</li>
+          </ul>
+        </div>
+        <div class="step-card">
+          <h3>Holly</h3>
+          <span class="meta">Customers, calls, coaching</span>
+          <ul>
+            <li>Who our customers are and what they care about</li>
+            <li>Pitch structure alongside Paddy</li>
+            <li>Live call demo on Day 2</li>
+            <li>Feedback during test-environment practice</li>
+          </ul>
+        </div>
+        <div class="step-card">
+          <h3>Ops / People</h3>
+          <span class="meta">Logistics and kit</span>
+          <ul>
+            <li>Pay, commission, and payroll dates</li>
+            <li>Contracts, holiday, and policy questions</li>
+            <li>Laptops, headsets, and logins</li>
+            <li>Dinner booking</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="day-heading">
+        <h2>Day 1 - Tuesday 4 August</h2>
+        <span class="when">13:00 - 18:00, then dinner</span>
+      </div>
+
+      <div class="strip" aria-label="Day 1 visual timeline">
+        <div class="strip-block ed" style="flex: 60 0 0">Kick-off<br>Ed</div>
+        <div class="strip-block paddy" style="flex: 60 0 0">Product<br>Paddy</div>
+        <div class="strip-block none" style="flex: 15 0 0">Break</div>
+        <div class="strip-block paddy-holly" style="flex: 60 0 0">Customers &amp; Pitch<br>Paddy + Holly</div>
+        <div class="strip-block ops" style="flex: 60 0 0">Pay &amp; Logistics<br>Ops</div>
+        <div class="strip-block group" style="flex: 45 0 0">Kit Setup</div>
+      </div>
+      <div class="strip-key">
+        <span><i class="swatch" style="background:#10507C"></i> Ed</span>
+        <span><i class="swatch" style="background:#ED6961"></i> Paddy</span>
+        <span><i class="swatch" style="background:#00897B"></i> Holly</span>
+        <span><i class="swatch" style="background:#B65A17"></i> Paddy + Holly</span>
+        <span><i class="swatch" style="background:#6D4C41"></i> Ops / People</span>
+        <span><i class="swatch" style="background:#7B3FA0"></i> Whole group</span>
+        <span><i class="swatch" style="background:#2E7D32"></i> Break</span>
+      </div>
+
+      <h3>Day 1 Timetable</h3>
+      <div class="table-wrap">
+        <table aria-label="Day 1 onboarding timetable">
+          <thead>
+            <tr>
+              <th>Time</th>
+              <th>Length</th>
+              <th>Session</th>
+              <th>Owner</th>
+              <th>What Gets Covered</th>
+              <th>Outcome</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="time">13:00 - 14:00</td>
+              <td class="mins">60 min</td>
+              <td><strong>Kick-off: Who We Are</strong></td>
+              <td><span class="owner ed">Ed</span></td>
+              <td>Welcome and introductions, our story and culture, the team and
+                who does what, the structure above and around the telesales floor,
+                shift pattern, standards and expectations.</td>
+              <td>Everyone knows the room, the culture, and who to ask for what.</td>
+            </tr>
+            <tr>
+              <td class="time">14:00 - 15:00</td>
+              <td class="mins">60 min</td>
+              <td><strong>The Product</strong></td>
+              <td><span class="owner paddy">Paddy</span></td>
+              <td>What our food actually is and how it is made, the range and how
+                plans are built, our food versus competitor food, and the proof
+                points a rep can lean on.</td>
+              <td>Reps can explain the product and hold a fair comparison.</td>
+            </tr>
+            <tr class="is-break">
+              <td class="time">15:00 - 15:15</td>
+              <td class="mins">15 min</td>
+              <td><strong>Break</strong></td>
+              <td><span class="owner none">-</span></td>
+              <td>Coffee and reset.</td>
+              <td>-</td>
+            </tr>
+            <tr>
+              <td class="time">15:15 - 16:15</td>
+              <td class="mins">60 min</td>
+              <td><strong>Our Customers &amp; The Pitch</strong></td>
+              <td><span class="owner paddy-holly">Paddy + Holly</span></td>
+              <td>Who our customers are and what they care about, where our leads
+                come from, the pitch structure stage by stage, the most common
+                objections, and a first walk-through of a full pitch.</td>
+              <td>Reps can name our customer types and talk through the pitch.</td>
+            </tr>
+            <tr>
+              <td class="time">16:15 - 17:15</td>
+              <td class="mins">60 min</td>
+              <td><strong>Pay &amp; Logistics</strong></td>
+              <td><span class="owner ops">Ops / People</span></td>
+              <td>How pay works, what the package looks like, how commission is
+                earned and when it lands, payroll dates and payslips, holiday and
+                absence, then open questions.</td>
+              <td>No one leaves with an unanswered question about their pay.</td>
+            </tr>
+            <tr>
+              <td class="time">17:15 - 18:00</td>
+              <td class="mins">45 min</td>
+              <td><strong>Laptop &amp; Kit Setup</strong></td>
+              <td><span class="owner group">Whole group</span></td>
+              <td>Laptops out and logged in, email and calendar working, headset
+                paired and tested, Adversus access confirmed, and any blockers
+                logged for overnight fixing.</td>
+              <td>Every rep is genuinely ready to work on Day 2.</td>
+            </tr>
+            <tr>
+              <td class="time">18:00</td>
+              <td class="mins">-</td>
+              <td><strong>Close, then Team Dinner</strong></td>
+              <td><span class="owner group">Everyone</span></td>
+              <td>Wrap the day, confirm the Day 2 start time, then head to dinner.</td>
+              <td>The team leaves knowing each other, not just the material.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Day 1 Session Detail</h3>
+      <div class="steps">
+        <div class="step-card">
+          <span class="tag">13:00</span>
+          <h3>Kick-off - Ed</h3>
+          <ul>
+            <li>Welcome, quick round of introductions</li>
+            <li>Our story and why the business exists</li>
+            <li>Culture: how we treat customers and each other</li>
+            <li>The team: names, faces, and roles</li>
+            <li>Structure: who a rep reports to and escalates to</li>
+            <li>Shift pattern, hours, and the shape of a normal week</li>
+            <li>What good looks like in the first month</li>
+          </ul>
+        </div>
+        <div class="step-card">
+          <span class="tag">14:00</span>
+          <h3>Product - Paddy</h3>
+          <ul>
+            <li>What the food is and how it is made</li>
+            <li>The range and how a customer plan is built</li>
+            <li>Us versus the main competitor types</li>
+            <li>Honest strengths, and where we are not the cheapest</li>
+            <li>Proof points a rep can use on a call</li>
+            <li>Claims we must never make</li>
+          </ul>
+        </div>
+        <div class="step-card">
+          <span class="tag">15:15</span>
+          <h3>Customers &amp; Pitch - Paddy + Holly</h3>
+          <ul>
+            <li>Our main customer types and what motivates each</li>
+            <li>Where leads come from and what the customer already knows</li>
+            <li>Pitch structure: open, discover, present, handle, close</li>
+            <li>Top objections and the agreed responses</li>
+            <li>One full pitch demonstrated end to end</li>
+          </ul>
+        </div>
+        <div class="step-card">
+          <span class="tag">16:15</span>
+          <h3>Pay &amp; Logistics - Ops</h3>
+          <ul>
+            <li>Base pay and what the package includes</li>
+            <li>How commission is calculated</li>
+            <li>What counts as a valid, payable sale</li>
+            <li>Payroll dates, payslips, and first pay timing</li>
+            <li>Holiday, sickness, and absence process</li>
+            <li>Open floor for questions</li>
+          </ul>
+        </div>
+        <div class="step-card">
+          <span class="tag">17:15</span>
+          <h3>Kit Setup - All</h3>
+          <ul>
+            <li>Laptop on, password set, updates done</li>
+            <li>Email, calendar, and chat working</li>
+            <li>Headset paired and audio tested</li>
+            <li>Adversus login confirmed</li>
+            <li>Any blocker logged and owned before people leave</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="good" style="margin-top:16px">
+        <strong>Why this order:</strong> product before pitch, and pitch before pay.
+        Reps understand what they are selling and who they are selling to before
+        they hear how they get paid for it, and the day ends on the one task that
+        must be finished before Day 2 can run.
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="day-heading">
+        <h2>Day 2 - Wednesday 5 August</h2>
+        <span class="when">09:30 - 17:00</span>
+      </div>
+
+      <div class="strip" aria-label="Day 2 visual timeline">
+        <div class="strip-block group" style="flex: 15 0 0">Recap</div>
+        <div class="strip-block ops" style="flex: 75 0 0">Systems 1<br>Adversus</div>
+        <div class="strip-block none" style="flex: 15 0 0">Break</div>
+        <div class="strip-block ops" style="flex: 75 0 0">Systems 2<br>Orders &amp; Tools</div>
+        <div class="strip-block none" style="flex: 45 0 0">Lunch</div>
+        <div class="strip-block holly" style="flex: 75 0 0">Call Listening<br>3 Calls</div>
+        <div class="strip-block holly" style="flex: 45 0 0">Live Call<br>Holly</div>
+        <div class="strip-block none" style="flex: 15 0 0">Break</div>
+        <div class="strip-block paddy-holly" style="flex: 75 0 0">Test Environment<br>Practice</div>
+        <div class="strip-block group" style="flex: 15 0 0">Wrap</div>
+      </div>
+      <div class="strip-key">
+        <span><i class="swatch" style="background:#00897B"></i> Holly</span>
+        <span><i class="swatch" style="background:#B65A17"></i> Paddy + Holly</span>
+        <span><i class="swatch" style="background:#6D4C41"></i> Systems lead</span>
+        <span><i class="swatch" style="background:#7B3FA0"></i> Whole group</span>
+        <span><i class="swatch" style="background:#2E7D32"></i> Break</span>
+      </div>
+
+      <h3>Day 2 Timetable</h3>
+      <div class="table-wrap">
+        <table aria-label="Day 2 onboarding timetable">
+          <thead>
+            <tr>
+              <th>Time</th>
+              <th>Length</th>
+              <th>Session</th>
+              <th>Owner</th>
+              <th>What Gets Covered</th>
+              <th>Outcome</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="time">09:30 - 09:45</td>
+              <td class="mins">15 min</td>
+              <td><strong>Day 1 Recap</strong></td>
+              <td><span class="owner group">Whole group</span></td>
+              <td>Quick recap, questions left over from Day 1, and a check that
+                every laptop and login still works.</td>
+              <td>Clean start with no one locked out.</td>
+            </tr>
+            <tr>
+              <td class="time">09:45 - 11:00</td>
+              <td class="mins">75 min</td>
+              <td><strong>Systems 1: Adversus</strong></td>
+              <td><span class="owner ops">Systems lead</span></td>
+              <td>What Adversus is and where it sits, logging in and getting
+                ready, campaigns and lead lists, taking and making a call,
+                dispositions and outcomes, notes and call-back scheduling.</td>
+              <td>Reps can run a call through the dialler unaided.</td>
+            </tr>
+            <tr class="is-break">
+              <td class="time">11:00 - 11:15</td>
+              <td class="mins">15 min</td>
+              <td><strong>Break</strong></td>
+              <td><span class="owner none">-</span></td>
+              <td>Screen break.</td>
+              <td>-</td>
+            </tr>
+            <tr>
+              <td class="time">11:15 - 12:30</td>
+              <td class="mins">75 min</td>
+              <td><strong>Systems 2: Orders &amp; Wider Tools</strong></td>
+              <td><span class="owner ops">Systems lead</span></td>
+              <td>Taking the order and entering the sale correctly, payment and
+                data handling rules, the other tools reps touch day to day, what
+                a clean record looks like, and where things commonly go wrong.</td>
+              <td>Reps can process a sale end to end without help.</td>
+            </tr>
+            <tr class="is-break">
+              <td class="time">12:30 - 13:15</td>
+              <td class="mins">45 min</td>
+              <td><strong>Lunch</strong></td>
+              <td><span class="owner none">-</span></td>
+              <td>Break between the systems morning and the calls afternoon.</td>
+              <td>-</td>
+            </tr>
+            <tr>
+              <td class="time">13:15 - 14:30</td>
+              <td class="mins">75 min</td>
+              <td><strong>Call Listening: Three Recorded Calls</strong></td>
+              <td><span class="owner holly">Holly</span></td>
+              <td>Three real calls played and unpacked: one successful sale, one
+                not interested, one call back. Each one listened to, then
+                discussed against the pitch structure from Day 1.</td>
+              <td>Reps can point to what worked, what did not, and why.</td>
+            </tr>
+            <tr>
+              <td class="time">14:30 - 15:15</td>
+              <td class="mins">45 min</td>
+              <td><strong>Live Call Demo</strong></td>
+              <td><span class="owner holly">Holly</span></td>
+              <td>Holly takes live calls with the group listening in, then talks
+                through her decisions in the moment and answers questions.</td>
+              <td>Reps see the theory land on a real, unscripted call.</td>
+            </tr>
+            <tr class="is-break">
+              <td class="time">15:15 - 15:30</td>
+              <td class="mins">15 min</td>
+              <td><strong>Break</strong></td>
+              <td><span class="owner none">-</span></td>
+              <td>Reset before practice.</td>
+              <td>-</td>
+            </tr>
+            <tr>
+              <td class="time">15:30 - 16:45</td>
+              <td class="mins">75 min</td>
+              <td><strong>Practice in the Test Environment</strong></td>
+              <td><span class="owner paddy-holly">Paddy + Holly</span></td>
+              <td>Reps work in the test environment: dial, pitch, handle an
+                objection, disposition the call, and log a practice order. Run in
+                pairs with a coach rotating and giving feedback.</td>
+              <td>Every rep completes at least one full practice call.</td>
+            </tr>
+            <tr>
+              <td class="time">16:45 - 17:00</td>
+              <td class="mins">15 min</td>
+              <td><strong>Wrap &amp; What Happens Next</strong></td>
+              <td><span class="owner group">Whole group</span></td>
+              <td>What we saw, individual strengths and focus areas, what the
+                first live shift looks like, and who to go to on day one.</td>
+              <td>Everyone leaves knowing their next step.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>The Three Recorded Calls</h3>
+      <p>
+        Roughly 25 minutes each: listen, then unpack. Pick the calls in advance and
+        listen to them yourself first, so the discussion points are already chosen.
+      </p>
+      <div class="steps">
+        <div class="step-card">
+          <span class="tag">Call 1</span>
+          <h3>The Successful Call</h3>
+          <span class="meta">Listen for what to copy</span>
+          <ul>
+            <li>How the rep opened and earned the time</li>
+            <li>The questions that uncovered the real need</li>
+            <li>How the product was matched to that need</li>
+            <li>How price was introduced</li>
+            <li>How the close was asked for</li>
+            <li>Whether the customer knew exactly what happens next</li>
+          </ul>
+        </div>
+        <div class="step-card">
+          <span class="tag">Call 2</span>
+          <h3>The Not Interested</h3>
+          <span class="meta">Listen for the turning point</span>
+          <ul>
+            <li>Where the call was lost, and was it winnable</li>
+            <li>Was the objection real or just a brush-off</li>
+            <li>What the rep could have asked instead</li>
+            <li>How the rep left the door open</li>
+            <li>How to take a no without losing momentum</li>
+          </ul>
+        </div>
+        <div class="step-card">
+          <span class="tag">Call 3</span>
+          <h3>The Call Back</h3>
+          <span class="meta">Listen for the follow-up setup</span>
+          <ul>
+            <li>Why the customer was not ready</li>
+            <li>Whether a firm time and reason were agreed</li>
+            <li>The quality of the note left behind</li>
+            <li>How it was dispositioned in Adversus</li>
+            <li>What makes a call back actually convert</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="note" style="margin-top:16px">
+        <strong>Keep the debriefs consistent.</strong> For each call, ask the same
+        three questions: what did the rep do well, what one change would have
+        improved the outcome, and what would you do differently on your version of
+        that call. Repeating the same frame is what makes it stick.
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Before Day 1: Prep Checklist</h2>
+      <div class="steps">
+        <div class="step-card">
+          <h3>Systems &amp; Access</h3>
+          <ul class="checklist">
+            <li>Laptops built and allocated per rep</li>
+            <li>Email, calendar, and chat accounts created</li>
+            <li>Adversus users created and licensed</li>
+            <li>Headsets ordered and tested</li>
+            <li>Test environment finished and confirmed working</li>
+            <li>Practice lead data loaded into the test environment</li>
+          </ul>
+        </div>
+        <div class="step-card">
+          <h3>Content</h3>
+          <ul class="checklist">
+            <li>Ed's kick-off deck and org chart</li>
+            <li>Product and competitor comparison material</li>
+            <li>Pitch structure one-pager per rep</li>
+            <li>Objection handling sheet</li>
+            <li>Pay and commission explainer</li>
+          </ul>
+        </div>
+        <div class="step-card">
+          <h3>The Three Calls</h3>
+          <ul class="checklist">
+            <li>Successful call chosen and clipped</li>
+            <li>Not interested call chosen and clipped</li>
+            <li>Call back call chosen and clipped</li>
+            <li>Playback audio tested in the room</li>
+            <li>Discussion points noted for each call</li>
+          </ul>
+        </div>
+        <div class="step-card">
+          <h3>Room &amp; Logistics</h3>
+          <ul class="checklist">
+            <li>Training room booked for both days</li>
+            <li>Screen, sound, and enough power sockets</li>
+            <li>Refreshments for breaks, lunch on Day 2</li>
+            <li>Dinner booked for Day 1 evening</li>
+            <li>Listening-in set up for Holly's live call</li>
+            <li>Joining instructions sent to reps</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>What I Have Assumed</h2>
+      <p>These are the gaps I filled in to make the schedule run. Correct any that are wrong and the timings will shift accordingly.</p>
+      <ul>
+        <li><strong>Day 2 timings.</strong> You said morning systems, a short break, then a calls afternoon, but not the start time. I have assumed 09:30-17:00 and treated the mid-day break as a 45-minute lunch.</li>
+        <li><strong>Session lengths on Day 1.</strong> Split as 60 / 60 / 60 / 60 minutes with a 15-minute break and 45 minutes for kit setup, which fills 13:00-18:00 exactly.</li>
+        <li><strong>Pay and logistics owner.</strong> Listed as Ops / People rather than Ed, Paddy, or Holly, since you did not name someone.</li>
+        <li><strong>Systems owner.</strong> Day 2's systems morning has no named lead yet.</li>
+        <li><strong>Customers sits with the pitch.</strong> You mentioned pitch structure and who our customers are together with Paddy and Holly, so they are one 60-minute session.</li>
+        <li><strong>Live call slot.</strong> Placed after the recorded calls so reps have the framework before they hear a real one, and it is 45 minutes to allow for call volume being unpredictable.</li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <h2>Open Questions</h2>
+      <div class="warn">
+        <ul>
+          <li>How many reps are in this intake? It changes the test-environment practice, which currently assumes pairs with a rotating coach.</li>
+          <li>What time do you want to start on Day 2, and is the mid-day break a full lunch or a short one?</li>
+          <li>Who owns the pay and logistics session, and who owns the systems morning?</li>
+          <li>Is this the whole induction, or is there a Day 3 and a first live shift to schedule?</li>
+          <li>Beyond Adversus, which systems do reps need on day one?</li>
+          <li>Are the three call recordings already chosen, and is the test environment ready to load practice data?</li>
+          <li>Do you want a printed pack per rep, or will they work from the laptop?</li>
+          <li>Is anything needed for compliance sign-off, such as data handling or call scripting rules?</li>
+        </ul>
+      </div>
+    </section>
+
+    <footer>
+      Standalone page. It does not change the existing dashboard homepage.
+      Draft schedule for the 4-5 August telesales intake.
+    </footer>
+  </main>
+</body>
+</html>
