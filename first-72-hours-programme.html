@@ -1210,6 +1210,7 @@
         <li><a href="#reframe">The Reframe</a></li>
         <li><a href="#c1">1. Training Deck</a></li>
         <li><a href="#c2">2. In-Box Scorecard</a></li>
+        <li><a href="#capture">How the Data Reaches Us</a></li>
         <li><a href="#c3">3. Scorecard-Driven CRM</a></li>
         <li><a href="#anxiety">One Anxiety, Two Phases</a></li>
         <li><a href="#c4a">4a. Pre-Arrival Pack</a></li>
@@ -1267,7 +1268,7 @@ The problem is not that cats dislike the food. It is that we let a fourteen-day 
 **Core components:**
 
 1. **Transition &amp; Texture Training Deck** - internal enablement that shifts how agents frame Box 1, positioning it as an exploratory tasting and texture trial rather than a standard order, and gives them the texture vocabulary to coach with.
-2. **In-Box Recipe Scorecard** - a physical card in Box 1 with a daily tracker: which recipe was served, chilled or warmed, how the cat reacted on a four-point scale, and any texture preference. Partial acceptance is printed as progress, not failure.
+2. **In-Box Recipe Scorecard** - a physical card in Box 1 with a daily tracker: which recipe was served, chilled or warmed, how the cat reacted on a four-point scale, and any texture preference. Partial acceptance is printed as progress, not failure. The card is the customer's diary; the data reaches us through a one-tap reply in the daily message, because we ask and they tap rather than expecting them to scan something unprompted.
 3. **Scorecard-Driven CRM Messaging** - email and SMS flows triggered by early usage signals rather than calendar days, designed to intercept a pause and offer a recipe or texture swap instead, personalised with what the scorecard already told us.
 4. **Early-Pause Prevention (Days 1-3)** - the 72 hours around first delivery managed deliberately rather than survived, so knee-jerk pauses are prevented before the transition has had a fair chance.
 4a. **The Pre-Arrival Readiness Pack** - the upfront structure that removes hesitation before the box hits the doorstep. A personalised switch plan in their hands within the hour, a published itinerary of every message we will send and when, a two-minute readiness checklist, and the safety net stated before they need it: swaps are free, and you never need to pause in order to change something.
@@ -1671,7 +1672,7 @@ The problem is not that cats dislike the food. It is that we let a fourteen-day 
       <div class="comp-head">
         <span class="comp-num">2</span>
         <h2>In-Box Recipe Scorecard</h2>
-        <span class="who">Owners: Product and Packaging with Brand design, Fulfilment for insertion. Audience: pet parents. Format: printed card in Box 1, with a digital twin.</span>
+        <span class="who">Owners: Product and Packaging with Brand design, Fulfilment for insertion. Audience: pet parents. Format: printed card in Box 1, with one-tap digital capture alongside it.</span>
       </div>
 
       <div class="badge-row">
@@ -1802,10 +1803,11 @@ The problem is not that cats dislike the food. It is that we let a fourteen-day 
             up next to where the food is served. A card in a leaflet stack is a card nobody reads.
           </li>
           <li>
-            <strong>The QR is the telemetry, the paper is the habit.</strong> Do not fight the
-            paper. Let the card be the daily ritual and use the QR to pull the same data into the
-            CRM, where component 3 needs it. Every scan should pre-fill from what we already know
-            so logging a meal takes one tap.
+            <strong>The card is the customer's diary, not our sensor.</strong> The card exists to
+            make the trial real, to teach the two textures and to make partial acceptance visible to
+            the person standing at the fridge. It is not how the data reaches us &mdash; see
+            <a href="#capture">how the data reaches us</a> below, because this is the dependency the
+            whole programme rests on.
           </li>
         </ul>
       </div>
@@ -1828,6 +1830,184 @@ The problem is not that cats dislike the food. It is that we let a fourteen-day 
         cost or a fridge-safe adhesive strip will do. Print lead time against the pilot date. Whether
         Fulfilment can insert a track-specific reverse (four variants) or whether version one carries
         all four tracks on the same card. Only the last one changes the design meaningfully.
+      </div>
+    </section>
+
+    <!-- ── DATA CAPTURE ── -->
+    <section class="card" id="capture">
+      <h2>How the Data Reaches Us</h2>
+      <p class="lede">
+        If the card is filled in at home and stays there, we learn nothing, and component 3 has
+        nothing to trigger on. This is the single biggest delivery risk in the programme, so it needs
+        an answer before anything goes to print.
+      </p>
+
+      <div class="band">
+        <strong class="band-title">The card is the diary. The message is the sensor.</strong>
+        A QR code requires the customer to start something: find their phone, open the camera, scan,
+        land on a page, choose an answer. Three times a day, for a week, in a busy kitchen. That will
+        not happen at the rate component 3 needs. So we invert it. <strong>We ask, they tap.</strong>
+        The daily message arrives at the moment the meal happens and carries the four answers as four
+        tappable options, so logging takes one thumb and no navigation. The card gives the customer
+        their record and the framing; the reply gives us the data.
+      </div>
+
+      <h3>The capture routes, in order of how much we should rely on them</h3>
+      <div class="table-wrap">
+        <table class="wide" aria-label="Data capture routes for the scorecard">
+          <thead>
+            <tr>
+              <th>Route</th>
+              <th>What the customer does</th>
+              <th>What we get</th>
+              <th>Rely on it for</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="stage">1. One-tap reply in the daily SMS</td>
+              <td>Taps one of four options in a message that just arrived. No app, no login, no typing.</td>
+              <td>Recipe, reaction, timestamp. Enough to branch the journey.</td>
+              <td><strong>The primary sensor.</strong> Everything in component 3 should be designed to run on this alone.</td>
+            </tr>
+            <tr>
+              <td class="stage">2. Four buttons in the email</td>
+              <td>Clicks one button. Same four labels as the card and the SMS.</td>
+              <td>Same as above, for customers who live in email rather than messages.</td>
+              <td>Coverage of the non-SMS cohort.</td>
+            </tr>
+            <tr>
+              <td class="stage">3. Printed short link and QR on the card</td>
+              <td>Starts it themselves, at the fridge, when they want to log a full day.</td>
+              <td>Richer entries: texture, notes, multiple meals.</td>
+              <td>The engaged minority. Useful, never assumed.</td>
+            </tr>
+            <tr>
+              <td class="stage">4. Card photo at day 7</td>
+              <td>Sends one photo in reply to a message. Zero data entry.</td>
+              <td>The whole week at once, including from customers who never logged digitally.</td>
+              <td>Retrospective recipe and texture preference, and box-2 build. Too late to intervene.</td>
+            </tr>
+            <tr>
+              <td class="stage">5. Agent capture on any contact</td>
+              <td>Reads their card out to whoever they are speaking to.</td>
+              <td>A full history, plus the reasons behind it, which no form captures.</td>
+              <td>The highest-value data we get, from the smallest number of customers.</td>
+            </tr>
+            <tr>
+              <td class="stage">6. Implicit signals</td>
+              <td>Nothing. They just behave.</td>
+              <td>Swap requests, portion changes, delivery shifts, pause-page visits &mdash; and silence.</td>
+              <td>Risk scoring when no explicit log exists. Always available.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="note warn">
+        <strong class="note-title">Do not ask people to log the same meal twice</strong>
+        If the card says "write it here" and the SMS says "and tell us there", we have created
+        duplicate work and most people will do neither. The way out is to give the two artifacts
+        different jobs, in the customer's own terms: <strong>the card is for them, the tap is for
+        us</strong>. Their record on the fridge is what makes progress visible; ours is what makes the
+        next message useful. The four labels must be word-for-word identical across the card, the SMS
+        and the email, or the two records will not reconcile and the customer will notice the seam.
+      </div>
+
+      <h3>What the one-tap reply actually looks like</h3>
+      <div class="msg">
+        <div class="msg-head">
+          <span class="chan sms">SMS</span>
+          <span class="trig">Trigger: delivery confirmed, evening of bowl-day 1 &middot; the primary capture event</span>
+        </div>
+        <div class="msg-body">
+          <p>
+            Marro: how did <span class="var">cat_name</span> get on with the
+            <span class="var">recipe_name</span>? Tap the closest:
+          </p>
+          <div class="cta-row">
+            <span class="pill-cta">Cleared the plate</span>
+            <span class="pill-cta">Ate some</span>
+            <span class="pill-cta">Sniffed or licked</span>
+            <span class="pill-cta">Walked away</span>
+          </div>
+          <p style="margin-top:12px">
+            Each option is its own pre-filled link, so the tap <em>is</em> the log &mdash; it lands on
+            a confirmation page with the next step already personalised to the answer, and never asks
+            them to select anything or sign in.
+          </p>
+        </div>
+      </div>
+
+      <div class="panel accent">
+        <h3>Design the journey to work when the data does not arrive</h3>
+        <p>
+          Assume a meaningful share of customers will log nothing. The flows have to degrade
+          gracefully rather than stall, so every stage runs one of two branches:
+        </p>
+        <ul>
+          <li>
+            <strong>If we know</strong> &mdash; personalise hard. Name the recipe, name the reaction,
+            give the specific next move. This is where the programme earns its keep.
+          </li>
+          <li>
+            <strong>If we don't know</strong> &mdash; do not guess and do not go quiet. Send the
+            generic-but-useful version of the same message and make it a question, so the message
+            doubles as another chance to capture a reaction.
+          </li>
+          <li>
+            <strong>Treat silence as a signal in its own right.</strong> No log by 48 hours after
+            delivery is one of the strongest early risk flags available to us, because the engaged
+            customers are the ones who answer. Non-loggers should be routed to the day-3 checkpoint
+            and the rescue path regardless, not dropped because we lack data on them.
+          </li>
+          <li>
+            <strong>Never make an intervention conditional on complete data.</strong> One reaction on
+            bowl-day 1 is enough to branch. Waiting for a full week of entries means intervening after
+            the day-5 cliff, which is the failure we are trying to prevent.
+          </li>
+        </ul>
+      </div>
+
+      <div class="panel">
+        <h3>What engineering needs to build</h3>
+        <ul>
+          <li>
+            <strong>Tokenised one-tap links</strong>, one per option, scoped to a customer, a day and
+            a recipe, and not guessable. No login, and safe to open on a shared device.
+          </li>
+          <li>
+            <strong>Idempotent writes.</strong> People tap twice, forward messages, and change their
+            minds. Last answer for a given day and recipe wins; duplicates must not create two events.
+          </li>
+          <li>
+            <strong>Late and out-of-order entries.</strong> Someone logging Monday's meal on Wednesday
+            should still land on Monday. Store the meal date, not just the submission time.
+          </li>
+          <li>
+            <strong>A single scorecard event schema</strong> shared by all routes, so an agent-entered
+            reaction, a tap and a QR entry are indistinguishable downstream.
+          </li>
+          <li>
+            <strong>Agent-side entry</strong> in the CS tool, because route 5 is worthless if the
+            agent has nowhere to put what they just heard.
+          </li>
+          <li>
+            <strong>Confirmation pages that do the next job</strong>, rather than saying "thanks".
+            Each answer lands on the relevant next step, and for the two low answers, the free swap.
+          </li>
+        </ul>
+      </div>
+
+      <div class="note">
+        <strong class="note-title">The number that tells us whether any of this worked</strong>
+        <strong>Signal coverage</strong>: the share of first-box customers we get at least one
+        reaction from, by any route, within 48 hours of delivery. It belongs on the dashboard from day
+        one of the pilot, because it caps the effectiveness of every personalised branch in component
+        3. If coverage comes in low, the fix is the capture mechanism, not the copy &mdash; and we
+        should find that out in the pilot rather than after a print run. We have no basis for
+        predicting the rate yet, so the pilot's job is to measure it, not to hit a number someone
+        guessed.
       </div>
     </section>
 
@@ -1895,10 +2075,17 @@ The problem is not that cats dislike the food. It is that we let a fourteen-day 
               <td>Log meal one</td>
             </tr>
             <tr>
-              <td class="stage">No meal logged</td>
+              <td class="stage">Evening of bowl-day 1</td>
+              <td>B + ~6 hours</td>
+              <td>SMS</td>
+              <td>The primary capture event. Ask the question at the moment the answer exists.</td>
+              <td>Four tappable reactions</td>
+            </tr>
+            <tr>
+              <td class="stage">No reaction logged</td>
               <td>B + 24 hours</td>
               <td>SMS</td>
-              <td>Capture a reaction with one tap; silence is itself a risk signal.</td>
+              <td>Second capture attempt, and silence past this point is itself a risk flag.</td>
               <td>One-tap reaction</td>
             </tr>
             <tr>
@@ -2067,7 +2254,7 @@ The problem is not that cats dislike the food. It is that we let a fourteen-day 
         <ul>
           <li>Delivery confirmation as a reliable, timely CRM event. Everything on clock B hangs off this.</li>
           <li>Previous food and eating type, captured at sign-up, to select the track and to write honest timelines into the copy.</li>
-          <li>Scorecard events: recipe, serve temperature, reaction score, timestamp.</li>
+          <li>Scorecard events: recipe, serve temperature, reaction score, meal date. See <a href="#capture">how the data reaches us</a> &mdash; the flows are only as good as this coverage.</li>
           <li>A swap endpoint that can rebuild the remainder of box 1 and the contents of box 2 without an agent.</li>
           <li>Pause-intent as an event, not just pause-completed, so the interception in the last row is possible at all.</li>
         </ul>
@@ -2469,9 +2656,15 @@ The problem is not that cats dislike the food. It is that we let a fourteen-day 
             </tr>
             <tr>
               <td class="stage">Leading</td>
-              <td>Scorecard activation: meal one logged within 48 hours</td>
-              <td>The earliest signal we have of an engaged trial, and the input the CRM flows need.</td>
+              <td>Signal coverage: at least one reaction captured within 48 hours, by any route</td>
+              <td>Caps the effectiveness of every personalised branch in component 3. If this is low, nothing downstream can work.</td>
               <td>Up</td>
+            </tr>
+            <tr>
+              <td class="stage">Leading</td>
+              <td>Capture rate by route</td>
+              <td>Tells us whether the one-tap reply is carrying the load, or whether we are quietly depending on the QR.</td>
+              <td>Monitor</td>
             </tr>
             <tr>
               <td class="stage">Leading</td>
@@ -2633,13 +2826,13 @@ The problem is not that cats dislike the food. It is that we let a fourteen-day 
               <td class="empty"></td>
             </tr>
             <tr>
-              <td class="stage">Digital twin</td>
-              <td>QR landing page, one-tap logging, events into CRM</td>
-              <td class="empty"></td>
+              <td class="stage">Capture layer</td>
+              <td>Tokenised one-tap links, event schema, agent entry, confirmation pages</td>
               <td class="empty"></td>
               <td><span class="bar ops">Spec</span></td>
               <td><span class="bar ops">Build</span></td>
               <td><span class="bar ops">Ship</span></td>
+              <td><span class="bar ops">Coverage</span></td>
               <td class="empty"></td>
             </tr>
             <tr>
@@ -2680,7 +2873,13 @@ The problem is not that cats dislike the food. It is that we let a fourteen-day 
               <td class="stage">2. Scorecard</td>
               <td>Product and Packaging</td>
               <td>Brand design, Fulfilment, print supplier</td>
-              <td>Print artwork, print spec, insertion instruction, QR landing page</td>
+              <td>Print artwork, print spec, insertion instruction, printed short link and QR</td>
+            </tr>
+            <tr>
+              <td class="stage">Capture layer</td>
+              <td>Engineering</td>
+              <td>CRM for the messages that carry the links, CS tooling for agent entry</td>
+              <td>Tokenised one-tap links, scorecard event schema, confirmation pages, agent entry screen</td>
             </tr>
             <tr>
               <td class="stage">3. CRM messaging</td>
@@ -2730,8 +2929,13 @@ The problem is not that cats dislike the food. It is that we let a fourteen-day 
         </div>
         <div class="summary-box">
           <strong>The card must not become a leaflet</strong>
-          If it ships in a stack of inserts it will not be read, and components 3 and 4 lose the data
-          they run on. Placement is a requirement, not a detail.
+          If it ships in a stack of inserts it will not be read, and components 3 and 4 lose the
+          framing they depend on. Placement is a requirement, not a detail.
+        </div>
+        <div class="summary-box">
+          <strong>Never depend on the customer starting the log</strong>
+          We ask, they tap. Any design that requires them to find their phone and scan something
+          unprompted will not produce the data the flows need.
         </div>
         <div class="summary-box">
           <strong>Swap cost needs a cap</strong>
@@ -2787,8 +2991,20 @@ The problem is not that cats dislike the food. It is that we let a fourteen-day 
           will miss the customers who pause silently?
         </li>
         <li>
-          <strong>Digital twin scope.</strong> Is a no-login QR page with one-tap logging enough for
-          version one, avoiding an app dependency entirely?
+          <strong>Capture channel.</strong> Do we have reliable mobile numbers and SMS consent for
+          enough of the base to make the one-tap reply the primary sensor? If not, the email variant
+          has to carry it, which is slower and lands less often at mealtime. This is worth checking
+          before the card goes to print, because it changes what the card asks people to do.
+        </li>
+        <li>
+          <strong>Day-7 card photos.</strong> Read manually at pilot volume, which is fine and also
+          genuinely informative. Worth deciding now whether we ever intend to automate it, because if
+          not, the card layout does not need to be machine-readable and the design gets freer.
+        </li>
+        <li>
+          <strong>Logging incentive.</strong> Is "box 2 built around the winners" enough of a reason
+          to log, or does completion need to unlock something? Careful: paying for data tends to
+          produce data rather than truth.
         </li>
         <li>
           <strong>Completion incentive.</strong> Does finishing seven days on the card earn
