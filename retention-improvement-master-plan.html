@@ -213,6 +213,15 @@
       text-transform: uppercase;
     }
 
+    /* Fraunces sets a heavily stylised ampersand; borrow the body font's instead */
+    h1 .amp,
+    h2 .amp,
+    h3 .amp,
+    .band-title .amp {
+      font-family: var(--sans);
+      font-weight: 600;
+    }
+
     /* ── Ornamental divider, echoing the Marro menu flourishes ── */
     .flourish {
       align-items: center;
@@ -751,6 +760,16 @@
 
   <main>
     <section class="card">
+      <h2>Programme Pages</h2>
+      <p>
+        Detailed build plans for individual workstreams live on their own pages.
+      </p>
+      <ul class="toc">
+        <li><a href="first-72-hours-programme.html">The First 72 Hours &mdash; early-pause prevention (days 1&ndash;3)</a></li>
+      </ul>
+    </section>
+
+    <section class="card">
       <h2>Contents</h2>
       <ul class="toc">
         <li><a href="#summary">Executive Summary</a></li>
@@ -986,7 +1005,7 @@ The prize is small, specific and winnable. We currently miss the 47% box-2 reten
     <section class="card" id="pillar1">
       <div class="pillar-head">
         <span class="pillar-num">1</span>
-        <h2>Education, Messaging &amp; Customer Experience</h2>
+        <h2>Education, Messaging <span class="amp">&amp;</span> Customer Experience</h2>
         <span class="who">Owners: Retention Strategy, CRM, Brand &amp; Content, Product. Goal: make the first fourteen days feel designed rather than survived.</span>
       </div>
 
@@ -996,7 +1015,7 @@ The prize is small, specific and winnable. We currently miss the 47% box-2 reten
           <span class="badge high">High impact</span>
           <span class="badge owner">Content + Retention</span>
         </div>
-        <h3>1. Transition Training &amp; Content Positioning</h3>
+        <h3>1. Transition Training <span class="amp">&amp;</span> Content Positioning</h3>
         <p>
           Build a baseline-relative onboarding journey around food transition, using the blog
           material we already have. The critical upgrade to your original idea: the transition
@@ -1061,7 +1080,7 @@ The prize is small, specific and winnable. We currently miss the 47% box-2 reten
           <span class="badge quick">Fast to ship</span>
           <span class="badge owner">CRM</span>
         </div>
-        <h3>2. Onboarding CRM &amp; Key-Day Interventions</h3>
+        <h3>2. Onboarding CRM <span class="amp">&amp;</span> Key-Day Interventions</h3>
         <p>
           Rebuild the email and SMS journey around the actual risk windows in the data rather than a
           generic weekly cadence. Three windows matter: pre-delivery (23% of pauses), day 3 to day 5
@@ -1163,7 +1182,7 @@ The prize is small, specific and winnable. We currently miss the 47% box-2 reten
           <span class="badge high">High impact</span>
           <span class="badge owner">Commercial</span>
         </div>
-        <h3>10. Week-7 Value Bridge &amp; Discount Taper</h3>
+        <h3>10. Week-7 Value Bridge <span class="amp">&amp;</span> Discount Taper</h3>
         <p>
           None of the original nine initiatives owns the week-7 drop, and it is the clearest
           structural break in the whole dataset. Retention falls when the discount changes, which
@@ -1194,7 +1213,7 @@ The prize is small, specific and winnable. We currently miss the 47% box-2 reten
     <section class="card" id="pillar2">
       <div class="pillar-head">
         <span class="pillar-num">2</span>
-        <h2>Agent Operations, QA &amp; Enablement</h2>
+        <h2>Agent Operations, QA <span class="amp">&amp;</span> Enablement</h2>
         <span class="who">Owners: Customer Service Lead, QA, Training. Goal: every agent conversation either prevents a food-refusal pause or recovers one.</span>
       </div>
 
@@ -1205,7 +1224,7 @@ The prize is small, specific and winnable. We currently miss the 47% box-2 reten
           <span class="badge quick">Fast to ship</span>
           <span class="badge owner">CS Operations</span>
         </div>
-        <h3>4. Targeted Offboarding &amp; Early-Pause Recovery Calls</h3>
+        <h3>4. Targeted Offboarding <span class="amp">&amp;</span> Early-Pause Recovery Calls</h3>
         <p>
           Proactive outbound to customers who pause or cancel in their first days, to gather
           qualitative feedback and recover the account. Two refinements make this materially more
@@ -1317,7 +1336,7 @@ The prize is small, specific and winnable. We currently miss the 47% box-2 reten
           <span class="badge med">Medium impact</span>
           <span class="badge owner">Training</span>
         </div>
-        <h3>6. Mandatory Retention E-Learning &amp; Certification</h3>
+        <h3>6. Mandatory Retention E-Learning <span class="amp">&amp;</span> Certification</h3>
         <p>
           A quarterly course and quiz that agents must pass to work on active retention campaigns.
           Refinement: make the curriculum the transition problem specifically, and make
@@ -1344,7 +1363,7 @@ The prize is small, specific and winnable. We currently miss the 47% box-2 reten
     <section class="card" id="pillar3">
       <div class="pillar-head">
         <span class="pillar-num">3</span>
-        <h2>Data, Dashboards &amp; Performance Management</h2>
+        <h2>Data, Dashboards <span class="amp">&amp;</span> Performance Management</h2>
         <span class="who">Owners: Data / Analytics, Retention Strategy, CS Leadership. Goal: replace lagging pause reports with leading indicators we can act on inside 72 hours.</span>
       </div>
 
