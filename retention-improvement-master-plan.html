@@ -1,0 +1,2090 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Marro Retention Improvement Master Plan</title>
+  <style>
+    :root {
+      --brown: #522A10;
+      --cream: #FFF6D8;
+      --gold: #FFE180;
+      --coral: #ED6961;
+      --blue: #10507C;
+      --green: #2E7D32;
+      --teal: #00897B;
+      --purple: #7B3FA0;
+      --pink: #C2185B;
+      --paper: #FFFFFF;
+      --line: #E8D9B0;
+      --text: #2E261F;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--cream);
+      color: var(--text);
+      font-family: Arial, Verdana, sans-serif;
+      line-height: 1.45;
+    }
+
+    header {
+      background: var(--brown);
+      color: var(--gold);
+      padding: 24px;
+    }
+
+    header h1 {
+      margin: 0 0 8px;
+      font-size: clamp(24px, 4vw, 40px);
+    }
+
+    header p {
+      max-width: 820px;
+      margin: 0;
+      color: #F8D98D;
+      font-size: 18px;
+    }
+
+    .header-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .header-meta span {
+      background: #3A1C0A;
+      border: 1px solid #7A5A3A;
+      border-radius: 999px;
+      color: var(--gold);
+      font-size: 14px;
+      font-weight: 700;
+      padding: 7px 14px;
+    }
+
+    main {
+      width: min(1180px, calc(100% - 32px));
+      margin: 24px auto 48px;
+    }
+
+    .card {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      box-shadow: 0 8px 24px rgba(82, 42, 16, 0.08);
+      margin-bottom: 22px;
+      padding: 22px;
+    }
+
+    h2 {
+      color: var(--brown);
+      font-size: 24px;
+      margin: 0 0 16px;
+    }
+
+    h3 {
+      color: var(--brown);
+      font-size: 18px;
+      margin: 18px 0 8px;
+    }
+
+    h4 {
+      color: var(--brown);
+      font-size: 15px;
+      margin: 14px 0 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+    }
+
+    p {
+      margin: 0 0 12px;
+    }
+
+    ul {
+      margin: 8px 0 0;
+      padding-left: 22px;
+    }
+
+    li {
+      margin: 6px 0;
+    }
+
+    .lede {
+      font-size: 17px;
+      max-width: 900px;
+    }
+
+    /* ── Contents nav ── */
+    .toc {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      padding: 0;
+      list-style: none;
+      margin: 0;
+    }
+
+    .toc a {
+      display: inline-block;
+      background: #F8E9B8;
+      border: 1px solid #E4C670;
+      border-radius: 999px;
+      color: var(--brown);
+      font-weight: 700;
+      padding: 9px 14px;
+      text-decoration: none;
+    }
+
+    .toc a:hover {
+      background: var(--gold);
+    }
+
+    /* ── Metric tiles ── */
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 14px;
+    }
+
+    .metric {
+      background: #FFF9E8;
+      border: 1px solid var(--line);
+      border-left: 6px solid var(--coral);
+      border-radius: 12px;
+      padding: 16px;
+    }
+
+    .metric .big {
+      color: var(--brown);
+      display: block;
+      font-size: 28px;
+      font-weight: 700;
+      line-height: 1.1;
+      margin-bottom: 6px;
+    }
+
+    .metric .label {
+      display: block;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .metric .src {
+      color: #7A5A3A;
+      display: block;
+      font-size: 12px;
+      margin-top: 6px;
+    }
+
+    .metric.blue { border-left-color: var(--blue); }
+    .metric.green { border-left-color: var(--green); }
+    .metric.purple { border-left-color: var(--purple); }
+    .metric.teal { border-left-color: var(--teal); }
+
+    /* ── Summary boxes ── */
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 14px;
+    }
+
+    .summary-box {
+      border-left: 6px solid var(--coral);
+      background: #FFF9E8;
+      border-radius: 12px;
+      padding: 16px;
+    }
+
+    .summary-box strong {
+      display: block;
+      color: var(--brown);
+      font-size: 18px;
+      margin-bottom: 5px;
+    }
+
+    /* ── Pillars ── */
+    .pillar-head {
+      align-items: center;
+      border-bottom: 2px solid var(--line);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 6px;
+      padding-bottom: 12px;
+    }
+
+    .pillar-num {
+      background: var(--brown);
+      border-radius: 12px;
+      color: var(--gold);
+      font-size: 22px;
+      font-weight: 700;
+      padding: 10px 16px;
+    }
+
+    .pillar-head h2 {
+      margin: 0;
+    }
+
+    .pillar-head .who {
+      color: #7A5A3A;
+      font-size: 14px;
+      width: 100%;
+    }
+
+    .initiative {
+      background: #FFFBEF;
+      border: 1px solid var(--line);
+      border-left: 6px solid var(--blue);
+      border-radius: 14px;
+      margin-top: 16px;
+      padding: 18px;
+    }
+
+    .initiative.new {
+      border-left-color: var(--green);
+    }
+
+    .initiative h3 {
+      margin-top: 0;
+    }
+
+    .badge-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 0 0 10px;
+    }
+
+    .badge {
+      border-radius: 999px;
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 5px 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+
+    .badge.ref { background: var(--blue); }
+    .badge.new { background: var(--green); }
+    .badge.high { background: var(--coral); }
+    .badge.med { background: #B65A17; }
+    .badge.test { background: var(--purple); }
+    .badge.quick { background: var(--teal); }
+    .badge.owner { background: #6D4C41; }
+
+    .kv {
+      display: grid;
+      grid-template-columns: 150px 1fr;
+      gap: 6px 14px;
+      margin-top: 12px;
+    }
+
+    .kv dt {
+      color: var(--brown);
+      font-weight: 700;
+    }
+
+    .kv dd {
+      margin: 0;
+    }
+
+    /* ── Tables ── */
+    .table-wrap {
+      overflow-x: auto;
+    }
+
+    table {
+      border-collapse: collapse;
+      min-width: 820px;
+      width: 100%;
+    }
+
+    table.wide {
+      min-width: 980px;
+    }
+
+    th,
+    td {
+      border: 1px solid var(--line);
+      padding: 11px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: var(--brown);
+      color: var(--gold);
+      font-size: 14px;
+      vertical-align: middle;
+    }
+
+    tbody tr:nth-child(even) {
+      background: #FFFBEF;
+    }
+
+    .stage {
+      color: var(--brown);
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .bar {
+      display: block;
+      min-width: 70px;
+      border-radius: 999px;
+      color: #fff;
+      font-weight: 700;
+      font-size: 13px;
+      padding: 8px 10px;
+      text-align: center;
+    }
+
+    .bar.setup { background: var(--blue); }
+    .bar.content { background: #B65A17; }
+    .bar.crm { background: var(--coral); }
+    .bar.ops { background: var(--teal); }
+    .bar.qa { background: var(--purple); }
+    .bar.data { background: var(--green); }
+    .bar.product { background: #6D4C41; }
+    .bar.training { background: var(--pink); }
+
+    .empty {
+      background: #FAF0CF;
+    }
+
+    /* ── Cards grid ── */
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 14px;
+    }
+
+    .step-card {
+      background: #FFF9E8;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 16px;
+    }
+
+    .step-card h3 {
+      margin-top: 0;
+    }
+
+    /* ── Notes ── */
+    .note {
+      background: #EAF4FA;
+      border-left: 6px solid var(--blue);
+      border-radius: 12px;
+      padding: 16px;
+      margin: 14px 0 0;
+    }
+
+    .note.warn {
+      background: #FDECEA;
+      border-left-color: var(--coral);
+    }
+
+    .note.win {
+      background: #EDF7EE;
+      border-left-color: var(--green);
+    }
+
+    .note strong.note-title {
+      color: var(--brown);
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    /* ── Copy block ── */
+    .copy-head {
+      align-items: center;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .btn-copy {
+      background: var(--brown);
+      border: none;
+      border-radius: 8px;
+      color: var(--gold);
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 700;
+      padding: 10px 18px;
+    }
+
+    .btn-copy:hover {
+      background: #3A1C0A;
+    }
+
+    pre.paste {
+      background: #2E261F;
+      border-radius: 12px;
+      color: #FFF6D8;
+      font-family: "Courier New", monospace;
+      font-size: 13px;
+      line-height: 1.5;
+      margin: 0;
+      overflow-x: auto;
+      padding: 16px;
+      white-space: pre-wrap;
+    }
+
+    details.paste-wrap summary {
+      color: var(--brown);
+      cursor: pointer;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    /* ── Timeline ── */
+    .timeline {
+      display: grid;
+      gap: 14px;
+    }
+
+    .timeline-item {
+      display: grid;
+      grid-template-columns: 150px 1fr;
+      gap: 14px;
+      align-items: start;
+      background: #FFF9E8;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 16px;
+    }
+
+    .timeline-item strong {
+      color: var(--brown);
+      font-size: 17px;
+    }
+
+    .tag {
+      display: inline-block;
+      background: var(--brown);
+      border-radius: 999px;
+      color: var(--gold);
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      padding: 6px 12px;
+    }
+
+    .tag.risk { background: var(--coral); }
+
+    @media (max-width: 700px) {
+      .timeline-item,
+      .kv {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    footer {
+      color: #7A5A3A;
+      font-size: 14px;
+      margin-top: 26px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Retention Improvement Master Plan</h1>
+    <p>
+      Marro cat. One problem to solve above all others: getting the cat to eat the food
+      in the first two weeks. Three pillars, nine core initiatives, nine new bets.
+    </p>
+    <div class="header-meta">
+      <span>Owner: Customer Retention</span>
+      <span>Core problem: first-bowl acceptance</span>
+      <span>Target: +6.63 retained boxes per week</span>
+      <span>Evidence: D2MS retention review + blog audit</span>
+    </div>
+  </header>
+
+  <main>
+    <section class="card">
+      <h2>Contents</h2>
+      <ul class="toc">
+        <li><a href="#summary">Executive Summary</a></li>
+        <li><a href="#evidence">The Evidence</a></li>
+        <li><a href="#thesis">Strategic Thesis</a></li>
+        <li><a href="#pillar1">Pillar 1: Education &amp; CX</a></li>
+        <li><a href="#pillar2">Pillar 2: Agent Ops &amp; QA</a></li>
+        <li><a href="#pillar3">Pillar 3: Data &amp; Performance</a></li>
+        <li><a href="#new-ideas">New Retention Ideas</a></li>
+        <li><a href="#tracks">Transition Tracks</a></li>
+        <li><a href="#keydays">Key-Day Intervention Map</a></li>
+        <li><a href="#kpis">KPI Framework</a></li>
+        <li><a href="#roadmap">Roadmap</a></li>
+        <li><a href="#guardrails">Guardrails</a></li>
+        <li><a href="#decisions">Open Decisions</a></li>
+      </ul>
+    </section>
+
+    <section class="card" id="summary">
+      <h2>Executive Summary</h2>
+      <p class="lede">
+        Marro's retention problem has a name: <strong>the first bowl</strong>. Of every pause we
+        recorded this year, 56.67% happened within seven days of sign-up, roughly 23% happened
+        before a box was even delivered, and the single largest spike lands on day 5 &mdash; where
+        the dominant reason given is that the cat did not eat the food. Our own blog content tells
+        us why that timing matters: a kibble-fed cat needs 7&ndash;14 days to switch to fresh, and
+        sometimes 3&ndash;4 weeks. Most churning customers are abandoning a fourteen-day process on
+        day five, because nobody told them what day five is supposed to look like.
+      </p>
+      <p class="lede">
+        The data also tells us what is <em>not</em> wrong. Breed has no meaningful effect. Price
+        barely registers in the first 28 days &mdash; it only becomes the dominant pause reason
+        afterwards, which is exactly where our week-7 discount step-down bites. So we have two
+        different churn engines and we have been treating them as one: <strong>days 0&ndash;28 is an
+        acceptance problem</strong> solved with education, product experience and proactive support;
+        <strong>day 28 onwards is a value problem</strong> solved with visible results and a smooth
+        price taper instead of a cliff.
+      </p>
+      <p class="lede">
+        This plan reframes Box 1 from a pass/fail test into a <strong>Tasting &amp; Texture
+        Exploration Session</strong>. We capture what the cat was eating before sign-up, set a
+        transition track relative to that baseline, redefine week-one success as "tasted and
+        interested" rather than "cleaned the bowl", and intervene on day 3 &mdash; ahead of the day-5
+        cliff &mdash; instead of reacting to a pause we could have prevented. Work is organised into
+        three pillars: Education, Messaging &amp; Customer Experience; Agent Operations, QA &amp;
+        Enablement; and Data, Dashboards &amp; Performance Management.
+      </p>
+      <p class="lede">
+        The prize is small, specific and winnable. We currently miss the 47% box-2 retention target
+        by an average of <strong>6.63 boxes per week</strong>. That is the number every initiative on
+        this page is judged against: not "improve retention", but persuade 6.63 more households a
+        week to keep going past the first bowl.
+      </p>
+
+      <details class="paste-wrap">
+        <summary>Plain-text version for pasting into GitHub / decks</summary>
+        <div class="copy-head">
+          <span>Markdown, ready to paste at the top of the project page.</span>
+          <button class="btn-copy" type="button" id="copyBtn">Copy summary</button>
+        </div>
+        <pre class="paste" id="pasteBlock">## Executive Summary
+
+Marro's retention problem has a name: **the first bowl**. Of every pause recorded this year, 56.67% happened within seven days of sign-up, roughly 23% happened before a box was even delivered, and the single largest spike lands on day 5 - where the dominant reason given is that the cat did not eat the food. Our own blog content tells us why that timing matters: a kibble-fed cat needs 7-14 days to switch to fresh, and sometimes 3-4 weeks. Most churning customers are abandoning a fourteen-day process on day five, because nobody told them what day five is supposed to look like.
+
+The data also tells us what is *not* wrong. Breed has no meaningful effect. Price barely registers in the first 28 days - it only becomes the dominant pause reason afterwards, which is exactly where our week-7 discount step-down bites. So we have two different churn engines and we have been treating them as one: **days 0-28 is an acceptance problem** solved with education, product experience and proactive support; **day 28 onwards is a value problem** solved with visible results and a smooth price taper instead of a cliff.
+
+This plan reframes Box 1 from a pass/fail test into a **Tasting &amp; Texture Exploration Session**. We capture what the cat was eating before sign-up, set a transition track relative to that baseline, redefine week-one success as "tasted and interested" rather than "cleaned the bowl", and intervene on day 3 - ahead of the day-5 cliff - instead of reacting to a pause we could have prevented. Work is organised into three pillars: Education, Messaging &amp; Customer Experience; Agent Operations, QA &amp; Enablement; and Data, Dashboards &amp; Performance Management.
+
+The prize is small, specific and winnable. We currently miss the 47% box-2 retention target by an average of **6.63 boxes per week**. That is the number every initiative here is judged against: not "improve retention", but persuade 6.63 more households a week to keep going past the first bowl.</pre>
+      </details>
+    </section>
+
+    <section class="card" id="evidence">
+      <h2>The Evidence We Are Building On</h2>
+      <p>
+        Everything below comes from the D2MS retention review (matured data, week 7 to week 24) and
+        the blog content audit. These are the numbers to quote in any debate about priority.
+      </p>
+      <div class="metric-grid">
+        <div class="metric">
+          <span class="big">6.63</span>
+          <span class="label">Boxes per week we miss by</span>
+          Average shortfall against the 47% box-2 retention target on matured data.
+          <span class="src">Retention review, "Quantify"</span>
+        </div>
+        <div class="metric">
+          <span class="big">56.67%</span>
+          <span class="label">Pauses inside 7 days</span>
+          More than half of all pauses this year happened in the first week of the subscription.
+          <span class="src">Retention review, time to pause</span>
+        </div>
+        <div class="metric">
+          <span class="big">Day 5</span>
+          <span class="label">The cliff</span>
+          Highest single-day pause volume, with reasons heavily weighted to "the pet has not eaten
+          the food". Customers try for a few days and give up.
+          <span class="src">Retention review, time to pause</span>
+        </div>
+        <div class="metric">
+          <span class="big">~23%</span>
+          <span class="label">Pause before any box arrives</span>
+          Buyer's remorse and subscription aversion, before the food has had a chance to perform.
+          <span class="src">Retention review, pause vs delivery date</span>
+        </div>
+        <div class="metric blue">
+          <span class="big">+6.26pp</span>
+          <span class="label">"Pet did not eat" gap</span>
+          How much more often non-retained customers cite food refusal inside 28 days versus
+          customers who stay.
+          <span class="src">Retention review, pause reason</span>
+        </div>
+        <div class="metric blue">
+          <span class="big">+3.37%</span>
+          <span class="label">Fussy-eater churn premium</span>
+          Cats flagged as fussy eating types are more likely to pause. Breed shows no meaningful
+          signal.
+          <span class="src">Retention review, not retained vs active</span>
+        </div>
+        <div class="metric purple">
+          <span class="big">Week 7</span>
+          <span class="label">The price cliff</span>
+          Retention drops from week 7, aligning with the discount change. Price is a minor factor
+          inside 28 days and a major one after.
+          <span class="src">Retention review, "Looking at the start"</span>
+        </div>
+        <div class="metric purple">
+          <span class="big">24% / 21%</span>
+          <span class="label">Subscription-driven pauses</span>
+          Share of pauses attributed to the subscription on 7-day versus 14-day trials, with pause
+          spikes on days 7 and 14 as box 2 lands.
+          <span class="src">Retention review, trial analysis</span>
+        </div>
+        <div class="metric teal">
+          <span class="big">42 &rarr; 9</span>
+          <span class="label">Grams-per-day segments</span>
+          Marro runs 42 feeding segments in Looker where Butternut runs 9, yet 92.1% of customers
+          fall into just four bands: 65g, 90g, 130g, 180g.
+          <span class="src">Retention review, grams per day</span>
+        </div>
+        <div class="metric teal">
+          <span class="big">7&ndash;14 days</span>
+          <span class="label">What a real transition takes</span>
+          Kibble to fresh takes 7&ndash;14 days and up to 3&ndash;4 weeks; wet to fresh 7&ndash;10
+          days; raw to fresh 3&ndash;7 days.
+          <span class="src">Blog audit, "Making the Switch"</span>
+        </div>
+        <div class="metric green">
+          <span class="big">150&deg;C</span>
+          <span class="label">Why refusal is habit, not preference</span>
+          Kibble is extruded above 150&deg;C then coated in fat and flavour sprays. Cats are
+          conditioned to crave it. Initial refusal of fresh is a habit problem we can coach.
+          <span class="src">Blog audit, myths vs reality</span>
+        </div>
+        <div class="metric green">
+          <span class="big">Larger</span>
+          <span class="label">Plan size and retention</span>
+          Bigger daily plans retain better, echoing Butternut trends &mdash; though the 180g sample
+          is still small (70 box 2s, 157 sales).
+          <span class="src">Retention review, grams per day</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="card" id="thesis">
+      <h2>Strategic Thesis: Two Churn Engines, One Plan</h2>
+      <p>
+        The single most useful thing in the data is that the reason for churn changes at roughly the
+        28-day mark. If we run one retention playbook across the whole lifecycle we will spend
+        margin where it is not needed and withhold support where it is.
+      </p>
+      <div class="table-wrap">
+        <table aria-label="Comparison of the two churn engines">
+          <thead>
+            <tr>
+              <th style="width: 18%">&nbsp;</th>
+              <th>Engine 1 &mdash; Days 0 to 28</th>
+              <th>Engine 2 &mdash; Day 28 onwards</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="stage">Dominant reason</td>
+              <td>Pet did not eat the food; subscription friction and buyer's remorse before box 1.</td>
+              <td>Price and perceived value, sharpening from week 7 as the discount steps down.</td>
+            </tr>
+            <tr>
+              <td class="stage">Peak risk</td>
+              <td>Pre-delivery, then day 5, then days 7 and 14 as box 2 arrives.</td>
+              <td>Week 7, then each renewal where spend visibly rises.</td>
+            </tr>
+            <tr>
+              <td class="stage">What works</td>
+              <td>
+                Expectation setting, transition coaching, aroma and texture tactics, proactive
+                contact, free recipe swaps, feeding clarity.
+              </td>
+              <td>
+                Proof of benefit (coat, digestion, energy, weight), plan right-sizing, loyalty
+                pricing, taper instead of cliff.
+              </td>
+            </tr>
+            <tr>
+              <td class="stage">What wastes money</td>
+              <td>
+                Discount-led saves. Price is not the objection yet, so a discount buys nothing and
+                trains the customer to expect one.
+              </td>
+              <td>
+                More education. They already know how to feed the cat; they are questioning the
+                bill.
+              </td>
+            </tr>
+            <tr>
+              <td class="stage">Owning pillar</td>
+              <td>Pillar 1 and Pillar 2.</td>
+              <td>Pillar 1 (initiative 10) and Pillar 3.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="note win">
+        <strong class="note-title">The reframe that everything hangs off</strong>
+        Week one is not a verdict, it is a trial period for the cat's palate. If we define success
+        on day 5 as "cleaned the bowl", most customers fail, and failure is the trigger for a pause.
+        If we define success on day 5 as "sniffed it, licked it, ate some of the chicken", most
+        customers pass &mdash; and passing is the trigger to keep going. Same cat, same bowl,
+        different finish line.
+      </div>
+    </section>
+
+    <section class="card" id="pillar1">
+      <div class="pillar-head">
+        <span class="pillar-num">1</span>
+        <h2>Education, Messaging &amp; Customer Experience</h2>
+        <span class="who">Owners: Retention Strategy, CRM, Brand &amp; Content, Product. Goal: make the first fourteen days feel designed rather than survived.</span>
+      </div>
+
+      <div class="initiative">
+        <div class="badge-row">
+          <span class="badge ref">Refined</span>
+          <span class="badge high">High impact</span>
+          <span class="badge owner">Content + Retention</span>
+        </div>
+        <h3>1. Transition Training &amp; Content Positioning</h3>
+        <p>
+          Build a baseline-relative onboarding journey around food transition, using the blog
+          material we already have. The critical upgrade to your original idea: the transition
+          advice is worthless as a generic guide and powerful as a personalised one, because the
+          length and difficulty of the switch depend almost entirely on what the cat ate before.
+        </p>
+        <h4>Strategy: anchor on the previous food</h4>
+        <ul>
+          <li>
+            Capture "what is your cat eating today?" as a required field at sign-up (dry / wet /
+            raw / mixed / brand where known), plus an eating-type question (easy, normal, fussy).
+          </li>
+          <li>
+            Assign one of four transition tracks from that answer &mdash; see
+            <a href="#tracks">Transition Tracks</a>. A kibble cat gets a 14-day track and is told
+            up front it may take 3&ndash;4 weeks. A raw-fed cat gets a 5-day track and is told to
+            expect quick acceptance.
+          </li>
+          <li>
+            Every asset the customer receives states the day number and the expected state on that
+            day, so nobody has to guess whether they are on track.
+          </li>
+        </ul>
+        <h4>Framing: Box 1 is a Tasting &amp; Texture Exploration Session</h4>
+        <ul>
+          <li>
+            Rename Box 1 in all customer-facing copy. It is not "your first delivery", it is the
+            tasting session &mdash; the week we find out which recipes and textures this particular
+            cat loves.
+          </li>
+          <li>
+            Explicit instruction to try <em>all</em> flavours and textures rather than committing to
+            one, and an explicit promise that we will rebuild Box 2 around the winners.
+          </li>
+          <li>
+            Lead with the myth-buster from the blog: kibble is coated in fat and flavour sprays
+            after cooking, so a cat turning its nose up at fresh food is showing a habit, not a
+            preference. This single line converts a customer's "my cat hates it" into "my cat is
+            addicted to the old stuff", which is a solvable problem rather than a verdict.
+          </li>
+          <li>
+            Teach the three highest-leverage mechanics loudly and repeatedly: warm the food to lift
+            aroma (warm water for 10 minutes or 10 seconds in the microwave), serve a spoonful on a
+            clean plate with the old food and treats removed, and apply the 20-minute rule &mdash;
+            if it is refused, take it away and offer the usual food, then try again tomorrow.
+          </li>
+        </ul>
+        <dl class="kv">
+          <dt>Deliverables</dt>
+          <dd>Four track guides, a printed Day 1&ndash;14 card for Box 1, four short videos (warming, plate setup, 20-minute rule, introducing recipe two), refreshed blog hub page.</dd>
+          <dt>Primary KPI</dt>
+          <dd>Day 0&ndash;7 pause rate; share of day-5 pauses citing food refusal.</dd>
+          <dt>Watch out</dt>
+          <dd>Do not promise instant success anywhere in the funnel. Sales copy that says "cats love it" is what creates the day-5 disappointment.</dd>
+        </dl>
+      </div>
+
+      <div class="initiative">
+        <div class="badge-row">
+          <span class="badge ref">Refined</span>
+          <span class="badge high">High impact</span>
+          <span class="badge quick">Fast to ship</span>
+          <span class="badge owner">CRM</span>
+        </div>
+        <h3>2. Onboarding CRM &amp; Key-Day Interventions</h3>
+        <p>
+          Rebuild the email and SMS journey around the actual risk windows in the data rather than a
+          generic weekly cadence. Three windows matter: pre-delivery (23% of pauses), day 3 to day 5
+          (the cliff), and days 7 and 14 (box 2 arriving). Full schedule in the
+          <a href="#keydays">Key-Day Intervention Map</a>.
+        </p>
+        <ul>
+          <li>
+            <strong>Pre-delivery block.</strong> The customer has paid and now has days of silence
+            to reconsider. Fill it: delivery tracking, what is in the tasting box, how to prep, and
+            an explicit "here is what week one looks like" expectation-setter. Confirm the
+            subscription terms plainly here rather than letting box 2 be a surprise.
+          </li>
+          <li>
+            <strong>Day 3 pre-emption, not day 5 reaction.</strong> Message before the cliff, not
+            after. Ask one question with a one-tap answer: ate it all / ate some / sniffed and
+            walked away / refused. Each answer routes to a different next message and, for the worst
+            two, a rescue action (see idea N5).
+          </li>
+          <li>
+            <strong>Texture-refusal branch.</strong> A dedicated flow for "refused" that leads with
+            warming, plate hygiene, removing kibble between meals, and switching to the chicken
+            recipe first because it is easiest on the stomach. Offer a free recipe swap before the
+            customer thinks to ask for a pause.
+          </li>
+          <li>
+            <strong>Box 2 pre-notification.</strong> Two days before dispatch, tell them it is
+            coming and give them a self-serve way to shift the date. Pausing is currently the only
+            lever they have, so they use it.
+          </li>
+          <li>
+            <strong>Fussy-eater variant.</strong> Cats flagged fussy get a slower, more
+            reassurance-heavy version of every message in the sequence.
+          </li>
+        </ul>
+        <dl class="kv">
+          <dt>Primary KPI</dt>
+          <dd>Day-3 check-in response rate, day 0&ndash;7 pause rate, pre-delivery pause rate, day 7 and 14 pause spikes.</dd>
+          <dt>Test design</dt>
+          <dd>Holdout of 20% on the existing journey for at least four full cohorts before rollout.</dd>
+        </dl>
+      </div>
+
+      <div class="initiative">
+        <div class="badge-row">
+          <span class="badge ref">Refined</span>
+          <span class="badge test">Test first</span>
+          <span class="badge med">Medium impact</span>
+          <span class="badge owner">Commercial + Retention</span>
+        </div>
+        <h3>3. Six-Week Commitment Trial (2-Box Programme)</h3>
+        <p>
+          Test a two-box commitment with a deeper upfront discount in exchange for a longer
+          commitment. The logic is sound &mdash; the data says customers who take longer to stick
+          around stay longer &mdash; but the framing needs care and the measurement needs to be
+          honest.
+        </p>
+        <h4>Refinements</h4>
+        <ul>
+          <li>
+            <strong>Sell it as a programme, not a lock-in.</strong> "The 6-Week Transition
+            Programme: the time it actually takes a cat to switch, at our best price." That is a
+            benefit. "Commit to six weeks" is a hurdle, and roughly a quarter of our early pausers
+            are already subscription-averse, so a hurdle will cost us conversions at checkout.
+          </li>
+          <li>
+            <strong>Do not count guaranteed weeks as retention.</strong> Holding someone for six
+            weeks by contract is not retention, it is deferral. Judge this test only on week
+            7&ndash;12 and day-84 retention against a control. If the curve simply falls off a
+            cliff at week 7, the trial has bought time, not loyalty.
+          </li>
+          <li>
+            <strong>Pair with flexibility inside the commitment.</strong> Free recipe swaps,
+            portion changes and one date shift. The commitment is to the programme, not to a
+            specific set of trays.
+          </li>
+          <li>
+            <strong>Mind the discount cliff.</strong> A deeper upfront discount makes the week-7
+            step-down steeper, and week 7 is already where retention breaks. Pair with initiative
+            10 so the exit is a taper.
+          </li>
+          <li>
+            <strong>Segment the test.</strong> Kibble-fed and fussy-flagged cats have the most to
+            gain from a longer runway; those cells should show the biggest lift. Run the trial
+            against 7-day and 14-day trial controls, since 14-day plans currently retain worse.
+          </li>
+        </ul>
+        <dl class="kv">
+          <dt>Primary KPI</dt>
+          <dd>Day-84 retention and contribution margin per acquired customer, not week-6 survival.</dd>
+          <dt>Guardrail</dt>
+          <dd>Checkout conversion and pre-delivery pause rate must not deteriorate.</dd>
+        </dl>
+      </div>
+
+      <div class="initiative new">
+        <div class="badge-row">
+          <span class="badge new">New &mdash; gap found</span>
+          <span class="badge high">High impact</span>
+          <span class="badge owner">Commercial</span>
+        </div>
+        <h3>10. Week-7 Value Bridge &amp; Discount Taper</h3>
+        <p>
+          None of the original nine initiatives owns the week-7 drop, and it is the clearest
+          structural break in the whole dataset. Retention falls when the discount changes, which
+          tells us we are currently renting customers rather than converting them to full price.
+        </p>
+        <ul>
+          <li>Replace the single step-down with a two- or three-step taper so no invoice jumps sharply in one week.</li>
+          <li>
+            Land a "six weeks in" proof moment before the price change: the benefits the blog
+            promises are visible by then (coat, digestion, energy, weight), so ask for a photo, show
+            a before-and-after, and reflect their own logged transition progress back to them.
+          </li>
+          <li>
+            Offer plan right-sizing rather than a discount: a smaller portion band or a longer
+            delivery interval keeps the customer at full unit price while cutting their weekly
+            spend. Larger plans retain better, so protect plan size where the feeding maths
+            supports it.
+          </li>
+          <li>Introduce a loyalty price that is earned by staying, not a retention discount that is earned by threatening to leave.</li>
+        </ul>
+        <dl class="kv">
+          <dt>Primary KPI</dt>
+          <dd>Week 6 to week 9 retention delta; share of post-28-day pauses citing price.</dd>
+        </dl>
+      </div>
+    </section>
+
+    <section class="card" id="pillar2">
+      <div class="pillar-head">
+        <span class="pillar-num">2</span>
+        <h2>Agent Operations, QA &amp; Enablement</h2>
+        <span class="who">Owners: Customer Service Lead, QA, Training. Goal: every agent conversation either prevents a food-refusal pause or recovers one.</span>
+      </div>
+
+      <div class="initiative">
+        <div class="badge-row">
+          <span class="badge ref">Refined</span>
+          <span class="badge high">High impact</span>
+          <span class="badge quick">Fast to ship</span>
+          <span class="badge owner">CS Operations</span>
+        </div>
+        <h3>4. Targeted Offboarding &amp; Early-Pause Recovery Calls</h3>
+        <p>
+          Proactive outbound to customers who pause or cancel in their first days, to gather
+          qualitative feedback and recover the account. Two refinements make this materially more
+          valuable.
+        </p>
+        <ul>
+          <li>
+            <strong>Call within 24 hours, and prioritise by reason.</strong> A "pet did not eat"
+            pause on day 4 is highly recoverable because the transition was never finished. A price
+            pause on day 60 needs a different conversation. Queue food-refusal pauses first.
+          </li>
+          <li>
+            <strong>Recover with product, not margin.</strong> Price is not the objection inside 28
+            days. The save offer should be a free recipe or texture swap, a rescue kit, a portion
+            reset, or a delivery date shift &mdash; not a discount. Reserve discount authority for
+            post-28-day price pauses.
+          </li>
+          <li>
+            <strong>Structured reason capture.</strong> A fixed taxonomy on every call: which
+            recipe, which texture, how many days tried, was it warmed, was old food removed, how
+            much was offered. This is how we learn which recipes and textures actually fail, which
+            the pause dropdown will never tell us.
+          </li>
+          <li>
+            <strong>Feed it back weekly.</strong> The top three refusal patterns each week go
+            straight to Content, CRM and Product. If one recipe or texture dominates refusals, that
+            is a product decision, not a call-script decision.
+          </li>
+        </ul>
+        <dl class="kv">
+          <dt>Primary KPI</dt>
+          <dd>Save rate on early pauses, reactivation rate within 14 days, cost per save.</dd>
+        </dl>
+      </div>
+
+      <div class="initiative">
+        <div class="badge-row">
+          <span class="badge ref">Refined</span>
+          <span class="badge med">Medium impact</span>
+          <span class="badge owner">QA</span>
+        </div>
+        <h3>5. Retention QA Scorecard</h3>
+        <p>
+          A call-scoring framework rating agents 1&ndash;5 on how effectively they guide customers
+          through the transition. The refinement: score the specific behaviours the data says
+          correlate with retention, not general call quality, and weight them.
+        </p>
+        <div class="table-wrap">
+          <table aria-label="Retention QA scorecard dimensions">
+            <thead>
+              <tr>
+                <th>Dimension (1&ndash;5)</th>
+                <th>What a 5 looks like</th>
+                <th>Weight</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="stage">Baseline captured</td>
+                <td>Previous food, brand and eating type recorded accurately in the record.</td>
+                <td>15%</td>
+              </tr>
+              <tr>
+                <td class="stage">Expectation set</td>
+                <td>States the transition length for that baseline and that partial eating in week one is normal and expected.</td>
+                <td>20%</td>
+              </tr>
+              <tr>
+                <td class="stage">Mechanics taught</td>
+                <td>Warming, clean plate, remove old food and treats, the 20-minute rule, start with chicken.</td>
+                <td>20%</td>
+              </tr>
+              <tr>
+                <td class="stage">Feeding clarity</td>
+                <td>Confirms grams per day and how to split meals; customer can repeat the number back.</td>
+                <td>10%</td>
+              </tr>
+              <tr>
+                <td class="stage">Subscription clarity</td>
+                <td>Box 2 date and price stated plainly, plus how to shift it. No surprises engineered.</td>
+                <td>15%</td>
+              </tr>
+              <tr>
+                <td class="stage">No overpromising</td>
+                <td>Never claims the cat will love it immediately. Zero score if they do.</td>
+                <td>10%</td>
+              </tr>
+              <tr>
+                <td class="stage">Next step booked</td>
+                <td>Customer knows the day-3 check-in is coming and how to reach us before pausing.</td>
+                <td>10%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <ul>
+          <li>Calibrate monthly: QA, CS lead and Retention score the same five calls and reconcile.</li>
+          <li>
+            Validate the scorecard against outcomes every quarter. If high scorers do not retain
+            better, the scorecard is wrong &mdash; change it rather than defending it.
+          </li>
+          <li>Build a clip library of real calls that scored 5 on expectation setting. Nothing teaches faster.</li>
+        </ul>
+      </div>
+
+      <div class="initiative">
+        <div class="badge-row">
+          <span class="badge ref">Refined</span>
+          <span class="badge med">Medium impact</span>
+          <span class="badge owner">Training</span>
+        </div>
+        <h3>6. Mandatory Retention E-Learning &amp; Certification</h3>
+        <p>
+          A quarterly course and quiz that agents must pass to work on active retention campaigns.
+          Refinement: make the curriculum the transition problem specifically, and make
+          certification mean something operationally.
+        </p>
+        <h4>Curriculum, built from our own content</h4>
+        <ul>
+          <li>Module 1 &mdash; Fresh versus kibble, wet and raw: the real differences, in plain language.</li>
+          <li>Module 2 &mdash; Myth-busting: kibble and teeth, "my cat loves kibble", premium kibble, the 4% meat rule, raw safety.</li>
+          <li>Module 3 &mdash; The four transition tracks and what each day should look like.</li>
+          <li>Module 4 &mdash; The fussy-eater playbook: aroma, warming, texture ladder, plate hygiene, the 20-minute rule, patience scripts.</li>
+          <li>Module 5 &mdash; Feeding plans and grams per day: how to explain the number and split meals.</li>
+          <li>Module 6 &mdash; Saving without discounting inside 28 days, and when a discount is the right tool.</li>
+          <li>Module 7 &mdash; Live call teardowns: two saved, two lost.</li>
+        </ul>
+        <ul>
+          <li>Pass mark 85%, with a practical element: one role-played refusal call assessed against the scorecard.</li>
+          <li>Certification is recorded against the agent ID and gates campaign allocation, so it is visible in the dashboards from Pillar 3.</li>
+          <li>New starters certify before their first live retention call; existing agents recertify quarterly with an updated module reflecting that quarter's top refusal patterns.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="card" id="pillar3">
+      <div class="pillar-head">
+        <span class="pillar-num">3</span>
+        <h2>Data, Dashboards &amp; Performance Management</h2>
+        <span class="who">Owners: Data / Analytics, Retention Strategy, CS Leadership. Goal: replace lagging pause reports with leading indicators we can act on inside 72 hours.</span>
+      </div>
+
+      <div class="initiative">
+        <div class="badge-row">
+          <span class="badge ref">Refined</span>
+          <span class="badge high">High impact</span>
+          <span class="badge owner">Data</span>
+        </div>
+        <h3>7. Multi-View Retention Dashboards</h3>
+        <p>
+          Two views, one data model. The refinement worth insisting on: pause data is a lagging
+          indicator. By the time a pause is recorded we have already lost. Both views must carry
+          leading indicators drawn from the transition tracker and the day-3 check-in.
+        </p>
+        <div class="steps">
+          <div class="step-card">
+            <h3>Executive view</h3>
+            <ul>
+              <li>Box-2 retention versus the 47% target, and the gap expressed in boxes per week against 6.63.</li>
+              <li>Cohort survival curves by sign-up week, out to week 24.</li>
+              <li>Pause rate split pre-delivery, days 0&ndash;7, days 8&ndash;28, day 29+.</li>
+              <li>Reason mix over time, with food refusal and subscription tracked separately.</li>
+              <li>Week 6 to week 9 retention delta, to monitor the price cliff.</li>
+              <li>Retention by transition track, eating type and grams band.</li>
+            </ul>
+          </div>
+          <div class="step-card">
+            <h3>Agent view</h3>
+            <ul>
+              <li>My cohorts: sales, 28-day and 84-day retention, versus team median.</li>
+              <li>My transition-compliance rate: baseline captured, grams confirmed, box-2 date stated.</li>
+              <li>My QA scorecard trend and certification status.</li>
+              <li>My save rate on early pauses, split by reason.</li>
+              <li>My at-risk list today, with the recommended next action on each.</li>
+            </ul>
+          </div>
+          <div class="step-card">
+            <h3>Leading indicators (both views)</h3>
+            <ul>
+              <li>First-meal-logged rate within 48 hours of delivery.</li>
+              <li>Day-3 check-in response rate and answer mix.</li>
+              <li>Warm-serve adoption, self-reported.</li>
+              <li>Tracker completion through day 7 and day 14.</li>
+              <li>Recipe-swap requests as a share of active first-boxers.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="note">
+          <strong class="note-title">Data prerequisites</strong>
+          Previous-food field, eating-type field, transition track, paused-before-first-box flag,
+          grams band collapsed from 42 segments to the agreed set, and a clean join between pause
+          reason, recipe and texture. Without these the dashboards cannot answer the questions we
+          actually have.
+        </div>
+      </div>
+
+      <div class="initiative">
+        <div class="badge-row">
+          <span class="badge ref">Refined</span>
+          <span class="badge quick">Low cost</span>
+          <span class="badge owner">CS Leadership</span>
+        </div>
+        <h3>8. Internal Retention Newsletter</h3>
+        <p>
+          A short weekly internal note that turns the dashboards into behaviour. Keep it to one
+          screen and a fixed format so it gets read.
+        </p>
+        <ul>
+          <li><strong>Number of the week.</strong> How far we are from the 6.63 target, and the direction of travel.</li>
+          <li><strong>Save of the week.</strong> A 60-second clip of a real food-refusal save, with the specific line that turned it.</li>
+          <li><strong>Myth-buster of the week.</strong> One piece of transition science an agent can use verbatim today.</li>
+          <li><strong>Pattern watch.</strong> The top refusal reason this week and the approved response.</li>
+          <li><strong>Recognition.</strong> Top performers on retention-adjusted metrics, not raw sales volume.</li>
+        </ul>
+      </div>
+
+      <div class="initiative">
+        <div class="badge-row">
+          <span class="badge ref">Refined</span>
+          <span class="badge med">Handle with care</span>
+          <span class="badge owner">CS Leadership + HR</span>
+        </div>
+        <h3>9. Performance Accountability Standards</h3>
+        <p>
+          Clear thresholds, for example rotating an agent off the campaign for retraining if their
+          retention rate sits below a benchmark for four consecutive weeks. The principle is right;
+          three refinements stop it backfiring.
+        </p>
+        <ul>
+          <li>
+            <strong>Use fair maths.</strong> Rolling four-week retention on a minimum cohort size
+            (25 or more sales), normalised for lead source, trial length and plan mix. Judging an
+            agent on 8 sales is noise, and rotating them off for noise destroys trust in the whole
+            programme.
+          </li>
+          <li>
+            <strong>Anti-gaming clause.</strong> If retention alone drives consequences, agents will
+            quietly avoid fussy cats and kibble-fed households &mdash; exactly the customers we most
+            need to win. Track cohort mix per agent and adjust for difficulty, or pair the retention
+            metric with a transition-compliance metric that rewards doing the right thing regardless
+            of outcome.
+          </li>
+          <li>
+            <strong>Coach before you rotate.</strong> Week 2 triggers a QA deep-dive and a coaching
+            plan, week 3 triggers side-by-side calls, week 4 triggers rotation. Nobody should be
+            surprised by a rotation.
+          </li>
+          <li>
+            <strong>Make the route back explicit.</strong> Recertify plus five monitored calls at or
+            above scorecard standard, and they are back on the campaign.
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="card" id="new-ideas">
+      <h2>New Retention Ideas: Solving the First Bowl</h2>
+      <p>
+        Nine new bets, all aimed squarely at food acceptance in the first fourteen days. Each is
+        framed so it can be tested against a control, because the whole point is to prove which of
+        these moves the 6.63.
+      </p>
+
+      <div class="initiative new">
+        <div class="badge-row">
+          <span class="badge new">N1</span>
+          <span class="badge high">High impact</span>
+          <span class="badge owner">Product + Packaging</span>
+        </div>
+        <h3>The Taste Flight: Box 1 as a Sampler, Box 2 Rebuilt Around the Winners</h3>
+        <p>
+          Ship Box 1 as a deliberate flavour-and-texture flight in smaller portions rather than a
+          normal week's supply of one or two recipes, and put a scorecard on the fridge with it.
+          The parent rates each recipe as loved, ate some or refused, and Box 2 is automatically
+          rebuilt around whatever won.
+        </p>
+        <ul>
+          <li>
+            Turns a pass/fail week into a game with a result. "Which one wins?" is a question a
+            customer wants to answer; "did the cat eat it?" is a question they can fail.
+          </li>
+          <li>
+            Every rating is data. We finally learn which recipes and textures actually fail, per
+            eating type and previous food.
+          </li>
+          <li>
+            It makes Box 2 feel earned and personalised, which directly attacks the day 7 and 14
+            "surprise box" pause spike.
+          </li>
+          <li>
+            Pair with the promise: if nothing won, we rebuild Box 2 free with different textures
+            before anyone pays again.
+          </li>
+        </ul>
+        <dl class="kv">
+          <dt>Test</dt>
+          <dd>Taste-flight Box 1 versus standard Box 1, matched on plan size and previous food.</dd>
+          <dt>KPI</dt>
+          <dd>Day 0&ndash;14 pause rate, scorecard completion rate, box-2 retention.</dd>
+        </dl>
+      </div>
+
+      <div class="initiative new">
+        <div class="badge-row">
+          <span class="badge new">N2</span>
+          <span class="badge high">High impact</span>
+          <span class="badge quick">Fast to ship</span>
+          <span class="badge owner">Packaging + Ops</span>
+        </div>
+        <h3>The Transition Starter Kit, Printed on the Box Itself</h3>
+        <p>
+          The best transition advice we have is currently sitting in an email nobody opens on day 4.
+          Move it onto the physical product, where a worried pet parent standing at the fridge will
+          actually see it.
+        </p>
+        <ul>
+          <li>Day-numbered sleeves or stickers on each tray: "Day 1 &mdash; a spoonful, warmed", "Day 3 &mdash; a quarter of the tray".</li>
+          <li>A bold "warm me first" cue on every pack, with the 10-second microwave or 10-minute warm-water instruction right there.</li>
+          <li>A portion-marked scoop or spoon, and the customer's own grams-per-day number printed on the box lid.</li>
+          <li>A shallow, clean tasting plate in Box 1, because plate hygiene and shape genuinely affect acceptance.</li>
+          <li>Three sachets of freeze-dried aroma topper to sprinkle on days 1&ndash;3, tapering to nothing by day 5 as the palate resets.</li>
+          <li>A single card with the 20-minute rule and one line: "refusing at first is habit, not preference."</li>
+        </ul>
+        <dl class="kv">
+          <dt>Why it works</dt>
+          <dd>Warming is the cheapest, highest-leverage acceptance lever we have, and it is currently optional and easy to miss.</dd>
+          <dt>KPI</dt>
+          <dd>Warm-serve adoption, day-5 pause rate, refusal rate by day.</dd>
+        </dl>
+      </div>
+
+      <div class="initiative new">
+        <div class="badge-row">
+          <span class="badge new">N3</span>
+          <span class="badge high">High impact</span>
+          <span class="badge owner">Commercial + CS</span>
+        </div>
+        <h3>The Fussy Cat Promise: "Won't Eat It? You Won't Pay For It"</h3>
+        <p>
+          Right now, pausing is the only self-service tool a frustrated customer has, so they use it
+          on day 5. Give them a better one and make it a headline promise rather than a
+          buried policy.
+        </p>
+        <ul>
+          <li>Unlimited free recipe and texture swaps in the first 28 days.</li>
+          <li>If the cat rejects everything in Box 1, Box 2 is rebuilt free with different textures &mdash; one more genuine attempt at no cost.</li>
+          <li>If it still fails after a supported transition, refund the first box and part on good terms. We lose one box and keep the brand advocate.</li>
+          <li>Every touchpoint says it: "you will never pay for food your cat won't eat in the first month."</li>
+        </ul>
+        <div class="note warn">
+          <strong class="note-title">Model the cost before launch</strong>
+          Cap swaps per household, require the day-3 check-in to be completed before a refund is
+          granted, and monitor abuse. Judge the promise on contribution margin over 84 days, not on
+          refund volume in isolation &mdash; it should also lift checkout conversion, which is where
+          much of the payback sits.
+        </div>
+      </div>
+
+      <div class="initiative new">
+        <div class="badge-row">
+          <span class="badge new">N4</span>
+          <span class="badge high">High impact</span>
+          <span class="badge owner">Product + Data</span>
+        </div>
+        <h3>The 14-Day Transition Tracker</h3>
+        <p>
+          A lightweight guided tool &mdash; in-app, or a no-login web page linked from SMS &mdash;
+          that walks the household through their assigned track one day at a time and adapts to what
+          they report.
+        </p>
+        <ul>
+          <li>
+            One tap per meal: ate it all, ate some, sniffed it, refused. Tomorrow's plan adjusts
+            automatically ("hold at a quarter today and warm it ten seconds longer").
+          </li>
+          <li>
+            A progress bar that treats partial acceptance as progress. This is the psychological
+            core of the tool: it makes "ate some" feel like a win rather than a failure.
+          </li>
+          <li>Day-appropriate reassurance, including the honest message that some kibble-fed cats take three to four weeks.</li>
+          <li>
+            A live risk score pushed into the CRM and the agent dashboard, so two refusals in a row
+            triggers help automatically. This is the leading indicator Pillar 3 is missing.
+          </li>
+          <li>A shareable "we did it" moment at day 14 that doubles as social proof and a review prompt.</li>
+        </ul>
+        <dl class="kv">
+          <dt>KPI</dt>
+          <dd>Tracker adoption, day-7 and day-14 completion, pause rate for trackers versus non-trackers.</dd>
+        </dl>
+      </div>
+
+      <div class="initiative new">
+        <div class="badge-row">
+          <span class="badge new">N5</span>
+          <span class="badge high">High impact</span>
+          <span class="badge quick">Testable now</span>
+          <span class="badge owner">CS + Ops</span>
+        </div>
+        <h3>The Day-3 Rescue Drop</h3>
+        <p>
+          Surprise-and-delight aimed precisely at the day-5 cliff. Trigger: a negative day-3
+          check-in answer, two refusals logged in the tracker, or no meal logged at all within 48
+          hours of delivery.
+        </p>
+        <ul>
+          <li>
+            Next-day dispatch of a small free rescue pack: a different texture, an aroma topper, a
+            printed rescue plan, and something for the human (a decent cat treat, a fridge magnet
+            with the plan on it).
+          </li>
+          <li>A personal note referencing the specific problem they reported. Not a template.</li>
+          <li>An optional booked call slot rather than an unsolicited ring, which converts far better.</li>
+          <li>
+            The point is timing above all. Arriving on day 4 with unexpected help, before the
+            customer has decided to quit, is worth more than any save call on day 6.
+          </li>
+        </ul>
+        <dl class="kv">
+          <dt>Test</dt>
+          <dd>Rescue drop versus email-only support for matched at-risk customers.</dd>
+          <dt>KPI</dt>
+          <dd>Day 4&ndash;10 pause rate among flagged customers, cost per retained customer.</dd>
+        </dl>
+      </div>
+
+      <div class="initiative new">
+        <div class="badge-row">
+          <span class="badge new">N6</span>
+          <span class="badge med">Medium impact</span>
+          <span class="badge quick">Low cost</span>
+          <span class="badge owner">Data + Product</span>
+        </div>
+        <h3>The One-Number Feeding Plan</h3>
+        <p>
+          We run 42 grams-per-day segments where Butternut runs 9, and 92.1% of our customers sit in
+          just four bands. That complexity is invisible to us and confusing to them, and confusion
+          about how much to serve looks exactly like a cat refusing food.
+        </p>
+        <ul>
+          <li>Collapse to a defensible set of bands anchored on 65g, 90g, 130g and 180g, with a clear rule for the tails.</li>
+          <li>Print one number and one sentence on the box: "Ziggy: 90g a day. That is one tray, split into two meals."</li>
+          <li>Agents confirm the number on the call and the customer repeats it back. It is a scorecard line for a reason.</li>
+          <li>Give fulfilment a single feeding-guidance standard so the pack, the email and the agent all say the same thing.</li>
+          <li>
+            Revisit portion sizing at week 6 alongside the value bridge. Larger plans retain better,
+            so right-size deliberately rather than by accident &mdash; while remembering the 180g
+            sample is still small.
+          </li>
+        </ul>
+      </div>
+
+      <div class="initiative new">
+        <div class="badge-row">
+          <span class="badge new">N7</span>
+          <span class="badge high">High impact</span>
+          <span class="badge quick">Fast to ship</span>
+          <span class="badge owner">CRM + Product</span>
+        </div>
+        <h3>The No-Surprises Box 2 Control Panel</h3>
+        <p>
+          Pause spikes land on days 7 and 14 &mdash; precisely when box 2 appears &mdash; and
+          subscription concerns are the reason on around a quarter of 7-day-trial pauses. The
+          gap between boxes is being experienced as an ambush.
+        </p>
+        <ul>
+          <li>Notify two days before dispatch, with the price and the contents stated plainly.</li>
+          <li>Offer one-tap "give us another week" date shifting, positioned as the normal thing to do while a cat is still settling.</li>
+          <li>Let them change recipes and textures in the same click, so the fix for "this one didn't work" is a swap, not a pause.</li>
+          <li>Make "skip one box" more prominent than "pause subscription" in the account area. A skip is recoverable; a pause usually is not.</li>
+          <li>Test whether the trial gap itself should flex with the transition track, giving kibble-fed cats a longer runway before box 2.</li>
+        </ul>
+      </div>
+
+      <div class="initiative new">
+        <div class="badge-row">
+          <span class="badge new">N8</span>
+          <span class="badge med">Medium impact</span>
+          <span class="badge owner">Brand + CS</span>
+        </div>
+        <h3>The Transition Clinic and the Week Two Club</h3>
+        <p>
+          Authority and peer proof do work that a retention agent cannot do, because the customer
+          does not believe the company has an impartial view.
+        </p>
+        <ul>
+          <li>
+            <strong>Transition Clinic.</strong> A bookable 10-minute call or video slot with a
+            qualified feline nutrition adviser or vet nurse, offered free to fussy-flagged and
+            kibble-fed households in week one. "A nurse will help you" beats "an agent will call
+            you".
+          </li>
+          <li>
+            <strong>Week Two Club.</strong> A short drip of real customer stories chosen for
+            difficulty, not for triumph: cats who refused for nine days and now clear the bowl.
+            Normalising a slow start is the cheapest intervention available to us.
+          </li>
+          <li>
+            <strong>Live group session.</strong> A weekly 20-minute open clinic for new customers.
+            Hearing another owner describe the same problem does more than any email.
+          </li>
+        </ul>
+      </div>
+
+      <div class="initiative new">
+        <div class="badge-row">
+          <span class="badge new">N9</span>
+          <span class="badge med">Medium impact</span>
+          <span class="badge test">Research</span>
+          <span class="badge owner">Product + R&amp;D</span>
+        </div>
+        <h3>The Texture Ladder and the Bridge Recipe</h3>
+        <p>
+          If food refusal is our biggest churn driver, some of the answer has to be the food itself
+          rather than the messaging around it.
+        </p>
+        <ul>
+          <li>
+            Map our recipes onto a texture ladder from most kibble-adjacent to most different
+            (firmer and drier through to loose and gravy-rich), then assign a starting rung by
+            previous food rather than letting the customer guess.
+          </li>
+          <li>
+            Investigate a deliberate bridge format for kibble converts: a firmer, drier, more
+            aromatic chicken recipe designed as rung one, whose only job is to be accepted on day
+            one.
+          </li>
+          <li>
+            Review whether an aroma topper should be a standing product line, given that fresh aroma
+            is our stated advantage for fussy eaters.
+          </li>
+          <li>
+            Feed the refusal taxonomy from initiative 4 and the taste-flight scorecards from N1 into
+            the recipe roadmap. If a specific recipe or texture dominates refusals, fix or retire
+            it.
+          </li>
+        </ul>
+      </div>
+
+      <h3>Prioritisation at a glance</h3>
+      <div class="table-wrap">
+        <table class="wide" aria-label="Prioritisation of new retention ideas">
+          <thead>
+            <tr>
+              <th>Idea</th>
+              <th>Attacks</th>
+              <th>Expected impact</th>
+              <th>Effort</th>
+              <th>Sequence</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="stage">N2 Starter kit on-pack</td>
+              <td>Day-5 refusal, warming adoption</td>
+              <td>High</td>
+              <td>Low</td>
+              <td><span class="bar product">Wave 1</span></td>
+            </tr>
+            <tr>
+              <td class="stage">N5 Day-3 rescue drop</td>
+              <td>The day-5 cliff</td>
+              <td>High</td>
+              <td>Low</td>
+              <td><span class="bar product">Wave 1</span></td>
+            </tr>
+            <tr>
+              <td class="stage">N7 Box 2 control panel</td>
+              <td>Day 7 and 14 spikes, subscription aversion</td>
+              <td>High</td>
+              <td>Medium</td>
+              <td><span class="bar product">Wave 1</span></td>
+            </tr>
+            <tr>
+              <td class="stage">N3 Fussy Cat Promise</td>
+              <td>Pre-delivery remorse, refusal pauses</td>
+              <td>High</td>
+              <td>Medium</td>
+              <td><span class="bar crm">Wave 2</span></td>
+            </tr>
+            <tr>
+              <td class="stage">N6 One-number feeding plan</td>
+              <td>Feeding confusion mistaken for refusal</td>
+              <td>Medium</td>
+              <td>Low</td>
+              <td><span class="bar crm">Wave 2</span></td>
+            </tr>
+            <tr>
+              <td class="stage">N1 Taste flight Box 1</td>
+              <td>Pass/fail framing, box-2 personalisation</td>
+              <td>High</td>
+              <td>High</td>
+              <td><span class="bar crm">Wave 2</span></td>
+            </tr>
+            <tr>
+              <td class="stage">N4 14-day tracker</td>
+              <td>Expectation setting, early risk detection</td>
+              <td>High</td>
+              <td>High</td>
+              <td><span class="bar data">Wave 3</span></td>
+            </tr>
+            <tr>
+              <td class="stage">N8 Clinic and Week Two Club</td>
+              <td>Belief and patience</td>
+              <td>Medium</td>
+              <td>Medium</td>
+              <td><span class="bar data">Wave 3</span></td>
+            </tr>
+            <tr>
+              <td class="stage">N9 Texture ladder</td>
+              <td>The food itself</td>
+              <td>Medium to high</td>
+              <td>High</td>
+              <td><span class="bar data">Wave 3</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="card" id="tracks">
+      <h2>Transition Tracks: Tailored to the Previous Food</h2>
+      <p>
+        One question at sign-up drives everything downstream. These tracks come straight from the
+        blog audit, and they are the operational backbone of initiative 1.
+      </p>
+      <div class="table-wrap">
+        <table class="wide" aria-label="Transition tracks by previous food">
+          <thead>
+            <tr>
+              <th>Previous food</th>
+              <th>Track length</th>
+              <th>What to tell the customer</th>
+              <th>Day 1&ndash;3 mechanics</th>
+              <th>Risk level</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="stage">Dry / kibble</td>
+              <td>14 days, up to 3&ndash;4 weeks</td>
+              <td>
+                This is the longest switch there is, and that is normal. Kibble is coated in fat and
+                flavour sprays after cooking, so your cat is unlearning a habit, not rejecting real
+                food.
+              </td>
+              <td>
+                Spoonful of warmed chicken on a clean plate. Remove kibble and treats between meals.
+                20-minute rule, then offer the usual food. Repeat day 1 if untouched.
+              </td>
+              <td><span class="bar crm">Highest</span></td>
+            </tr>
+            <tr>
+              <td class="stage">Wet (pouches / trays)</td>
+              <td>7&ndash;10 days</td>
+              <td>
+                Texture and moisture are already familiar; the palate needs to reset away from
+                flavour digests. Unfamiliar is not the same as unwanted.
+              </td>
+              <td>Mix fresh into the old food and increase gradually. Warm to lift aroma. Go slowly to avoid digestive upset.</td>
+              <td><span class="bar ops">Medium</span></td>
+            </tr>
+            <tr>
+              <td class="stage">Raw</td>
+              <td>3&ndash;7 days</td>
+              <td>Same philosophy, gently cooked. Most cats adapt quickly because both are moist and meat-rich.</td>
+              <td>Mix fresh into raw, increasing slowly. Serve from the fridge. Warm aroma helps.</td>
+              <td><span class="bar data">Lowest</span></td>
+            </tr>
+            <tr>
+              <td class="stage">Mixed feeding</td>
+              <td>10&ndash;14 days</td>
+              <td>Replace the dry portion first, since that is the habit doing the damage, then move the wet meals across.</td>
+              <td>Swap the wet meal to fresh first for an easy early win, then work on the dry meal.</td>
+              <td><span class="bar ops">Medium to high</span></td>
+            </tr>
+            <tr>
+              <td class="stage">Any of the above, flagged fussy</td>
+              <td>Add 7 days to the track</td>
+              <td>
+                We expect this to take longer and we have planned for it. Fresh aroma is on our
+                side; patience is the strategy.
+              </td>
+              <td>Smallest possible portions, warmed every time, one recipe at a time, no pressure, offered at consistent times.</td>
+              <td><span class="bar crm">Highest</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="note">
+        <strong class="note-title">Non-negotiable in every track</strong>
+        Warm the food. Clean plate. Old food and treats removed between meals. Start with chicken
+        because it is easiest on the stomach. Twenty minutes, then take it away. Introduce other
+        recipes only once one is settled. Every cat moves at its own pace.
+      </div>
+    </section>
+
+    <section class="card" id="keydays">
+      <h2>Key-Day Intervention Map</h2>
+      <p>
+        The CRM journey rebuilt around the pause data rather than a calendar. Risk levels reflect
+        observed pause volume.
+      </p>
+      <div class="timeline">
+        <div class="timeline-item">
+          <div><span class="tag">Day 0</span><br><strong>Sale</strong></div>
+          <div>
+            Capture previous food, brand and eating type. Assign the transition track. State the
+            grams per day and have it repeated back. State the box 2 date and price plainly. Set the
+            expectation that week one is a tasting session, not a verdict. Never promise instant
+            love.
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div><span class="tag risk">Days 1&ndash;3</span><br><strong>Pre-delivery &mdash; 23% of pauses</strong></div>
+          <div>
+            Fill the silence. Tracking, what is in the tasting box, how to prepare, and a plain
+            restatement of how the subscription works. This window is buyer's remorse and
+            subscription aversion, so reassurance about flexibility matters more than product
+            education here.
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div><span class="tag">Delivery day</span><br><strong>Tasting session opens</strong></div>
+          <div>
+            SMS on delivery: warm it, clean plate, one spoonful, remove the old food, twenty
+            minutes. Prompt the first meal log. If nothing is logged within 48 hours, flag it.
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div><span class="tag risk">Day 3</span><br><strong>Pre-empt the cliff</strong></div>
+          <div>
+            One-tap check-in: ate it all / ate some / sniffed / refused. "Sniffed" and "refused"
+            trigger the rescue drop and an offer of a booked call or clinic slot. This is the single
+            most important message in the entire journey, because it lands before the customer
+            decides to quit.
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div><span class="tag risk">Day 5</span><br><strong>The cliff &mdash; peak pause day</strong></div>
+          <div>
+            Reassurance plus permission: partial eating on day 5 of a fourteen-day switch is on
+            track. Show their own progress back to them. Offer a free recipe or texture swap
+            explicitly, before they go looking for the pause button.
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div><span class="tag risk">Days 6&ndash;7</span><br><strong>Box 2 pre-notification</strong></div>
+          <div>
+            Two days before dispatch: price, contents, and one-tap options to shift the date, skip
+            one box, or change recipes. Removes the ambush that drives the day-7 spike.
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div><span class="tag">Days 8&ndash;13</span><br><strong>Consolidation</strong></div>
+          <div>
+            Introduce recipe two now that one has settled. Confirm the portion is right. Early
+            benefit spotting: litter tray, energy, coat. Keep the tracker moving.
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div><span class="tag risk">Day 14</span><br><strong>Second spike</strong></div>
+          <div>
+            Celebrate completion of the track and make it shareable. For cats still transitioning,
+            extend the plan honestly &mdash; three to four weeks is within normal for a kibble
+            convert &mdash; and offer the clinic.
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div><span class="tag">Days 21&ndash;28</span><br><strong>Habit formed</strong></div>
+          <div>
+            Lock in the routine, confirm the long-term recipe mix, right-size the plan, and ask for
+            a review while sentiment is high. Last window where support beats pricing.
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div><span class="tag risk">Weeks 6&ndash;7</span><br><strong>Price cliff</strong></div>
+          <div>
+            Proof moment before the invoice changes: visible benefits, before-and-after, their own
+            transition story. Then a tapered price step with right-sizing options. This is where a
+            discount is the right tool, and the only place it is.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card" id="kpis">
+      <h2>KPI Framework</h2>
+      <p>
+        One north star, a small set of driver metrics, and leading indicators that tell us within
+        days whether an intervention is working.
+      </p>
+      <div class="table-wrap">
+        <table class="wide" aria-label="KPI framework">
+          <thead>
+            <tr>
+              <th>Type</th>
+              <th>Metric</th>
+              <th>Why it matters</th>
+              <th>Target direction</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="stage">North star</td>
+              <td>Box-2 retention rate</td>
+              <td>The 47% target we currently miss by 6.63 boxes a week.</td>
+              <td>Close the 6.63 gap</td>
+            </tr>
+            <tr>
+              <td class="stage">Driver</td>
+              <td>Pause rate, days 0&ndash;7</td>
+              <td>56.67% of all pauses happen here. The biggest single prize.</td>
+              <td>Down</td>
+            </tr>
+            <tr>
+              <td class="stage">Driver</td>
+              <td>Pre-delivery pause rate</td>
+              <td>Around 23% of pauses happen before we have delivered anything.</td>
+              <td>Down</td>
+            </tr>
+            <tr>
+              <td class="stage">Driver</td>
+              <td>Day-5 pause index</td>
+              <td>Isolates the cliff so we can see whether the day-3 intervention worked.</td>
+              <td>Down</td>
+            </tr>
+            <tr>
+              <td class="stage">Driver</td>
+              <td>Share of pauses citing food refusal, 0&ndash;28 days</td>
+              <td>The root cause this plan exists to fix.</td>
+              <td>Down</td>
+            </tr>
+            <tr>
+              <td class="stage">Driver</td>
+              <td>Fussy-eater retention gap</td>
+              <td>Currently around 3.37% worse. Closing it proves the tracks work.</td>
+              <td>Narrow</td>
+            </tr>
+            <tr>
+              <td class="stage">Driver</td>
+              <td>Week 6 to week 9 retention delta</td>
+              <td>Measures the price cliff and the value bridge.</td>
+              <td>Narrow</td>
+            </tr>
+            <tr>
+              <td class="stage">Leading</td>
+              <td>First meal logged within 48 hours</td>
+              <td>Earliest possible signal of engagement.</td>
+              <td>Up</td>
+            </tr>
+            <tr>
+              <td class="stage">Leading</td>
+              <td>Day-3 check-in response rate</td>
+              <td>No response is itself a risk signal.</td>
+              <td>Up</td>
+            </tr>
+            <tr>
+              <td class="stage">Leading</td>
+              <td>Warm-serve adoption</td>
+              <td>Our highest-leverage acceptance mechanic.</td>
+              <td>Up</td>
+            </tr>
+            <tr>
+              <td class="stage">Leading</td>
+              <td>Recipe swaps versus pauses</td>
+              <td>A swap instead of a pause is a retained customer. Ratio should climb.</td>
+              <td>Up</td>
+            </tr>
+            <tr>
+              <td class="stage">Enablement</td>
+              <td>QA scorecard average and certification coverage</td>
+              <td>Links agent behaviour to retention outcomes.</td>
+              <td>Up</td>
+            </tr>
+            <tr>
+              <td class="stage">Guardrail</td>
+              <td>Contribution margin per acquired customer at 84 days</td>
+              <td>Stops us buying retention with margin we cannot afford.</td>
+              <td>Hold or up</td>
+            </tr>
+            <tr>
+              <td class="stage">Guardrail</td>
+              <td>Checkout conversion</td>
+              <td>Commitment offers and guarantees must not cost us sign-ups.</td>
+              <td>Hold or up</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="card" id="roadmap">
+      <h2>Roadmap</h2>
+      <p>
+        Eight delivery blocks. Wave 1 is deliberately made up of low-effort, high-impact work that
+        can ship without engineering dependencies, so we are moving the day-5 number while the
+        tracker and taste flight are still being built.
+      </p>
+      <div class="table-wrap">
+        <table class="wide" aria-label="Retention master plan roadmap">
+          <thead>
+            <tr>
+              <th>Workstream</th>
+              <th>Scope</th>
+              <th>Block 1</th>
+              <th>Block 2</th>
+              <th>Block 3</th>
+              <th>Block 4</th>
+              <th>Block 5</th>
+              <th>Block 6</th>
+              <th>Block 7</th>
+              <th>Block 8</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="stage">Data foundations</td>
+              <td>Previous-food and eating-type fields, grams bands, pause taxonomy</td>
+              <td><span class="bar setup">Spec</span></td>
+              <td><span class="bar setup">Build</span></td>
+              <td><span class="bar setup">Verify</span></td>
+              <td class="empty"></td>
+              <td class="empty"></td>
+              <td class="empty"></td>
+              <td class="empty"></td>
+              <td class="empty"></td>
+            </tr>
+            <tr>
+              <td class="stage">Content and tracks</td>
+              <td>Four transition tracks, on-pack copy, videos, blog hub</td>
+              <td><span class="bar content">Draft</span></td>
+              <td><span class="bar content">Review</span></td>
+              <td><span class="bar content">Publish</span></td>
+              <td><span class="bar content">Iterate</span></td>
+              <td class="empty"></td>
+              <td class="empty"></td>
+              <td class="empty"></td>
+              <td class="empty"></td>
+            </tr>
+            <tr>
+              <td class="stage">CRM journey</td>
+              <td>Key-day map, day-3 check-in, texture branch, box-2 notice</td>
+              <td class="empty"></td>
+              <td><span class="bar crm">Design</span></td>
+              <td><span class="bar crm">Build</span></td>
+              <td><span class="bar crm">Test</span></td>
+              <td><span class="bar crm">Scale</span></td>
+              <td class="empty"></td>
+              <td class="empty"></td>
+              <td class="empty"></td>
+            </tr>
+            <tr>
+              <td class="stage">Packaging and kit</td>
+              <td>Starter kit, day-numbered sleeves, warm-me cue, aroma sachets</td>
+              <td class="empty"></td>
+              <td><span class="bar product">Spec</span></td>
+              <td><span class="bar product">Source</span></td>
+              <td><span class="bar product">Pilot</span></td>
+              <td><span class="bar product">Roll</span></td>
+              <td class="empty"></td>
+              <td class="empty"></td>
+              <td class="empty"></td>
+            </tr>
+            <tr>
+              <td class="stage">Agent ops</td>
+              <td>Early-pause calls, reason capture, save-without-discount playbook</td>
+              <td class="empty"></td>
+              <td><span class="bar ops">Playbook</span></td>
+              <td><span class="bar ops">Pilot</span></td>
+              <td><span class="bar ops">Measure</span></td>
+              <td><span class="bar ops">Scale</span></td>
+              <td class="empty"></td>
+              <td class="empty"></td>
+              <td class="empty"></td>
+            </tr>
+            <tr>
+              <td class="stage">QA and training</td>
+              <td>Scorecard, calibration, e-learning and certification</td>
+              <td class="empty"></td>
+              <td class="empty"></td>
+              <td><span class="bar qa">Design</span></td>
+              <td><span class="bar qa">Calibrate</span></td>
+              <td><span class="bar training">Course</span></td>
+              <td><span class="bar training">Certify</span></td>
+              <td><span class="bar training">Refresh</span></td>
+              <td class="empty"></td>
+            </tr>
+            <tr>
+              <td class="stage">Dashboards</td>
+              <td>Executive view, agent view, leading indicators</td>
+              <td class="empty"></td>
+              <td class="empty"></td>
+              <td><span class="bar data">Spec</span></td>
+              <td><span class="bar data">Build</span></td>
+              <td><span class="bar data">Test</span></td>
+              <td><span class="bar data">Launch</span></td>
+              <td><span class="bar data">Improve</span></td>
+              <td class="empty"></td>
+            </tr>
+            <tr>
+              <td class="stage">Tests and bets</td>
+              <td>Rescue drop, promise, taste flight, tracker, 6-week programme, value bridge</td>
+              <td class="empty"></td>
+              <td class="empty"></td>
+              <td><span class="bar crm">Rescue</span></td>
+              <td><span class="bar crm">Promise</span></td>
+              <td><span class="bar product">Flight</span></td>
+              <td><span class="bar data">Tracker</span></td>
+              <td><span class="bar setup">6-week</span></td>
+              <td><span class="bar content">Bridge</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="card" id="guardrails">
+      <h2>Guardrails: What We Will Not Do</h2>
+      <div class="summary-grid">
+        <div class="summary-box">
+          <strong>No discounting inside 28 days</strong>
+          Price is not the objection yet. A discount buys nothing, trains the customer to expect
+          one, and makes the week-7 step worse.
+        </div>
+        <div class="summary-box">
+          <strong>No promising instant success</strong>
+          "Cats love it" in the sales call is what manufactures the day-5 disappointment. We promise
+          a supported switch, not an instant one.
+        </div>
+        <div class="summary-box">
+          <strong>No counting bought weeks as retention</strong>
+          A commitment offer that guarantees six weeks proves nothing. Judge it at day 84.
+        </div>
+        <div class="summary-box">
+          <strong>No public shame lists</strong>
+          Accountability runs through coaching, calibration and a clear route back, on cohorts large
+          enough to be meaningful.
+        </div>
+        <div class="summary-box">
+          <strong>No metric that can be gamed by cherry-picking</strong>
+          If retention alone drives consequences, agents avoid fussy cats and kibble households.
+          Adjust for cohort difficulty.
+        </div>
+        <div class="summary-box">
+          <strong>No initiative without a measurement plan</strong>
+          Every item on this page names a control group or a before-and-after window before it
+          ships.
+        </div>
+      </div>
+    </section>
+
+    <section class="card" id="decisions">
+      <h2>Open Decisions and Questions</h2>
+      <ul>
+        <li>
+          <strong>Trial length.</strong> 14-day plans retain worse and 7-day plans generate more
+          subscription-related pauses. Should the gap before box 2 flex with the transition track
+          rather than being a single commercial choice?
+        </li>
+        <li>
+          <strong>Grams bands.</strong> What is the defensible replacement for 42 segments, and who
+          owns the rule for customers outside the four dominant bands?
+        </li>
+        <li>
+          <strong>Plan size and retention.</strong> Larger plans retain better, but the 180g sample
+          is small (70 box 2s, 157 sales). Is this a real effect or a household-size artefact? Needs
+          a bigger sample before we bias acquisition toward larger plans.
+        </li>
+        <li>
+          <strong>Cost of the Fussy Cat Promise.</strong> Modelled refund and swap cost against the
+          expected lift in checkout conversion and 84-day margin.
+        </li>
+        <li>
+          <strong>Week-7 taper shape.</strong> Two steps or three, and does the deeper upfront
+          discount in the 6-week programme need a different curve entirely?
+        </li>
+        <li>
+          <strong>Pause reason taxonomy.</strong> Current options collapse distinct problems into
+          "subscription" and "food". Can we split refusal into texture, aroma, recipe and portion
+          confusion at source?
+        </li>
+        <li>
+          <strong>Tracker build versus buy.</strong> Is a no-login web tracker linked from SMS
+          enough for a first version, avoiding an app dependency?
+        </li>
+      </ul>
+    </section>
+
+    <footer>
+      Retention Improvement Master Plan &mdash; standalone project page. Evidence base: D2MS
+      retention review (matured data, weeks 7&ndash;24) and the fresh versus kibble, wet and raw
+      blog audit.
+    </footer>
+  </main>
+
+  <script>
+    document.getElementById('copyBtn').addEventListener('click', function () {
+      var text = document.getElementById('pasteBlock').innerText;
+      var button = this;
+      var done = function () {
+        button.textContent = 'Copied';
+        setTimeout(function () { button.textContent = 'Copy summary'; }, 2000);
+      };
+
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(done, function () { button.textContent = 'Copy failed'; });
+        return;
+      }
+
+      var area = document.createElement('textarea');
+      area.value = text;
+      document.body.appendChild(area);
+      area.select();
+      document.execCommand('copy');
+      document.body.removeChild(area);
+      done();
+    });
+  </script>
+</body>
+</html>
