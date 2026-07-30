@@ -220,6 +220,16 @@
       text-transform: uppercase;
     }
 
+    /* Fraunces sets a heavily stylised ampersand; borrow the body font's instead */
+    h1 .amp,
+    h2 .amp,
+    h3 .amp,
+    .sc-title .amp,
+    .band-title .amp {
+      font-family: var(--sans);
+      font-weight: 600;
+    }
+
     p {
       margin: 0 0 12px;
     }
@@ -706,6 +716,10 @@
       white-space: nowrap;
     }
 
+    table.sc-grid td.fill {
+      min-width: 68px;
+    }
+
     .tickbox {
       border: 1.5px solid var(--muted-soft);
       border-radius: 4px;
@@ -737,9 +751,9 @@
     .dots i.n4 { border-color: var(--maroon); color: var(--maroon); }
 
     .sc-legend {
-      display: grid;
-      gap: 8px;
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 18px;
       margin-top: 14px;
     }
 
@@ -1352,7 +1366,7 @@ The problem is not that cats dislike the food. It is that we let a fourteen-day 
     <section class="card" id="c1">
       <div class="comp-head">
         <span class="comp-num">1</span>
-        <h2>Transition &amp; Texture Training Deck</h2>
+        <h2>Transition <span class="amp">&amp;</span> Texture Training Deck</h2>
         <span class="who">Owners: Training and Retention Strategy, with Brand for the science content. Audience: sales and customer service agents. Format: internal deck plus assessment.</span>
       </div>
 
@@ -1542,7 +1556,7 @@ The problem is not that cats dislike the food. It is that we let a fourteen-day 
               <tbody>
                 <tr>
                   <td class="day">Day 1</td>
-                  <td><span class="writeon" style="display:block;min-width:60px">&nbsp;</span></td>
+                  <td class="fill">&nbsp;</td>
                   <td><span class="tickbox"></span></td>
                   <td><span class="tickbox"></span></td>
                   <td>
@@ -1550,11 +1564,11 @@ The problem is not that cats dislike the food. It is that we let a fourteen-day 
                       <i class="n1">1</i><i class="n2">2</i><i class="n3">3</i><i class="n4">4</i>
                     </span>
                   </td>
-                  <td><span class="writeon" style="display:block;min-width:70px">&nbsp;</span></td>
+                  <td class="fill">&nbsp;</td>
                 </tr>
                 <tr>
                   <td class="day">Day 2</td>
-                  <td><span class="writeon" style="display:block;min-width:60px">&nbsp;</span></td>
+                  <td class="fill">&nbsp;</td>
                   <td><span class="tickbox"></span></td>
                   <td><span class="tickbox"></span></td>
                   <td>
@@ -1562,11 +1576,11 @@ The problem is not that cats dislike the food. It is that we let a fourteen-day 
                       <i class="n1">1</i><i class="n2">2</i><i class="n3">3</i><i class="n4">4</i>
                     </span>
                   </td>
-                  <td><span class="writeon" style="display:block;min-width:70px">&nbsp;</span></td>
+                  <td class="fill">&nbsp;</td>
                 </tr>
                 <tr>
                   <td class="day">Day 3</td>
-                  <td><span class="writeon" style="display:block;min-width:60px">&nbsp;</span></td>
+                  <td class="fill">&nbsp;</td>
                   <td><span class="tickbox"></span></td>
                   <td><span class="tickbox"></span></td>
                   <td>
@@ -1574,7 +1588,7 @@ The problem is not that cats dislike the food. It is that we let a fourteen-day 
                       <i class="n1">1</i><i class="n2">2</i><i class="n3">3</i><i class="n4">4</i>
                     </span>
                   </td>
-                  <td><span class="writeon" style="display:block;min-width:70px">&nbsp;</span></td>
+                  <td class="fill">&nbsp;</td>
                 </tr>
                 <tr>
                   <td class="day">Days 4&ndash;7</td>
