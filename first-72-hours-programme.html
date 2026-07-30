@@ -1,0 +1,2430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The First 72 Hours | Marro Early-Pause Prevention Programme</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&amp;family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,500..900,50,1&amp;display=swap">
+  <style>
+    :root {
+      --maroon: #451219;
+      --maroon-deep: #3A070D;
+      --maroon-ink: #240205;
+      --maroon-mid: #63393F;
+      --apricot: #E9B377;
+      --apricot-soft: #FBEAD6;
+      --amber: #D69042;
+      --blush: #F6DDDD;
+      --blush-soft: #F6ECEC;
+      --paper: #FDF9F9;
+      --muted: #816165;
+      --muted-soft: #B29495;
+      --line: #E2C5C5;
+      --mint: #68C29A;
+      --mint-soft: #E6F6EE;
+      --red: #D63F49;
+      --red-deep: #80020F;
+      --periwinkle: #A1A8D2;
+      --periwinkle-soft: #E8EBFF;
+      --text: #451219;
+      --display: "Fraunces", "Bricolage Grotesque", Georgia, "Times New Roman", serif;
+      --sans: "Bricolage Grotesque", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--blush);
+      color: var(--text);
+      font-family: var(--sans);
+      line-height: 1.5;
+    }
+
+    /* ── Header ── */
+    header {
+      background:
+        radial-gradient(130% 150% at 12% 0%, #5A1A22 0%, transparent 60%),
+        var(--maroon-deep);
+      color: var(--paper);
+      padding: 34px 24px 30px;
+    }
+
+    .brand-row {
+      align-items: center;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .wordmark {
+      color: var(--paper);
+      font-family: var(--display);
+      font-variation-settings: "SOFT" 50, "WONK" 1;
+      font-size: 26px;
+      font-weight: 900;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .brand-row .rule {
+      background: rgba(233, 179, 119, 0.45);
+      flex: 1;
+      height: 1px;
+      max-width: 120px;
+    }
+
+    .brand-row .kicker {
+      color: var(--apricot);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    header h1 {
+      color: var(--paper);
+      font-family: var(--display);
+      font-variation-settings: "SOFT" 50, "WONK" 1;
+      font-size: clamp(30px, 5.4vw, 56px);
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      line-height: 1.08;
+      margin: 0 0 14px;
+      max-width: 20ch;
+      text-transform: uppercase;
+    }
+
+    header p {
+      color: #EBCFCE;
+      font-size: 18px;
+      margin: 0;
+      max-width: 780px;
+    }
+
+    header p .pop {
+      color: var(--apricot);
+      font-weight: 700;
+    }
+
+    header a.up {
+      color: var(--apricot);
+      text-decoration: underline;
+    }
+
+    .header-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .header-meta span {
+      background: rgba(233, 179, 119, 0.1);
+      border: 1px solid rgba(233, 179, 119, 0.5);
+      border-radius: 999px;
+      color: var(--apricot);
+      font-size: 13px;
+      font-weight: 600;
+      padding: 8px 15px;
+    }
+
+    /* ── Apricot strip with scalloped underside ── */
+    .promo {
+      background: var(--apricot);
+      color: var(--maroon-ink);
+      padding: 11px 24px;
+    }
+
+    .promo-track {
+      align-items: center;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 26px;
+      justify-content: center;
+      margin: 0 auto;
+      width: min(1180px, 100%);
+    }
+
+    .promo-track span {
+      align-items: center;
+      display: inline-flex;
+      font-size: 13px;
+      font-weight: 700;
+      gap: 8px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .promo-track span::before {
+      background: var(--maroon);
+      border-radius: 50%;
+      content: "";
+      height: 7px;
+      width: 7px;
+    }
+
+    .scallop {
+      background-image: radial-gradient(circle 13px at 13px 0, var(--apricot) 97%, transparent 100%);
+      background-repeat: repeat-x;
+      background-size: 26px 26px;
+      height: 13px;
+    }
+
+    /* ── Layout ── */
+    main {
+      width: min(1180px, calc(100% - 32px));
+      margin: 30px auto 48px;
+    }
+
+    .card {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      box-shadow: 0 10px 30px rgba(69, 18, 25, 0.07);
+      margin-bottom: 22px;
+      padding: 26px;
+    }
+
+    h2 {
+      color: var(--maroon);
+      font-family: var(--display);
+      font-variation-settings: "SOFT" 50, "WONK" 1;
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      margin: 0 0 16px;
+      text-transform: uppercase;
+    }
+
+    h3 {
+      color: var(--maroon);
+      font-family: var(--display);
+      font-variation-settings: "SOFT" 50, "WONK" 0;
+      font-size: 19px;
+      font-weight: 700;
+      margin: 20px 0 8px;
+    }
+
+    h4 {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      margin: 16px 0 6px;
+      text-transform: uppercase;
+    }
+
+    p {
+      margin: 0 0 12px;
+    }
+
+    ul, ol {
+      margin: 8px 0 0;
+      padding-left: 22px;
+    }
+
+    li {
+      margin: 6px 0;
+    }
+
+    .lede {
+      font-size: 17px;
+      max-width: 900px;
+    }
+
+    /* ── Contents ── */
+    .toc {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .toc a {
+      background: transparent;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: var(--maroon);
+      display: inline-block;
+      font-size: 14px;
+      font-weight: 600;
+      padding: 9px 16px;
+      text-decoration: none;
+      transition: background 0.15s, border-color 0.15s;
+    }
+
+    .toc a:hover {
+      background: var(--apricot-soft);
+      border-color: var(--apricot);
+    }
+
+    /* ── Metrics ── */
+    .metric-grid {
+      display: grid;
+      gap: 14px;
+      grid-template-columns: repeat(auto-fit, minmax(255px, 1fr));
+    }
+
+    .metric {
+      background: var(--blush-soft);
+      border: 1px solid var(--line);
+      border-left: 6px solid var(--red);
+      border-radius: 16px;
+      font-size: 15px;
+      padding: 18px;
+    }
+
+    .metric .big {
+      color: var(--maroon);
+      display: block;
+      font-family: var(--display);
+      font-variation-settings: "SOFT" 50, "WONK" 1;
+      font-size: 32px;
+      font-weight: 900;
+      line-height: 1.05;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+    }
+
+    .metric .label {
+      display: block;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .metric .src {
+      color: var(--muted);
+      display: block;
+      font-size: 12px;
+      margin-top: 8px;
+    }
+
+    .metric.amber { border-left-color: var(--amber); }
+    .metric.peri { border-left-color: var(--periwinkle); }
+    .metric.mint { border-left-color: var(--mint); }
+
+    /* ── Summary boxes ── */
+    .summary-grid {
+      display: grid;
+      gap: 14px;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    }
+
+    .summary-box {
+      background: var(--blush-soft);
+      border: 1px solid var(--line);
+      border-left: 6px solid var(--red);
+      border-radius: 16px;
+      padding: 18px;
+    }
+
+    .summary-box strong {
+      color: var(--maroon);
+      display: block;
+      font-family: var(--display);
+      font-variation-settings: "SOFT" 50, "WONK" 0;
+      font-size: 18px;
+      margin-bottom: 6px;
+    }
+
+    /* ── Component blocks ── */
+    .comp-head {
+      align-items: center;
+      border-bottom: 2px solid var(--line);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-bottom: 6px;
+      padding-bottom: 14px;
+    }
+
+    .comp-num {
+      background: var(--maroon);
+      border-radius: 999px;
+      color: var(--apricot);
+      font-family: var(--display);
+      font-variation-settings: "SOFT" 50, "WONK" 1;
+      font-size: 20px;
+      font-weight: 900;
+      min-width: 56px;
+      padding: 9px 0;
+      text-align: center;
+    }
+
+    .comp-head h2 {
+      margin: 0;
+    }
+
+    .comp-head .who {
+      color: var(--muted);
+      font-size: 14px;
+      width: 100%;
+    }
+
+    .panel {
+      background: var(--blush-soft);
+      border: 1px solid var(--line);
+      border-left: 6px solid var(--maroon-mid);
+      border-radius: 18px;
+      margin-top: 16px;
+      padding: 20px;
+    }
+
+    .panel.accent {
+      border-left-color: var(--apricot);
+    }
+
+    .panel h3 {
+      margin-top: 0;
+    }
+
+    .badge-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 0 0 12px;
+    }
+
+    .badge {
+      border-radius: 999px;
+      color: var(--paper);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      padding: 5px 12px;
+      text-transform: uppercase;
+    }
+
+    .badge.core { background: var(--maroon); }
+    .badge.new { background: var(--apricot); color: var(--maroon-ink); }
+    .badge.high { background: var(--red-deep); }
+    .badge.med { background: var(--amber); color: var(--maroon-ink); }
+    .badge.quick { background: var(--mint); color: var(--maroon-ink); }
+    .badge.eng { background: var(--periwinkle); color: var(--maroon-ink); }
+    .badge.owner { background: transparent; border: 1px solid var(--muted-soft); color: var(--muted); }
+
+    .kv {
+      display: grid;
+      gap: 8px 14px;
+      grid-template-columns: 160px 1fr;
+      margin-top: 14px;
+    }
+
+    .kv dt {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .kv dd {
+      margin: 0;
+    }
+
+    /* ── Tables ── */
+    .table-wrap {
+      overflow-x: auto;
+    }
+
+    table {
+      border-collapse: collapse;
+      min-width: 820px;
+      width: 100%;
+    }
+
+    table.wide {
+      min-width: 1000px;
+    }
+
+    th, td {
+      border: 1px solid var(--line);
+      padding: 11px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: var(--maroon);
+      color: var(--apricot);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      vertical-align: middle;
+    }
+
+    tbody tr:nth-child(even) {
+      background: var(--blush-soft);
+    }
+
+    .stage {
+      color: var(--maroon);
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .bar {
+      border-radius: 999px;
+      color: var(--paper);
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      min-width: 70px;
+      padding: 8px 10px;
+      text-align: center;
+    }
+
+    .bar.deck { background: var(--maroon); }
+    .bar.card { background: var(--amber); color: var(--maroon-ink); }
+    .bar.crm { background: var(--red-deep); }
+    .bar.swap { background: var(--mint); color: var(--maroon-ink); }
+    .bar.data { background: var(--apricot); color: var(--maroon-ink); }
+    .bar.pilot { background: var(--periwinkle); color: var(--maroon-ink); }
+    .bar.ops { background: var(--muted); }
+
+    .empty {
+      background: #F2E4E4;
+    }
+
+    /* ── Say this, not that ── */
+    .swap-table td.no {
+      background: #FBE7E4;
+      color: var(--red-deep);
+    }
+
+    .swap-table td.yes {
+      background: var(--mint-soft);
+    }
+
+    /* ── Cards grid ── */
+    .steps {
+      display: grid;
+      gap: 14px;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    }
+
+    .step-card {
+      background: var(--blush-soft);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 18px;
+    }
+
+    .step-card h3 {
+      margin-top: 0;
+    }
+
+    /* ── Notes and bands ── */
+    .note {
+      background: var(--periwinkle-soft);
+      border-left: 6px solid var(--periwinkle);
+      border-radius: 16px;
+      margin: 16px 0 0;
+      padding: 18px;
+    }
+
+    .note.warn {
+      background: #FBE7E4;
+      border-left-color: var(--red);
+    }
+
+    .note.win {
+      background: var(--mint-soft);
+      border-left-color: var(--mint);
+    }
+
+    .note strong.note-title {
+      color: var(--maroon);
+      display: block;
+      font-family: var(--display);
+      font-variation-settings: "SOFT" 50, "WONK" 0;
+      font-size: 17px;
+      margin-bottom: 5px;
+    }
+
+    .band {
+      background:
+        radial-gradient(130% 170% at 8% 0%, #5A1A22 0%, transparent 62%),
+        var(--maroon-deep);
+      border-radius: 20px;
+      color: #EBCFCE;
+      font-size: 17px;
+      margin: 18px 0 0;
+      padding: 26px;
+    }
+
+    .band .band-title {
+      color: var(--apricot);
+      display: block;
+      font-family: var(--display);
+      font-variation-settings: "SOFT" 50, "WONK" 1;
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+    }
+
+    .band strong,
+    .band em {
+      color: var(--paper);
+    }
+
+    /* ── Two clocks ── */
+    .clocks {
+      display: grid;
+      gap: 14px;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    }
+
+    .clock {
+      background: var(--paper);
+      border: 2px solid var(--line);
+      border-radius: 18px;
+      padding: 18px;
+    }
+
+    .clock.a { border-color: var(--red); }
+    .clock.b { border-color: var(--apricot); }
+
+    .clock .cname {
+      color: var(--maroon);
+      display: block;
+      font-family: var(--display);
+      font-variation-settings: "SOFT" 50, "WONK" 1;
+      font-size: 20px;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+    }
+
+    /* ── The scorecard mock ── */
+    .mock-wrap {
+      display: flex;
+      justify-content: center;
+      margin-top: 18px;
+    }
+
+    .scorecard {
+      background: var(--paper);
+      border: 2px solid var(--maroon);
+      border-radius: 18px;
+      box-shadow: 0 14px 34px rgba(69, 18, 25, 0.16);
+      max-width: 620px;
+      overflow: hidden;
+      width: 100%;
+    }
+
+    .sc-head {
+      background: var(--maroon);
+      color: var(--paper);
+      padding: 16px 18px;
+    }
+
+    .sc-head .sc-title {
+      color: var(--paper);
+      display: block;
+      font-family: var(--display);
+      font-variation-settings: "SOFT" 50, "WONK" 1;
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+    }
+
+    .sc-head .sc-sub {
+      color: var(--apricot);
+      display: block;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      margin-top: 4px;
+      text-transform: uppercase;
+    }
+
+    .sc-body {
+      padding: 16px 18px 18px;
+    }
+
+    .sc-name {
+      align-items: baseline;
+      display: flex;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .sc-name span {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .sc-name .writeon {
+      border-bottom: 2px dotted var(--muted-soft);
+      flex: 1;
+    }
+
+    table.sc-grid {
+      border-collapse: collapse;
+      min-width: 0;
+      width: 100%;
+    }
+
+    table.sc-grid th {
+      background: var(--apricot-soft);
+      border: 1px solid var(--line);
+      color: var(--maroon);
+      font-size: 10px;
+      letter-spacing: 0.06em;
+      padding: 7px 6px;
+      text-align: center;
+    }
+
+    table.sc-grid td {
+      border: 1px solid var(--line);
+      font-size: 12px;
+      padding: 9px 6px;
+      text-align: center;
+      vertical-align: middle;
+    }
+
+    table.sc-grid td.day {
+      color: var(--maroon);
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .tickbox {
+      border: 1.5px solid var(--muted-soft);
+      border-radius: 4px;
+      display: inline-block;
+      height: 14px;
+      width: 14px;
+    }
+
+    .dots {
+      display: inline-flex;
+      gap: 5px;
+    }
+
+    .dots i {
+      border: 1.5px solid var(--muted-soft);
+      border-radius: 50%;
+      display: block;
+      font-size: 9px;
+      font-style: normal;
+      height: 17px;
+      line-height: 15px;
+      text-align: center;
+      width: 17px;
+    }
+
+    .dots i.n1 { border-color: var(--red); color: var(--red); }
+    .dots i.n2 { border-color: var(--amber); color: var(--amber); }
+    .dots i.n3 { border-color: #3E9E77; color: #3E9E77; }
+    .dots i.n4 { border-color: var(--maroon); color: var(--maroon); }
+
+    .sc-legend {
+      display: grid;
+      gap: 8px;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      margin-top: 14px;
+    }
+
+    .sc-legend div {
+      align-items: center;
+      display: flex;
+      font-size: 12px;
+      gap: 8px;
+    }
+
+    .sc-foot {
+      align-items: center;
+      background: var(--apricot);
+      color: var(--maroon-ink);
+      display: flex;
+      gap: 14px;
+      justify-content: space-between;
+      padding: 14px 18px;
+    }
+
+    .sc-foot .msg-strong {
+      font-family: var(--display);
+      font-variation-settings: "SOFT" 50, "WONK" 1;
+      font-size: 17px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .sc-foot .qr {
+      background:
+        repeating-linear-gradient(0deg, var(--maroon-ink) 0 4px, transparent 4px 8px),
+        repeating-linear-gradient(90deg, var(--maroon-ink) 0 4px, transparent 4px 8px);
+      background-color: var(--paper);
+      border: 3px solid var(--maroon-ink);
+      border-radius: 4px;
+      flex: none;
+      height: 54px;
+      width: 54px;
+    }
+
+    .mock-caption {
+      color: var(--muted);
+      font-size: 13px;
+      margin-top: 12px;
+      text-align: center;
+    }
+
+    /* ── Draft messages ── */
+    .msg {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      margin-top: 14px;
+      overflow: hidden;
+    }
+
+    .msg-head {
+      align-items: center;
+      background: var(--blush-soft);
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 12px;
+      padding: 11px 16px;
+    }
+
+    .chan {
+      border-radius: 999px;
+      color: var(--paper);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      padding: 4px 11px;
+      text-transform: uppercase;
+    }
+
+    .chan.sms { background: var(--maroon); }
+    .chan.email { background: var(--red-deep); }
+    .chan.onsite { background: var(--periwinkle); color: var(--maroon-ink); }
+
+    .msg-head .trig {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .msg-body {
+      font-size: 15px;
+      padding: 16px;
+    }
+
+    .msg-body .subject {
+      color: var(--maroon);
+      display: block;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .msg-body p:last-child {
+      margin-bottom: 0;
+    }
+
+    .msg-body .var {
+      background: var(--apricot-soft);
+      border-radius: 4px;
+      font-weight: 700;
+      padding: 1px 5px;
+    }
+
+    .cta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .pill-cta {
+      background: var(--apricot);
+      border-radius: 999px;
+      color: var(--maroon-ink);
+      font-size: 13px;
+      font-weight: 700;
+      padding: 9px 16px;
+    }
+
+    .pill-cta.ghost {
+      background: transparent;
+      border: 1px solid var(--muted-soft);
+      color: var(--muted);
+    }
+
+    /* ── Offer ladder ── */
+    .ladder {
+      display: grid;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .rung {
+      align-items: center;
+      background: var(--blush-soft);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      display: grid;
+      gap: 14px;
+      grid-template-columns: 84px 1fr;
+      padding: 14px 16px;
+    }
+
+    .rung .lvl {
+      background: var(--maroon);
+      border-radius: 999px;
+      color: var(--apricot);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      padding: 6px 0;
+      text-align: center;
+      text-transform: uppercase;
+    }
+
+    .rung.last {
+      background: #FBE7E4;
+      border-color: var(--red);
+    }
+
+    .rung.last .lvl {
+      background: var(--red-deep);
+      color: var(--paper);
+    }
+
+    .rung strong {
+      color: var(--maroon);
+    }
+
+    /* ── Timeline ── */
+    .timeline {
+      display: grid;
+      gap: 14px;
+    }
+
+    .timeline-item {
+      align-items: start;
+      background: var(--blush-soft);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      display: grid;
+      gap: 16px;
+      grid-template-columns: 170px 1fr;
+      padding: 18px;
+    }
+
+    .timeline-item strong {
+      color: var(--maroon);
+      font-family: var(--display);
+      font-variation-settings: "SOFT" 50, "WONK" 0;
+      font-size: 17px;
+    }
+
+    .tag {
+      background: var(--apricot);
+      border-radius: 999px;
+      color: var(--maroon-ink);
+      display: inline-block;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      margin-bottom: 8px;
+      padding: 6px 13px;
+      text-transform: uppercase;
+    }
+
+    .tag.risk {
+      background: var(--red-deep);
+      color: var(--paper);
+    }
+
+    /* ── Copy block ── */
+    .copy-head {
+      align-items: center;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .btn-copy {
+      background: var(--apricot);
+      border: none;
+      border-radius: 999px;
+      color: var(--maroon-ink);
+      cursor: pointer;
+      font-family: var(--sans);
+      font-size: 14px;
+      font-weight: 700;
+      padding: 11px 22px;
+      transition: background 0.15s;
+    }
+
+    .btn-copy:hover {
+      background: var(--amber);
+    }
+
+    pre.paste {
+      background: var(--maroon-ink);
+      border-radius: 16px;
+      color: var(--blush);
+      font-family: "Courier New", monospace;
+      font-size: 13px;
+      line-height: 1.55;
+      margin: 0;
+      overflow-x: auto;
+      padding: 18px;
+      white-space: pre-wrap;
+    }
+
+    details.paste-wrap summary {
+      color: var(--maroon);
+      cursor: pointer;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    /* ── Flourish and gingham ── */
+    .flourish {
+      align-items: center;
+      display: flex;
+      gap: 12px;
+      margin: 22px 0 4px;
+    }
+
+    .flourish::before,
+    .flourish::after {
+      background: linear-gradient(90deg, transparent, var(--line), transparent);
+      content: "";
+      flex: 1;
+      height: 1px;
+    }
+
+    .flourish i {
+      background: var(--apricot);
+      display: block;
+      height: 8px;
+      transform: rotate(45deg);
+      width: 8px;
+    }
+
+    .gingham {
+      background-color: var(--blush);
+      background-image:
+        repeating-linear-gradient(0deg, rgba(69, 18, 25, 0.2) 0 15px, transparent 15px 30px),
+        repeating-linear-gradient(90deg, rgba(69, 18, 25, 0.2) 0 15px, transparent 15px 30px);
+      border-radius: 6px;
+      height: 30px;
+      margin: 32px 0 20px;
+    }
+
+    footer {
+      color: var(--muted);
+      font-size: 14px;
+      text-align: center;
+    }
+
+    footer .sign {
+      color: var(--maroon);
+      display: block;
+      font-family: var(--display);
+      font-variation-settings: "SOFT" 50, "WONK" 1;
+      font-size: 20px;
+      font-weight: 900;
+      letter-spacing: 0.06em;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+    }
+
+    footer a {
+      color: var(--maroon);
+    }
+
+    @media (max-width: 700px) {
+      .timeline-item,
+      .kv,
+      .rung {
+        grid-template-columns: 1fr;
+      }
+
+      .sc-foot {
+        flex-direction: column;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand-row">
+      <span class="wordmark">Marro</span>
+      <span class="rule"></span>
+      <span class="kicker">Early-Pause Prevention</span>
+    </div>
+    <h1>The First 72 Hours</h1>
+    <p>
+      Eliminate early-stage pauses by changing what Box 1 <em>means</em>. It stops being a test the
+      cat can fail and becomes a <span class="pop">tasting and texture trial</span> we run together
+      &mdash; with a scorecard on the fridge, a CRM journey that reads it, and a swap offered long
+      before a pause is considered.
+    </p>
+    <div class="header-meta">
+      <span>Workstream of the <a class="up" href="retention-improvement-master-plan.html">Retention Master Plan</a></span>
+      <span>Window: order to bowl-day 3</span>
+      <span>Four core components</span>
+      <span>Signature metric: swap-to-pause ratio</span>
+    </div>
+  </header>
+
+  <div class="promo">
+    <div class="promo-track">
+      <span>56.67% of pauses inside 7 days</span>
+      <span>23% pause before a box lands</span>
+      <span>Day 5 is the cliff</span>
+      <span>Swap it, don't stop it</span>
+    </div>
+  </div>
+  <div class="scallop"></div>
+
+  <main>
+    <section class="card">
+      <h2>Contents</h2>
+      <ul class="toc">
+        <li><a href="#goal">The Goal</a></li>
+        <li><a href="#why">Why the First 72 Hours</a></li>
+        <li><a href="#clocks">Defining the Window</a></li>
+        <li><a href="#reframe">The Reframe</a></li>
+        <li><a href="#c1">1. Training Deck</a></li>
+        <li><a href="#c2">2. In-Box Scorecard</a></li>
+        <li><a href="#c3">3. Scorecard-Driven CRM</a></li>
+        <li><a href="#c4">4. Day 1&ndash;3 Interventions</a></li>
+        <li><a href="#ladder">Swap, Don't Stop</a></li>
+        <li><a href="#measure">Measurement</a></li>
+        <li><a href="#build">Build Plan</a></li>
+        <li><a href="#owners">Owners &amp; Artifacts</a></li>
+        <li><a href="#risks">Guardrails</a></li>
+        <li><a href="#decisions">Open Decisions</a></li>
+      </ul>
+    </section>
+
+    <section class="card" id="goal">
+      <h2>The Goal</h2>
+      <p class="lede">
+        Eliminate early-stage customer pauses in the first three days by reframing how customers
+        experience their first box, and by guiding them through the transition instead of leaving
+        them to judge it alone.
+      </p>
+      <p class="lede">
+        The problem is not that cats dislike the food. It is that we let a fourteen-day process be
+        judged in seventy-two hours, against a finish line nobody agreed to. More than half of all
+        pauses happen inside the first week, roughly a quarter arrive before a box has even been
+        delivered, and the reason given clusters hard around the pet not eating. So this programme
+        does four things: it teaches agents to sell Box 1 as an exploration rather than a delivery,
+        it puts a physical scorecard on the fridge so partial progress is visible and recordable, it
+        rewires the CRM to read that scorecard and offer a recipe swap at the exact moment a pause is
+        being considered, and it front-loads expectation setting into the window before and around
+        first delivery.
+      </p>
+
+      <div class="flourish"><i></i></div>
+
+      <details class="paste-wrap">
+        <summary>Plain-text summary for pasting into GitHub / decks</summary>
+        <div class="copy-head">
+          <span>Markdown, ready to paste at the top of the project page.</span>
+          <button class="btn-copy" type="button" id="copyBtn">Copy summary</button>
+        </div>
+        <pre class="paste" id="pasteBlock">## The First 72 Hours - Early-Pause Prevention Programme
+
+**Goal:** eliminate early-stage customer pauses (days 1-3) by reframing how customers experience their first box and guiding them through the transition process.
+
+The problem is not that cats dislike the food. It is that we let a fourteen-day process be judged in seventy-two hours, against a finish line nobody agreed to. More than half of all pauses happen inside the first week, roughly a quarter arrive before a box has even been delivered, and the reason given clusters hard around the pet not eating.
+
+**Four core components:**
+
+1. **Transition &amp; Texture Training Deck** - internal enablement that shifts how agents frame Box 1, positioning it as an exploratory tasting and texture trial rather than a standard order, and gives them the texture vocabulary to coach with.
+2. **In-Box Recipe Scorecard** - a physical card in Box 1 with a daily tracker: which recipe was served, chilled or warmed, how the cat reacted on a four-point scale, and any texture preference. Partial acceptance is printed as progress, not failure.
+3. **Scorecard-Driven CRM Messaging** - email and SMS flows triggered by early usage signals rather than calendar days, designed to intercept a pause and offer a recipe or texture swap instead, personalised with what the scorecard already told us.
+4. **Early-Pause Prevention (Days 1-3)** - expectation setting before and during first delivery, so the critical 72-hour window is managed rather than survived, and knee-jerk pauses are prevented before the transition has had a fair chance.
+
+**Signature metric:** the swap-to-pause ratio. Every recipe or texture swap we trigger instead of a pause is a retained customer.</pre>
+      </details>
+    </section>
+
+    <section class="card" id="why">
+      <h2>Why the First 72 Hours</h2>
+      <p>
+        This is the evidence that makes a 72-hour programme the highest-value thing we can build.
+        All of it comes from the D2MS retention review and the blog content audit.
+      </p>
+      <div class="metric-grid">
+        <div class="metric">
+          <span class="big">56.67%</span>
+          <span class="label">Of pauses land inside 7 days</span>
+          More than half of everything we lose, we lose in week one. Nothing else in the lifecycle
+          concentrates risk like this.
+          <span class="src">Retention review, time between sign-up and pause</span>
+        </div>
+        <div class="metric">
+          <span class="big">~23%</span>
+          <span class="label">Pause before a box arrives</span>
+          Buyer's remorse and subscription aversion, decided before the food ever gets a chance.
+          These customers never see the scorecard, so the fix has to start pre-delivery.
+          <span class="src">Retention review, pause versus delivery date</span>
+        </div>
+        <div class="metric">
+          <span class="big">Day 5</span>
+          <span class="label">The cliff</span>
+          Peak pause day, with reasons weighted heavily to the pet not eating. Customers try for a
+          few days and give up &mdash; which means every intervention must land by day 3.
+          <span class="src">Retention review, time between sign-up and pause</span>
+        </div>
+        <div class="metric amber">
+          <span class="big">+6.26pp</span>
+          <span class="label">Food-refusal gap</span>
+          How much more often customers who leave cite food refusal inside 28 days, compared with
+          those who stay. Price barely features this early.
+          <span class="src">Retention review, pause reason</span>
+        </div>
+        <div class="metric amber">
+          <span class="big">+3.37%</span>
+          <span class="label">Fussy-eater churn premium</span>
+          Cats flagged as fussy are meaningfully more likely to pause, while breed shows nothing.
+          Eating type is the segmentation that matters here.
+          <span class="src">Retention review, not retained versus active</span>
+        </div>
+        <div class="metric peri">
+          <span class="big">7&ndash;14 days</span>
+          <span class="label">What the switch actually takes</span>
+          Kibble to fresh needs 7&ndash;14 days and sometimes 3&ndash;4 weeks. Wet to fresh takes
+          7&ndash;10 days. Raw to fresh, 3&ndash;7.
+          <span class="src">Blog audit, making the switch</span>
+        </div>
+        <div class="metric peri">
+          <span class="big">150&deg;C</span>
+          <span class="label">Why refusal is habit</span>
+          Kibble is extruded above 150&deg;C then sprayed with fat and flavour. Cats are conditioned
+          to crave it. Early refusal of fresh is an unlearning problem, and unlearning takes days.
+          <span class="src">Blog audit, myths versus reality</span>
+        </div>
+        <div class="metric mint">
+          <span class="big">6.63</span>
+          <span class="label">Boxes a week to find</span>
+          The gap to the 47% box-2 target. Roughly seven pause decisions a week need to become
+          swaps or continuations. That is the whole job.
+          <span class="src">Retention review, quantify</span>
+        </div>
+      </div>
+
+      <div class="band">
+        <strong class="band-title">The arithmetic worth remembering</strong>
+        We are not trying to fix retention in the abstract. We need about <strong>seven households a
+        week</strong> to make a different decision in their first few days. That is a small enough
+        number to be winnable with better framing and a free recipe swap, and a specific enough
+        number to tell us honestly whether this programme worked.
+      </div>
+    </section>
+
+    <section class="card" id="clocks">
+      <h2>Defining the Window: Two Clocks, Not One</h2>
+      <p>
+        "Days 1&ndash;3" means two different things in our data, and conflating them is the fastest
+        way to build a journey that fires at the wrong moment. Both clocks need covering, and the
+        CRM has to know which one it is reading.
+      </p>
+      <div class="clocks">
+        <div class="clock a">
+          <span class="cname">Clock A &mdash; the order clock</span>
+          <p><strong>Day 0 is checkout.</strong> Days 1&ndash;3 here are the pre-delivery window: the
+          customer has paid, nothing has arrived, and they have time to reconsider.</p>
+          <p>
+            This is where roughly 23% of pauses come from, and the driver is remorse and
+            subscription anxiety rather than food. Nothing about texture helps here. What helps is
+            confirming what they bought, when it arrives, how flexible it is, and what week one will
+            actually look like.
+          </p>
+        </div>
+        <div class="clock b">
+          <span class="cname">Clock B &mdash; the bowl clock</span>
+          <p><strong>Day 1 is the first meal served.</strong> Days 1&ndash;3 here are the tasting
+          window, and they end just before the day-5 pause spike on the order clock.</p>
+          <p>
+            This is where the scorecard lives and where the food itself is being judged. Every
+            message must be keyed off delivery confirmation, not the order date, or a "how did meal
+            one go?" prompt will land while the box is still on a van.
+          </p>
+        </div>
+      </div>
+      <div class="note warn">
+        <strong class="note-title">Implementation warning</strong>
+        Delivery dates vary, and trial length varies. If we trigger on order date plus N days, the
+        journey will drift out of sync with reality for a large share of customers and the day-3
+        checkpoint &mdash; the most important message in the programme &mdash; will miss. Delivery
+        confirmation must be a reliable event in the CRM before the flows in component 3 go live.
+        If it is not, that is the first thing to fix.
+      </div>
+    </section>
+
+    <section class="card" id="reframe">
+      <h2>The Reframe: A Trial, Not a Test</h2>
+      <p>
+        Every component below is a different delivery mechanism for one idea. Box 1 is not the first
+        instalment of a standing order; it is a <strong>tasting and texture trial</strong>, and the
+        customer is running it with us. That changes what success looks like on day two, and it
+        changes what a bad reaction means: not "this failed", but "we have a result, let's use it".
+      </p>
+      <div class="table-wrap">
+        <table class="swap-table" aria-label="Framing comparison between an order and a trial">
+          <thead>
+            <tr>
+              <th style="width: 20%">&nbsp;</th>
+              <th>Box 1 as a standard order</th>
+              <th>Box 1 as a tasting and texture trial</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="stage">Success on day 2</td>
+              <td class="no">The bowl is empty.</td>
+              <td class="yes">We know something new about what this cat likes.</td>
+            </tr>
+            <tr>
+              <td class="stage">A refused meal</td>
+              <td class="no">A failure, and evidence the product is wrong.</td>
+              <td class="yes">A data point that narrows down the recipe and texture.</td>
+            </tr>
+            <tr>
+              <td class="stage">Customer's job</td>
+              <td class="no">Passive. Wait and see whether it works.</td>
+              <td class="yes">Active. Run the trial, log the reactions, tell us the winner.</td>
+            </tr>
+            <tr>
+              <td class="stage">Natural next step when it goes badly</td>
+              <td class="no">Pause the subscription.</td>
+              <td class="yes">Swap the recipe or change the texture.</td>
+            </tr>
+            <tr>
+              <td class="stage">What box 2 is</td>
+              <td class="no">More of the same, arriving unbidden.</td>
+              <td class="yes">The result of the trial, built around what won.</td>
+            </tr>
+            <tr>
+              <td class="stage">Emotional state on day 3</td>
+              <td class="no">Anxious and out of pocket.</td>
+              <td class="yes">Curious and mid-experiment.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="band">
+        <strong class="band-title">The texture lever we already own, for free</strong>
+        Our own product page says it plainly: serve straight from the fridge for a
+        <strong>jelly-like texture</strong>, or warm it up to release a <strong>silky gravy</strong>.
+        That means every tray we ship is already two textures, and a genuine texture trial costs us
+        nothing &mdash; no new SKU, no extra shipment. A cat that refuses chilled jelly has not
+        refused the recipe; it has refused one of the two ways we can serve it. Right now almost
+        nobody in the first 72 hours knows that, which makes this the cheapest and fastest
+        acceptance lever in the entire programme.
+      </div>
+    </section>
+
+    <!-- ── COMPONENT 1 ── -->
+    <section class="card" id="c1">
+      <div class="comp-head">
+        <span class="comp-num">1</span>
+        <h2>Transition &amp; Texture Training Deck</h2>
+        <span class="who">Owners: Training and Retention Strategy, with Brand for the science content. Audience: sales and customer service agents. Format: internal deck plus assessment.</span>
+      </div>
+
+      <div class="badge-row">
+        <span class="badge core">Core component</span>
+        <span class="badge high">High impact</span>
+        <span class="badge quick">No engineering</span>
+        <span class="badge owner">Training</span>
+      </div>
+
+      <p>
+        An internal deck covering the transition phase and texture nuance, whose single behavioural
+        objective is to change how agents frame Box 1 on the call. Everything else in the deck exists
+        to make that reframe credible, because an agent who does not believe the science will not
+        deliver the framing convincingly.
+      </p>
+
+      <h3>Deck structure</h3>
+      <div class="table-wrap">
+        <table class="wide" aria-label="Training deck structure">
+          <thead>
+            <tr>
+              <th>Section</th>
+              <th>Slides</th>
+              <th>Content</th>
+              <th>Agent walks away able to&hellip;</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="stage">A. Why this matters</td>
+              <td>4</td>
+              <td>The 6.63 gap. 56.67% inside 7 days. 23% before delivery. Day 5. Food refusal versus price.</td>
+              <td>Explain in one sentence why their first call decides retention.</td>
+            </tr>
+            <tr>
+              <td class="stage">B. The science, plainly</td>
+              <td>5</td>
+              <td>Kibble at 150&deg;C plus fat and flavour sprays. Fresh at 90&deg;C. Moisture and carbs. Why conditioning, not preference, drives early refusal.</td>
+              <td>Say "refusing at first is habit, not preference" and back it up.</td>
+            </tr>
+            <tr>
+              <td class="stage">C. The reframe</td>
+              <td>4</td>
+              <td>Box 1 as a tasting and texture trial. Redefining day-2 success. The promise we make, and the promise we never make.</td>
+              <td>Position Box 1 as an exploration without overpromising.</td>
+            </tr>
+            <tr>
+              <td class="stage">D. Texture nuance</td>
+              <td>5</td>
+              <td>Chilled jelly versus warmed gravy. The texture ladder from kibble-adjacent to loose and gravy-rich. Language for describing texture. Matching a starting texture to the previous food.</td>
+              <td>Recommend a specific first serve and a specific fallback.</td>
+            </tr>
+            <tr>
+              <td class="stage">E. Transition tracks</td>
+              <td>4</td>
+              <td>Kibble 14 days, wet 7&ndash;10, raw 3&ndash;7, mixed 10&ndash;14, plus 7 days for fussy-flagged cats.</td>
+              <td>Give an accurate, personalised timeline from one question.</td>
+            </tr>
+            <tr>
+              <td class="stage">F. The scorecard</td>
+              <td>3</td>
+              <td>What the card is, how to introduce it in 20 seconds, how to read it back on an inbound call.</td>
+              <td>Set up the scorecard so the customer actually uses it.</td>
+            </tr>
+            <tr>
+              <td class="stage">G. Swap, don't stop</td>
+              <td>5</td>
+              <td>The offer ladder. Scripts for the four common refusal calls. Why we do not discount inside 28 days. Escalation points.</td>
+              <td>Convert a pause request into a swap without reaching for margin.</td>
+            </tr>
+            <tr>
+              <td class="stage">H. Practice</td>
+              <td>3</td>
+              <td>Two real call teardowns, one saved and one lost. Role-play briefs. Assessment rules.</td>
+              <td>Handle a live "she won't touch it" call.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>The framing script, and its failure modes</h3>
+      <p>
+        The reframe has to survive contact with a real call, so it is taught as specific language
+        rather than a principle. The left column is what we hear today.
+      </p>
+      <div class="table-wrap">
+        <table class="swap-table" aria-label="Say this, not that">
+          <thead>
+            <tr>
+              <th style="width: 44%">Don't say</th>
+              <th>Say</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="no">"Cats love it, she'll be fine."</td>
+              <td class="yes">"Most cats take a few days to switch, especially off dry food. Week one is about finding which recipe and texture she goes for."</td>
+            </tr>
+            <tr>
+              <td class="no">"Your first box will arrive on Tuesday."</td>
+              <td class="yes">"Tuesday is her tasting box &mdash; seven recipes to try, and two ways to serve each one. There's a card inside to keep score."</td>
+            </tr>
+            <tr>
+              <td class="no">"Did she eat it?"</td>
+              <td class="yes">"How did she approach it &mdash; did she sniff it, lick it, or take a few bites?"</td>
+            </tr>
+            <tr>
+              <td class="no">"Just give it time."</td>
+              <td class="yes">"Let's change one thing tonight: warm the next tray for ten seconds so the gravy comes through, and serve it on a clean plate."</td>
+            </tr>
+            <tr>
+              <td class="no">"It's normal, cats are fussy."</td>
+              <td class="yes">"Fussiness here is a habit from the old food, not a verdict on this one. It's the bit we're best at helping with."</td>
+            </tr>
+            <tr>
+              <td class="no">"I can pause that for you now."</td>
+              <td class="yes">"Before we pause anything &mdash; which ones has she tried? Let me swap the rest for the proteins that got the best reaction. That's free and it usually does it."</td>
+            </tr>
+            <tr>
+              <td class="no">"I can give you 20% off the next box."</td>
+              <td class="yes">"A discount won't make her eat it. Let's fix the food: different texture, different protein, and I'll send a topper to bridge the gap."</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="panel accent">
+        <h3>Assessment and rollout</h3>
+        <ul>
+          <li>Written quiz, 85% pass mark, weighted towards the transition tracks and the texture mechanics.</li>
+          <li>One assessed role-play: a bowl-day-2 refusal call, scored against the retention QA scorecard, with the reframe and the swap offer both required to pass.</li>
+          <li>Certification recorded against the agent ID and required before working live early-life contacts.</li>
+          <li>Delivered as two 45-minute sessions rather than one long one, with the practice session at least a day later so the language has time to settle.</li>
+          <li>Quarterly refresh slide built from the previous quarter's top three refusal patterns, so the deck stays current instead of ageing into a compliance exercise.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ── COMPONENT 2 ── -->
+    <section class="card" id="c2">
+      <div class="comp-head">
+        <span class="comp-num">2</span>
+        <h2>In-Box Recipe Scorecard</h2>
+        <span class="who">Owners: Product and Packaging with Brand design, Fulfilment for insertion. Audience: pet parents. Format: printed card in Box 1, with a digital twin.</span>
+      </div>
+
+      <div class="badge-row">
+        <span class="badge core">Core component</span>
+        <span class="badge high">High impact</span>
+        <span class="badge med">Print lead time</span>
+        <span class="badge owner">Product + Packaging</span>
+      </div>
+
+      <p>
+        A physical card in the first box carrying a daily tracker: which recipe was served, how it
+        was served, how the cat reacted, and what that says about texture preference. It does three
+        jobs at once. It makes the trial framing tangible the moment the box is opened, it converts
+        a vague worry into a recorded observation, and it produces the only early data we currently
+        have no way of collecting.
+      </p>
+
+      <div class="mock-wrap">
+        <div class="scorecard">
+          <div class="sc-head">
+            <span class="sc-title">The Tasting Card</span>
+            <span class="sc-sub">Seven recipes &middot; two textures &middot; one week</span>
+          </div>
+          <div class="sc-body">
+            <div class="sc-name">
+              <span>Chief taster</span>
+              <span class="writeon"></span>
+              <span>Coming from</span>
+              <span class="writeon"></span>
+            </div>
+            <table class="sc-grid" aria-label="Example of the printed tasting card grid">
+              <thead>
+                <tr>
+                  <th>Day</th>
+                  <th>Recipe</th>
+                  <th>Chilled<br>jelly</th>
+                  <th>Warmed<br>gravy</th>
+                  <th>How it went</th>
+                  <th>Notes</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="day">Day 1</td>
+                  <td><span class="writeon" style="display:block;min-width:60px">&nbsp;</span></td>
+                  <td><span class="tickbox"></span></td>
+                  <td><span class="tickbox"></span></td>
+                  <td>
+                    <span class="dots">
+                      <i class="n1">1</i><i class="n2">2</i><i class="n3">3</i><i class="n4">4</i>
+                    </span>
+                  </td>
+                  <td><span class="writeon" style="display:block;min-width:70px">&nbsp;</span></td>
+                </tr>
+                <tr>
+                  <td class="day">Day 2</td>
+                  <td><span class="writeon" style="display:block;min-width:60px">&nbsp;</span></td>
+                  <td><span class="tickbox"></span></td>
+                  <td><span class="tickbox"></span></td>
+                  <td>
+                    <span class="dots">
+                      <i class="n1">1</i><i class="n2">2</i><i class="n3">3</i><i class="n4">4</i>
+                    </span>
+                  </td>
+                  <td><span class="writeon" style="display:block;min-width:70px">&nbsp;</span></td>
+                </tr>
+                <tr>
+                  <td class="day">Day 3</td>
+                  <td><span class="writeon" style="display:block;min-width:60px">&nbsp;</span></td>
+                  <td><span class="tickbox"></span></td>
+                  <td><span class="tickbox"></span></td>
+                  <td>
+                    <span class="dots">
+                      <i class="n1">1</i><i class="n2">2</i><i class="n3">3</i><i class="n4">4</i>
+                    </span>
+                  </td>
+                  <td><span class="writeon" style="display:block;min-width:70px">&nbsp;</span></td>
+                </tr>
+                <tr>
+                  <td class="day">Days 4&ndash;7</td>
+                  <td colspan="5" style="color:#816165;text-align:left">Same again &mdash; one row per day on the printed card.</td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="sc-legend">
+              <div><span class="dots"><i class="n1">1</i></span> Walked away</div>
+              <div><span class="dots"><i class="n2">2</i></span> Sniffed or licked</div>
+              <div><span class="dots"><i class="n3">3</i></span> Ate some</div>
+              <div><span class="dots"><i class="n4">4</i></span> Cleared the plate</div>
+            </div>
+          </div>
+          <div class="sc-foot">
+            <div>
+              <span class="msg-strong">2s and 3s are progress</span><br>
+              A recipe that gets a 1 twice isn't a problem. It's a result &mdash; swap it, don't stop.
+            </div>
+            <div class="qr" role="img" aria-label="Placeholder for the QR code to the digital scorecard"></div>
+          </div>
+        </div>
+      </div>
+      <p class="mock-caption">
+        Indicative design for the front of the card. Print artwork to be produced by Brand design.
+      </p>
+
+      <div class="panel">
+        <h3>Design decisions worth defending</h3>
+        <ul>
+          <li>
+            <strong>The four-point scale is the whole card.</strong> A binary "did they eat it?"
+            manufactures failure on day one, which is precisely the behaviour we are trying to
+            prevent. Four points make "sniffed it" a legitimate recordable outcome, and the card
+            prints the interpretation directly on it so nobody has to guess whether a 2 is bad news.
+          </li>
+          <li>
+            <strong>Chilled and warmed are separate columns.</strong> This is what turns a recipe
+            tracker into a texture tracker, and it costs a column. It also teaches the warming trick
+            by implication: a parent looking at two boxes will try both.
+          </li>
+          <li>
+            <strong>The cat's name is handwritten, not printed.</strong> Variable-data printing adds
+            cost and lead time, and a name the owner writes themselves creates more ownership than
+            one we print. "Coming from" also captures the previous food at the moment they are most
+            willing to tell us.
+          </li>
+          <li>
+            <strong>It lives on the fridge, not in the recycling.</strong> Sat on top of the trays
+            under the lid so it is the first thing seen, with a magnet or magnetic strip so it ends
+            up next to where the food is served. A card in a leaflet stack is a card nobody reads.
+          </li>
+          <li>
+            <strong>The QR is the telemetry, the paper is the habit.</strong> Do not fight the
+            paper. Let the card be the daily ritual and use the QR to pull the same data into the
+            CRM, where component 3 needs it. Every scan should pre-fill from what we already know
+            so logging a meal takes one tap.
+          </li>
+        </ul>
+      </div>
+
+      <div class="panel">
+        <h3>Reverse of the card</h3>
+        <ul>
+          <li>Their transition track and its honest length, selected from the previous food they were asked about at sign-up.</li>
+          <li>The first-meal method: a spoonful, warmed ten seconds, on a clean plate, old food and treats out of the way.</li>
+          <li>The 20-minute rule: if it is refused, take it away, offer the usual food, try again tomorrow. Framed as normal procedure, not as a contingency.</li>
+          <li>The two-texture trick, spelled out: chilled for jelly, warmed for gravy, and try both before writing off a recipe.</li>
+          <li>"Swap it, don't stop it" with the short link and QR, plus what a swap costs, which is nothing.</li>
+          <li>A finish line: complete seven days and we will build box 2 around the winners.</li>
+        </ul>
+      </div>
+
+      <div class="note">
+        <strong class="note-title">Operational questions to close before print</strong>
+        Unit cost at volume and where it sits in the pack sequence. Whether the magnet is worth its
+        cost or a fridge-safe adhesive strip will do. Print lead time against the pilot date. Whether
+        Fulfilment can insert a track-specific reverse (four variants) or whether version one carries
+        all four tracks on the same card. Only the last one changes the design meaningfully.
+      </div>
+    </section>
+
+    <!-- ── COMPONENT 3 ── -->
+    <section class="card" id="c3">
+      <div class="comp-head">
+        <span class="comp-num">3</span>
+        <h2>Scorecard-Driven CRM Messaging</h2>
+        <span class="who">Owners: CRM with Retention Strategy for the decision logic, Engineering for the swap and interception surfaces. Format: rebuilt early-life email and SMS flows.</span>
+      </div>
+
+      <div class="badge-row">
+        <span class="badge core">Core component</span>
+        <span class="badge high">High impact</span>
+        <span class="badge eng">Needs engineering</span>
+        <span class="badge owner">CRM</span>
+      </div>
+
+      <p>
+        Rebuild the early-life flows so they fire on <strong>usage signals</strong> rather than
+        calendar days, and so the default remedy offered at every branch is a recipe or texture swap
+        instead of a pause. The scorecard is what makes this possible: once we know a cat rated the
+        chicken a 2 chilled, we can write a message no generic journey could.
+      </p>
+
+      <h3>Trigger map</h3>
+      <div class="table-wrap">
+        <table class="wide" aria-label="CRM trigger map">
+          <thead>
+            <tr>
+              <th>Trigger</th>
+              <th>Clock</th>
+              <th>Channel</th>
+              <th>Intent</th>
+              <th>Primary action offered</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="stage">Order placed</td>
+              <td>A + 1 hour</td>
+              <td>Email</td>
+              <td>Set the trial framing before anything can go wrong.</td>
+              <td>Read what week one looks like</td>
+            </tr>
+            <tr>
+              <td class="stage">Dispatch confirmed</td>
+              <td>A, day before delivery</td>
+              <td>SMS</td>
+              <td>Prepare the house: clear the old food, pick a plate.</td>
+              <td>First-meal guide</td>
+            </tr>
+            <tr>
+              <td class="stage">Delivery confirmed</td>
+              <td>B, hour 0</td>
+              <td>SMS</td>
+              <td>Get meal one served correctly and logged.</td>
+              <td>Log meal one</td>
+            </tr>
+            <tr>
+              <td class="stage">No meal logged</td>
+              <td>B + 24 hours</td>
+              <td>SMS</td>
+              <td>Capture a reaction with one tap; silence is itself a risk signal.</td>
+              <td>One-tap reaction</td>
+            </tr>
+            <tr>
+              <td class="stage">Reaction 3 or 4 logged</td>
+              <td>B, on event</td>
+              <td>Email</td>
+              <td>Reinforce and extend: name the winner, introduce recipe two.</td>
+              <td>Lock this recipe into box 2</td>
+            </tr>
+            <tr>
+              <td class="stage">Reaction 1 or 2, first time</td>
+              <td>B, on event</td>
+              <td>SMS</td>
+              <td>Normalise, then change one variable: temperature.</td>
+              <td>Try it warmed tonight</td>
+            </tr>
+            <tr>
+              <td class="stage">Reaction 1 or 2, twice</td>
+              <td>B, on event</td>
+              <td>SMS + email</td>
+              <td>Intercept the pause thought before it forms. Offer the swap unprompted.</td>
+              <td>Swap these recipes free</td>
+            </tr>
+            <tr>
+              <td class="stage">Day-3 checkpoint</td>
+              <td>B + 72 hours</td>
+              <td>Email</td>
+              <td>Reflect their own progress back and reset the finish line to day 14.</td>
+              <td>Adjust the plan</td>
+            </tr>
+            <tr>
+              <td class="stage">Pause page opened</td>
+              <td>Any</td>
+              <td>On-site</td>
+              <td>Last-moment interception with scorecard context.</td>
+              <td>Swap, or delay a week</td>
+            </tr>
+            <tr>
+              <td class="stage">Pause completed</td>
+              <td>Any, within 24 hours</td>
+              <td>Call + email</td>
+              <td>Capture the real reason and offer recovery on product, not price.</td>
+              <td>Rebuild box 2 free</td>
+            </tr>
+            <tr>
+              <td class="stage">Box 2 dispatch minus 2 days</td>
+              <td>A</td>
+              <td>SMS</td>
+              <td>Remove the surprise that drives the day-7 spike.</td>
+              <td>Change recipes or shift the date</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Draft copy for the messages that matter most</h3>
+      <p>
+        Four of these eleven do the heavy lifting. Copy below is a starting point for Brand, written
+        in Marro's voice, with merge fields marked.
+      </p>
+
+      <div class="msg">
+        <div class="msg-head">
+          <span class="chan email">Email</span>
+          <span class="trig">Trigger: order placed, plus 1 hour &middot; Clock A</span>
+        </div>
+        <div class="msg-body">
+          <span class="subject">Subject: Box 1 is a tasting session, not a test</span>
+          <p>Hi <span class="var">first_name</span>,</p>
+          <p>
+            <span class="var">cat_name</span> doesn't know it yet, but a rather good week is coming.
+          </p>
+          <p>
+            One thing worth knowing before the box lands. Fresh food is new, and most cats take a few
+            days to commit &mdash; especially cats coming off dry food, which is engineered with fat
+            and flavour sprays to be hard to walk away from. Early hesitation is habit, not a verdict.
+          </p>
+          <p>
+            So we don't expect a cleared plate on day one. Box 1 is a tasting and texture trial:
+            several recipes, two ways to serve each one, and one job &mdash; find out what
+            <span class="var">cat_name</span> actually goes for.
+          </p>
+          <p>
+            Inside you'll find the Tasting Card. Stick it on the fridge and log each meal. It takes
+            five seconds, and it tells us exactly what to put in box 2.
+          </p>
+          <p>
+            <strong>What a good day one looks like:</strong> a sniff, a lick, a few bites. Anything
+            more is a bonus.
+          </p>
+          <p>Arriving <span class="var">delivery_date</span>.</p>
+        </div>
+      </div>
+
+      <div class="msg">
+        <div class="msg-head">
+          <span class="chan sms">SMS</span>
+          <span class="trig">Trigger: delivery confirmed &middot; Clock B, hour 0</span>
+        </div>
+        <div class="msg-body">
+          <p>
+            Marro: <span class="var">cat_name</span>'s tasting box has landed. Start small &mdash;
+            one spoonful of the chicken, warmed for 10 seconds so the gravy comes through, on a clean
+            plate with the old food out of the way. Give her 20 minutes, then take it away and offer
+            her usual dinner. That's a normal day one. Log meal one:
+            <span class="var">log_link</span>
+          </p>
+        </div>
+      </div>
+
+      <div class="msg">
+        <div class="msg-head">
+          <span class="chan sms">SMS</span>
+          <span class="trig">Trigger: reaction 1 or 2 logged twice &middot; Clock B, on event</span>
+        </div>
+        <div class="msg-body">
+          <p>
+            Marro: that's two "not yet" meals for <span class="var">cat_name</span> &mdash;
+            completely normal on day <span class="var">bowl_day</span> of a switch off
+            <span class="var">previous_food</span>. Two things left to try: warm the tray for 10
+            seconds if you served it chilled, and keep the kibble away between meals so she comes to
+            it hungry.
+          </p>
+          <p>
+            Still no? Then it's the recipe, not the food. We'll swap the rest of the box for
+            different proteins, free, and build box 2 around whatever wins:
+            <span class="var">swap_link</span>. No need to pause anything.
+          </p>
+        </div>
+      </div>
+
+      <div class="msg">
+        <div class="msg-head">
+          <span class="chan onsite">On-site</span>
+          <span class="trig">Trigger: pause page opened &middot; interception before the pause options</span>
+        </div>
+        <div class="msg-body">
+          <span class="subject">Before you pause &mdash; can we fix the food instead?</span>
+          <p>
+            <span class="var">cat_name</span> has tried <span class="var">n_recipes</span> of
+            <span class="var">total_recipes</span> recipes, and the best reaction so far was
+            <span class="var">best_reaction</span>. Most cats who pause in week one hadn't found
+            their recipe yet &mdash; a switch off <span class="var">previous_food</span> usually
+            takes <span class="var">track_length</span>.
+          </p>
+          <p>Three things we can do right now, all free:</p>
+          <div class="cta-row">
+            <span class="pill-cta">Swap my recipes</span>
+            <span class="pill-cta">Change the texture</span>
+            <span class="pill-cta">Push my next box back a week</span>
+            <span class="pill-cta ghost">Continue to pause</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="note win">
+        <strong class="note-title">The design principle for every branch</strong>
+        A pause is the only self-service tool most customers currently have, so of course they reach
+        for it. Every message in this component exists to put a better tool within easier reach: a
+        swap, a texture change, or a week's delay. If the swap is harder to find than the pause
+        button, the flows will not work no matter how good the copy is.
+      </div>
+
+      <div class="panel">
+        <h3>Data the flows depend on</h3>
+        <ul>
+          <li>Delivery confirmation as a reliable, timely CRM event. Everything on clock B hangs off this.</li>
+          <li>Previous food and eating type, captured at sign-up, to select the track and to write honest timelines into the copy.</li>
+          <li>Scorecard events: recipe, serve temperature, reaction score, timestamp.</li>
+          <li>A swap endpoint that can rebuild the remainder of box 1 and the contents of box 2 without an agent.</li>
+          <li>Pause-intent as an event, not just pause-completed, so the interception in the last row is possible at all.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ── COMPONENT 4 ── -->
+    <section class="card" id="c4">
+      <div class="comp-head">
+        <span class="comp-num">4</span>
+        <h2>Early-Pause Prevention: The Day 1&ndash;3 Interventions</h2>
+        <span class="who">Owners: Retention Strategy with CRM and Customer Service. Format: an intervention map from checkout to bowl-day 3, plus the rescue path.</span>
+      </div>
+
+      <div class="badge-row">
+        <span class="badge core">Core component</span>
+        <span class="badge high">High impact</span>
+        <span class="badge owner">Retention + CS</span>
+      </div>
+
+      <p>
+        Educate before and during the first delivery so expectations are managed rather than
+        discovered, and so a knee-jerk pause never becomes the obvious move. The principle
+        throughout: <strong>arrive before the doubt</strong>. Every intervention below is scheduled
+        earlier than the moment it is designed to prevent.
+      </p>
+
+      <div class="timeline">
+        <div class="timeline-item">
+          <div><span class="tag">Checkout</span><br><strong>The expectation contract</strong></div>
+          <div>
+            Capture previous food and eating type. State the transition length for that baseline out
+            loud. Confirm the box 2 date and price plainly, and how to change either. Introduce the
+            Tasting Card in one sentence so it is expected rather than discovered. Never promise
+            instant love &mdash; the overpromise made here is what detonates on bowl-day 2.
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div><span class="tag risk">Order days 1&ndash;3</span><br><strong>Pre-delivery silence &mdash; 23% of pauses</strong></div>
+          <div>
+            The highest-risk window nobody currently owns. The customer has paid and has nothing to
+            hold. Fill it with tracking, what is in the tasting box, how to prepare, and a plain
+            restatement of how flexible the subscription is. This window is about remorse and
+            commitment anxiety, so reassurance about control beats education about food.
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div><span class="tag">Delivery minus 1</span><br><strong>Prepare the house</strong></div>
+          <div>
+            One SMS with two asks: move the old food and treats out of the way, and choose a clean,
+            shallow plate. Small, concrete, and it recruits the customer into the trial before the
+            box arrives.
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div><span class="tag">Bowl-day 1</span><br><strong>The first meal, done properly</strong></div>
+          <div>
+            A spoonful, warmed ten seconds, clean plate, old food away, 20 minutes then withdraw and
+            offer the usual dinner. Log meal one. The most common day-one failure is not the cat, it
+            is a full portion served cold next to a bowl of kibble.
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div><span class="tag">Bowl-day 2</span><br><strong>Change one variable</strong></div>
+          <div>
+            If day one went well, increase slightly and stay on the same recipe. If it did not, change
+            exactly one thing &mdash; temperature first, because chilled to warmed is free and turns
+            jelly into gravy. Changing three things at once teaches us nothing and overwhelms the
+            customer.
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div><span class="tag risk">Bowl-day 3</span><br><strong>The checkpoint that prevents day 5</strong></div>
+          <div>
+            The single most important contact in the programme. Reflect their own logged progress
+            back to them, restate the real finish line, and put the swap in front of them explicitly
+            before they go looking for the pause button. Two low scores here triggers the rescue
+            path: a free recipe swap dispatched next day, and the offer of a booked call rather than
+            an unsolicited one.
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div><span class="tag">Bowl-days 4&ndash;7</span><br><strong>Hold the line to the cliff</strong></div>
+          <div>
+            Order-clock day 5 sits in here for most customers, so the tone stays "on track" rather
+            than "how's it going?". Introduce recipe two once one has settled. Confirm the portion.
+            Start naming early benefits the customer can verify themselves.
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div><span class="tag risk">Box 2 minus 2 days</span><br><strong>No surprises</strong></div>
+          <div>
+            Price, contents and date stated plainly, with one-tap options to swap recipes, shift the
+            date or skip. The day-7 and day-14 pause spikes are an ambush problem, and this is the
+            cheapest fix for them.
+          </div>
+        </div>
+      </div>
+
+      <div class="note warn">
+        <strong class="note-title">What we are not doing in this window</strong>
+        No discounts. Price is not the objection inside 28 days, and a discount offered on bowl-day 2
+        both wastes margin and signals that we think the food is the problem. No unsolicited outbound
+        calls before day 3 either &mdash; a booked slot converts far better than an interruption, and
+        an unexpected call about whether the cat is eating can create the doubt it was meant to
+        resolve.
+      </div>
+    </section>
+
+    <section class="card" id="ladder">
+      <h2>Swap, Don't Stop: The Offer Ladder</h2>
+      <p>
+        One ladder, used by agents, by the CRM flows and by the self-service surfaces, so a customer
+        gets the same answer wherever they ask. Start at the top and only move down. Nothing on this
+        ladder costs margin until the very last rung.
+      </p>
+      <div class="ladder">
+        <div class="rung">
+          <span class="lvl">Rung 1</span>
+          <div><strong>Change the texture, not the food.</strong> Chilled for jelly, warmed for gravy. Free, instant, needs nothing from us, and resolves a meaningful share of "she won't touch it" without changing a single recipe.</div>
+        </div>
+        <div class="rung">
+          <span class="lvl">Rung 2</span>
+          <div><strong>Swap the recipes.</strong> Rebuild the rest of box 1 and the contents of box 2 around the proteins with the best reactions on the card. Free, self-serve, and it uses data the customer generated themselves, which makes it persuasive.</div>
+        </div>
+        <div class="rung">
+          <span class="lvl">Rung 3</span>
+          <div><strong>Send a rescue pack.</strong> Next-day dispatch of a different texture, an aroma topper and a printed rescue plan, triggered by two low scores. Arriving unasked on bowl-day 4 is worth more than any save call on day 6.</div>
+        </div>
+        <div class="rung">
+          <span class="lvl">Rung 4</span>
+          <div><strong>Push the next box back a week.</strong> Positioned as the normal thing to do while a cat is still settling, not as a concession. This is what most people actually want when they click pause.</div>
+        </div>
+        <div class="rung">
+          <span class="lvl">Rung 5</span>
+          <div><strong>Skip one box.</strong> Recoverable, visible, and far better for us than a pause. Should sit higher in the account area than the pause option does.</div>
+        </div>
+        <div class="rung">
+          <span class="lvl">Rung 6</span>
+          <div><strong>Book the transition clinic.</strong> Ten minutes with someone qualified for fussy-flagged and kibble-fed cats. Authority does work an agent cannot, because the customer assumes we are biased.</div>
+        </div>
+        <div class="rung last">
+          <span class="lvl">Rung 7</span>
+          <div><strong>Pause &mdash; deliberately, with a date.</strong> If we get here, pause cleanly, capture the structured reason, and schedule a check-back. A pause with a plan is recoverable; a pause after a fight is not.</div>
+        </div>
+      </div>
+      <div class="note">
+        <strong class="note-title">The one rule</strong>
+        No discount at any rung inside the first 28 days. If the cat is not eating, a cheaper box of
+        food the cat is not eating solves nothing, and it trains the customer to expect a discount at
+        every future wobble. Discount authority belongs to the post-28-day price conversation, which
+        is a different problem with a different owner.
+      </div>
+    </section>
+
+    <section class="card" id="measure">
+      <h2>Measurement</h2>
+      <p>
+        The signature metric for this programme is the <strong>swap-to-pause ratio</strong>: for
+        every pause we take in the first 72 hours, how many recipe or texture swaps did we trigger
+        instead? It goes up when the programme is working, and unlike a pause rate it tells us
+        whether the mechanism &mdash; not just the mood &mdash; is doing its job.
+      </p>
+      <div class="table-wrap">
+        <table class="wide" aria-label="Measurement framework">
+          <thead>
+            <tr>
+              <th>Type</th>
+              <th>Metric</th>
+              <th>Why it earns its place</th>
+              <th>Direction</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="stage">Signature</td>
+              <td>Swap-to-pause ratio, first 72 hours</td>
+              <td>Directly measures whether we are redirecting the pause impulse rather than suppressing it.</td>
+              <td>Up</td>
+            </tr>
+            <tr>
+              <td class="stage">Primary</td>
+              <td>Pause rate, order days 0&ndash;3</td>
+              <td>The pre-delivery remorse window, currently around 23% of all pauses.</td>
+              <td>Down</td>
+            </tr>
+            <tr>
+              <td class="stage">Primary</td>
+              <td>Pause rate, bowl-days 1&ndash;3</td>
+              <td>The tasting window this programme exists to protect.</td>
+              <td>Down</td>
+            </tr>
+            <tr>
+              <td class="stage">Primary</td>
+              <td>Day-5 pause index</td>
+              <td>The cliff. If the day-3 checkpoint works, this is where it shows up first.</td>
+              <td>Down</td>
+            </tr>
+            <tr>
+              <td class="stage">Primary</td>
+              <td>Share of early pauses citing food refusal</td>
+              <td>The root cause. Should fall faster than the overall pause rate if the mechanism is right.</td>
+              <td>Down</td>
+            </tr>
+            <tr>
+              <td class="stage">Leading</td>
+              <td>Scorecard activation: meal one logged within 48 hours</td>
+              <td>The earliest signal we have of an engaged trial, and the input the CRM flows need.</td>
+              <td>Up</td>
+            </tr>
+            <tr>
+              <td class="stage">Leading</td>
+              <td>Three-day and seven-day card completion</td>
+              <td>Distinguishes a card that was read from a card that is being used.</td>
+              <td>Up</td>
+            </tr>
+            <tr>
+              <td class="stage">Leading</td>
+              <td>Texture trial rate: both chilled and warmed tried</td>
+              <td>Tests whether the free texture lever is actually reaching people.</td>
+              <td>Up</td>
+            </tr>
+            <tr>
+              <td class="stage">Leading</td>
+              <td>Reaction-score trajectory, bowl-days 1 to 7</td>
+              <td>Shows acceptance improving before retention data could possibly confirm it.</td>
+              <td>Up</td>
+            </tr>
+            <tr>
+              <td class="stage">Enablement</td>
+              <td>Certification coverage and QA scores on the reframe and swap behaviours</td>
+              <td>Connects component 1 to outcomes instead of assuming training landed.</td>
+              <td>Up</td>
+            </tr>
+            <tr>
+              <td class="stage">Guardrail</td>
+              <td>Swap and rescue cost per acquired customer</td>
+              <td>Free-to-the-customer is not free to us. This is the number that decides whether we scale it.</td>
+              <td>Within cap</td>
+            </tr>
+            <tr>
+              <td class="stage">Guardrail</td>
+              <td>Contact volume per 100 first boxes</td>
+              <td>A card and a swap offer could raise contacts. Worth it if pauses fall, a problem if they do not.</td>
+              <td>Watch</td>
+            </tr>
+            <tr>
+              <td class="stage">Guardrail</td>
+              <td>Contribution margin per acquired customer at 84 days</td>
+              <td>The programme must pay for itself beyond the trial window.</td>
+              <td>Hold or up</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="panel accent">
+        <h3>Test design</h3>
+        <ul>
+          <li>
+            <strong>Pull the baselines first.</strong> We do not currently have clean 72-hour pause
+            rates on either clock, and setting targets before we have them would be guessing. First
+            deliverable of the data workstream, before anything ships.
+          </li>
+          <li>
+            <strong>Hold back 20%</strong> on the existing journey for at least four full cohorts.
+            Early-life retention is seasonal and cohort-sensitive; one good week proves nothing.
+          </li>
+          <li>
+            <strong>Split the card by fulfilment batch</strong> rather than by customer, since
+            inserting a card for some customers and not others within the same batch is an
+            operational headache and a source of error.
+          </li>
+          <li>
+            <strong>Isolate the components where you can.</strong> Training and CRM can be measured
+            separately from the card. If they all launch together and the number moves, we will not
+            know which of the four earned it, and we will not know what to double down on.
+          </li>
+          <li>
+            <strong>Read the leading indicators weekly, the pause rates monthly.</strong> Card
+            activation and reaction trajectories move within days; retention curves need cohorts to
+            mature.
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="card" id="build">
+      <h2>Build Plan</h2>
+      <p>
+        Sequenced so the two components that need no engineering and no print run &mdash; the deck
+        and the pre-delivery messaging &mdash; are live and measurable while the card is at the
+        printer and the swap endpoint is being built.
+      </p>
+      <div class="table-wrap">
+        <table class="wide" aria-label="Build plan by block">
+          <thead>
+            <tr>
+              <th>Workstream</th>
+              <th>Scope</th>
+              <th>Block 1</th>
+              <th>Block 2</th>
+              <th>Block 3</th>
+              <th>Block 4</th>
+              <th>Block 5</th>
+              <th>Block 6</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="stage">Baselines</td>
+              <td>72-hour pause rates on both clocks, reason mix, delivery-event audit</td>
+              <td><span class="bar data">Pull</span></td>
+              <td><span class="bar data">Verify</span></td>
+              <td class="empty"></td>
+              <td class="empty"></td>
+              <td class="empty"></td>
+              <td class="empty"></td>
+            </tr>
+            <tr>
+              <td class="stage">Training deck</td>
+              <td>Deck, scripts, quiz, role-play, certification</td>
+              <td><span class="bar deck">Draft</span></td>
+              <td><span class="bar deck">Review</span></td>
+              <td><span class="bar deck">Deliver</span></td>
+              <td><span class="bar deck">Certify</span></td>
+              <td class="empty"></td>
+              <td><span class="bar deck">Refresh</span></td>
+            </tr>
+            <tr>
+              <td class="stage">Scorecard</td>
+              <td>Design, copy, print spec, fulfilment insertion</td>
+              <td><span class="bar card">Spec</span></td>
+              <td><span class="bar card">Design</span></td>
+              <td><span class="bar card">Print</span></td>
+              <td><span class="bar card">Insert</span></td>
+              <td><span class="bar card">Scale</span></td>
+              <td class="empty"></td>
+            </tr>
+            <tr>
+              <td class="stage">CRM flows</td>
+              <td>Trigger map, copy, branch logic, holdout setup</td>
+              <td class="empty"></td>
+              <td><span class="bar crm">Design</span></td>
+              <td><span class="bar crm">Build</span></td>
+              <td><span class="bar crm">Test</span></td>
+              <td><span class="bar crm">Launch</span></td>
+              <td><span class="bar crm">Tune</span></td>
+            </tr>
+            <tr>
+              <td class="stage">Swap tooling</td>
+              <td>Self-serve swap, texture guidance, pause-page interception</td>
+              <td class="empty"></td>
+              <td><span class="bar swap">Scope</span></td>
+              <td><span class="bar swap">Build</span></td>
+              <td><span class="bar swap">Build</span></td>
+              <td><span class="bar swap">Ship</span></td>
+              <td class="empty"></td>
+            </tr>
+            <tr>
+              <td class="stage">Digital twin</td>
+              <td>QR landing page, one-tap logging, events into CRM</td>
+              <td class="empty"></td>
+              <td class="empty"></td>
+              <td><span class="bar ops">Spec</span></td>
+              <td><span class="bar ops">Build</span></td>
+              <td><span class="bar ops">Ship</span></td>
+              <td class="empty"></td>
+            </tr>
+            <tr>
+              <td class="stage">Pilot and read</td>
+              <td>Holdout, cohort reads, weekly leading indicators</td>
+              <td class="empty"></td>
+              <td class="empty"></td>
+              <td class="empty"></td>
+              <td><span class="bar pilot">Pilot</span></td>
+              <td><span class="bar pilot">Read</span></td>
+              <td><span class="bar pilot">Decide</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="card" id="owners">
+      <h2>Owners and Artifacts</h2>
+      <div class="table-wrap">
+        <table aria-label="Owners and artifacts by component">
+          <thead>
+            <tr>
+              <th>Component</th>
+              <th>Owner</th>
+              <th>Needs</th>
+              <th>Artifacts produced</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="stage">1. Training deck</td>
+              <td>Training</td>
+              <td>Retention for the data slides, Brand for the science</td>
+              <td>Deck, framing script, say-this-not-that card, quiz, role-play brief, certification record</td>
+            </tr>
+            <tr>
+              <td class="stage">2. Scorecard</td>
+              <td>Product and Packaging</td>
+              <td>Brand design, Fulfilment, print supplier</td>
+              <td>Print artwork, print spec, insertion instruction, QR landing page</td>
+            </tr>
+            <tr>
+              <td class="stage">3. CRM messaging</td>
+              <td>CRM</td>
+              <td>Retention for branch logic, Engineering for events and swap endpoint</td>
+              <td>Eleven triggered messages, branch logic map, holdout configuration</td>
+            </tr>
+            <tr>
+              <td class="stage">4. Day 1&ndash;3 interventions</td>
+              <td>Retention Strategy</td>
+              <td>CRM to deliver, Customer Service to staff the rescue path</td>
+              <td>Intervention map, rescue-pack spec, booked-call flow, offer ladder</td>
+            </tr>
+            <tr>
+              <td class="stage">Measurement</td>
+              <td>Data and Analytics</td>
+              <td>Delivery events, scorecard events, pause reasons</td>
+              <td>Baseline report, dashboard tiles, weekly leading-indicator read</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="card" id="risks">
+      <h2>Guardrails and Risks</h2>
+      <div class="summary-grid">
+        <div class="summary-box">
+          <strong>No discounting inside 28 days</strong>
+          Price is not the objection in this window. Fix the food, the texture or the timing instead.
+        </div>
+        <div class="summary-box">
+          <strong>No promising instant success</strong>
+          Every overpromise at checkout is a pause on bowl-day 2. The deck treats this as a zero-score
+          behaviour for a reason.
+        </div>
+        <div class="summary-box">
+          <strong>The card must not become a leaflet</strong>
+          If it ships in a stack of inserts it will not be read, and components 3 and 4 lose the data
+          they run on. Placement is a requirement, not a detail.
+        </div>
+        <div class="summary-box">
+          <strong>Swap cost needs a cap</strong>
+          Free swaps are the core mechanic and also the main cost risk. Cap per household, model it
+          before the pilot, and watch it weekly.
+        </div>
+        <div class="summary-box">
+          <strong>Don't trigger on the wrong clock</strong>
+          Messages keyed to order date instead of delivery will miss the moments that matter and
+          erode trust in the journey.
+        </div>
+        <div class="summary-box">
+          <strong>Don't measure with everything at once</strong>
+          Four components launching together will move a number nobody can attribute. Sequence so
+          each earns its own read.
+        </div>
+      </div>
+    </section>
+
+    <section class="card" id="decisions">
+      <h2>Open Decisions</h2>
+      <ul>
+        <li>
+          <strong>Card variants.</strong> One card carrying all four transition tracks, or four
+          track-specific versions inserted by Fulfilment? Four is better for the customer and harder
+          for operations.
+        </li>
+        <li>
+          <strong>Reaction scale wording.</strong> "Walked away / sniffed or licked / ate some /
+          cleared the plate" is proposed. Worth a quick test with real customers, because these four
+          labels carry most of the psychological weight of the programme.
+        </li>
+        <li>
+          <strong>Swap scope.</strong> Can a swap change the remainder of box 1, or only box 2? The
+          first is far more persuasive on bowl-day 2 and materially harder operationally.
+        </li>
+        <li>
+          <strong>Pause-page interception.</strong> Needs engineering on the account surfaces. If
+          that is slow, is an email-and-SMS-only version worth launching first, accepting that it
+          will miss the customers who pause silently?
+        </li>
+        <li>
+          <strong>Digital twin scope.</strong> Is a no-login QR page with one-tap logging enough for
+          version one, avoiding an app dependency entirely?
+        </li>
+        <li>
+          <strong>Completion incentive.</strong> Does finishing seven days on the card earn
+          something, and if so, does it need to be a physical item or is "box 2 built around the
+          winners" reward enough on its own?
+        </li>
+        <li>
+          <strong>Trial length interaction.</strong> Should the gap before box 2 flex with the
+          transition track, giving kibble-fed cats a longer runway? Currently a commercial decision
+          made independently of the transition, which is why the day-7 spike exists.
+        </li>
+      </ul>
+    </section>
+
+    <div class="gingham"></div>
+
+    <footer>
+      <span class="sign">Marro &middot; The First 72 Hours</span>
+      Workstream of the <a href="retention-improvement-master-plan.html">Retention Improvement Master
+      Plan</a>. Evidence base: D2MS retention review (matured data, weeks 7&ndash;24) and the fresh
+      versus kibble, wet and raw blog audit.
+    </footer>
+  </main>
+
+  <script>
+    document.getElementById('copyBtn').addEventListener('click', function () {
+      var text = document.getElementById('pasteBlock').innerText;
+      var button = this;
+      var done = function () {
+        button.textContent = 'Copied';
+        setTimeout(function () { button.textContent = 'Copy summary'; }, 2000);
+      };
+
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(done, function () { button.textContent = 'Copy failed'; });
+        return;
+      }
+
+      var area = document.createElement('textarea');
+      area.value = text;
+      document.body.appendChild(area);
+      area.select();
+      document.execCommand('copy');
+      document.body.removeChild(area);
+      done();
+    });
+  </script>
+</body>
+</html>
