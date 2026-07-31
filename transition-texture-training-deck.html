@@ -1,0 +1,2718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Transition &amp; Texture | Marro Agent Training Deck</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&amp;family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,500..900,50,1&amp;display=swap">
+  <style>
+    :root {
+      --maroon: #451219;
+      --maroon-deep: #3A070D;
+      --maroon-ink: #240205;
+      --apricot: #E9B377;
+      --apricot-soft: #FBEAD6;
+      --amber: #D69042;
+      --blush: #F6DDDD;
+      --blush-soft: #F6ECEC;
+      --paper: #FDF9F9;
+      --muted: #816165;
+      --muted-soft: #B29495;
+      --line: #E2C5C5;
+      --mint-soft: #E6F6EE;
+      --red: #D63F49;
+      --red-deep: #80020F;
+      --display: "Fraunces", "Bricolage Grotesque", Georgia, "Times New Roman", serif;
+      --sans: "Bricolage Grotesque", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: var(--blush);
+      color: var(--maroon);
+      font-family: var(--sans);
+      line-height: 1.5;
+    }
+
+    /* Fraunces sets a heavily stylised ampersand; borrow the body font's instead */
+    .amp {
+      font-family: var(--sans);
+      font-weight: 600;
+    }
+
+    /* ══════════ Chrome ══════════ */
+    .bar {
+      align-items: center;
+      background: var(--maroon-deep);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 16px;
+      padding: 10px 16px;
+    }
+
+    .bar .wordmark {
+      color: var(--paper);
+      font-family: var(--display);
+      font-variation-settings: "SOFT" 50, "WONK" 1;
+      font-size: 19px;
+      font-weight: 900;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .bar .deck-name {
+      color: var(--apricot);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    .bar .spacer {
+      flex: 1;
+    }
+
+    .bar .section-pill {
+      background: rgba(233, 179, 119, 0.12);
+      border: 1px solid rgba(233, 179, 119, 0.5);
+      border-radius: 999px;
+      color: var(--apricot);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      padding: 6px 13px;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .bar .counter {
+      color: #EBCFCE;
+      font-size: 13px;
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .btn {
+      background: transparent;
+      border: 1px solid rgba(235, 207, 206, 0.4);
+      border-radius: 999px;
+      color: #EBCFCE;
+      cursor: pointer;
+      font-family: var(--sans);
+      font-size: 13px;
+      font-weight: 600;
+      padding: 7px 13px;
+      transition: background 0.15s, color 0.15s, border-color 0.15s;
+      white-space: nowrap;
+    }
+
+    .btn:hover {
+      background: rgba(233, 179, 119, 0.18);
+      color: var(--paper);
+    }
+
+    .btn.primary {
+      background: var(--apricot);
+      border-color: var(--apricot);
+      color: var(--maroon-ink);
+    }
+
+    .btn.primary:hover {
+      background: var(--amber);
+      border-color: var(--amber);
+    }
+
+    .btn[aria-pressed="true"] {
+      background: var(--apricot);
+      border-color: var(--apricot);
+      color: var(--maroon-ink);
+    }
+
+    .btn:focus-visible {
+      outline: 3px solid var(--apricot);
+      outline-offset: 2px;
+    }
+
+    .bar a.btn {
+      text-decoration: none;
+    }
+
+    /* ══════════ Stage ══════════ */
+    .stage {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      padding: 20px 16px 26px;
+    }
+
+    /* ══════════ Slide ══════════ */
+    .slide {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      box-shadow: 0 12px 32px rgba(69, 18, 25, 0.1);
+      container-type: inline-size;
+      margin: 0 auto;
+      overflow: hidden;
+      position: relative;
+      width: min(1180px, 100%);
+    }
+
+    .slide-in {
+      display: flex;
+      flex-direction: column;
+      font-size: 17px;
+      height: 100%;
+      justify-content: center;
+      padding: 4.2cqw 5cqw;
+    }
+
+    @supports (font-size: 1cqw) {
+      .slide-in {
+        font-size: clamp(11px, 1.62cqw, 25px);
+      }
+    }
+
+    .slide .kicker {
+      color: var(--muted);
+      font-size: 0.72em;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      margin-bottom: 0.7em;
+      text-transform: uppercase;
+    }
+
+    .slide h2 {
+      color: var(--maroon);
+      font-family: var(--display);
+      font-variation-settings: "SOFT" 50, "WONK" 1;
+      font-size: 2.15em;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      line-height: 1.08;
+      margin: 0 0 0.7em;
+      text-transform: uppercase;
+    }
+
+    .slide h3 {
+      color: var(--maroon);
+      font-family: var(--display);
+      font-variation-settings: "SOFT" 50, "WONK" 0;
+      font-size: 1.05em;
+      margin: 0 0 0.35em;
+    }
+
+    .slide p {
+      margin: 0 0 0.7em;
+      max-width: 46em;
+    }
+
+    .slide p:last-child {
+      margin-bottom: 0;
+    }
+
+    .slide ul {
+      margin: 0;
+      padding-left: 1.2em;
+    }
+
+    .slide li {
+      margin: 0 0 0.55em;
+      padding-left: 0.15em;
+    }
+
+    .slide li:last-child {
+      margin-bottom: 0;
+    }
+
+    .slide li strong,
+    .slide p strong {
+      color: var(--maroon);
+    }
+
+    .slide .sub {
+      color: var(--muted);
+      font-size: 0.9em;
+    }
+
+    /* Inverted slides */
+    .slide.inv {
+      background:
+        radial-gradient(130% 165% at 8% 0%, #5A1A22 0%, transparent 62%),
+        var(--maroon-deep);
+      border-color: var(--maroon-ink);
+      color: #EBCFCE;
+    }
+
+    .slide.inv h2,
+    .slide.inv h3 {
+      color: var(--paper);
+    }
+
+    .slide.inv .kicker {
+      color: var(--apricot);
+    }
+
+    .slide.inv strong {
+      color: var(--paper);
+    }
+
+    .slide.inv .sub {
+      color: var(--muted-soft);
+    }
+
+    /* Title slide */
+    .s-title h1 {
+      color: var(--paper);
+      font-family: var(--display);
+      font-variation-settings: "SOFT" 50, "WONK" 1;
+      font-size: 3.4em;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      line-height: 1.04;
+      margin: 0 0 0.4em;
+      text-transform: uppercase;
+    }
+
+    .s-title .standfirst {
+      color: var(--apricot);
+      font-size: 1.15em;
+      font-weight: 700;
+      max-width: 30em;
+    }
+
+    .s-title .meta {
+      color: var(--muted-soft);
+      font-size: 0.85em;
+      margin-top: 1.6em;
+    }
+
+    /* Big statement */
+    .s-quote .big-line {
+      font-family: var(--display);
+      font-size: 2.5em;
+      font-variation-settings: "SOFT" 50, "WONK" 1;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      line-height: 1.12;
+      margin: 0;
+      max-width: 30em;
+      text-transform: uppercase;
+    }
+
+    .s-quote .after {
+      font-size: 1.02em;
+      margin-top: 1.1em;
+      max-width: 40em;
+    }
+
+    /* Stat slide */
+    .stat-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.2em;
+    }
+
+    .stat {
+      background: var(--blush-soft);
+      border: 1px solid var(--line);
+      border-left: 0.32em solid var(--red);
+      border-radius: 0.6em;
+      flex: 1 1 12em;
+      padding: 1em 1.1em;
+    }
+
+    .slide.inv .stat {
+      background: rgba(253, 249, 249, 0.07);
+      border-color: rgba(233, 179, 119, 0.3);
+      border-left-color: var(--apricot);
+    }
+
+    .stat .n {
+      color: var(--maroon);
+      display: block;
+      font-family: var(--display);
+      font-size: 2.1em;
+      font-variation-settings: "SOFT" 50, "WONK" 1;
+      font-weight: 900;
+      line-height: 1;
+      margin-bottom: 0.25em;
+      text-transform: uppercase;
+    }
+
+    .slide.inv .stat .n {
+      color: var(--apricot);
+    }
+
+    .stat .t {
+      display: block;
+      font-size: 0.92em;
+    }
+
+    .hero-num {
+      color: var(--apricot);
+      font-family: var(--display);
+      font-size: 6.2em;
+      font-variation-settings: "SOFT" 50, "WONK" 1;
+      font-weight: 900;
+      line-height: 0.9;
+      margin: 0 0 0.15em;
+    }
+
+    /* Split slide */
+    .split {
+      display: grid;
+      gap: 1.1em;
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .pane {
+      border-radius: 0.6em;
+      padding: 1.1em 1.2em;
+    }
+
+    .pane.no {
+      background: #FBE7E4;
+      border: 1px solid #F0C4C0;
+    }
+
+    .pane.yes {
+      background: var(--mint-soft);
+      border: 1px solid #BEE4D2;
+    }
+
+    .pane.plain {
+      background: var(--blush-soft);
+      border: 1px solid var(--line);
+    }
+
+    .pane .plabel {
+      display: block;
+      font-size: 0.76em;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      margin-bottom: 0.6em;
+      text-transform: uppercase;
+    }
+
+    .pane.no .plabel { color: var(--red-deep); }
+    .pane.yes .plabel { color: #2F7D5B; }
+    .pane.plain .plabel { color: var(--muted); }
+
+    /* Tables on slides */
+    .slide table {
+      border-collapse: collapse;
+      font-size: 0.9em;
+      width: 100%;
+    }
+
+    .slide th,
+    .slide td {
+      border: 1px solid var(--line);
+      padding: 0.55em 0.7em;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    .slide th {
+      background: var(--maroon);
+      color: var(--apricot);
+      font-size: 0.85em;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .slide tbody tr:nth-child(even) {
+      background: var(--blush-soft);
+    }
+
+    .slide td.k {
+      color: var(--maroon);
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .slide td.no-cell {
+      background: #FBE7E4;
+      color: var(--red-deep);
+    }
+
+    .slide td.yes-cell {
+      background: var(--mint-soft);
+    }
+
+    /* Script slide */
+    .script {
+      background: var(--maroon-ink);
+      border-radius: 0.7em;
+      color: var(--blush);
+      font-size: 1.02em;
+      line-height: 1.55;
+      padding: 1.1em 1.3em;
+    }
+
+    .script .who {
+      color: var(--apricot);
+      display: block;
+      font-size: 0.72em;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      margin-bottom: 0.5em;
+      text-transform: uppercase;
+    }
+
+    .script em {
+      color: var(--apricot);
+      font-style: normal;
+    }
+
+    .beats {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6em;
+      margin-top: 0.9em;
+    }
+
+    .beats span {
+      background: var(--apricot-soft);
+      border: 1px solid var(--apricot);
+      border-radius: 999px;
+      color: var(--maroon);
+      font-size: 0.8em;
+      font-weight: 700;
+      padding: 0.4em 0.9em;
+    }
+
+    /* Card grid */
+    .cards {
+      display: grid;
+      gap: 1em;
+      grid-template-columns: repeat(auto-fit, minmax(11em, 1fr));
+    }
+
+    .mini {
+      background: var(--blush-soft);
+      border: 1px solid var(--line);
+      border-radius: 0.6em;
+      padding: 1em 1.1em;
+    }
+
+    .mini .num {
+      background: var(--maroon);
+      border-radius: 999px;
+      color: var(--apricot);
+      display: inline-block;
+      font-size: 0.78em;
+      font-weight: 700;
+      margin-bottom: 0.6em;
+      padding: 0.25em 0.75em;
+    }
+
+    .mini h3 {
+      font-size: 1em;
+    }
+
+    .mini p {
+      font-size: 0.9em;
+      margin: 0;
+    }
+
+    /* Ladder */
+    .rungs {
+      display: grid;
+      gap: 0.45em;
+    }
+
+    .rung {
+      align-items: baseline;
+      background: var(--blush-soft);
+      border: 1px solid var(--line);
+      border-radius: 0.5em;
+      display: grid;
+      gap: 0.8em;
+      grid-template-columns: 2.1em 1fr;
+      padding: 0.55em 0.8em;
+    }
+
+    .rung b {
+      background: var(--maroon);
+      border-radius: 0.35em;
+      color: var(--apricot);
+      font-size: 0.85em;
+      padding: 0.15em 0;
+      text-align: center;
+    }
+
+    .rung.last {
+      background: #FBE7E4;
+      border-color: #F0C4C0;
+    }
+
+    .rung.last b {
+      background: var(--red-deep);
+      color: var(--paper);
+    }
+
+    /* Scale chips */
+    .scale {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.7em;
+      margin: 0.4em 0 0;
+    }
+
+    .scale span {
+      align-items: center;
+      border: 1px solid var(--muted-soft);
+      border-radius: 999px;
+      display: inline-flex;
+      font-size: 0.85em;
+      gap: 0.5em;
+      padding: 0.35em 0.9em;
+    }
+
+    .scale span i {
+      border: 1.5px solid currentColor;
+      border-radius: 50%;
+      display: inline-block;
+      font-size: 0.8em;
+      font-style: normal;
+      height: 1.5em;
+      line-height: 1.35em;
+      text-align: center;
+      width: 1.5em;
+    }
+
+    .scale span.r1 { border-color: var(--red); color: var(--red-deep); }
+    .scale span.r2 { border-color: var(--amber); color: #9A5F12; }
+    .scale span.r3 { border-color: #3E9E77; color: #2F7D5B; }
+    .scale span.r4 { border-color: var(--maroon); color: var(--maroon); }
+
+    /* ══════════ Speaker notes ══════════ */
+    .notes {
+      display: none;
+    }
+
+    .notes-panel {
+      background: var(--maroon-ink);
+      border-radius: 16px;
+      color: var(--blush);
+      display: none;
+      font-size: 15px;
+      margin: 0 auto;
+      max-height: 30vh;
+      overflow-y: auto;
+      padding: 16px 20px;
+      width: min(1180px, 100%);
+    }
+
+    .notes-panel .np-label {
+      color: var(--apricot);
+      display: block;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+    }
+
+    .notes-panel p {
+      margin: 0 0 10px;
+    }
+
+    .notes-panel p:last-child {
+      margin-bottom: 0;
+    }
+
+    .notes-panel strong {
+      color: var(--apricot);
+    }
+
+    .notes-panel ul {
+      margin: 6px 0 10px;
+      padding-left: 20px;
+    }
+
+    body.notes-on .notes-panel {
+      display: block;
+    }
+
+    /* ══════════ Progress ══════════ */
+    .progress {
+      background: rgba(69, 18, 25, 0.12);
+      height: 5px;
+      overflow: hidden;
+    }
+
+    .progress i {
+      background: var(--apricot);
+      display: block;
+      height: 100%;
+      transition: width 0.2s ease;
+      width: 0;
+    }
+
+    /* ══════════ Deck vs handout ══════════ */
+    /* No-JS and handout default: every slide stacked and readable. */
+    .slide {
+      margin-bottom: 20px;
+    }
+
+    .slide .notes {
+      background: var(--blush-soft);
+      border-top: 1px solid var(--line);
+      display: block;
+      font-size: 15px;
+      padding: 16px 20px;
+    }
+
+    .slide .notes .np-label {
+      color: var(--muted);
+      display: block;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+    }
+
+    .slide .notes p {
+      margin: 0 0 8px;
+      max-width: none;
+    }
+
+    .slide .notes p:last-child {
+      margin-bottom: 0;
+    }
+
+    .slide .notes ul {
+      margin: 6px 0 8px;
+    }
+
+    .slide.inv .notes {
+      background: rgba(0, 0, 0, 0.25);
+      border-top-color: rgba(233, 179, 119, 0.25);
+    }
+
+    .slide.inv .notes .np-label {
+      color: var(--apricot);
+    }
+
+    .handout-only {
+      display: none;
+    }
+
+    /* Deck mode: one slide, sized to fit, notes in the panel */
+    body.js.deck .slide {
+      aspect-ratio: 16 / 9;
+      display: none;
+      height: min(calc((min(1180px, 100vw - 32px)) * 0.5625), calc(100vh - 210px));
+      margin-bottom: 0;
+      min-height: 260px;
+      width: auto;
+    }
+
+    body.js.deck .slide.current {
+      display: block;
+    }
+
+    body.js.deck .slide .notes {
+      display: none;
+    }
+
+    body.js.deck .handout-only {
+      display: none !important;
+    }
+
+    body.js.handout .notes-panel,
+    body.js.handout .progress {
+      display: none;
+    }
+
+    body.js.handout .handout-only {
+      display: block;
+    }
+
+    body.js.handout .stage {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    body.js.handout .slide {
+      width: 100%;
+    }
+
+    body.js.handout .slide-in {
+      font-size: 16px;
+      padding: 30px 34px;
+    }
+
+    body.js.handout .hero-num {
+      font-size: 4.2em;
+    }
+
+    body.js.handout .s-title h1 {
+      font-size: 2.4em;
+    }
+
+    body.js.handout .s-quote .big-line {
+      font-size: 1.9em;
+    }
+
+    .slide-index {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      padding: 0 20px 12px;
+      text-transform: uppercase;
+    }
+
+    .slide.inv .slide-index {
+      color: var(--muted-soft);
+    }
+
+    body.js.deck .slide-index {
+      display: none;
+    }
+
+    /* ══════════ Help overlay ══════════ */
+    .help {
+      background: rgba(36, 2, 5, 0.9);
+      display: none;
+      inset: 0;
+      padding: 24px;
+      place-items: center;
+      position: fixed;
+      z-index: 60;
+    }
+
+    body.help-on .help {
+      display: grid;
+    }
+
+    .help-box {
+      background: var(--paper);
+      border-radius: 20px;
+      max-width: 520px;
+      padding: 26px;
+      width: 100%;
+    }
+
+    .help-box h2 {
+      color: var(--maroon);
+      font-family: var(--display);
+      font-variation-settings: "SOFT" 50, "WONK" 1;
+      font-size: 22px;
+      margin: 0 0 14px;
+      text-transform: uppercase;
+    }
+
+    .help-box dl {
+      display: grid;
+      gap: 8px 16px;
+      grid-template-columns: 8em 1fr;
+      margin: 0 0 18px;
+    }
+
+    .help-box dt {
+      font-weight: 700;
+    }
+
+    .help-box dd {
+      color: var(--muted);
+      margin: 0;
+    }
+
+    kbd {
+      background: var(--blush-soft);
+      border: 1px solid var(--line);
+      border-bottom-width: 2px;
+      border-radius: 5px;
+      font-family: var(--sans);
+      font-size: 12px;
+      font-weight: 700;
+      padding: 2px 7px;
+    }
+
+    /* ══════════ Handout extras ══════════ */
+    .sheet {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      margin-bottom: 20px;
+      padding: 30px 34px;
+    }
+
+    .sheet h2 {
+      color: var(--maroon);
+      font-family: var(--display);
+      font-variation-settings: "SOFT" 50, "WONK" 1;
+      font-size: 26px;
+      margin: 0 0 14px;
+      text-transform: uppercase;
+    }
+
+    .sheet h3 {
+      color: var(--maroon);
+      font-family: var(--display);
+      font-variation-settings: "SOFT" 50, "WONK" 0;
+      font-size: 18px;
+      margin: 22px 0 8px;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+    }
+
+    .sheet table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    .sheet th,
+    .sheet td {
+      border: 1px solid var(--line);
+      padding: 10px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    .sheet th {
+      background: var(--maroon);
+      color: var(--apricot);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .sheet tbody tr:nth-child(even) {
+      background: var(--blush-soft);
+    }
+
+    .sheet ol,
+    .sheet ul {
+      padding-left: 22px;
+    }
+
+    .sheet li {
+      margin: 8px 0;
+    }
+
+    .qz {
+      background: var(--blush-soft);
+      border: 1px solid var(--line);
+      border-left: 6px solid var(--apricot);
+      border-radius: 14px;
+      margin: 12px 0;
+      padding: 16px 18px;
+    }
+
+    .qz .q {
+      color: var(--maroon);
+      font-weight: 700;
+    }
+
+    .qz .a {
+      color: var(--muted);
+      font-size: 14px;
+      margin-top: 8px;
+    }
+
+    .qz .a strong {
+      color: #2F7D5B;
+    }
+
+    footer {
+      color: var(--muted);
+      font-size: 14px;
+      padding: 8px 16px 32px;
+      text-align: center;
+    }
+
+    footer a {
+      color: var(--maroon);
+    }
+
+    /* ══════════ Small screens ══════════ */
+    @media (max-width: 760px) {
+      .split {
+        grid-template-columns: 1fr;
+      }
+
+      body.js.deck .slide {
+        aspect-ratio: auto;
+        height: auto;
+        min-height: 0;
+        width: 100%;
+      }
+
+      body.js.deck .slide-in {
+        font-size: 15px;
+        padding: 22px;
+      }
+
+      .help-box dl {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* ══════════ Print ══════════ */
+    @media print {
+      body {
+        background: #fff;
+      }
+
+      .bar,
+      .notes-panel,
+      .progress,
+      .help {
+        display: none !important;
+      }
+
+      body.js.deck .slide {
+        aspect-ratio: auto;
+        display: block !important;
+        height: auto;
+        width: 100%;
+      }
+
+      body.js.deck .slide .notes,
+      body.js.deck .handout-only {
+        display: block !important;
+      }
+
+      .slide,
+      .sheet {
+        box-shadow: none;
+        break-inside: avoid;
+        page-break-inside: avoid;
+      }
+
+      .slide-in {
+        font-size: 12pt !important;
+        padding: 18pt !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="bar">
+    <span class="wordmark">Marro</span>
+    <span class="deck-name">Agent Training</span>
+    <span class="section-pill" id="sectionPill">Transition <span class="amp">&amp;</span> Texture</span>
+    <span class="spacer"></span>
+    <span class="counter" id="counter">&nbsp;</span>
+    <button class="btn" type="button" id="prevBtn" aria-label="Previous slide">&larr;</button>
+    <button class="btn" type="button" id="nextBtn" aria-label="Next slide">&rarr;</button>
+    <button class="btn" type="button" id="notesBtn" aria-pressed="false">Notes</button>
+    <button class="btn" type="button" id="viewBtn" aria-pressed="false">Handout</button>
+    <button class="btn" type="button" id="helpBtn" aria-label="Keyboard shortcuts">?</button>
+    <a class="btn" href="first-72-hours-programme.html">Programme</a>
+  </div>
+  <div class="progress"><i id="progressBar"></i></div>
+
+  <div class="stage" id="stage">
+
+    <!-- ═════ 1 ═════ -->
+    <section class="slide inv s-title" data-section="Welcome">
+      <div class="slide-in">
+        <div class="kicker">Marro agent training &middot; 90 minutes</div>
+        <h1>Transition <span class="amp">&amp;</span> Texture</h1>
+        <p class="standfirst">
+          Everything you need for the conversation that decides whether a cat ever gets a second box.
+        </p>
+        <p class="meta">
+          Part of the First 72 Hours programme &middot; Assessment and certification at the end
+        </p>
+      </div>
+      <aside class="notes">
+        <span class="np-label">Speaker notes</span>
+        <p>
+          Two sessions of 45 minutes, with the practice session at least a day later so the language
+          has time to settle. Assessment is a written quiz at 85% plus one assessed role-play.
+        </p>
+        <p>
+          Open with this, before any slides: <strong>"Put your hand up if you've ever had a customer
+          tell you their cat won't touch it."</strong> Everyone's hand goes up. That is the entire
+          reason we are here.
+        </p>
+      </aside>
+    </section>
+
+    <!-- ═════ 2 ═════ -->
+    <section class="slide inv s-quote" data-section="A. Why this matters">
+      <div class="slide-in">
+        <div class="kicker">The number behind this whole programme</div>
+        <div class="hero-num">6.63</div>
+        <p class="big-line">Boxes a week we need to find</p>
+        <p class="after">
+          We miss our box-2 retention target by an average of 6.63 boxes every week. That is about
+          <strong>seven households</strong> who would have stayed if the first week had gone
+          differently.
+        </p>
+      </div>
+      <aside class="notes">
+        <span class="np-label">Speaker notes</span>
+        <p>
+          Make the point that this is small and winnable. Nobody is being asked to fix retention in
+          the abstract. Seven families a week, out of everyone you speak to.
+        </p>
+        <p>
+          If someone asks where the number comes from: it is the average shortfall against the 47%
+          box-2 target, measured on matured data between week 7 and week 24.
+        </p>
+      </aside>
+    </section>
+
+    <!-- ═════ 3 ═════ -->
+    <section class="slide" data-section="A. Why this matters">
+      <div class="slide-in">
+        <div class="kicker">A. Why this matters</div>
+        <h2>Where we lose them</h2>
+        <div class="stat-row">
+          <div class="stat">
+            <span class="n">56.67%</span>
+            <span class="t">of all pauses happen inside the first <strong>7 days</strong></span>
+          </div>
+          <div class="stat">
+            <span class="n">~23%</span>
+            <span class="t">pause <strong>before a box has even arrived</strong></span>
+          </div>
+          <div class="stat">
+            <span class="n">Day 5</span>
+            <span class="t">the single <strong>biggest pause day</strong>, and the reasons are about food</span>
+          </div>
+        </div>
+        <p style="margin-top:1.1em">
+          More than half of everything we lose, we lose in week one. Nothing else in the customer's
+          life with us concentrates risk like this.
+        </p>
+      </div>
+      <aside class="notes">
+        <span class="np-label">Speaker notes</span>
+        <p>
+          Land the day-5 point hard, because it is the one that changes behaviour: customers try for a
+          few days, decide it isn't working, and stop. They are quitting a two-week process on day
+          five.
+        </p>
+        <p>
+          The 23% matters too, and it surprises people. Those customers never even see the food. They
+          pause because they are not sure the cat will eat it and nothing has happened yet to reassure
+          them. Your call is the only thing standing in that gap.
+        </p>
+      </aside>
+    </section>
+
+    <!-- ═════ 4 ═════ -->
+    <section class="slide" data-section="A. Why this matters">
+      <div class="slide-in">
+        <div class="kicker">A. Why this matters</div>
+        <h2>What they actually leave over</h2>
+        <div class="split">
+          <div class="pane plain">
+            <span class="plabel">First 28 days</span>
+            <p>
+              <strong>"The pet didn't eat the food."</strong> Cited 6.26 percentage points more often
+              by customers who leave than by customers who stay.
+            </p>
+            <p class="sub">Price barely features. It is not the objection yet.</p>
+          </div>
+          <div class="pane plain">
+            <span class="plabel">After 28 days</span>
+            <p>
+              <strong>Price and value take over</strong>, sharpening from week 7 as the introductory
+              discount steps down.
+            </p>
+            <p class="sub">A different problem, with a different fix, owned by someone else.</p>
+          </div>
+        </div>
+        <p style="margin-top:1em">
+          Cats flagged as <strong>fussy eaters are 3.37% more likely to pause</strong>. Breed makes no
+          measurable difference at all.
+        </p>
+      </div>
+      <aside class="notes">
+        <span class="np-label">Speaker notes</span>
+        <p>
+          This slide is why we do not discount in the first 28 days. If price is not what is bothering
+          them, a discount buys us nothing, and it teaches the customer to expect one every time
+          something wobbles. We will come back to this in section G.
+        </p>
+        <p>
+          The fussy-eater number is why we ask about eating type on the call. It is the only piece of
+          segmentation in the data that reliably predicts anything.
+        </p>
+      </aside>
+    </section>
+
+    <!-- ═════ 5 ═════ -->
+    <section class="slide inv s-quote" data-section="A. Why this matters">
+      <div class="slide-in">
+        <div class="kicker">A. Why this matters &middot; the point of the whole deck</div>
+        <p class="big-line">You are not selling food.<br>You are setting a finish line.</p>
+        <p class="after">
+          Whatever you tell a customer to expect is what they will measure day five against. Set the
+          wrong finish line and a perfectly normal transition looks like a failure.
+        </p>
+      </div>
+      <aside class="notes">
+        <span class="np-label">Speaker notes</span>
+        <p>
+          Pause here. This is the sentence you want people to leave with, and everything after this is
+          just how to do it well.
+        </p>
+        <p>
+          Worth saying plainly: nobody is accusing anyone of doing a bad job. Most of us set the wrong
+          finish line because it feels like good service to be reassuring. "She'll love it" is meant
+          kindly. It just costs us the customer on day five.
+        </p>
+      </aside>
+    </section>
+
+    <!-- ═════ 6 ═════ -->
+    <section class="slide" data-section="B. The science, plainly">
+      <div class="slide-in">
+        <div class="kicker">B. The science, plainly</div>
+        <h2>What fresh food actually is</h2>
+        <ul>
+          <li><strong>Real, named meat and fish</strong> &mdash; you can see the protein and the percentage.</li>
+          <li><strong>Gently cooked at around 90&deg;C</strong>, then chilled or frozen rather than made shelf-stable.</li>
+          <li><strong>High moisture</strong>, like wet food, so hydration comes with the meal.</li>
+          <li><strong>Complete and balanced</strong> by design, vet approved, suitable for kittens through to seniors.</li>
+          <li><strong>Prebiotics</strong> &mdash; MOS, FOS and psyllium seed &mdash; for gut health.</li>
+        </ul>
+        <p style="margin-top:0.9em" class="sub">
+          90&deg;C is the number worth remembering: hot enough to kill bacteria, cool enough to leave
+          taurine and amino acids intact.
+        </p>
+      </div>
+      <aside class="notes">
+        <span class="np-label">Speaker notes</span>
+        <p>
+          You do not need to be a nutritionist. You need four or five facts you can say with
+          confidence, because confidence is what the customer is actually buying in week one.
+        </p>
+        <p>
+          If you only remember one: <strong>90&deg;C versus 150&deg;C</strong>. That single comparison
+          answers most of the questions you will get.
+        </p>
+      </aside>
+    </section>
+
+    <!-- ═════ 7 ═════ -->
+    <section class="slide" data-section="B. The science, plainly">
+      <div class="slide-in">
+        <div class="kicker">B. The science, plainly</div>
+        <h2>What kibble actually is</h2>
+        <ul>
+          <li>Ingredients mixed into a dough and <strong>forced through a machine at over 150&deg;C</strong> under pressure.</li>
+          <li>Around <strong>10% moisture</strong>. Between <strong>25% and 50% carbohydrate</strong>.</li>
+          <li>Nutrients like taurine are destroyed by that heat, then <strong>added back synthetically</strong>.</li>
+          <li>
+            And then the part that matters most to us: it is
+            <strong>sprayed with fat and flavour enhancers after cooking</strong>.
+          </li>
+        </ul>
+        <p style="margin-top:0.9em">
+          That spray is not an accident. It is there to make the food irresistible. Cats are
+          <strong>conditioned</strong> to want it.
+        </p>
+      </div>
+      <aside class="notes">
+        <span class="np-label">Speaker notes</span>
+        <p>
+          Do not turn this into an attack on kibble or on the customer's past choices. They chose it
+          in good faith and often for years. The line to hold is the one from our blog:
+          <strong>kibble isn't poison, fresh isn't magic, but fresh is the more natural upgrade.</strong>
+        </p>
+        <p>
+          The flavour spray is the fact that unlocks the whole call, so make sure everyone can say it
+          out loud before you move on.
+        </p>
+      </aside>
+    </section>
+
+    <!-- ═════ 8 ═════ -->
+    <section class="slide inv s-quote" data-section="B. The science, plainly">
+      <div class="slide-in">
+        <div class="kicker">B. The science, plainly &middot; learn this one word for word</div>
+        <p class="big-line">"Refusing it at first is habit, not preference."</p>
+        <p class="after">
+          This one line turns <em>"my cat hates your food"</em> into <em>"my cat is still hooked on
+          the old stuff"</em>. The first is a verdict you cannot argue with. The second is a problem
+          you can help them solve.
+        </p>
+      </div>
+      <aside class="notes">
+        <span class="np-label">Speaker notes</span>
+        <p>
+          Get everyone to say it out loud. It feels awkward the first time and completely natural by
+          the third.
+        </p>
+        <p>
+          The follow-up sentence matters as much as the line itself: <strong>"and that's the bit we're
+          best at helping with."</strong> Never leave the customer holding the diagnosis on their own.
+        </p>
+      </aside>
+    </section>
+
+    <!-- ═════ 9 ═════ -->
+    <section class="slide" data-section="B. The science, plainly">
+      <div class="slide-in">
+        <div class="kicker">B. The science, plainly</div>
+        <h2>Three myths you will hear this week</h2>
+        <table>
+          <thead>
+            <tr>
+              <th style="width:31%">What they say</th>
+              <th>What you say</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="k">"Kibble keeps her teeth clean"</td>
+              <td>Crunching shifts a bit of surface plaque, but does nothing below the gumline where dental disease actually starts. The British Veterinary Association doesn't recommend dry food for dental care. Brushing and vet checks are the only proven things.</td>
+            </tr>
+            <tr>
+              <td class="k">"She loves her kibble, so it must suit her"</td>
+              <td>She loves the fat and flavour sprayed on after cooking. That is a conditioned response, not a nutritional choice &mdash; it's the feline version of ultra-processed food.</td>
+            </tr>
+            <tr>
+              <td class="k">"Premium kibble is basically the same as fresh"</td>
+              <td>Premium is genuinely better than budget: more meat, better sourcing. But it is still extruded above 150&deg;C and still around 10% moisture, with nutrients added back afterwards.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <aside class="notes">
+        <span class="np-label">Speaker notes</span>
+        <p>
+          Tone is everything here. Never sneer at the old food, and never make the customer feel
+          they've been getting it wrong for six years. You are adding information, not correcting
+          them.
+        </p>
+        <p>
+          The dental one comes up most, usually from customers who were told it by someone they trust.
+          Cite the BVA rather than us &mdash; it lands better coming from a third party.
+        </p>
+      </aside>
+    </section>
+
+    <!-- ═════ 10 ═════ -->
+    <section class="slide" data-section="B. The science, plainly">
+      <div class="slide-in">
+        <div class="kicker">B. The science, plainly</div>
+        <h2>The other two conversations</h2>
+        <div class="split">
+          <div class="pane plain">
+            <span class="plabel">Coming from wet food</span>
+            <ul>
+              <li>Cooked at <strong>121&deg;C+</strong> to make it shelf-stable.</li>
+              <li>The <strong>"4% meat rule"</strong>: "with chicken" can legally mean 4% chicken.</li>
+              <li>Wet can be <strong>complete or complementary</strong> &mdash; a meal or a topper. Always check.</li>
+              <li>Many pouches use engineered flavour "digests" for the same reason kibble uses sprays.</li>
+            </ul>
+          </div>
+          <div class="pane plain">
+            <span class="plabel">Coming from raw</span>
+            <ul>
+              <li>Same philosophy as us: real meat, high moisture, minimal processing.</li>
+              <li>The difference is cooking and handling, <strong>not intention</strong>.</li>
+              <li>The UK FSA found harmful bacteria in <strong>35% of raw products tested</strong>.</li>
+              <li>Fresh is raw's philosophy made <strong>safer and easier</strong> &mdash; that is the whole pitch.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <aside class="notes">
+        <span class="np-label">Speaker notes</span>
+        <p>
+          Practical point: these two customers are much easier wins than kibble converts, because the
+          texture and moisture are already familiar. A wet-food switch takes 7&ndash;10 days and a raw
+          switch often 3&ndash;7.
+        </p>
+        <p>
+          With raw feeders, lead with respect. They have usually put real effort into their cat's diet.
+          The argument is household safety and convenience, never nutrition.
+        </p>
+      </aside>
+    </section>
+
+    <!-- ═════ 11 ═════ -->
+    <section class="slide" data-section="C. The reframe">
+      <div class="slide-in">
+        <div class="kicker">C. The reframe</div>
+        <h2>Box 1 is not a delivery</h2>
+        <div class="split">
+          <div class="pane no">
+            <span class="plabel">Stop treating it as</span>
+            <p>The first instalment of a standing order. Food arrives, cat eats it, subscription continues.</p>
+            <p class="sub">If the cat doesn't eat it, the order was wrong. The only lever is stop.</p>
+          </div>
+          <div class="pane yes">
+            <span class="plabel">Start treating it as</span>
+            <p>
+              A <strong>tasting and texture trial</strong>. Several recipes, two ways to serve each
+              one, and one job: find out what this cat goes for.
+            </p>
+            <p class="sub">If a recipe doesn't land, we have a result. The lever is swap.</p>
+          </div>
+        </div>
+        <p style="margin-top:1em">
+          Say <strong>"tasting box"</strong>, not "first box". It costs you one word and it changes
+          what the customer thinks they are being sent.
+        </p>
+      </div>
+      <aside class="notes">
+        <span class="np-label">Speaker notes</span>
+        <p>
+          The wording change is small and it does a lot of work. "Your first box arrives Tuesday" sets
+          up an expectation of normal service. "Tuesday is her tasting box" sets up an experiment,
+          and experiments cannot fail on day two &mdash; they only produce results.
+        </p>
+        <p>
+          Ask the room for the last time a customer said "she didn't eat it" and how they replied. Use
+          a real answer to show how differently that call goes under the two framings.
+        </p>
+      </aside>
+    </section>
+
+    <!-- ═════ 12 ═════ -->
+    <section class="slide" data-section="C. The reframe">
+      <div class="slide-in">
+        <div class="kicker">C. The reframe</div>
+        <h2>Two finish lines, same cat</h2>
+        <div class="split">
+          <div class="pane no">
+            <span class="plabel">If day 5 means "cleared the bowl"</span>
+            <p>Most customers fail. Failure feels like a wasted month coming. So they pause.</p>
+          </div>
+          <div class="pane yes">
+            <span class="plabel">If day 5 means "tasted it and interested"</span>
+            <p>Most customers pass. Passing feels like progress. So they carry on.</p>
+          </div>
+        </div>
+        <p style="margin-top:1em">
+          Same cat, same bowl, same amount eaten. The only thing that changed is what we told them to
+          expect &mdash; and we are the ones who told them.
+        </p>
+      </div>
+      <aside class="notes">
+        <span class="np-label">Speaker notes</span>
+        <p>
+          This is the slide to return to whenever someone asks whether the framing really matters. It
+          costs nothing, changes no product, and flips the same set of facts from failure to progress.
+        </p>
+        <p>
+          Concretely, week one success is: <strong>sniffed it, licked it, ate some of the chicken.</strong>
+          Say those words on the call so the customer has a target they can actually hit.
+        </p>
+      </aside>
+    </section>
+
+    <!-- ═════ 13 ═════ -->
+    <section class="slide" data-section="C. The reframe">
+      <div class="slide-in">
+        <div class="kicker">C. The reframe</div>
+        <h2>What we promise, and what we never promise</h2>
+        <div class="split">
+          <div class="pane yes">
+            <span class="plabel">Promise freely</span>
+            <ul>
+              <li>A plan built around what her cat is eating right now.</li>
+              <li>Support at the moments that matter, including a day-3 check-in.</li>
+              <li>Free recipe and texture swaps for the first 28 days.</li>
+              <li>Box 2 built around whatever wins.</li>
+            </ul>
+          </div>
+          <div class="pane no">
+            <span class="plabel">Never, under any circumstances</span>
+            <ul>
+              <li>"She'll love it."</li>
+              <li>"She'll eat it straight away."</li>
+              <li>"Cats always take to this one."</li>
+              <li>"It'll be easy."</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <aside class="notes">
+        <span class="np-label">Speaker notes</span>
+        <p>
+          Be direct about this: overpromising is scored as an automatic fail on the retention QA
+          scorecard. Not because it is dishonest in spirit &mdash; people say it to be warm &mdash; but
+          because it is the single most reliable way to create a day-5 pause.
+        </p>
+        <p>
+          Everything in the left column is a promise we can actually keep, and each one is more
+          reassuring than "she'll love it" because it is specific.
+        </p>
+      </aside>
+    </section>
+
+    <!-- ═════ 14 ═════ -->
+    <section class="slide" data-section="C. The reframe">
+      <div class="slide-in">
+        <div class="kicker">C. The reframe &middot; the script</div>
+        <h2>Thirty seconds that decide the month</h2>
+        <div class="script">
+          <span class="who">On the call, once the plan is confirmed</span>
+          <p>
+            "So Tuesday is Ziggy's <em>tasting box</em>. There are several recipes in there, and each
+            one can be served two ways &mdash; straight from the fridge it's jelly-like, or warm it for
+            ten seconds and it goes to a silky gravy.
+          </p>
+          <p>
+            Your job this week is just to find out what she goes for. There's a card inside to keep
+            score, and I'll be in touch on day three to see where you've got to.
+          </p>
+          <p>
+            One thing worth knowing: cats coming off dry food usually take <em>a week or two</em> to
+            fully switch. So if she's cautious on day one, that's completely normal. That's what the
+            week is for."
+          </p>
+        </div>
+        <div class="beats">
+          <span>1. Name the box</span>
+          <span>2. Name the two textures</span>
+          <span>3. Name the job</span>
+          <span>4. Name the timeline</span>
+        </div>
+      </div>
+      <aside class="notes">
+        <span class="np-label">Speaker notes</span>
+        <p>
+          Learn the <strong>four beats</strong>, not the words. If you can hit those in your own voice,
+          you have done this properly. Reading it verbatim sounds like reading it verbatim.
+        </p>
+        <p>
+          Practice round: everyone says their version out loud to the person next to them, and the
+          listener's only job is to confirm all four beats were there. Two minutes each, then swap.
+        </p>
+      </aside>
+    </section>
+
+    <!-- ═════ 15 ═════ -->
+    <section class="slide inv s-quote" data-section="D. Texture nuance">
+      <div class="slide-in">
+        <div class="kicker">D. Texture nuance &middot; the cheapest thing we own</div>
+        <p class="big-line">Every tray is two textures</p>
+        <p class="after">
+          <strong>Straight from the fridge</strong>, it is jelly-like. <strong>Warmed for ten
+          seconds</strong>, it releases a silky gravy. Same tray, same recipe, completely different
+          experience for the cat.
+        </p>
+        <p class="after">
+          A cat that turns down chilled jelly <em>has not refused the recipe</em>. She has refused one
+          of the two ways we can serve it &mdash; and almost nobody in their first week knows the other
+          one exists.
+        </p>
+      </div>
+      <aside class="notes">
+        <span class="np-label">Speaker notes</span>
+        <p>
+          This is the highest-value slide in the deck for day-to-day calls. It costs us nothing: no new
+          product, nothing to ship, no refund. Just a sentence.
+        </p>
+        <p>
+          Warming also lifts the aroma, and aroma is most of how a cat decides. Ten seconds in the
+          microwave, or sit the tray in warm water for ten minutes. Never hot &mdash; warm.
+        </p>
+      </aside>
+    </section>
+
+    <!-- ═════ 16 ═════ -->
+    <section class="slide" data-section="D. Texture nuance">
+      <div class="slide-in">
+        <div class="kicker">D. Texture nuance</div>
+        <h2>The texture ladder</h2>
+        <div class="rungs">
+          <div class="rung"><b>1</b><div><strong>Firmest and driest</strong> &mdash; closest to what a kibble-fed cat recognises. Serve chilled, small amount, on a flat plate.</div></div>
+          <div class="rung"><b>2</b><div><strong>Flaked and shredded</strong>, still fairly firm, lightly warmed so there is a little gravy but the texture holds.</div></div>
+          <div class="rung"><b>3</b><div><strong>Softer, more gravy</strong> &mdash; warmed properly. Familiar territory for a cat coming off wet pouches.</div></div>
+          <div class="rung"><b>4</b><div><strong>Loosest and most gravy-rich</strong> &mdash; fully warmed and stirred. Best for cats who already like moisture, and for seniors.</div></div>
+        </div>
+        <p style="margin-top:0.9em">
+          Start where the cat already is, then move <strong>one rung at a time</strong>.
+        </p>
+      </div>
+      <aside class="notes">
+        <span class="np-label">Speaker notes</span>
+        <p>
+          The rungs are about how you serve it as much as which recipe you pick. Temperature and
+          stirring change the texture more than most people expect.
+        </p>
+        <p>
+          The discipline that matters: <strong>change one thing at a time.</strong> If a customer
+          changes recipe, temperature and portion all at once and it works, we have learned nothing and
+          neither have they.
+        </p>
+      </aside>
+    </section>
+
+    <!-- ═════ 17 ═════ -->
+    <section class="slide" data-section="D. Texture nuance">
+      <div class="slide-in">
+        <div class="kicker">D. Texture nuance</div>
+        <h2>Give them the picture</h2>
+        <div class="split">
+          <div class="pane no">
+            <span class="plabel">Vague &mdash; leaves them guessing</span>
+            <ul>
+              <li>"It's a bit different to what she's used to."</li>
+              <li>"It's got some jelly in it."</li>
+              <li>"It's quite meaty."</li>
+              <li>"Just warm it up a bit."</li>
+            </ul>
+          </div>
+          <div class="pane yes">
+            <span class="plabel">Specific &mdash; they can picture it</span>
+            <ul>
+              <li>"Jelly-like straight from the fridge."</li>
+              <li>"Warm it ten seconds and it turns to a silky gravy."</li>
+              <li>"Shredded and flaked, rather than a smooth p&acirc;t&eacute;."</li>
+              <li>"You'll see real pieces of chicken, not a paste."</li>
+            </ul>
+          </div>
+        </div>
+        <p style="margin-top:1em">
+          Texture is the one thing a customer genuinely cannot imagine before the box arrives. Describe
+          it and you remove a whole category of surprise.
+        </p>
+      </div>
+      <aside class="notes">
+        <span class="np-label">Speaker notes</span>
+        <p>
+          Fussy-eater households are usually fussy about texture rather than flavour, and they often
+          already know it &mdash; "she won't eat anything with jelly", "she only likes p&acirc;t&eacute;".
+          If you use precise words, they will tell you exactly what to send.
+        </p>
+        <p>
+          Write down what they say. It is the most useful thing you will capture on the whole call.
+        </p>
+      </aside>
+    </section>
+
+    <!-- ═════ 18 ═════ -->
+    <section class="slide" data-section="D. Texture nuance">
+      <div class="slide-in">
+        <div class="kicker">D. Texture nuance</div>
+        <h2>Match the first serve to the last meal</h2>
+        <table>
+          <thead>
+            <tr>
+              <th style="width:20%">Coming from</th>
+              <th>First serve</th>
+              <th style="width:24%">Why</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="k">Dry / kibble</td>
+              <td>A <strong>spoonful</strong> of chicken, <strong>warmed</strong>, on a clean plate. Old food and treats out of the way.</td>
+              <td>Aroma has to do the persuading, because the texture is completely new.</td>
+            </tr>
+            <tr>
+              <td class="k">Wet pouches</td>
+              <td>Chilled or barely warmed, <strong>mixed into the old food</strong> and increased slowly.</td>
+              <td>Texture is already familiar. The palate just needs to reset off flavour digests.</td>
+            </tr>
+            <tr>
+              <td class="k">Raw</td>
+              <td>Straight from the fridge, <strong>mixed into the raw</strong>, increasing gradually.</td>
+              <td>Both are moist and meat-rich, so most cats barely notice.</td>
+            </tr>
+            <tr>
+              <td class="k">Mixed feeding</td>
+              <td>Replace the <strong>wet meal first</strong>, then work on the dry one.</td>
+              <td>Take the easy win first. It builds the customer's confidence before the hard part.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <aside class="notes">
+        <span class="np-label">Speaker notes</span>
+        <p>
+          Note the mixed-feeding row, because it is the one people get wrong. Instinct says tackle the
+          dry food first since it is the problem. In practice, swapping the wet meal gives you a win on
+          day one, and a customer who has seen one win will persist through a harder second week.
+        </p>
+      </aside>
+    </section>
+
+    <!-- ═════ 19 ═════ -->
+    <section class="slide" data-section="D. Texture nuance">
+      <div class="slide-in">
+        <div class="kicker">D. Texture nuance</div>
+        <h2>The three mechanics that do most of the work</h2>
+        <div class="cards">
+          <div class="mini">
+            <span class="num">1</span>
+            <h3>Warm it</h3>
+            <p>Ten seconds in the microwave, or the tray in warm water for ten minutes. Lifts the aroma and turns jelly to gravy.</p>
+          </div>
+          <div class="mini">
+            <span class="num">2</span>
+            <h3>Clean, shallow plate</h3>
+            <p>Not the usual bowl, not next to the kibble. Old food and treats moved out of reach between meals.</p>
+          </div>
+          <div class="mini">
+            <span class="num">3</span>
+            <h3>Twenty minutes</h3>
+            <p>Then take it away and offer her usual dinner. Try again tomorrow. This is normal procedure, not a fallback.</p>
+          </div>
+        </div>
+        <p style="margin-top:1em">
+          The most common day-one failure isn't the cat. It's a <strong>full portion, served cold,
+          next to a bowl of kibble</strong>.
+        </p>
+      </div>
+      <aside class="notes">
+        <span class="np-label">Speaker notes</span>
+        <p>
+          Teach all three, every time, on every first-box call. They take fifteen seconds to say and
+          they are the difference between a day-one refusal and a day-one nibble.
+        </p>
+        <p>
+          The 20-minute rule needs framing carefully. Presented as "if it fails, here's what to do" it
+          plants doubt. Presented as "here's how the first few days work" it sounds like expertise.
+          Same instruction, opposite effect.
+        </p>
+      </aside>
+    </section>
+
+    <!-- ═════ 20 ═════ -->
+    <section class="slide inv s-quote" data-section="E. Transition tracks">
+      <div class="slide-in">
+        <div class="kicker">E. Transition tracks &middot; the one question</div>
+        <p class="big-line">"What's she eating at the moment?"</p>
+        <p class="after">
+          The track, the timeline, the first texture, the first recipe, what goes in box 2, and every
+          message she gets for the next fortnight &mdash; all of it comes out of the answer to that one
+          question.
+        </p>
+      </div>
+      <aside class="notes">
+        <span class="np-label">Speaker notes</span>
+        <p>
+          It is a required field, and it is scored on the QA scorecard. Do not guess it, do not infer
+          it from the brand they mentioned in passing, and do not skip it because the call is running
+          long. Ask, and get the eating type too: easy, normal, or fussy.
+        </p>
+        <p>
+          Frame it as being for the cat's benefit, not as data collection: "so I can tell you exactly
+          how to do the switch for her."
+        </p>
+      </aside>
+    </section>
+
+    <!-- ═════ 21 ═════ -->
+    <section class="slide" data-section="E. Transition tracks">
+      <div class="slide-in">
+        <div class="kicker">E. Transition tracks</div>
+        <h2>The four tracks</h2>
+        <table>
+          <thead>
+            <tr>
+              <th style="width:22%">Coming from</th>
+              <th style="width:24%">How long, honestly</th>
+              <th>What you tell them</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="k">Dry / kibble</td>
+              <td><strong>14 days</strong>, sometimes 3&ndash;4 weeks</td>
+              <td>"This is the longest switch there is, and that's normal. She's unlearning a habit."</td>
+            </tr>
+            <tr>
+              <td class="k">Wet</td>
+              <td><strong>7&ndash;10 days</strong></td>
+              <td>"Texture's already familiar, so this is usually a quick one."</td>
+            </tr>
+            <tr>
+              <td class="k">Raw</td>
+              <td><strong>3&ndash;7 days</strong></td>
+              <td>"Same sort of food, just gently cooked. Most cats barely blink."</td>
+            </tr>
+            <tr>
+              <td class="k">Mixed</td>
+              <td><strong>10&ndash;14 days</strong></td>
+              <td>"We'll do the wet meal first for a quick win, then the dry."</td>
+            </tr>
+            <tr>
+              <td class="k">Flagged fussy</td>
+              <td><strong>Add a week</strong> to any of the above</td>
+              <td>"We plan for longer with fussy ones. Patience is genuinely the strategy."</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <aside class="notes">
+        <span class="np-label">Speaker notes</span>
+        <p>
+          Say the number out loud on the call. Every time. A customer who has heard "two weeks" is a
+          customer who is still going on day five.
+        </p>
+        <p>
+          The fussy row is not a get-out. It is a promise that we have planned for the harder version
+          of their situation, which is exactly what an anxious owner of a fussy cat wants to hear.
+        </p>
+      </aside>
+    </section>
+
+    <!-- ═════ 22 ═════ -->
+    <section class="slide" data-section="E. Transition tracks">
+      <div class="slide-in">
+        <div class="kicker">E. Transition tracks</div>
+        <h2>The kibble track, days one to three</h2>
+        <div class="cards">
+          <div class="mini">
+            <span class="num">Day 1</span>
+            <h3>Start small</h3>
+            <p>A spoonful of warmed chicken on a clean plate. Old food and treats removed so she can focus. Twenty minutes, then take it away and offer her usual food.</p>
+          </div>
+          <div class="mini">
+            <span class="num">Day 2</span>
+            <h3>Increase slowly</h3>
+            <p>If she ate some, increase the portion a little and stay on chicken. If she didn't try it at all, simply repeat day one. No escalation.</p>
+          </div>
+          <div class="mini">
+            <span class="num">Day 3</span>
+            <h3>Build familiarity</h3>
+            <p>Keep increasing the fresh and reducing the kibble. Once she is settled on chicken, introduce a second recipe for variety.</p>
+          </div>
+        </div>
+        <p style="margin-top:1em" class="sub">
+          Chicken first, every time &mdash; it is the easiest on the stomach and the least likely to
+          cause a setback you then have to explain.
+        </p>
+      </div>
+      <aside class="notes">
+        <span class="np-label">Speaker notes</span>
+        <p>
+          "If she didn't try it, repeat day one" is the instruction customers most need permission for.
+          Their instinct is to try something dramatic. Ours is to run the same gentle day again.
+        </p>
+        <p>
+          This is straight out of our own blog, so a customer who has read the site will hear
+          consistency &mdash; which is itself reassuring.
+        </p>
+      </aside>
+    </section>
+
+    <!-- ═════ 23 ═════ -->
+    <section class="slide" data-section="E. Transition tracks">
+      <div class="slide-in">
+        <div class="kicker">E. Transition tracks</div>
+        <h2>Honesty is a retention tool</h2>
+        <div class="split">
+          <div class="pane yes">
+            <span class="plabel">"Give her a week or two" &mdash; said on day 0</span>
+            <p>On day 5 the customer thinks: <strong>"we're only halfway."</strong></p>
+            <p class="sub">They keep going. We keep the customer.</p>
+          </div>
+          <div class="pane no">
+            <span class="plabel">"She'll love it" &mdash; said on day 0</span>
+            <p>On day 5 the customer thinks: <strong>"this isn't working."</strong></p>
+            <p class="sub">They pause. And they were told to expect better.</p>
+          </div>
+        </div>
+        <p style="margin-top:1em">
+          The timeline is not a disclaimer and it is not a hedge. It is the thing that buys the food
+          enough time to work.
+        </p>
+      </div>
+      <aside class="notes">
+        <span class="np-label">Speaker notes</span>
+        <p>
+          Some agents worry that mentioning two weeks costs them the sale. Address it head on: there is
+          no version of this where hiding the timeline helps. It converts a cancelled subscription in
+          week one into a cancelled subscription in week one plus a refund and a bad review.
+        </p>
+        <p>
+          Said with confidence, the timeline sounds like expertise. "Cats coming off dry food take a
+          week or two, and I'll walk you through it" is a stronger sales line than "she'll love it".
+        </p>
+      </aside>
+    </section>
+
+    <!-- ═════ 24 ═════ -->
+    <section class="slide" data-section="F. The scorecard">
+      <div class="slide-in">
+        <div class="kicker">F. The scorecard</div>
+        <h2>The Tasting Card</h2>
+        <p>
+          A card in the top of every first box, designed to live on the fridge door. Each meal, the
+          customer notes the recipe, whether they served it <strong>chilled or warmed</strong>, and how
+          it went:
+        </p>
+        <div class="scale">
+          <span class="r1"><i>1</i> Walked away</span>
+          <span class="r2"><i>2</i> Sniffed or licked</span>
+          <span class="r3"><i>3</i> Ate some</span>
+          <span class="r4"><i>4</i> Cleared the plate</span>
+        </div>
+        <p style="margin-top:1em">
+          And printed on the card itself, so nobody has to guess:
+          <strong>"2s and 3s are progress."</strong>
+        </p>
+        <p class="sub">
+          A recipe that gets a 1 twice is not a problem. It is a result &mdash; and a result tells us
+          what to swap.
+        </p>
+      </div>
+      <aside class="notes">
+        <span class="np-label">Speaker notes</span>
+        <p>
+          The four-point scale is the entire point of the card. "Did she eat it?" only has two answers
+          and one of them is failure. Four points mean a cautious cat still generates a good day.
+        </p>
+        <p>
+          So: <strong>never ask "did she eat it?"</strong> Ask how she approached it. You will get a
+          more useful answer and a calmer customer.
+        </p>
+      </aside>
+    </section>
+
+    <!-- ═════ 25 ═════ -->
+    <section class="slide" data-section="F. The scorecard">
+      <div class="slide-in">
+        <div class="kicker">F. The scorecard &middot; the script</div>
+        <h2>Introducing the card in twenty seconds</h2>
+        <div class="script">
+          <span class="who">Near the end of the call, after the delivery date</span>
+          <p>
+            "One thing to look out for when the box arrives &mdash; there's a <em>Tasting Card</em>
+            sitting on top of the trays. Stick it on the fridge and tick off each meal: which recipe,
+            whether you served it chilled or warmed, and how she took it.
+          </p>
+          <p>
+            Takes about five seconds a meal, and it decides what goes in box 2 &mdash; we build that one
+            around whatever she liked best.
+          </p>
+          <p>
+            And if a couple of recipes get a definite no, you just <em>swap them</em>. That's free, and
+            there's no need to pause anything."
+          </p>
+        </div>
+      </div>
+      <aside class="notes">
+        <span class="np-label">Speaker notes</span>
+        <p>
+          The last line is the important one, and the instinct is to leave it out because it raises the
+          possibility of failure. Say it anyway. The moment a customer needs to know swaps are free is
+          the moment they are frustrated at 9pm, and that is exactly when they will not ring us &mdash;
+          they will find the pause button.
+        </p>
+        <p>
+          Mentioning box 2 here also does quiet work: it makes the second delivery feel earned and
+          personalised rather than an ambush.
+        </p>
+      </aside>
+    </section>
+
+    <!-- ═════ 26 ═════ -->
+    <section class="slide" data-section="F. The scorecard">
+      <div class="slide-in">
+        <div class="kicker">F. The scorecard</div>
+        <h2>Reading the card back on an inbound call</h2>
+        <div class="split">
+          <div class="pane plain">
+            <span class="plabel">Ask, in this order</span>
+            <ul>
+              <li>Which recipes has she tried?</li>
+              <li>Chilled or warmed &mdash; or both?</li>
+              <li>How many days so far?</li>
+              <li>Was the old food out of the way?</li>
+              <li>How much did you put down?</li>
+            </ul>
+          </div>
+          <div class="pane plain">
+            <span class="plabel">Then say what you're doing, and why</span>
+            <p>
+              "So she's given the chicken a 2 twice, and both of those were chilled. Before we change
+              the recipe, let's warm the next one for ten seconds &mdash; that's the single thing most
+              likely to shift it. If she's still not interested tomorrow, I'll swap the rest of the box
+              for the turkey and the salmon."
+            </p>
+          </div>
+        </div>
+      </div>
+      <aside class="notes">
+        <span class="np-label">Speaker notes</span>
+        <p>
+          Two things make this work. First, you are using <em>their</em> data, which is far more
+          persuasive than our opinion. Second, you are naming the next step and a deadline, so the call
+          ends with a plan rather than a hope.
+        </p>
+        <p>
+          Log everything they tell you. If they logged nothing digitally, this call is the only record
+          we will ever have of what actually happened in that kitchen.
+        </p>
+      </aside>
+    </section>
+
+    <!-- ═════ 27 ═════ -->
+    <section class="slide inv s-quote" data-section="G. Swap, don't stop">
+      <div class="slide-in">
+        <div class="kicker">G. Swap, don't stop</div>
+        <p class="big-line">Pausing is the only tool we've given them</p>
+        <p class="after">
+          Most people who pause in week one are not leaving us. They are trying to <em>stop
+          something</em> they don't know how else to change. Give them a better tool and most of them
+          never reach for that one.
+        </p>
+      </div>
+      <aside class="notes">
+        <span class="np-label">Speaker notes</span>
+        <p>
+          This reframe changes how the call feels. You are not defending against a cancellation, you
+          are offering a better option to someone who currently only has one.
+        </p>
+        <p>
+          It also explains why the swap has to be offered <strong>before</strong> they ask. By the time
+          they say "I want to pause", they have already decided; you are now negotiating rather than
+          helping.
+        </p>
+      </aside>
+    </section>
+
+    <!-- ═════ 28 ═════ -->
+    <section class="slide" data-section="G. Swap, don't stop">
+      <div class="slide-in">
+        <div class="kicker">G. Swap, don't stop</div>
+        <h2>The offer ladder</h2>
+        <div class="rungs">
+          <div class="rung"><b>1</b><div><strong>Change the texture.</strong> Chilled to warmed, or the other way. Free, instant, nothing to ship.</div></div>
+          <div class="rung"><b>2</b><div><strong>Swap the recipes.</strong> Rebuild the rest of the box, and box 2, around her best reactions.</div></div>
+          <div class="rung"><b>3</b><div><strong>Send a rescue pack.</strong> Different texture, an aroma topper and a printed plan, out next day.</div></div>
+          <div class="rung"><b>4</b><div><strong>Push the next box back a week.</strong> The normal thing to do while a cat is still settling.</div></div>
+          <div class="rung"><b>5</b><div><strong>Skip one box.</strong> Recoverable, and far better for everyone than a pause.</div></div>
+          <div class="rung"><b>6</b><div><strong>Book the transition clinic.</strong> Ten minutes with someone qualified, for fussy and kibble-fed cats.</div></div>
+          <div class="rung last"><b>7</b><div><strong>Pause &mdash; deliberately, with a date.</strong> Capture the real reason and set a check-back.</div></div>
+        </div>
+        <p style="margin-top:0.8em">Start at the top. Only move down. Nothing here costs us margin.</p>
+      </div>
+      <aside class="notes">
+        <span class="np-label">Speaker notes</span>
+        <p>
+          Everyone gets this laminated. Same ladder for the CRM messages and the self-service pages, so
+          a customer gets the same answer wherever they ask.
+        </p>
+        <p>
+          On rung 7: a pause with a plan and a date is recoverable. A pause at the end of an argument
+          is not. If you genuinely get there, get there gracefully and write down exactly why.
+        </p>
+      </aside>
+    </section>
+
+    <!-- ═════ 29 ═════ -->
+    <section class="slide" data-section="G. Swap, don't stop">
+      <div class="slide-in">
+        <div class="kicker">G. Swap, don't stop</div>
+        <h2>No discounts in the first 28 days</h2>
+        <ul>
+          <li>
+            The data is unambiguous: <strong>price is not the objection in the first month.</strong>
+            Food refusal is. Price only takes over after day 28.
+          </li>
+          <li>
+            A cheaper box of food the cat won't eat <strong>solves nothing</strong>. You have spent
+            margin and the problem is still sitting in the fridge.
+          </li>
+          <li>
+            It teaches the customer that <strong>every wobble is worth a discount</strong>, and they
+            will test that again at week 7 when the introductory price steps down anyway.
+          </li>
+          <li>
+            Fix the food instead: <strong>texture, recipe, portion, timing.</strong> That is what they
+            actually came to you for.
+          </li>
+        </ul>
+        <p style="margin-top:0.9em" class="sub">
+          Discount authority belongs to the post-28-day price conversation. Different problem, different
+          owner, different playbook.
+        </p>
+      </div>
+      <aside class="notes">
+        <span class="np-label">Speaker notes</span>
+        <p>
+          Expect pushback, because a discount is the easiest thing to reach for under pressure and it
+          often ends the call quickly. Acknowledge that: it ends the call, it does not save the
+          customer.
+        </p>
+        <p>
+          Give them the replacement line so they are not left empty-handed:
+          <strong>"A discount won't make her eat it. Let's fix the food."</strong>
+        </p>
+      </aside>
+    </section>
+
+    <!-- ═════ 30 ═════ -->
+    <section class="slide" data-section="G. Swap, don't stop">
+      <div class="slide-in">
+        <div class="kicker">G. Swap, don't stop</div>
+        <h2>Four calls you will get this week</h2>
+        <table>
+          <thead>
+            <tr>
+              <th style="width:27%">What they open with</th>
+              <th>Your move</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="k">"She won't touch it." <span class="sub">(Day 2, served chilled)</span></td>
+              <td>Warm it ten seconds, clean shallow plate, kibble out of reach between meals. One change, tonight. Tell them you'll check in tomorrow.</td>
+            </tr>
+            <tr>
+              <td class="k">"She ate it twice, then stopped."</td>
+              <td>Usually variety fatigue rather than rejection. Rotate the recipe, keep the texture and temperature identical so we learn something.</td>
+            </tr>
+            <tr>
+              <td class="k">"It made her sick."</td>
+              <td>Back to chicken only, smaller portions, slower ramp. If it happens again, or there's any other symptom, straight to a vet &mdash; never talk anyone out of that.</td>
+            </tr>
+            <tr>
+              <td class="k">"I want to pause."</td>
+              <td>"Which ones has she tried?" Then swap the rest, rebuild box 2 around the best reactions, and offer to push the next delivery back a week.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <aside class="notes">
+        <span class="np-label">Speaker notes</span>
+        <p>
+          In all four: <strong>name the next step and put a time on it.</strong> "Try that tonight and
+          I'll text you tomorrow" beats "let us know how you get on", because the second one leaves the
+          customer alone with the decision.
+        </p>
+        <p>
+          On the sickness call, be unambiguous. We never discourage a vet visit, and we never diagnose.
+          One episode during a transition is common; anything more is a vet's call, not ours.
+        </p>
+      </aside>
+    </section>
+
+    <!-- ═════ 31 ═════ -->
+    <section class="slide" data-section="G. Swap, don't stop">
+      <div class="slide-in">
+        <div class="kicker">G. Swap, don't stop &middot; print this one</div>
+        <h2>Say this, not that</h2>
+        <table>
+          <thead>
+            <tr>
+              <th style="width:40%">Don't say</th>
+              <th>Say</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="no-cell">"Cats love it, she'll be fine."</td>
+              <td class="yes-cell">"Most cats take a few days, especially off dry food. Week one is about finding what she goes for."</td>
+            </tr>
+            <tr>
+              <td class="no-cell">"Your first box arrives Tuesday."</td>
+              <td class="yes-cell">"Tuesday is her tasting box &mdash; several recipes, two ways to serve each. There's a card inside to keep score."</td>
+            </tr>
+            <tr>
+              <td class="no-cell">"Did she eat it?"</td>
+              <td class="yes-cell">"How did she approach it &mdash; did she sniff it, lick it, or take a few bites?"</td>
+            </tr>
+            <tr>
+              <td class="no-cell">"Just give it time."</td>
+              <td class="yes-cell">"Let's change one thing tonight: warm the next tray ten seconds so the gravy comes through."</td>
+            </tr>
+            <tr>
+              <td class="no-cell">"It's normal, cats are fussy."</td>
+              <td class="yes-cell">"Fussiness here is a habit from the old food, not a verdict on this one. It's the bit we're best at helping with."</td>
+            </tr>
+            <tr>
+              <td class="no-cell">"I can pause that for you now."</td>
+              <td class="yes-cell">"Before we pause &mdash; which has she tried? Let me swap the rest for the ones she reacted best to. That's free."</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <aside class="notes">
+        <span class="np-label">Speaker notes</span>
+        <p>
+          This is the handout that ends up next to the phone. Print it, laminate it, stick it up.
+        </p>
+        <p>
+          Worth naming: none of the left-hand column is lazy or unkind. Every one of those lines is
+          someone trying to be reassuring. They just move the finish line to the wrong place.
+        </p>
+      </aside>
+    </section>
+
+    <!-- ═════ 32 ═════ -->
+    <section class="slide" data-section="H. Practice">
+      <div class="slide-in">
+        <div class="kicker">H. Practice</div>
+        <h2>Two calls, side by side</h2>
+        <div class="split">
+          <div class="pane yes">
+            <span class="plabel">The saved call &mdash; listen for</span>
+            <ul>
+              <li>The timeline stated out loud, unprompted.</li>
+              <li>Both textures named, with the ten seconds.</li>
+              <li>The swap offered <em>before</em> the customer asked for anything.</li>
+              <li>A next step with a time attached.</li>
+            </ul>
+          </div>
+          <div class="pane no">
+            <span class="plabel">The lost call &mdash; listen for</span>
+            <ul>
+              <li>"Cats love it."</li>
+              <li>"Did she eat it?"</li>
+              <li>Silence where the timeline should be.</li>
+              <li>"I can pause that for you" inside the first minute.</li>
+            </ul>
+          </div>
+        </div>
+        <p style="margin-top:1em" class="sub">
+          Both calls are real, both agents were trying to help, and only one customer is still with us.
+        </p>
+      </div>
+      <aside class="notes">
+        <span class="np-label">Speaker notes</span>
+        <p>
+          Play both clips in full, then play the lost one again and stop at the exact moment it turned
+          &mdash; usually within the first thirty seconds, and usually a kindly-meant overpromise.
+        </p>
+        <p>
+          Never name the agent on the lost call, and say so before you play it. If people think clips
+          are used to embarrass them, nobody will volunteer a call again.
+        </p>
+      </aside>
+    </section>
+
+    <!-- ═════ 33 ═════ -->
+    <section class="slide" data-section="H. Practice">
+      <div class="slide-in">
+        <div class="kicker">H. Practice &middot; five minutes each, then swap</div>
+        <h2>Role-play briefs</h2>
+        <div class="cards">
+          <div class="mini">
+            <span class="num">A</span>
+            <h3>The day-2 refusal</h3>
+            <p>
+              Kibble-fed, flagged fussy. Served chilled twice, walked away both times. Opens with "I
+              don't think she's going to eat this &mdash; can I pause it?"
+            </p>
+            <p class="sub"><strong>Pass:</strong> texture change before recipe change, timeline restated, swap offered, next step timed.</p>
+          </div>
+          <div class="mini">
+            <span class="num">B</span>
+            <h3>The day-4 stall</h3>
+            <p>
+              Wet-food convert. Cleared two meals, then lost interest. Customer is convinced the cat is
+              bored and wants to cancel before box 2.
+            </p>
+            <p class="sub"><strong>Pass:</strong> recognises variety fatigue, rotates recipe not texture, pre-notifies box 2, offers a date shift.</p>
+          </div>
+          <div class="mini">
+            <span class="num">C</span>
+            <h3>The pre-delivery wobble</h3>
+            <p>
+              Box hasn't arrived yet. Customer has been reading reviews, is now sure her cat won't eat
+              it, and asks to cancel before it ships.
+            </p>
+            <p class="sub"><strong>Pass:</strong> no defensiveness, plan named and sent, day-3 check-in promised, swap policy stated upfront.</p>
+          </div>
+        </div>
+      </div>
+      <aside class="notes">
+        <span class="np-label">Speaker notes</span>
+        <p>
+          Brief C is the one people find hardest, because there is nothing to troubleshoot yet &mdash;
+          no meal, no reaction, nothing to fix. The only tools are the plan, the schedule of support and
+          the safety net. That is the point of it.
+        </p>
+        <p>
+          Rotate so everyone plays the customer at least once. Being the anxious owner for five minutes
+          teaches more than any slide in this deck.
+        </p>
+      </aside>
+    </section>
+
+    <!-- ═════ 34 ═════ -->
+    <section class="slide" data-section="H. Practice">
+      <div class="slide-in">
+        <div class="kicker">H. Practice</div>
+        <h2>Assessment and certification</h2>
+        <ul>
+          <li><strong>Written quiz, 85% to pass.</strong> Weighted towards the transition tracks and the texture mechanics.</li>
+          <li>
+            <strong>One assessed role-play</strong> &mdash; a bowl-day-2 refusal call, scored against the
+            retention QA scorecard. The reframe and the swap offer are both required to pass.
+          </li>
+          <li><strong>Certification is recorded against your agent ID</strong> and is required before working live first-box conversations.</li>
+          <li><strong>Quarterly refresh</strong>, rebuilt each time from the previous quarter's most common refusal patterns.</li>
+        </ul>
+        <p style="margin-top:0.9em">
+          This is not a hoop. Passing means you can be trusted with the conversation that decides
+          whether a cat gets a second box.
+        </p>
+      </div>
+      <aside class="notes">
+        <span class="np-label">Speaker notes</span>
+        <p>
+          Be straight about the gating: certification controls access to first-box work. Nobody is
+          being caught out &mdash; the quiz questions come from these slides and the role-play is the
+          same brief they just practised.
+        </p>
+        <p>
+          Anyone who does not pass first time gets coaching and a retake, not a mark on their record.
+          Say that out loud, because otherwise people assume the worst.
+        </p>
+      </aside>
+    </section>
+
+    <!-- ═════ 35 ═════ -->
+    <section class="slide inv s-quote" data-section="Close">
+      <div class="slide-in">
+        <div class="kicker">The three things to take to your next call</div>
+        <p class="big-line">Week one is not a verdict. It's a tasting session.</p>
+        <p class="after">
+          <strong>1.</strong> Name both textures &mdash; chilled is jelly, ten seconds warm is gravy.<br>
+          <strong>2.</strong> Say the timeline out loud, whatever it is.<br>
+          <strong>3.</strong> Offer the swap before they ask for anything.
+        </p>
+      </div>
+      <aside class="notes">
+        <span class="np-label">Speaker notes</span>
+        <p>
+          Close on the three actions rather than the theory. If someone remembers nothing else from
+          ninety minutes, these three still move the number.
+        </p>
+        <p>
+          Then go straight into the quiz while it is all fresh.
+        </p>
+      </aside>
+    </section>
+
+    <!-- ══════════ Handout-only companion sheets ══════════ -->
+    <section class="sheet handout-only">
+      <h2>Trainer run sheet</h2>
+      <p>
+        Two sessions, 45 minutes each, at least a day apart. Slide numbers refer to the deck above.
+      </p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th style="width:14%">Time</th>
+              <th style="width:26%">Section</th>
+              <th style="width:12%">Slides</th>
+              <th>How to run it</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>0&ndash;5</td>
+              <td>Open</td>
+              <td>1</td>
+              <td>"Hands up if a customer has ever told you their cat won't touch it." Everyone's hand goes up. That's the session.</td>
+            </tr>
+            <tr>
+              <td>5&ndash;15</td>
+              <td>A. Why this matters</td>
+              <td>2&ndash;5</td>
+              <td>Land day 5 and the 23%. Finish on the finish-line slide and pause there.</td>
+            </tr>
+            <tr>
+              <td>15&ndash;27</td>
+              <td>B. The science, plainly</td>
+              <td>6&ndash;10</td>
+              <td>Everyone says "habit, not preference" out loud before you move on.</td>
+            </tr>
+            <tr>
+              <td>27&ndash;40</td>
+              <td>C. The reframe</td>
+              <td>11&ndash;14</td>
+              <td>Pairs practise the four beats in their own words. Two minutes each way.</td>
+            </tr>
+            <tr>
+              <td>40&ndash;45</td>
+              <td>Close part one</td>
+              <td>&mdash;</td>
+              <td>Homework: use "tasting box" on every call before the next session, and bring back what happened.</td>
+            </tr>
+            <tr>
+              <td colspan="4"><strong>Session two &mdash; at least a day later</strong></td>
+            </tr>
+            <tr>
+              <td>0&ndash;5</td>
+              <td>Recap</td>
+              <td>5, 11</td>
+              <td>What happened when you said "tasting box"? Collect two or three real examples.</td>
+            </tr>
+            <tr>
+              <td>5&ndash;18</td>
+              <td>D. Texture nuance</td>
+              <td>15&ndash;19</td>
+              <td>Pass round a chilled tray and a warmed one if you can get them. It lands far better than a slide.</td>
+            </tr>
+            <tr>
+              <td>18&ndash;28</td>
+              <td>E. Transition tracks</td>
+              <td>20&ndash;23</td>
+              <td>Quickfire: trainer names a previous food, room shouts the track length.</td>
+            </tr>
+            <tr>
+              <td>28&ndash;34</td>
+              <td>F. The scorecard</td>
+              <td>24&ndash;26</td>
+              <td>Hand out real cards. Everyone fills in a fictional day 1 and 2.</td>
+            </tr>
+            <tr>
+              <td>34&ndash;42</td>
+              <td>G. Swap, don't stop</td>
+              <td>27&ndash;31</td>
+              <td>Hand out the laminated ladder and the say-this-not-that sheet.</td>
+            </tr>
+            <tr>
+              <td>42&ndash;45</td>
+              <td>H. Practice and assess</td>
+              <td>32&ndash;35</td>
+              <td>Clips, then role-plays in threes, then the quiz. Assessed role-plays booked individually.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <h3>What you need in the room</h3>
+      <ul>
+        <li>One chilled tray and one warmed tray, plus plates and spoons. This is the single most persuasive prop available.</li>
+        <li>Printed Tasting Cards, one per person.</li>
+        <li>Laminated offer ladder and say-this-not-that sheet, one per desk.</li>
+        <li>Two call recordings: one saved, one lost. Anonymised, and say so before playing them.</li>
+      </ul>
+    </section>
+
+    <section class="sheet handout-only">
+      <h2>Assessment quiz</h2>
+      <p>
+        Twelve questions, 85% to pass, which means no more than one wrong. Answers are for the trainer's
+        copy only.
+      </p>
+
+      <div class="qz">
+        <p class="q">1. A customer's cat is currently on dry food. How long is the transition, and what do you tell them?</p>
+        <p class="a"><strong>14 days, sometimes 3&ndash;4 weeks</strong>, and you say the number out loud on the call.</p>
+      </div>
+      <div class="qz">
+        <p class="q">2. Give the two textures a single Marro tray can be served as, and how to get each.</p>
+        <p class="a"><strong>Jelly-like</strong> straight from the fridge; <strong>silky gravy</strong> warmed for about ten seconds.</p>
+      </div>
+      <div class="qz">
+        <p class="q">3. Why does a kibble-fed cat often refuse fresh food at first?</p>
+        <p class="a">Kibble is <strong>sprayed with fat and flavour enhancers after cooking</strong>, so the cat is conditioned to crave it. Refusal is <strong>habit, not preference</strong>.</p>
+      </div>
+      <div class="qz">
+        <p class="q">4. What does a "2" mean on the Tasting Card, and is it good news?</p>
+        <p class="a"><strong>Sniffed or licked.</strong> Yes &mdash; 2s and 3s are progress, and the card says so.</p>
+      </div>
+      <div class="qz">
+        <p class="q">5. A customer rings on bowl-day 2. The cat walked away from chilled chicken twice. What is your first move?</p>
+        <p class="a"><strong>Change the texture, not the recipe.</strong> Warm it ten seconds, clean shallow plate, old food out of reach. Recipe swap only if that fails.</p>
+      </div>
+      <div class="qz">
+        <p class="q">6. Name the first three rungs of the offer ladder, in order.</p>
+        <p class="a"><strong>1.</strong> Change the texture. <strong>2.</strong> Swap the recipes. <strong>3.</strong> Send a rescue pack.</p>
+      </div>
+      <div class="qz">
+        <p class="q">7. Why do we not offer a discount in the first 28 days?</p>
+        <p class="a">Price is <strong>not the objection</strong> in that window &mdash; food refusal is. A cheaper box of unwanted food fixes nothing and trains the customer to expect a discount every time.</p>
+      </div>
+      <div class="qz">
+        <p class="q">8. What are the three mechanics you teach on every first-box call?</p>
+        <p class="a"><strong>Warm it</strong> ten seconds; <strong>clean shallow plate</strong> with old food and treats out of reach; <strong>twenty minutes</strong> then withdraw and offer the usual dinner.</p>
+      </div>
+      <div class="qz">
+        <p class="q">9. Instead of "did she eat it?", what do you ask?</p>
+        <p class="a">"<strong>How did she approach it &mdash; did she sniff it, lick it, or take a few bites?</strong>"</p>
+      </div>
+      <div class="qz">
+        <p class="q">10. A customer feeds both wet and dry. Which meal do you replace first, and why?</p>
+        <p class="a">The <strong>wet meal</strong>. It is the easy win, and a customer who has seen one win will persist through the harder dry-food week.</p>
+      </div>
+      <div class="qz">
+        <p class="q">11. Which two things about a cat should you always capture on the call, and why?</p>
+        <p class="a"><strong>What it is eating now</strong> and <strong>its eating type</strong> (easy, normal, fussy). They set the track, the timeline, the first texture and every message for the next fortnight.</p>
+      </div>
+      <div class="qz">
+        <p class="q">12. Complete the sentence: "You are not selling food, you are&hellip;"</p>
+        <p class="a">"&hellip;<strong>setting a finish line</strong>."</p>
+      </div>
+    </section>
+
+    <section class="sheet handout-only">
+      <h2>One-page desk aid</h2>
+      <h3>The four beats of the framing script</h3>
+      <ol>
+        <li>Name the box &mdash; "Tuesday is her <strong>tasting box</strong>."</li>
+        <li>Name the two textures &mdash; "<strong>jelly</strong> from the fridge, <strong>gravy</strong> warmed ten seconds."</li>
+        <li>Name the job &mdash; "your job this week is finding what she goes for."</li>
+        <li>Name the timeline &mdash; "cats off dry food take <strong>a week or two</strong>. Cautious on day one is normal."</li>
+      </ol>
+      <h3>Track lengths</h3>
+      <ul>
+        <li>Dry / kibble &mdash; <strong>14 days</strong>, up to 3&ndash;4 weeks</li>
+        <li>Wet &mdash; <strong>7&ndash;10 days</strong></li>
+        <li>Raw &mdash; <strong>3&ndash;7 days</strong></li>
+        <li>Mixed &mdash; <strong>10&ndash;14 days</strong>, wet meal first</li>
+        <li>Flagged fussy &mdash; <strong>add a week</strong></li>
+      </ul>
+      <h3>The offer ladder</h3>
+      <ol>
+        <li>Change the texture</li>
+        <li>Swap the recipes</li>
+        <li>Send a rescue pack</li>
+        <li>Push the next box back a week</li>
+        <li>Skip one box</li>
+        <li>Book the transition clinic</li>
+        <li>Pause &mdash; deliberately, with a date</li>
+      </ol>
+      <h3>Never</h3>
+      <ul>
+        <li>Promise she'll love it, or eat it straight away.</li>
+        <li>Ask "did she eat it?"</li>
+        <li>Offer a discount inside 28 days.</li>
+        <li>Offer a pause before you have offered a swap.</li>
+        <li>Talk anyone out of seeing a vet.</li>
+      </ul>
+    </section>
+
+  </div>
+
+  <div class="notes-panel" id="notesPanel" aria-live="polite">
+    <span class="np-label">Speaker notes</span>
+    <div id="notesBody"></div>
+  </div>
+
+  <footer>
+    Transition <span class="amp">&amp;</span> Texture &mdash; agent training deck. Part of
+    <a href="first-72-hours-programme.html">The First 72 Hours</a>, a workstream of the
+    <a href="retention-improvement-master-plan.html">Retention Improvement Master Plan</a>.
+    <br>
+    Press <kbd>?</kbd> for keyboard shortcuts, or switch to Handout to read and print everything at once.
+  </footer>
+
+  <div class="help" id="help" role="dialog" aria-modal="true" aria-labelledby="helpTitle">
+    <div class="help-box">
+      <h2 id="helpTitle">Keyboard shortcuts</h2>
+      <dl>
+        <dt><kbd>&rarr;</kbd> <kbd>Space</kbd></dt>
+        <dd>Next slide</dd>
+        <dt><kbd>&larr;</kbd></dt>
+        <dd>Previous slide</dd>
+        <dt><kbd>Home</kbd> <kbd>End</kbd></dt>
+        <dd>First or last slide</dd>
+        <dt><kbd>N</kbd></dt>
+        <dd>Show or hide speaker notes</dd>
+        <dt><kbd>A</kbd></dt>
+        <dd>Switch between deck and handout</dd>
+        <dt><kbd>F</kbd></dt>
+        <dd>Full screen</dd>
+        <dt><kbd>?</kbd></dt>
+        <dd>This panel</dd>
+        <dt><kbd>Esc</kbd></dt>
+        <dd>Close</dd>
+      </dl>
+      <p class="sub" style="color:#816165">
+        Handout mode prints cleanly, notes and all. Links can carry state, for example
+        <strong>#s14</strong> to open on a slide, or <strong>?notes=1</strong> to open with notes
+        showing.
+      </p>
+      <button class="btn primary" type="button" id="helpClose">Got it</button>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      'use strict';
+
+      var body = document.body;
+      var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+      if (!slides.length) { return; }
+
+      body.classList.add('js');
+
+      var counter = document.getElementById('counter');
+      var sectionPill = document.getElementById('sectionPill');
+      var progressBar = document.getElementById('progressBar');
+      var notesBody = document.getElementById('notesBody');
+      var prevBtn = document.getElementById('prevBtn');
+      var nextBtn = document.getElementById('nextBtn');
+      var notesBtn = document.getElementById('notesBtn');
+      var viewBtn = document.getElementById('viewBtn');
+      var helpBtn = document.getElementById('helpBtn');
+      var helpClose = document.getElementById('helpClose');
+
+      var index = 0;
+      var params = new URLSearchParams(window.location.search);
+
+      slides.forEach(function (slide, i) {
+        if (!slide.id) { slide.id = 's' + (i + 1); }
+        var label = document.createElement('div');
+        label.className = 'slide-index';
+        label.textContent = 'Slide ' + (i + 1) + ' of ' + slides.length +
+          (slide.dataset.section ? ' \u00b7 ' + slide.dataset.section : '');
+        slide.appendChild(label);
+      });
+
+      function slideFromHash() {
+        var m = /^#s(\d+)$/.exec(window.location.hash || '');
+        if (!m) { return 0; }
+        var n = parseInt(m[1], 10) - 1;
+        return (n >= 0 && n < slides.length) ? n : 0;
+      }
+
+      function render() {
+        slides.forEach(function (slide, i) {
+          slide.classList.toggle('current', i === index);
+        });
+
+        var slide = slides[index];
+        counter.textContent = (index + 1) + ' / ' + slides.length;
+        sectionPill.textContent = slide.dataset.section || '';
+        progressBar.style.width = (((index + 1) / slides.length) * 100) + '%';
+
+        var notes = slide.querySelector('.notes');
+        notesBody.innerHTML = '';
+        if (notes) {
+          Array.prototype.forEach.call(notes.children, function (node) {
+            if (!node.classList.contains('np-label')) {
+              notesBody.appendChild(node.cloneNode(true));
+            }
+          });
+        }
+
+        prevBtn.disabled = index === 0;
+        nextBtn.disabled = index === slides.length - 1;
+      }
+
+      function go(n) {
+        var next = Math.max(0, Math.min(slides.length - 1, n));
+        if (next === index) { return; }
+        index = next;
+        if (history.replaceState) {
+          history.replaceState(null, '', '#s' + (index + 1));
+        }
+        render();
+      }
+
+      function setNotes(on) {
+        body.classList.toggle('notes-on', on);
+        notesBtn.setAttribute('aria-pressed', on ? 'true' : 'false');
+      }
+
+      function setHandout(on) {
+        body.classList.toggle('handout', on);
+        body.classList.toggle('deck', !on);
+        viewBtn.setAttribute('aria-pressed', on ? 'true' : 'false');
+        viewBtn.textContent = on ? 'Deck' : 'Handout';
+        if (on) {
+          var target = slides[index];
+          if (target && target.scrollIntoView) { target.scrollIntoView(); }
+        } else {
+          window.scrollTo(0, 0);
+        }
+      }
+
+      function setHelp(on) {
+        body.classList.toggle('help-on', on);
+      }
+
+      prevBtn.addEventListener('click', function () { go(index - 1); });
+      nextBtn.addEventListener('click', function () { go(index + 1); });
+      notesBtn.addEventListener('click', function () {
+        setNotes(!body.classList.contains('notes-on'));
+      });
+      viewBtn.addEventListener('click', function () {
+        setHandout(!body.classList.contains('handout'));
+      });
+      helpBtn.addEventListener('click', function () { setHelp(true); });
+      helpClose.addEventListener('click', function () { setHelp(false); });
+      document.getElementById('help').addEventListener('click', function (e) {
+        if (e.target === this) { setHelp(false); }
+      });
+
+      document.addEventListener('keydown', function (e) {
+        var tag = (e.target && e.target.tagName) || '';
+        if (tag === 'INPUT' || tag === 'TEXTAREA' || e.metaKey || e.ctrlKey || e.altKey) { return; }
+
+        if (e.key === 'Escape') { setHelp(false); return; }
+        if (e.key === '?') { setHelp(true); e.preventDefault(); return; }
+
+        if (e.key === 'n' || e.key === 'N') {
+          setNotes(!body.classList.contains('notes-on'));
+          return;
+        }
+        if (e.key === 'a' || e.key === 'A') {
+          setHandout(!body.classList.contains('handout'));
+          return;
+        }
+        if (e.key === 'f' || e.key === 'F') {
+          if (document.fullscreenElement) {
+            document.exitFullscreen();
+          } else if (document.documentElement.requestFullscreen) {
+            document.documentElement.requestFullscreen();
+          }
+          return;
+        }
+
+        if (body.classList.contains('handout')) { return; }
+
+        if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+          go(index + 1); e.preventDefault();
+        } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+          go(index - 1); e.preventDefault();
+        } else if (e.key === 'Home') {
+          go(0); e.preventDefault();
+        } else if (e.key === 'End') {
+          go(slides.length - 1); e.preventDefault();
+        }
+      });
+
+      var touchX = null;
+      var stage = document.getElementById('stage');
+      stage.addEventListener('touchstart', function (e) {
+        touchX = e.changedTouches[0].clientX;
+      }, { passive: true });
+      stage.addEventListener('touchend', function (e) {
+        if (touchX === null || body.classList.contains('handout')) { return; }
+        var dx = e.changedTouches[0].clientX - touchX;
+        if (Math.abs(dx) > 60) { go(index + (dx < 0 ? 1 : -1)); }
+        touchX = null;
+      }, { passive: true });
+
+      window.addEventListener('hashchange', function () {
+        go(slideFromHash());
+      });
+
+      // Initial state, driven by the URL so links can be shared.
+      index = slideFromHash();
+      setHandout(params.get('view') === 'handout');
+      setNotes(params.get('notes') === '1');
+      render();
+    }());
+  </script>
+</body>
+</html>
