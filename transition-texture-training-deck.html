@@ -2308,7 +2308,7 @@
     </section>
 
     <!-- ══════════ Handout-only companion sheets ══════════ -->
-    <section class="sheet handout-only">
+    <section class="sheet handout-only" id="runsheet">
       <h2>Trainer run sheet</h2>
       <p>
         Two sessions, 45 minutes each, at least a day apart. Slide numbers refer to the deck above.
@@ -2405,7 +2405,7 @@
       </ul>
     </section>
 
-    <section class="sheet handout-only">
+    <section class="sheet handout-only" id="quiz">
       <h2>Assessment quiz</h2>
       <p>
         Twelve questions, 85% to pass, which means no more than one wrong. Answers are for the trainer's
@@ -2462,7 +2462,7 @@
       </div>
     </section>
 
-    <section class="sheet handout-only">
+    <section class="sheet handout-only" id="deskaid">
       <h2>One-page desk aid</h2>
       <h3>The four beats of the framing script</h3>
       <ol>
@@ -2511,7 +2511,10 @@
     <a href="first-72-hours-programme.html">The First 72 Hours</a>, a workstream of the
     <a href="retention-improvement-master-plan.html">Retention Improvement Master Plan</a>.
     <br>
-    Press <kbd>?</kbd> for keyboard shortcuts, or switch to Handout to read and print everything at once.
+    Press <kbd>?</kbd> for keyboard shortcuts. Handout view adds the
+    <a href="?view=handout#runsheet">trainer run sheet</a>,
+    <a href="?view=handout#quiz">assessment quiz</a> and
+    <a href="?view=handout#deskaid">desk aid</a>, and prints cleanly.
   </footer>
 
   <div class="help" id="help" role="dialog" aria-modal="true" aria-labelledby="helpTitle">
@@ -2536,9 +2539,12 @@
         <dd>Close</dd>
       </dl>
       <p class="sub" style="color:#816165">
-        Handout mode prints cleanly, notes and all. Links can carry state, for example
-        <strong>#s14</strong> to open on a slide, or <strong>?notes=1</strong> to open with notes
-        showing.
+        Handout mode prints cleanly, notes and all, and adds three companion sheets: the
+        <a href="?view=handout#runsheet">trainer run sheet</a>,
+        the <a href="?view=handout#quiz">assessment quiz</a> and the
+        <a href="?view=handout#deskaid">one-page desk aid</a>.
+        Links can carry state &mdash; <strong>#s14</strong> opens on a slide,
+        <strong>?notes=1</strong> opens with notes showing.
       </p>
       <button class="btn primary" type="button" id="helpClose">Got it</button>
     </div>
@@ -2577,8 +2583,14 @@
         slide.appendChild(label);
       });
 
+      var SLIDE_HASH = /^#s(\d+)$/;
+
+      function isSlideHash() {
+        return SLIDE_HASH.test(window.location.hash || '');
+      }
+
       function slideFromHash() {
-        var m = /^#s(\d+)$/.exec(window.location.hash || '');
+        var m = SLIDE_HASH.exec(window.location.hash || '');
         if (!m) { return 0; }
         var n = parseInt(m[1], 10) - 1;
         return (n >= 0 && n < slides.length) ? n : 0;
@@ -2628,10 +2640,13 @@
         body.classList.toggle('deck', !on);
         viewBtn.setAttribute('aria-pressed', on ? 'true' : 'false');
         viewBtn.textContent = on ? 'Deck' : 'Handout';
-        if (on) {
+        // Leave the scroll position alone when the URL points at a companion
+        // sheet, otherwise we would fight the browser's own anchor jump.
+        var deepLinked = window.location.hash && !isSlideHash();
+        if (on && !deepLinked) {
           var target = slides[index];
           if (target && target.scrollIntoView) { target.scrollIntoView(); }
-        } else {
+        } else if (!on) {
           window.scrollTo(0, 0);
         }
       }
@@ -2704,7 +2719,7 @@
       }, { passive: true });
 
       window.addEventListener('hashchange', function () {
-        go(slideFromHash());
+        if (isSlideHash()) { go(slideFromHash()); }
       });
 
       // Initial state, driven by the URL so links can be shared.
