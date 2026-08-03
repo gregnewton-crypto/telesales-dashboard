@@ -1,0 +1,1609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Marro Retention Tracker &mdash; Build Plan</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&amp;family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,500..900,50,1&amp;display=swap">
+  <style>
+    :root {
+      --maroon: #451219;
+      --maroon-deep: #3A070D;
+      --maroon-ink: #240205;
+      --maroon-mid: #63393F;
+      --apricot: #E9B377;
+      --apricot-soft: #FBEAD6;
+      --amber: #D69042;
+      --blush: #F6DDDD;
+      --blush-soft: #F6ECEC;
+      --paper: #FDF9F9;
+      --muted: #816165;
+      --muted-soft: #B29495;
+      --line: #E2C5C5;
+      --mint: #68C29A;
+      --red: #D63F49;
+      --red-deep: #80020F;
+      --periwinkle: #A1A8D2;
+      --periwinkle-soft: #E8EBFF;
+      --text: #451219;
+      --display: "Fraunces", "Bricolage Grotesque", Georgia, "Times New Roman", serif;
+      --sans: "Bricolage Grotesque", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--blush);
+      color: var(--text);
+      font-family: var(--sans);
+      line-height: 1.5;
+    }
+
+    header {
+      background:
+        radial-gradient(120% 140% at 12% 0%, #5A1A22 0%, transparent 60%),
+        var(--maroon-deep);
+      color: #FDF9F9;
+      padding: 34px 24px 30px;
+      position: relative;
+    }
+
+    .brand-row {
+      align-items: center;
+      display: flex;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .wordmark {
+      color: var(--paper);
+      font-family: var(--display);
+      font-variation-settings: "SOFT" 50, "WONK" 1;
+      font-size: 26px;
+      font-weight: 900;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .brand-row .rule {
+      background: rgba(233, 179, 119, 0.45);
+      flex: 1;
+      height: 1px;
+      max-width: 120px;
+    }
+
+    .brand-row .kicker {
+      color: var(--apricot);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    header h1 {
+      color: var(--paper);
+      font-family: var(--display);
+      font-variation-settings: "SOFT" 50, "WONK" 1;
+      font-size: clamp(30px, 5.4vw, 56px);
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      line-height: 1.08;
+      margin: 0 0 14px;
+      max-width: 20ch;
+      text-transform: uppercase;
+    }
+
+    header p {
+      max-width: 780px;
+      margin: 0;
+      color: #EBCFCE;
+      font-size: 18px;
+    }
+
+    header p .pop { color: var(--apricot); font-weight: 700; }
+
+    header a.up {
+      color: var(--apricot);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    .header-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .header-meta span {
+      background: rgba(233, 179, 119, 0.1);
+      border: 1px solid rgba(233, 179, 119, 0.5);
+      border-radius: 999px;
+      color: var(--apricot);
+      font-size: 13px;
+      font-weight: 600;
+      padding: 8px 15px;
+    }
+
+    .promo {
+      background: var(--apricot);
+      color: var(--maroon-ink);
+      padding: 11px 24px;
+    }
+
+    .promo-track {
+      align-items: center;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 26px;
+      justify-content: center;
+      margin: 0 auto;
+      width: min(1180px, 100%);
+    }
+
+    .promo-track span {
+      align-items: center;
+      display: inline-flex;
+      font-size: 13px;
+      font-weight: 700;
+      gap: 8px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .promo-track span::before {
+      background: var(--maroon);
+      border-radius: 50%;
+      content: "";
+      height: 7px;
+      width: 7px;
+    }
+
+    .scallop {
+      background-image: radial-gradient(circle 13px at 13px 0, var(--apricot) 97%, transparent 100%);
+      background-position: 0 0;
+      background-repeat: repeat-x;
+      background-size: 26px 26px;
+      height: 13px;
+    }
+
+    main {
+      width: min(1180px, calc(100% - 32px));
+      margin: 30px auto 48px;
+    }
+
+    .card {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      box-shadow: 0 10px 30px rgba(69, 18, 25, 0.07);
+      margin-bottom: 22px;
+      padding: 26px;
+    }
+
+    h2 {
+      color: var(--maroon);
+      font-family: var(--display);
+      font-variation-settings: "SOFT" 50, "WONK" 1;
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      margin: 0 0 16px;
+      text-transform: uppercase;
+    }
+
+    h3 {
+      color: var(--maroon);
+      font-family: var(--display);
+      font-variation-settings: "SOFT" 50, "WONK" 0;
+      font-size: 19px;
+      font-weight: 700;
+      margin: 18px 0 8px;
+    }
+
+    h4 {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      margin: 16px 0 6px;
+      text-transform: uppercase;
+    }
+
+    h1 .amp, h2 .amp, h3 .amp, .band-title .amp {
+      font-family: var(--sans);
+      font-weight: 600;
+    }
+
+    p { margin: 0 0 12px; }
+    ul { margin: 8px 0 0; padding-left: 22px; }
+    li { margin: 6px 0; }
+    .lede { font-size: 17px; max-width: 900px; }
+
+    code {
+      background: var(--apricot-soft);
+      border-radius: 5px;
+      font-family: "Courier New", monospace;
+      font-size: 13px;
+      padding: 2px 6px;
+    }
+
+    .toc {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      padding: 0;
+      list-style: none;
+      margin: 0;
+    }
+
+    .toc a {
+      display: inline-block;
+      background: transparent;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: var(--maroon);
+      font-size: 14px;
+      font-weight: 600;
+      padding: 9px 16px;
+      text-decoration: none;
+      transition: background 0.15s, border-color 0.15s;
+    }
+
+    .toc a:hover { background: var(--apricot-soft); border-color: var(--apricot); }
+
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(255px, 1fr));
+      gap: 14px;
+    }
+
+    .metric {
+      background: var(--blush-soft);
+      border: 1px solid var(--line);
+      border-left: 6px solid var(--red);
+      border-radius: 16px;
+      font-size: 15px;
+      padding: 18px;
+    }
+
+    .metric .big {
+      color: var(--maroon);
+      display: block;
+      font-family: var(--display);
+      font-variation-settings: "SOFT" 50, "WONK" 1;
+      font-size: 32px;
+      font-weight: 900;
+      letter-spacing: 0.01em;
+      line-height: 1.05;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+    }
+
+    .metric .label { display: block; font-weight: 700; margin-bottom: 4px; }
+    .metric .src { color: var(--muted); display: block; font-size: 12px; margin-top: 8px; }
+    .metric.blue { border-left-color: var(--periwinkle); }
+    .metric.green { border-left-color: var(--mint); }
+    .metric.purple { border-left-color: var(--maroon-mid); }
+    .metric.teal { border-left-color: var(--amber); }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 14px;
+    }
+
+    .summary-box {
+      border: 1px solid var(--line);
+      border-left: 6px solid var(--red);
+      background: var(--blush-soft);
+      border-radius: 16px;
+      padding: 18px;
+    }
+
+    .summary-box strong {
+      display: block;
+      color: var(--maroon);
+      font-family: var(--display);
+      font-variation-settings: "SOFT" 50, "WONK" 0;
+      font-size: 18px;
+      margin-bottom: 6px;
+    }
+
+    .pillar-head {
+      align-items: center;
+      border-bottom: 2px solid var(--line);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 6px;
+      padding-bottom: 12px;
+    }
+
+    .pillar-num {
+      background: var(--maroon);
+      border-radius: 999px;
+      color: var(--apricot);
+      font-family: var(--display);
+      font-variation-settings: "SOFT" 50, "WONK" 1;
+      font-size: 22px;
+      font-weight: 900;
+      min-width: 52px;
+      padding: 9px 0;
+      text-align: center;
+    }
+
+    .pillar-head h2 { margin: 0; }
+    .pillar-head .who { color: var(--muted); font-size: 14px; width: 100%; }
+
+    .initiative {
+      background: var(--blush-soft);
+      border: 1px solid var(--line);
+      border-left: 6px solid var(--maroon-mid);
+      border-radius: 18px;
+      margin-top: 16px;
+      padding: 20px;
+    }
+
+    .initiative.new { border-left-color: var(--apricot); }
+    .initiative h3 { margin-top: 0; }
+
+    .badge-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 12px; }
+
+    .badge {
+      border-radius: 999px;
+      color: var(--paper);
+      font-size: 11px;
+      font-weight: 700;
+      padding: 5px 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .badge.ref { background: var(--maroon); }
+    .badge.new { background: var(--apricot); color: var(--maroon-ink); }
+    .badge.high { background: var(--red-deep); }
+    .badge.med { background: var(--amber); color: var(--maroon-ink); }
+    .badge.test { background: var(--periwinkle); color: var(--maroon-ink); }
+    .badge.quick { background: var(--mint); color: var(--maroon-ink); }
+    .badge.owner { background: transparent; border: 1px solid var(--muted-soft); color: var(--muted); }
+
+    .kv { display: grid; grid-template-columns: 150px 1fr; gap: 8px 14px; margin-top: 14px; }
+    .kv dt { color: var(--muted); font-size: 13px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; }
+    .kv dd { margin: 0; }
+
+    .table-wrap { overflow-x: auto; }
+    table { border-collapse: collapse; min-width: 820px; width: 100%; }
+    table.wide { min-width: 980px; }
+    th, td { border: 1px solid var(--line); padding: 11px; text-align: left; vertical-align: top; }
+    th {
+      background: var(--maroon);
+      color: var(--apricot);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      vertical-align: middle;
+    }
+    tbody tr:nth-child(even) { background: var(--blush-soft); }
+    td.num { font-variant-numeric: tabular-nums; text-align: right; white-space: nowrap; }
+    .stage { color: var(--maroon); font-weight: 700; white-space: nowrap; }
+
+    .bar {
+      display: block;
+      min-width: 70px;
+      border-radius: 999px;
+      color: var(--paper);
+      font-weight: 700;
+      font-size: 12px;
+      letter-spacing: 0.04em;
+      padding: 8px 10px;
+      text-align: center;
+    }
+
+    .bar.setup { background: var(--maroon); }
+    .bar.content { background: var(--amber); color: var(--maroon-ink); }
+    .bar.crm { background: var(--red-deep); }
+    .bar.ops { background: var(--mint); color: var(--maroon-ink); }
+    .bar.qa { background: var(--maroon-mid); }
+    .bar.data { background: var(--apricot); color: var(--maroon-ink); }
+    .bar.product { background: var(--muted); }
+    .bar.training { background: var(--periwinkle); color: var(--maroon-ink); }
+    .empty { background: #F2E4E4; }
+
+    .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; }
+    .step-card { background: var(--blush-soft); border: 1px solid var(--line); border-radius: 18px; padding: 18px; }
+    .step-card h3 { margin-top: 0; }
+
+    .note {
+      background: var(--periwinkle-soft);
+      border-left: 6px solid var(--periwinkle);
+      border-radius: 16px;
+      padding: 18px;
+      margin: 16px 0 0;
+    }
+
+    .note.warn { background: #FBE7E4; border-left-color: var(--red); }
+    .note.win { background: #E6F6EE; border-left-color: var(--mint); }
+
+    .note strong.note-title {
+      color: var(--maroon);
+      display: block;
+      font-family: var(--display);
+      font-variation-settings: "SOFT" 50, "WONK" 0;
+      font-size: 17px;
+      margin-bottom: 5px;
+    }
+
+    .band {
+      background:
+        radial-gradient(130% 170% at 8% 0%, #5A1A22 0%, transparent 62%),
+        var(--maroon-deep);
+      border-radius: 20px;
+      color: #EBCFCE;
+      font-size: 17px;
+      margin: 18px 0 0;
+      padding: 26px;
+    }
+
+    .band .band-title {
+      color: var(--apricot);
+      display: block;
+      font-family: var(--display);
+      font-variation-settings: "SOFT" 50, "WONK" 1;
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+    }
+
+    .band strong, .band em { color: var(--paper); }
+    .band code { background: rgba(233, 179, 119, 0.16); color: var(--apricot); }
+
+    pre.paste {
+      background: var(--maroon-ink);
+      border-radius: 16px;
+      color: var(--blush);
+      font-family: "Courier New", monospace;
+      font-size: 13px;
+      line-height: 1.55;
+      margin: 0;
+      overflow-x: auto;
+      padding: 18px;
+      white-space: pre-wrap;
+    }
+
+    details.paste-wrap summary { color: var(--maroon); cursor: pointer; font-weight: 700; margin-bottom: 10px; }
+
+    .timeline { display: grid; gap: 14px; }
+
+    .timeline-item {
+      display: grid;
+      grid-template-columns: 160px 1fr;
+      gap: 16px;
+      align-items: start;
+      background: var(--blush-soft);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 18px;
+    }
+
+    .timeline-item strong {
+      color: var(--maroon);
+      font-family: var(--display);
+      font-variation-settings: "SOFT" 50, "WONK" 0;
+      font-size: 17px;
+    }
+
+    .tag {
+      display: inline-block;
+      background: var(--apricot);
+      border-radius: 999px;
+      color: var(--maroon-ink);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      margin-bottom: 8px;
+      padding: 6px 13px;
+      text-transform: uppercase;
+    }
+
+    .tag.risk { background: var(--red-deep); color: var(--paper); }
+
+    /* ── Column chart, drawn from the real pause data ── */
+    .chart {
+      background: var(--blush-soft);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      margin-top: 14px;
+      padding: 20px 18px 14px;
+    }
+
+    .chart-title {
+      color: var(--maroon);
+      font-family: var(--display);
+      font-variation-settings: "SOFT" 50, "WONK" 0;
+      font-size: 17px;
+      margin-bottom: 2px;
+    }
+
+    .chart-sub { color: var(--muted); font-size: 13px; margin-bottom: 16px; }
+
+    .plot {
+      display: flex;
+      align-items: flex-end;
+      gap: 4px;
+      height: 210px;
+      overflow-x: auto;
+      padding-bottom: 2px;
+    }
+
+    .col { display: flex; flex: 1 0 26px; flex-direction: column; height: 100%; justify-content: flex-end; }
+
+    .col .v {
+      background: var(--maroon-mid);
+      border-radius: 4px 4px 0 0;
+      min-height: 2px;
+      position: relative;
+      transition: background 0.15s;
+    }
+
+    .col.peak .v { background: var(--red-deep); }
+    .col.pre .v { background: var(--periwinkle); }
+    .col.box2 .v { background: var(--amber); }
+    .col:hover .v { background: var(--apricot); }
+
+    .col .n {
+      color: var(--muted);
+      font-size: 10px;
+      font-variant-numeric: tabular-nums;
+      text-align: center;
+      padding-bottom: 3px;
+    }
+
+    .col .d {
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 11px;
+      font-variant-numeric: tabular-nums;
+      padding-top: 5px;
+      text-align: center;
+    }
+
+    .col.peak .n, .col.peak .d { color: var(--red-deep); font-weight: 700; }
+
+    .legend { display: flex; flex-wrap: wrap; gap: 8px 18px; margin-top: 12px; }
+    .legend span { align-items: center; color: var(--muted); display: inline-flex; font-size: 12.5px; gap: 7px; }
+    .legend i { border-radius: 3px; display: block; height: 11px; width: 11px; }
+
+    /* ── Wireframe sketch of the dashboard tab ── */
+    .wire {
+      background: var(--paper);
+      border: 2px dashed var(--muted-soft);
+      border-radius: 18px;
+      margin-top: 16px;
+      padding: 16px;
+    }
+
+    .wire-bar {
+      align-items: center;
+      background: var(--maroon-deep);
+      border-radius: 10px;
+      color: var(--apricot);
+      display: flex;
+      flex-wrap: wrap;
+      font-size: 12px;
+      font-weight: 700;
+      gap: 10px;
+      letter-spacing: 0.06em;
+      margin-bottom: 12px;
+      padding: 10px 14px;
+      text-transform: uppercase;
+    }
+
+    .wire-bar em { background: rgba(233, 179, 119, 0.16); border-radius: 999px; font-style: normal; padding: 5px 11px; }
+
+    .wire-grid { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(215px, 1fr)); }
+
+    .wire-panel {
+      background: var(--blush-soft);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      font-size: 13px;
+      padding: 13px;
+    }
+
+    .wire-panel b { color: var(--maroon); display: block; font-size: 13.5px; margin-bottom: 3px; }
+    .wire-panel span { color: var(--muted); font-size: 12.5px; }
+    .wire-panel.hero { grid-column: 1 / -1; border-left: 6px solid var(--red-deep); }
+
+    @media (max-width: 700px) {
+      .timeline-item, .kv { grid-template-columns: 1fr; }
+    }
+
+    .gingham {
+      background-color: var(--blush);
+      background-image:
+        repeating-linear-gradient(0deg, rgba(69, 18, 25, 0.2) 0 15px, transparent 15px 30px),
+        repeating-linear-gradient(90deg, rgba(69, 18, 25, 0.2) 0 15px, transparent 15px 30px);
+      border-radius: 6px;
+      height: 30px;
+      margin: 32px 0 20px;
+    }
+
+    footer { color: var(--muted); font-size: 14px; text-align: center; }
+
+    footer .sign {
+      color: var(--maroon);
+      display: block;
+      font-family: var(--display);
+      font-variation-settings: "SOFT" 50, "WONK" 1;
+      font-size: 20px;
+      font-weight: 900;
+      letter-spacing: 0.06em;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand-row">
+      <span class="wordmark">Marro</span>
+      <span class="rule"></span>
+      <span class="kicker">Retention Programme</span>
+    </div>
+    <h1>The Retention Tracker</h1>
+    <p>
+      A build plan for the living version of the retention work &mdash; the page you open on a
+      Monday to see <span class="pop">how many households paused yesterday, and on which day of
+      their life with us</span>. Workstream of the
+      <a class="up" href="retention-improvement-master-plan.html">Retention Improvement Master Plan</a>.
+    </p>
+    <div class="header-meta">
+      <span>Owner: Data <span class="amp">&amp;</span> Retention Strategy</span>
+      <span>Surface: GitHub Pages, extending the existing dashboard</span>
+      <span>Source of truth: Airtable</span>
+      <span>Blocking dependency: a pause event log</span>
+    </div>
+  </header>
+
+  <div class="promo">
+    <div class="promo-track">
+      <span>Pauses per day needs a pause date</span>
+      <span>Marro has none that is live</span>
+      <span>Day 5 after delivery is the cliff</span>
+      <span>Build the log before the charts</span>
+    </div>
+  </div>
+  <div class="scallop"></div>
+
+  <main>
+
+    <!-- ══════════════ THE ANSWER ══════════════ -->
+    <section class="card" id="answer">
+      <h2>The Short Answer</h2>
+      <p class="lede">
+        Two questions were asked: where should this dashboard live, and how do we track pauses per
+        day. The second one turns out to be the harder of the two, and it is not a charting problem.
+      </p>
+
+      <div class="summary-grid">
+        <div class="summary-box">
+          <strong>Where it lives</strong>
+          GitHub Pages, as a new tab on the dashboard that already exists at
+          <code>index.html</code>. Not a Google Sheet. The site is already wired to the Airtable
+          API, already has a Retention tab, and already has a <em>Daily</em> tab carrying the
+          placeholder &ldquo;coming in v2&rdquo;. This plan is that v2.
+        </div>
+        <div class="summary-box" style="border-left-color: var(--periwinkle);">
+          <strong>What the data is</strong>
+          Airtable stays the source of truth. Google Sheets earns exactly one role &mdash; a
+          landing strip for the daily Looker or Snowflake export &mdash; and only if we cannot
+          write to Airtable directly. It should never be the thing anyone opens.
+        </div>
+        <div class="summary-box" style="border-left-color: var(--red-deep);">
+          <strong>What blocks it</strong>
+          Nothing in Marro&rsquo;s live data records <em>when</em> a subscription paused. We have
+          pause reasons on 26,699 subscriptions and pause dates on none of them that are current.
+          Until that is fixed, pauses per day cannot be counted at all, on any surface.
+        </div>
+        <div class="summary-box" style="border-left-color: var(--mint);">
+          <strong>What to build first</strong>
+          A <em>Marro Pause Events</em> table: one row per pause, with a date, both clocks, and a
+          reason. It is roughly a day of pipeline work and it unlocks every chart on this page.
+          Build the log before the dashboard.
+        </div>
+      </div>
+
+      <div class="note warn">
+        <strong class="note-title">The one-sentence version</strong>
+        We do not have a dashboard problem, we have a missing-column problem: add a pause date to
+        the Marro feed, and the tracker becomes a weekend of front-end work on a page that is
+        already built.
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Contents</h2>
+      <ul class="toc">
+        <li><a href="#audit">What Is Actually In The Data</a></li>
+        <li><a href="#blocker">Why Pauses Per Day Is Currently Impossible</a></li>
+        <li><a href="#clocks">Pauses Per Day Is Three Charts</a></li>
+        <li><a href="#reconcile">Reconciling The Headline Numbers</a></li>
+        <li><a href="#model">The Missing Table</a></li>
+        <li><a href="#spec">The Dashboard, Panel By Panel</a></li>
+        <li><a href="#quality">Data Quality Fixes</a></li>
+        <li><a href="#where">Where It Should Live</a></li>
+        <li><a href="#phases">Build Phases</a></li>
+        <li><a href="#decisions">Open Decisions</a></li>
+      </ul>
+    </section>
+
+    <!-- ══════════════ AUDIT ══════════════ -->
+    <section class="card" id="audit">
+      <h2>What Is Actually In The Data</h2>
+      <p class="lede">
+        Everything below was read directly out of Airtable rather than taken from a previous deck.
+        Two bases matter: <em>Greg&rsquo;s Butternut D2MS</em> holds the subscription rows, and
+        <em>Telesales System</em> holds the weekly roll-ups the current dashboard already reads.
+      </p>
+
+      <div class="metric-grid">
+        <div class="metric">
+          <span class="big">26,699</span>
+          <span class="label">Marro subscriptions on file</span>
+          Spanning 9 Aug 2024 to 2 Aug 2026, across London, D2MS, Manchester, Model Pitch, Bristol
+          and Scotland. Roughly 380 new sales a week over the last quarter.
+          <span class="src">Greg&rsquo;s Butternut D2MS &rarr; Marro sales</span>
+        </div>
+        <div class="metric">
+          <span class="big">44.26%</span>
+          <span class="label">Box-2 retention on matured rows</span>
+          11,619 retained out of 26,249 that have had the chance. Against the 47% target that is a
+          gap of about 10 boxes a week at current volume.
+          <span class="src">Derived from the five status flags</span>
+        </div>
+        <div class="metric" style="border-left-color: var(--red-deep);">
+          <span class="big">Zero</span>
+          <span class="label">Live pause dates for Marro</span>
+          The subscription table records a pause <em>reason</em> but never a pause <em>date</em>.
+          There is no field to put one in.
+          <span class="src">Marro sales, all 26,699 rows</span>
+        </div>
+        <div class="metric teal">
+          <span class="big">6 months</span>
+          <span class="label">Since the only dated feed updated</span>
+          <code>&#9881;&#65039; Marro D2MS Looker</code> does carry a First Pause Date, on 8,784
+          rows. Its last entry is 2 Feb 2026. It has not moved since.
+          <span class="src">Telesales System &rarr; Marro D2MS Looker</span>
+        </div>
+        <div class="metric blue">
+          <span class="big">Weekly</span>
+          <span class="label">Finest grain the dashboard can show today</span>
+          <code>&#128202; Weekly KPIs v2</code> is live and healthy, with paused counts, retention
+          and budget by brand, channel and market. It is a week bucket, so it cannot answer a
+          day-level question.
+          <span class="src">Telesales System &rarr; Weekly KPIs v2</span>
+        </div>
+        <div class="metric green">
+          <span class="big">Already built</span>
+          <span class="label">The surface to hang this on</span>
+          The dashboard authenticates against Airtable with a personal access token held in the
+          browser, paginates, rate-limits and refreshes every five minutes. None of that needs
+          rebuilding.
+          <span class="src">index.html</span>
+        </div>
+      </div>
+
+      <div class="note">
+        <strong class="note-title">The pattern already exists on the dog side</strong>
+        Butternut&rsquo;s equivalent Looker table has exactly the right shape &mdash;
+        <code>Paused At</code>, <code>Days to Pause</code>, <code>Sale to Pause</code> and
+        <code>BOX 1 TO PAUSE</code>, which is both clocks pre-computed. Those columns are largely
+        unpopulated and that feed has also gone quiet, but it means we are not inventing a schema
+        from scratch. We are restoring one that somebody already designed, and pointing it at cats.
+      </div>
+    </section>
+
+    <!-- ══════════════ BLOCKER ══════════════ -->
+    <section class="card" id="blocker">
+      <h2>Why Pauses Per Day Is Currently Impossible</h2>
+      <p class="lede">
+        This is the finding that shapes the whole plan, so it is worth being precise about it.
+        Marro&rsquo;s subscription table stores <em>current state</em>, not <em>history</em>.
+      </p>
+
+      <div class="steps">
+        <div class="step-card">
+          <h3>A row tells you where someone ended up</h3>
+          <p>
+            Each subscription carries five mutually exclusive flags &mdash; retained, unretained,
+            paused, scheduled, undelivered &mdash; plus a First Pause Reason and a Pause Reason.
+            Read a row and you learn the outcome.
+          </p>
+        </div>
+        <div class="step-card">
+          <h3>It never tells you when</h3>
+          <p>
+            There is no pause date, no status-change timestamp, and no history table. The
+            <code>Last Modified</code> field moves whenever anything on the row is edited, so it
+            cannot stand in for one.
+          </p>
+        </div>
+        <div class="step-card">
+          <h3>So the question has no answer</h3>
+          <p>
+            &ldquo;How many people paused on Tuesday?&rdquo; requires a pause date on every pause.
+            No chart, spreadsheet formula or clever roll-up can recover a date that was never
+            written down.
+          </p>
+        </div>
+      </div>
+
+      <h3>A second trap: a pause reason is not a churn</h3>
+      <p>
+        7,813 subscriptions carry a First Pause Reason <em>and</em> are marked retained &mdash;
+        that is 67% of all retained customers. People pause and come back, or pause and get saved.
+        Any chart that counts rows-with-a-pause-reason as churn will overstate the problem by a
+        factor of roughly two, which is exactly the sort of error that gets a dashboard quietly
+        distrusted and then ignored.
+      </p>
+
+      <div class="band">
+        <span class="band-title">What this means for the brief</span>
+        The ask was a dynamic pause tracker. The honest answer is that the dynamism is not the hard
+        part &mdash; the dashboard already refreshes itself every five minutes. The hard part is
+        that the underlying event has never been recorded. <strong>Fix the feed and the tracker is
+        straightforward. Skip the feed and no amount of front-end work will produce the chart.</strong>
+      </div>
+    </section>
+
+    <!-- ══════════════ CLOCKS ══════════════ -->
+    <section class="card" id="clocks">
+      <h2>Pauses Per Day Is Three Charts, Not One</h2>
+      <p class="lede">
+        &ldquo;Pauses per day&rdquo; means three genuinely different things, and they answer
+        different questions. The tracker should carry all three, clearly labelled, because
+        conflating them is how a programme ends up firing its most important message on the wrong
+        day. The First 72 Hours page already calls this out as
+        <a href="first-72-hours-programme.html#clocks">two clocks</a>; the data below settles which
+        clock the famous day-5 cliff is actually on.
+      </p>
+
+      <div class="summary-grid">
+        <div class="summary-box">
+          <strong>1. The calendar</strong>
+          Pauses that happened yesterday, regardless of who they were. This is the operational
+          number &mdash; the one that tells you Tuesday was bad and someone should look into it.
+          This is what most people mean by &ldquo;pauses per day&rdquo;.
+        </div>
+        <div class="summary-box" style="border-left-color: var(--periwinkle);">
+          <strong>2. The order clock</strong>
+          Days between checkout and pause. Day 0 is the sale. This is the clock the sales floor
+          feels, and it is the right one for judging an agent&rsquo;s cohort.
+        </div>
+        <div class="summary-box" style="border-left-color: var(--amber);">
+          <strong>3. The bowl clock</strong>
+          Days between the first box landing and the pause. Day 0 is the first meal. This is the
+          clock the <em>cat</em> is on, and it is the one the CRM has to trigger against.
+        </div>
+      </div>
+
+      <h3>The two clocks disagree, and the disagreement matters</h3>
+      <p>
+        Both charts below are drawn from the same 8,784 dated Marro pauses in the Looker snapshot.
+        They are the same events, counted twice against different day-zeros, and they point at
+        different days.
+      </p>
+
+      <div class="chart">
+        <div class="chart-title">Order clock &mdash; days from checkout to first pause</div>
+        <div class="chart-sub">Peak lands on day 7. Days 7 and 14 both spike, which is box 2 arriving on the 7-day and 14-day trials.</div>
+        <div class="plot">
+          <div class="col"><span class="n">309</span><span class="v" style="height:35.6%"></span><span class="d">0</span></div>
+          <div class="col"><span class="n">114</span><span class="v" style="height:13.1%"></span><span class="d">1</span></div>
+          <div class="col"><span class="n">369</span><span class="v" style="height:42.6%"></span><span class="d">2</span></div>
+          <div class="col"><span class="n">426</span><span class="v" style="height:49.1%"></span><span class="d">3</span></div>
+          <div class="col"><span class="n">418</span><span class="v" style="height:48.2%"></span><span class="d">4</span></div>
+          <div class="col"><span class="n">473</span><span class="v" style="height:54.6%"></span><span class="d">5</span></div>
+          <div class="col"><span class="n">373</span><span class="v" style="height:43.0%"></span><span class="d">6</span></div>
+          <div class="col peak"><span class="n">867</span><span class="v" style="height:100%"></span><span class="d">7</span></div>
+          <div class="col"><span class="n">546</span><span class="v" style="height:63.0%"></span><span class="d">8</span></div>
+          <div class="col"><span class="n">424</span><span class="v" style="height:48.9%"></span><span class="d">9</span></div>
+          <div class="col"><span class="n">249</span><span class="v" style="height:28.7%"></span><span class="d">10</span></div>
+          <div class="col"><span class="n">164</span><span class="v" style="height:18.9%"></span><span class="d">11</span></div>
+          <div class="col"><span class="n">172</span><span class="v" style="height:19.8%"></span><span class="d">12</span></div>
+          <div class="col"><span class="n">127</span><span class="v" style="height:14.6%"></span><span class="d">13</span></div>
+          <div class="col box2"><span class="n">368</span><span class="v" style="height:42.4%"></span><span class="d">14</span></div>
+          <div class="col"><span class="n">268</span><span class="v" style="height:30.9%"></span><span class="d">15</span></div>
+          <div class="col"><span class="n">141</span><span class="v" style="height:16.3%"></span><span class="d">16</span></div>
+          <div class="col"><span class="n">155</span><span class="v" style="height:17.9%"></span><span class="d">17</span></div>
+          <div class="col"><span class="n">83</span><span class="v" style="height:9.6%"></span><span class="d">18</span></div>
+          <div class="col"><span class="n">70</span><span class="v" style="height:8.1%"></span><span class="d">19</span></div>
+          <div class="col"><span class="n">64</span><span class="v" style="height:7.4%"></span><span class="d">20</span></div>
+          <div class="col"><span class="n">47</span><span class="v" style="height:5.4%"></span><span class="d">21</span></div>
+        </div>
+        <div class="legend">
+          <span><i style="background: var(--red-deep);"></i> Peak day</span>
+          <span><i style="background: var(--amber);"></i> Box 2 on the 14-day trial</span>
+          <span><i style="background: var(--maroon-mid);"></i> All other days</span>
+        </div>
+      </div>
+
+      <div class="chart">
+        <div class="chart-title">Bowl clock &mdash; days from first delivery to first pause</div>
+        <div class="chart-sub">Peak lands on day 5, unmistakably. Negative days are households who paused before the box ever arrived.</div>
+        <div class="plot">
+          <div class="col pre"><span class="n">24</span><span class="v" style="height:2.6%"></span><span class="d">-3</span></div>
+          <div class="col pre"><span class="n">240</span><span class="v" style="height:26.2%"></span><span class="d">-2</span></div>
+          <div class="col pre"><span class="n">128</span><span class="v" style="height:14.0%"></span><span class="d">-1</span></div>
+          <div class="col"><span class="n">457</span><span class="v" style="height:49.9%"></span><span class="d">0</span></div>
+          <div class="col"><span class="n">446</span><span class="v" style="height:48.7%"></span><span class="d">1</span></div>
+          <div class="col"><span class="n">435</span><span class="v" style="height:47.5%"></span><span class="d">2</span></div>
+          <div class="col"><span class="n">467</span><span class="v" style="height:51.0%"></span><span class="d">3</span></div>
+          <div class="col"><span class="n">372</span><span class="v" style="height:40.7%"></span><span class="d">4</span></div>
+          <div class="col peak"><span class="n">915</span><span class="v" style="height:100%"></span><span class="d">5</span></div>
+          <div class="col"><span class="n">549</span><span class="v" style="height:60.0%"></span><span class="d">6</span></div>
+          <div class="col"><span class="n">419</span><span class="v" style="height:45.8%"></span><span class="d">7</span></div>
+          <div class="col"><span class="n">200</span><span class="v" style="height:21.9%"></span><span class="d">8</span></div>
+          <div class="col"><span class="n">131</span><span class="v" style="height:14.3%"></span><span class="d">9</span></div>
+          <div class="col"><span class="n">139</span><span class="v" style="height:15.2%"></span><span class="d">10</span></div>
+          <div class="col"><span class="n">121</span><span class="v" style="height:13.2%"></span><span class="d">11</span></div>
+          <div class="col box2"><span class="n">400</span><span class="v" style="height:43.7%"></span><span class="d">12</span></div>
+          <div class="col"><span class="n">253</span><span class="v" style="height:27.7%"></span><span class="d">13</span></div>
+          <div class="col"><span class="n">148</span><span class="v" style="height:16.2%"></span><span class="d">14</span></div>
+          <div class="col"><span class="n">130</span><span class="v" style="height:14.2%"></span><span class="d">15</span></div>
+          <div class="col"><span class="n">76</span><span class="v" style="height:8.3%"></span><span class="d">16</span></div>
+          <div class="col"><span class="n">44</span><span class="v" style="height:4.8%"></span><span class="d">17</span></div>
+          <div class="col"><span class="n">71</span><span class="v" style="height:7.8%"></span><span class="d">18</span></div>
+          <div class="col"><span class="n">43</span><span class="v" style="height:4.7%"></span><span class="d">19</span></div>
+          <div class="col"><span class="n">44</span><span class="v" style="height:4.8%"></span><span class="d">20</span></div>
+          <div class="col"><span class="n">41</span><span class="v" style="height:4.5%"></span><span class="d">21</span></div>
+        </div>
+        <div class="legend">
+          <span><i style="background: var(--red-deep);"></i> The day-5 cliff</span>
+          <span><i style="background: var(--periwinkle);"></i> Paused before delivery</span>
+          <span><i style="background: var(--amber);"></i> Second-box echo</span>
+          <span><i style="background: var(--maroon-mid);"></i> All other days</span>
+        </div>
+      </div>
+
+      <div class="note win">
+        <strong class="note-title">The day-5 cliff is real, and it is on the bowl clock</strong>
+        On the order clock day 5 is unremarkable &mdash; 473 pauses, well below day 7. Measured from
+        the first delivery it is the tallest bar in the dataset at 915, nearly double its
+        neighbours. Since a Marro box typically lands two days after checkout, the same event
+        appears as day 7 on one clock and day 5 on the other. That is the whole discrepancy. It
+        also confirms the operational instruction on the First 72 Hours page: every message must
+        fire off delivery confirmation, not order date, or the day-3 check-in lands while the box
+        is still on a van.
+      </div>
+
+      <h3>Why the reason mix makes the same argument</h3>
+      <p>
+        Splitting those pauses by reason shows two distinct churn engines rather than one, which is
+        the thesis the master plan is built on. Before the box arrives, nobody complains about the
+        food, because there is no food &mdash; they are cancelling a subscription. Once the bowl is
+        down, refusal dominates. Later, price takes over.
+      </p>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>When they paused (bowl clock)</th>
+              <th class="num">Pauses</th>
+              <th class="num">Pet did not eat</th>
+              <th class="num">Do not want subscription</th>
+              <th class="num">Price</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td class="stage">Before delivery</td><td class="num">430</td><td class="num">2.3%</td><td class="num">55.3%</td><td class="num">19.8%</td></tr>
+            <tr><td class="stage">Days 0&ndash;2</td><td class="num">1,338</td><td class="num">33.5%</td><td class="num">24.1%</td><td class="num">18.6%</td></tr>
+            <tr><td class="stage">Days 3&ndash;6</td><td class="num">2,303</td><td class="num">50.5%</td><td class="num">19.6%</td><td class="num">16.6%</td></tr>
+            <tr><td class="stage">Days 7&ndash;13</td><td class="num">1,663</td><td class="num">44.6%</td><td class="num">24.6%</td><td class="num">18.1%</td></tr>
+            <tr><td class="stage">Days 14&ndash;27</td><td class="num">884</td><td class="num">46.2%</td><td class="num">14.9%</td><td class="num">24.5%</td></tr>
+            <tr><td class="stage">Day 28 onwards</td><td class="num">2,080</td><td class="num">34.2%</td><td class="num">15.3%</td><td class="num">28.9%</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="margin-top:12px;">
+        Refusal peaks at 50.5% in the days 3&ndash;6 window and price climbs steadily to 28.9%
+        after day 28. That is the acceptance engine and the value engine, visible in one table, and
+        it is the reason the tracker must always show reason mix <em>alongside</em> the day count
+        rather than on a separate tab.
+      </p>
+    </section>
+
+    <!-- ══════════════ RECONCILE ══════════════ -->
+    <section class="card" id="reconcile">
+      <h2>Reconciling The Headline Numbers</h2>
+      <p class="lede">
+        Two figures quoted throughout the master plan do not reproduce from the Airtable data. This
+        is not a reason to distrust the strategy &mdash; the shape of the problem is confirmed
+        emphatically &mdash; but the tracker will publish these numbers continuously, so they need
+        to agree with the decks before it launches.
+      </p>
+
+      <div class="table-wrap">
+        <table class="wide">
+          <thead>
+            <tr>
+              <th>Claim in the master plan</th>
+              <th class="num">Quoted</th>
+              <th class="num">From Airtable</th>
+              <th>Most likely explanation</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="stage">Pauses inside 7 days</td>
+              <td class="num">56.67%</td>
+              <td class="num">28.26%</td>
+              <td>
+                Measured as days 0&ndash;6 on the order clock. But <strong>days 0&ndash;13 on the
+                order clock gives 57.27%</strong>, which is within rounding of the quoted figure.
+                The original is almost certainly a two-week window &mdash; ISO weeks 1 and 2 &mdash;
+                described as &ldquo;7 days&rdquo;.
+              </td>
+            </tr>
+            <tr>
+              <td class="stage">Pause before any box arrives</td>
+              <td class="num">~23%</td>
+              <td class="num">4.94%</td>
+              <td>
+                Only 430 of 8,698 dated pauses precede the first delivery date. Coincidentally,
+                <strong>23.78% of pauses fall inside 7 days of signup</strong> on matured cohorts,
+                so the two figures may have been transposed at some point. Needs settling at source.
+              </td>
+            </tr>
+            <tr>
+              <td class="stage">Day 5 is the cliff</td>
+              <td class="num">&mdash;</td>
+              <td class="num">Confirmed</td>
+              <td>
+                Correct, on the bowl clock, at 915 pauses. The master plan attributes it to the
+                order clock, where the peak is actually day 7. Worth correcting in the copy.
+              </td>
+            </tr>
+            <tr>
+              <td class="stage">Gap to the 47% target</td>
+              <td class="num">6.63/wk</td>
+              <td class="num">~10.4/wk</td>
+              <td>
+                Current matured retention is 44.26% against a 47% target, on about 380 sales a week.
+                The 6.63 figure came from a narrower matured window; both are defensible, but the
+                tracker should compute it live rather than hard-code either.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="note warn">
+        <strong class="note-title">Read this the right way</strong>
+        Every one of these gaps is a definitional difference, not a contradiction. The strategy
+        stands: early pauses dominate, refusal drives them, price takes over later. What is missing
+        is a single written definition of each metric that the deck, the dashboard and the Looker
+        export all share. That definition list is a deliverable of phase 1, not an afterthought.
+      </div>
+    </section>
+
+    <!-- ══════════════ MODEL ══════════════ -->
+    <section class="card" id="model">
+      <div class="pillar-head">
+        <span class="pillar-num">1</span>
+        <h2>The Missing Table</h2>
+        <span class="who">Owner: Data. Everything else on this page depends on it.</span>
+      </div>
+
+      <p class="lede">
+        One new Airtable table in <em>Telesales System</em>, one row per pause event, appended
+        daily and never overwritten. Small, boring, and the single highest-leverage thing in this
+        plan.
+      </p>
+
+      <div class="initiative new">
+        <div class="badge-row">
+          <span class="badge new">New</span>
+          <span class="badge high">Blocking</span>
+          <span class="badge quick">Fast to ship</span>
+          <span class="badge owner">Data</span>
+        </div>
+        <h3>&#128202; Marro Pause Events</h3>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Field</th><th>Type</th><th>Why it is there</th></tr>
+            </thead>
+            <tbody>
+              <tr><td class="stage">Subscription ID</td><td>Number</td><td>Joins back to Marro sales. The grain key.</td></tr>
+              <tr><td class="stage">Pause Date</td><td>Date</td><td>The whole point. Enables the calendar chart.</td></tr>
+              <tr><td class="stage">Pause Sequence</td><td>Number</td><td>1 for the first pause, 2 for the second. Lets us separate first-time churn from repeat pausers.</td></tr>
+              <tr><td class="stage">Pause Reason</td><td>Single select</td><td>Constrained list, not free text. Today the same reason arrives with curly and straight apostrophes.</td></tr>
+              <tr><td class="stage">Subscription Created Date</td><td>Date</td><td>Copied in so the order clock is computable without a lookup.</td></tr>
+              <tr><td class="stage">Order 1 Delivery Date</td><td>Date</td><td>Same, for the bowl clock.</td></tr>
+              <tr><td class="stage">Days To Pause &mdash; Order</td><td>Formula</td><td><code>Pause Date &minus; Subscription Created Date</code>.</td></tr>
+              <tr><td class="stage">Days To Pause &mdash; Bowl</td><td>Formula</td><td><code>Pause Date &minus; Order 1 Delivery Date</code>. Negative means pre-delivery.</td></tr>
+              <tr><td class="stage">Pre-Delivery?</td><td>Formula</td><td>True when the bowl clock is negative. The 23%-versus-5% question, settled in a column.</td></tr>
+              <tr><td class="stage">Agent / Team / Channel</td><td>Text</td><td>Denormalised at write time so the agent view needs no joins.</td></tr>
+              <tr><td class="stage">Trial Length</td><td>Number</td><td>Order 1 to order 2 gap. Currently 14 days on 3,808 subs and 7 days on 3,297 &mdash; it drives the day-7 and day-14 spikes and must be a filter.</td></tr>
+              <tr><td class="stage">Reactivated?</td><td>Checkbox</td><td>Set later if they come back. Stops us counting saves as losses.</td></tr>
+              <tr><td class="stage">Snapshot Date</td><td>Date</td><td>When we observed it. Makes the pipeline auditable and late arrivals visible.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h4>How it gets populated &mdash; three options, in order of preference</h4>
+        <div class="steps">
+          <div class="step-card">
+            <h3>A. Restore the Looker feed</h3>
+            <p>
+              <code>&#9881;&#65039; Marro D2MS Looker</code> already has a First Pause Date column
+              and already knows how to fill it. It simply stopped on 2 Feb 2026. Find out why,
+              restart it, and schedule it daily.
+            </p>
+            <p><strong>Best because</strong> it is a repair, not a build, and it backfills history the moment it runs.</p>
+          </div>
+          <div class="step-card">
+            <h3>B. A Marro Snowflake table</h3>
+            <p>
+              <code>Snowflake Butternut Sales</code> exists and carries
+              <code>CURRENT_SUBSCRIPTION_STATUS</code>. A Marro twin, snapshotted nightly, lets us
+              <em>derive</em> pause events by watching status flip from active to paused.
+            </p>
+            <p><strong>Best because</strong> it survives the source system never emitting a pause timestamp at all.</p>
+          </div>
+          <div class="step-card">
+            <h3>C. Daily status snapshot</h3>
+            <p>
+              Failing both, a scheduled job copies the status of every live Marro subscription each
+              night and diffs it against yesterday. Cruder, catches the date to within a day, and
+              needs no cooperation from anyone upstream.
+            </p>
+            <p><strong>Worst because</strong> history starts the day we switch it on, so the first useful cohort view is a month away.</p>
+          </div>
+        </div>
+
+        <div class="note">
+          <strong class="note-title">Whichever option wins, record every pause, not just the first</strong>
+          <code>First Pause Date</code> is a single column on a subscription and therefore only
+          ever tells us about pause number one. A household that pauses on day 5, gets saved, and
+          pauses again on day 40 is two distinct events with two different stories, and the second
+          one is invisible in the current model. The event log is what makes repeat pausing
+          countable &mdash; and repeat pausing is the clearest possible signal that a save did not
+          stick.
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════ SPEC ══════════════ -->
+    <section class="card" id="spec">
+      <div class="pillar-head">
+        <span class="pillar-num">2</span>
+        <h2>The Dashboard, Panel By Panel</h2>
+        <span class="who">Owner: Data + Retention Strategy. A new Retention tab on the existing page.</span>
+      </div>
+
+      <p class="lede">
+        The layout below assumes the event log exists. Global filters run across the top and apply
+        to everything, so the same page serves the weekly leadership read and an agent looking at
+        their own cohort.
+      </p>
+
+      <div class="wire">
+        <div class="wire-bar">
+          <span>Marro Retention</span>
+          <em>Date range</em>
+          <em>Channel: D2MS / London / Manchester / Model Pitch</em>
+          <em>Agent</em>
+          <em>Trial length</em>
+          <em>Clock: order / bowl</em>
+        </div>
+        <div class="wire-grid">
+          <div class="wire-panel hero">
+            <b>Pauses per day &mdash; the headline strip</b>
+            <span>
+              Daily bar chart over the selected range, with a 7-day rolling average line so weekday
+              seasonality does not read as a crisis. Yesterday&rsquo;s count called out large, with
+              its variance against the trailing 4-week average for that weekday. This is the panel
+              that was asked for.
+            </span>
+          </div>
+          <div class="wire-panel">
+            <b>Box-2 retention vs 47%</b>
+            <span>Matured cohorts only, with the live gap expressed in boxes per week.</span>
+          </div>
+          <div class="wire-panel">
+            <b>Days-to-pause histogram</b>
+            <span>The two charts above, toggled by the clock filter. Cliff day highlighted automatically.</span>
+          </div>
+          <div class="wire-panel">
+            <b>Reason mix over time</b>
+            <span>Stacked area by week. Refusal and subscription tracked separately, never merged.</span>
+          </div>
+          <div class="wire-panel">
+            <b>Pre-delivery pause rate</b>
+            <span>Its own line. Different engine, different fix, different owner.</span>
+          </div>
+          <div class="wire-panel">
+            <b>Cohort survival curves</b>
+            <span>By signup week, out to day 84. The only honest way to compare a young cohort to an old one.</span>
+          </div>
+          <div class="wire-panel">
+            <b>Agent view</b>
+            <span>Cohort size, 28- and 84-day retention against team median, pause-day profile, save rate.</span>
+          </div>
+          <div class="wire-panel">
+            <b>Today&rsquo;s at-risk list</b>
+            <span>Delivered 3&ndash;5 days ago, still active, no contact logged. The one panel that creates work rather than reporting it.</span>
+          </div>
+        </div>
+      </div>
+
+      <h3>Three rules the build should not break</h3>
+      <div class="summary-grid">
+        <div class="summary-box">
+          <strong>Never mix matured and immature cohorts</strong>
+          A subscription signed up ten days ago cannot have failed to retain at 28 days. Include it
+          in the denominator and retention will look like it is collapsing every time sales have a
+          good week. Every retention figure states its maturity window on the panel.
+        </div>
+        <div class="summary-box" style="border-left-color: var(--periwinkle);">
+          <strong>Always show the denominator</strong>
+          A 60% pause rate on 5 sales is noise. Panels carry their <em>n</em>, and anything below
+          the agreed minimum cohort size renders greyed rather than ranked. This is also the
+          anti-gaming guardrail the master plan asks for.
+        </div>
+        <div class="summary-box" style="border-left-color: var(--amber);">
+          <strong>Label the clock on every chart</strong>
+          Every day-based panel says which clock it is on, in the title, permanently. The cost of
+          getting this wrong is a CRM message landing two days early for the whole base.
+        </div>
+      </div>
+
+      <h4>Technical notes for whoever builds it</h4>
+      <ul>
+        <li>
+          Reuse the existing fetch layer in <code>index.html</code> &mdash; token in
+          <code>localStorage</code>, paginated <code>fetchAllRecords</code>, the four-concurrent
+          rate-limited queue. It already handles Airtable&rsquo;s 5 requests-per-second ceiling.
+        </li>
+        <li>
+          Do not pull all 26,699 subscription rows into the browser on load. Fetch the event log,
+          which is roughly a tenth of the size, and read totals from
+          <code>&#128202; Weekly KPIs v2</code>, which is already aggregated and already fetched.
+        </li>
+        <li>
+          Aggregate the daily series in an Airtable formula or a scheduled roll-up rather than in
+          JavaScript. Browser-side grouping over tens of thousands of records is what makes
+          dashboards feel broken on a phone.
+        </li>
+        <li>
+          A read-only Airtable token scoped to the two bases would remove the paste-your-token
+          step. Worth checking whether that is acceptable for a public GitHub Pages URL before
+          committing to it &mdash; if the repository is public, it is not, and the current
+          bring-your-own-token approach is the right call.
+        </li>
+      </ul>
+    </section>
+
+    <!-- ══════════════ QUALITY ══════════════ -->
+    <section class="card" id="quality">
+      <div class="pillar-head">
+        <span class="pillar-num">3</span>
+        <h2>Data Quality Fixes</h2>
+        <span class="who">Owner: Data. Cheap to fix now, expensive to explain later.</span>
+      </div>
+
+      <p class="lede">
+        Found while reading the tables. None of these stop the build, but each one will produce a
+        wrong number on a dashboard someone is about to trust.
+      </p>
+
+      <div class="table-wrap">
+        <table class="wide">
+          <thead>
+            <tr><th>Problem</th><th>Where</th><th>Impact</th><th>Fix</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="stage">&ldquo;Retention 28d&rdquo; means the opposite of its name</td>
+              <td>Marro sales</td>
+              <td>
+                It equals <code>1 &minus; Retained</code> on all 26,699 rows without exception. Anyone
+                charting it as retention will report 55.7% when the truth is 44.3%, and the number
+                is plausible enough that nobody will catch it.
+              </td>
+              <td>Rename to <code>Not Retained 28d</code>, or invert it. Highest priority on this table.</td>
+            </tr>
+            <tr>
+              <td class="stage">Pause reasons written into the postcode column</td>
+              <td>Marro sales</td>
+              <td>Rows carrying <code>pet_did_not_eat_food</code> as a postcode. A column shifted during an import.</td>
+              <td>Find the affected import batch, re-run it, and add a postcode format check.</td>
+            </tr>
+            <tr>
+              <td class="stage">Broken VLOOKUPs frozen into a single-select</td>
+              <td>Marro sales &rarr; Direct Sales Team Name</td>
+              <td>
+                Around 40 of the option values are literal
+                <code>#N/A (Did not find value 'Seb Wright' ...)</code> strings. Every one is a real
+                rep whose sales are attributed to a team that does not exist.
+              </td>
+              <td>Map each to its real team, merge the options, then fix the upstream lookup.</td>
+            </tr>
+            <tr>
+              <td class="stage"><code>Timestamp</code> is <code>#ERROR!</code> on every row</td>
+              <td>Marro sales</td>
+              <td>A dead column sitting next to a <code>Timestamp MALFORMED</code> column. Confusing and useless.</td>
+              <td>Delete both, or repair one and delete the other.</td>
+            </tr>
+            <tr>
+              <td class="stage">Reason values are inconsistent free text</td>
+              <td>Both pause reason fields</td>
+              <td>
+                Curly and straight apostrophes coexist, and one value ends in a stray underscore.
+                Group-by will silently split the same reason into two rows.
+              </td>
+              <td>Convert to a single select with a fixed vocabulary; normalise on write.</td>
+            </tr>
+            <tr>
+              <td class="stage">Two pause-reason fields with no documented difference</td>
+              <td>Marro sales</td>
+              <td>
+                <code>First Pause Reason</code> is populated on 21,413 rows and <code>Pause
+                Reason</code> on 10,862, and it is not written down which is authoritative.
+              </td>
+              <td>Document it, or collapse both into the event log and retire them.</td>
+            </tr>
+            <tr>
+              <td class="stage">Reason taxonomy is too coarse to act on</td>
+              <td>All sources</td>
+              <td>
+                <code>pet_did_not_eat_food</code> is the single largest reason at 8,509 rows, but it
+                cannot distinguish texture, aroma, recipe or portion confusion &mdash; which are
+                four different fixes owned by four different teams.
+              </td>
+              <td>Split at source. Until then, the offboarding call is the only place this detail is captured.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ══════════════ WHERE ══════════════ -->
+    <section class="card" id="where">
+      <h2>Where It Should Live</h2>
+      <p class="lede">
+        The question was Google Sheets or GitHub Pages. Here is the comparison honestly, including
+        the case against the recommendation.
+      </p>
+
+      <div class="table-wrap">
+        <table class="wide">
+          <thead>
+            <tr>
+              <th>Option</th>
+              <th>Strengths</th>
+              <th>Why not</th>
+              <th class="num">Verdict</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="stage">GitHub Pages<br>(extend <code>index.html</code>)</td>
+              <td>
+                Already built, already connected to Airtable, already refreshing every five
+                minutes, already has the tab structure and the brand. Free, versioned, shareable by
+                URL, and works on a phone. The Daily tab is literally a placeholder waiting for
+                this.
+              </td>
+              <td>
+                Needs someone who can write JavaScript to change it. Each viewer supplies their own
+                Airtable token the first time. No row-level permissions.
+              </td>
+              <td class="num"><strong>Recommended</strong></td>
+            </tr>
+            <tr>
+              <td class="stage">Google Sheets</td>
+              <td>
+                Anyone can edit it. Pivot tables need no engineer. Good for a one-off analysis or a
+                quick sanity check against the dashboard.
+              </td>
+              <td>
+                Becomes a second source of truth within a fortnight. Manual refresh means it is
+                stale exactly when someone quotes it in a meeting. Cohort survival and rolling
+                averages over 26,699 rows are painful. Version history is not the same as a
+                definition anyone agreed to.
+              </td>
+              <td class="num">Landing strip only</td>
+            </tr>
+            <tr>
+              <td class="stage">Airtable Interface</td>
+              <td>
+                Zero pipeline &mdash; it sits on the data. Permissions, filtering and editing for
+                free. Genuinely the fastest way to get the at-risk list in front of agents.
+              </td>
+              <td>
+                Charting is limited: rolling averages and survival curves are awkward or
+                impossible. Needs a seat per viewer. Cannot be shared with the agency as a link.
+              </td>
+              <td class="num">Use for the at-risk list</td>
+            </tr>
+            <tr>
+              <td class="stage">Looker / BI tool</td>
+              <td>Correct long-term home. Proper cohort analysis, governed metric definitions, scheduled delivery.</td>
+              <td>
+                Depends on data-team capacity and access we do not control. The Looker feeds we
+                already depend on have been dead for six months, which is the argument against
+                waiting for it.
+              </td>
+              <td class="num">Later, if at all</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="band">
+        <span class="band-title">The recommendation, and the reason behind it</span>
+        Build it on GitHub Pages as a new tab, because the alternative to extending something that
+        already works is maintaining two things that half work. Keep Airtable as the only place a
+        number is calculated, and let the page be a window onto it rather than a second opinion.
+        <strong>Use Google Sheets for exactly one job &mdash; catching a daily export we cannot
+        otherwise write into Airtable &mdash; and never send anyone a link to it.</strong>
+      </div>
+    </section>
+
+    <!-- ══════════════ PHASES ══════════════ -->
+    <section class="card" id="phases">
+      <h2>Build Phases</h2>
+      <p class="lede">
+        Sequenced so that something useful ships before the hard dependency lands. Phase 0 needs
+        nobody outside this team; phase 1 is where the pipeline conversation has to happen.
+      </p>
+
+      <div class="timeline">
+        <div class="timeline-item">
+          <div>
+            <span class="tag">Phase 0</span>
+            <strong>Agree the definitions</strong>
+          </div>
+          <div>
+            Write down what a pause is, which clock each metric uses, what counts as matured, and
+            whether a reactivation cancels a pause. Settle the 56.67% and 23% discrepancies against
+            the original review. One page, signed off by whoever owns the master plan. Nothing else
+            here is safe to build until this exists.
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div>
+            <span class="tag risk">Phase 1</span>
+            <strong>Get a pause date flowing</strong>
+          </div>
+          <div>
+            Diagnose why the Marro Looker feed stopped on 2 February, restart it, and schedule it
+            daily. If it cannot be revived, stand up the nightly status snapshot instead so history
+            starts accumulating immediately while the better option is negotiated. This is the
+            critical path and the only genuinely blocking item.
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div>
+            <span class="tag">Phase 2</span>
+            <strong>Build the event log</strong>
+          </div>
+          <div>
+            Create <em>Marro Pause Events</em>, backfill from the 8,784 dated pauses we already
+            have, and add the derived clock and pre-delivery columns. At this point the analysis on
+            this page becomes reproducible on demand rather than a one-off.
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div>
+            <span class="tag">Phase 3</span>
+            <strong>Ship the headline strip</strong>
+          </div>
+          <div>
+            Pauses per day with its rolling average, plus the days-to-pause histogram with the clock
+            toggle. Replaces the &ldquo;coming in v2&rdquo; placeholder on the Daily tab. This is the
+            thing that was asked for, and it should go live on its own rather than waiting for the
+            rest.
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div>
+            <span class="tag">Phase 4</span>
+            <strong>Retention and reason panels</strong>
+          </div>
+          <div>
+            Box-2 retention against target with the live gap, reason mix over time, pre-delivery
+            rate, and cohort survival curves. Runs in parallel with the data quality fixes, since
+            those panels are the ones that expose bad data most visibly.
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div>
+            <span class="tag">Phase 5</span>
+            <strong>Agent view and the at-risk list</strong>
+          </div>
+          <div>
+            Per-agent cohorts with minimum-size guarding, and the daily at-risk queue surfaced in an
+            Airtable interface where agents can work it. This is where the tracker stops reporting
+            and starts changing the number.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════ DECISIONS ══════════════ -->
+    <section class="card" id="decisions">
+      <h2>Open Decisions</h2>
+      <p class="lede">Answers needed before phase 2. Each one changes the schema or the panel set.</p>
+
+      <ul>
+        <li>
+          <strong>Which clock is the default?</strong> The bowl clock is the truer one and the day-5
+          cliff only appears on it, but the sales floor thinks in days since sale. Recommendation:
+          bowl clock as default, order clock one toggle away, and never a chart without a label.
+        </li>
+        <li>
+          <strong>Is this Marro-wide or D2MS-only?</strong> The subscription table covers London,
+          Manchester, Bristol, Scotland and Model Pitch as well as D2MS &mdash; D2MS is 7,358 of
+          26,699 rows. The dated Looker snapshot is D2MS-only, so a Marro-wide tracker needs a
+          wider feed than the one we are restoring.
+        </li>
+        <li>
+          <strong>Does a reactivation erase a pause?</strong> Two-thirds of retained customers carry
+          a pause reason, so this is not a corner case. Recommendation: keep the event, add a
+          Reactivated flag, and let panels choose.
+        </li>
+        <li>
+          <strong>What is the minimum cohort size for agent panels?</strong> The master plan
+          suggests 25 sales on a rolling four weeks. Worth confirming against the actual per-agent
+          distribution before it drives any consequence.
+        </li>
+        <li>
+          <strong>Can the reason taxonomy be split at source?</strong> Everything downstream of
+          <code>pet_did_not_eat_food</code> is guesswork until texture, aroma, recipe and portion
+          confusion are separable. If the answer is no, the offboarding call script becomes the
+          only sensor we have.
+        </li>
+        <li>
+          <strong>Who owns the feed when it breaks?</strong> It has broken once already, silently,
+          for six months. A named owner and a staleness alert on the dashboard itself &mdash;
+          &ldquo;last updated&rdquo; in red past 48 hours &mdash; matter more than any panel on this
+          page.
+        </li>
+      </ul>
+
+      <div class="note warn">
+        <strong class="note-title">The failure mode to design against</strong>
+        The most likely way this project fails is not a bad chart. It is that the feed stops again,
+        nobody notices for a month, and the numbers quietly drift until someone spots that the page
+        disagrees with reality &mdash; at which point nobody trusts any of it again. Freshness
+        monitoring is not a nice-to-have on this build. It is the feature that keeps the rest alive.
+      </div>
+    </section>
+
+    <div class="gingham"></div>
+
+    <footer>
+      <span class="sign">Marro</span>
+      Retention Tracker build plan. Workstream of the
+      <a href="retention-improvement-master-plan.html">Retention Improvement Master Plan</a>,
+      alongside <a href="first-72-hours-programme.html">The First 72 Hours</a> and the
+      <a href="transition-texture-training-deck.html">Transition &amp; Texture training deck</a>.<br>
+      Figures read directly from Airtable on 3 August 2026. Pause-timing figures come from the
+      Marro D2MS Looker snapshot, which currently ends 2 February 2026.
+    </footer>
+  </main>
+</body>
+</html>
