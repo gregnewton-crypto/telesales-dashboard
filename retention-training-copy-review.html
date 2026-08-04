@@ -1,0 +1,2691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Retention Training Deck &mdash; Copy and Design Review | Marro</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&amp;family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,500..900,50,1&amp;display=swap">
+  <style>
+    :root {
+      --maroon: #451219;
+      --maroon-deep: #3A070D;
+      --maroon-ink: #240205;
+      --maroon-mid: #63393F;
+      --apricot: #E9B377;
+      --apricot-soft: #FBEAD6;
+      --amber: #D69042;
+      --blush: #F6DDDD;
+      --blush-soft: #F6ECEC;
+      --paper: #FDF9F9;
+      --muted: #816165;
+      --muted-soft: #B29495;
+      --line: #E2C5C5;
+      --mint: #68C29A;
+      --mint-soft: #E6F6EE;
+      --red: #D63F49;
+      --red-deep: #80020F;
+      --red-soft: #FBE7E4;
+      --periwinkle: #A1A8D2;
+      --periwinkle-soft: #E8EBFF;
+      --text: #451219;
+      --display: "Fraunces", "Bricolage Grotesque", Georgia, "Times New Roman", serif;
+      --sans: "Bricolage Grotesque", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--blush);
+      color: var(--text);
+      font-family: var(--sans);
+      line-height: 1.5;
+    }
+
+    /* ══════════ Header ══════════ */
+    header {
+      background:
+        radial-gradient(120% 140% at 12% 0%, #5A1A22 0%, transparent 60%),
+        var(--maroon-deep);
+      color: var(--paper);
+      padding: 34px 24px 30px;
+      position: relative;
+    }
+
+    .brand-row {
+      align-items: center;
+      display: flex;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .wordmark {
+      color: var(--paper);
+      font-family: var(--display);
+      font-variation-settings: "SOFT" 50, "WONK" 1;
+      font-size: 26px;
+      font-weight: 900;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .brand-row .rule {
+      background: rgba(233, 179, 119, 0.45);
+      flex: 1;
+      height: 1px;
+      max-width: 120px;
+    }
+
+    .brand-row .kicker {
+      color: var(--apricot);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    header h1 {
+      color: var(--paper);
+      font-family: var(--display);
+      font-variation-settings: "SOFT" 50, "WONK" 1;
+      font-size: clamp(30px, 5.4vw, 54px);
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      line-height: 1.08;
+      margin: 0 0 14px;
+      max-width: 22ch;
+      text-transform: uppercase;
+    }
+
+    header p {
+      max-width: 820px;
+      margin: 0;
+      color: #EBCFCE;
+      font-size: 18px;
+    }
+
+    header p .pop {
+      color: var(--apricot);
+      font-weight: 700;
+    }
+
+    .header-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .header-meta span {
+      background: rgba(233, 179, 119, 0.1);
+      border: 1px solid rgba(233, 179, 119, 0.5);
+      border-radius: 999px;
+      color: var(--apricot);
+      font-size: 13px;
+      font-weight: 600;
+      padding: 8px 15px;
+    }
+
+    .promo {
+      background: var(--apricot);
+      color: var(--maroon-ink);
+      padding: 11px 24px;
+    }
+
+    .promo-track {
+      align-items: center;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 26px;
+      justify-content: center;
+      margin: 0 auto;
+      width: min(1180px, 100%);
+    }
+
+    .promo-track span {
+      align-items: center;
+      display: inline-flex;
+      font-size: 13px;
+      font-weight: 700;
+      gap: 8px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .promo-track span::before {
+      background: var(--maroon);
+      border-radius: 50%;
+      content: "";
+      height: 7px;
+      width: 7px;
+    }
+
+    .scallop {
+      background-image: radial-gradient(circle 13px at 13px 0, var(--apricot) 97%, transparent 100%);
+      background-position: 0 0;
+      background-repeat: repeat-x;
+      background-size: 26px 26px;
+      height: 13px;
+    }
+
+    /* ══════════ Layout ══════════ */
+    main {
+      width: min(1180px, calc(100% - 32px));
+      margin: 30px auto 48px;
+    }
+
+    .card {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      box-shadow: 0 10px 30px rgba(69, 18, 25, 0.07);
+      margin-bottom: 22px;
+      padding: 26px;
+    }
+
+    h2 {
+      color: var(--maroon);
+      font-family: var(--display);
+      font-variation-settings: "SOFT" 50, "WONK" 1;
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      margin: 0 0 16px;
+      text-transform: uppercase;
+    }
+
+    h3 {
+      color: var(--maroon);
+      font-family: var(--display);
+      font-variation-settings: "SOFT" 50, "WONK" 0;
+      font-size: 19px;
+      font-weight: 700;
+      margin: 18px 0 8px;
+    }
+
+    h4 {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      margin: 16px 0 6px;
+      text-transform: uppercase;
+    }
+
+    /* Fraunces sets a heavily stylised ampersand; borrow the body font's instead */
+    h1 .amp,
+    h2 .amp,
+    h3 .amp,
+    .band-title .amp,
+    .sb-head h3 .amp {
+      font-family: var(--sans);
+      font-weight: 600;
+    }
+
+    p {
+      margin: 0 0 12px;
+    }
+
+    ul,
+    ol {
+      margin: 8px 0 0;
+      padding-left: 22px;
+    }
+
+    li {
+      margin: 6px 0;
+    }
+
+    .lede {
+      font-size: 17px;
+      max-width: 900px;
+    }
+
+    .flourish {
+      align-items: center;
+      display: flex;
+      gap: 12px;
+      margin: 22px 0 6px;
+    }
+
+    .flourish::before,
+    .flourish::after {
+      background: linear-gradient(90deg, transparent, var(--line), transparent);
+      content: "";
+      flex: 1;
+      height: 1px;
+    }
+
+    .flourish i {
+      background: var(--apricot);
+      display: block;
+      height: 8px;
+      transform: rotate(45deg);
+      width: 8px;
+    }
+
+    /* ══════════ Contents ══════════ */
+    .toc {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      padding: 0;
+      list-style: none;
+      margin: 0;
+    }
+
+    .toc a {
+      display: inline-block;
+      background: transparent;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: var(--maroon);
+      font-size: 14px;
+      font-weight: 600;
+      padding: 9px 16px;
+      text-decoration: none;
+      transition: background 0.15s, border-color 0.15s;
+    }
+
+    .toc a:hover {
+      background: var(--apricot-soft);
+      border-color: var(--apricot);
+    }
+
+    /* ══════════ Metric tiles ══════════ */
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(215px, 1fr));
+      gap: 14px;
+    }
+
+    .metric {
+      background: var(--blush-soft);
+      border: 1px solid var(--line);
+      border-left: 6px solid var(--red);
+      border-radius: 16px;
+      font-size: 15px;
+      padding: 18px;
+    }
+
+    .metric .big {
+      color: var(--maroon);
+      display: block;
+      font-family: var(--display);
+      font-variation-settings: "SOFT" 50, "WONK" 1;
+      font-size: 34px;
+      font-weight: 900;
+      letter-spacing: 0.01em;
+      line-height: 1.05;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+    }
+
+    .metric .label {
+      display: block;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .metric.blue { border-left-color: var(--periwinkle); }
+    .metric.green { border-left-color: var(--mint); }
+    .metric.gold { border-left-color: var(--apricot); }
+
+    /* ══════════ Summary boxes ══════════ */
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 14px;
+    }
+
+    .summary-box {
+      border: 1px solid var(--line);
+      border-left: 6px solid var(--red);
+      background: var(--blush-soft);
+      border-radius: 16px;
+      padding: 18px;
+    }
+
+    .summary-box strong {
+      display: block;
+      color: var(--maroon);
+      font-family: var(--display);
+      font-variation-settings: "SOFT" 50, "WONK" 0;
+      font-size: 18px;
+      margin-bottom: 6px;
+    }
+
+    .summary-box.ok { border-left-color: var(--mint); }
+    .summary-box.watch { border-left-color: var(--amber); }
+
+    /* ══════════ Tables ══════════ */
+    .table-wrap {
+      overflow-x: auto;
+    }
+
+    table {
+      border-collapse: collapse;
+      min-width: 860px;
+      width: 100%;
+    }
+
+    th,
+    td {
+      border: 1px solid var(--line);
+      padding: 11px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: var(--maroon);
+      color: var(--apricot);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      vertical-align: middle;
+    }
+
+    tbody tr:nth-child(even) {
+      background: var(--blush-soft);
+    }
+
+    td.was {
+      background: var(--red-soft);
+      color: var(--red-deep);
+    }
+
+    tbody tr:nth-child(even) td.was {
+      background: #F7DFDC;
+    }
+
+    td.now {
+      background: var(--mint-soft);
+    }
+
+    tbody tr:nth-child(even) td.now {
+      background: #DFF1E8;
+    }
+
+    td.slide-ref {
+      color: var(--maroon);
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    /* ══════════ Badges ══════════ */
+    .badge {
+      border-radius: 999px;
+      color: var(--paper);
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      padding: 5px 11px;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .badge.sp { background: var(--red-deep); }
+    .badge.gr { background: var(--maroon); }
+    .badge.pu { background: var(--maroon-mid); }
+    .badge.uk { background: var(--periwinkle); color: var(--maroon-ink); }
+    .badge.cl { background: var(--amber); color: var(--maroon-ink); }
+    .badge.co { background: var(--mint); color: var(--maroon-ink); }
+    .badge.ly { background: var(--apricot); color: var(--maroon-ink); }
+
+    .key-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 0 0 16px;
+    }
+
+    /* ══════════ Notes and bands ══════════ */
+    .note {
+      background: var(--periwinkle-soft);
+      border-left: 6px solid var(--periwinkle);
+      border-radius: 16px;
+      padding: 18px;
+      margin: 16px 0 0;
+    }
+
+    .note.warn {
+      background: var(--red-soft);
+      border-left-color: var(--red);
+    }
+
+    .note.win {
+      background: var(--mint-soft);
+      border-left-color: var(--mint);
+    }
+
+    .note strong.note-title {
+      color: var(--maroon);
+      display: block;
+      font-family: var(--display);
+      font-variation-settings: "SOFT" 50, "WONK" 0;
+      font-size: 17px;
+      margin-bottom: 5px;
+    }
+
+    .band {
+      background:
+        radial-gradient(130% 170% at 8% 0%, #5A1A22 0%, transparent 62%),
+        var(--maroon-deep);
+      border-radius: 20px;
+      color: #EBCFCE;
+      font-size: 17px;
+      margin: 18px 0 0;
+      padding: 26px;
+    }
+
+    .band .band-title {
+      color: var(--apricot);
+      display: block;
+      font-family: var(--display);
+      font-variation-settings: "SOFT" 50, "WONK" 1;
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+    }
+
+    .band strong,
+    .band em {
+      color: var(--paper);
+    }
+
+    .band ul {
+      margin: 8px 0 0;
+    }
+
+    /* ══════════ Revised slide blocks ══════════ */
+    .slide-block {
+      background: var(--blush-soft);
+      border: 1px solid var(--line);
+      border-left: 6px solid var(--maroon-mid);
+      border-radius: 18px;
+      margin-top: 16px;
+      padding: 20px;
+    }
+
+    .slide-block.statement { border-left-color: var(--apricot); }
+    .slide-block.divider { border-left-color: var(--periwinkle); }
+    .slide-block.rebuilt { border-left-color: var(--red); }
+
+    .sb-head {
+      align-items: baseline;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 14px;
+      margin-bottom: 4px;
+    }
+
+    .sn {
+      background: var(--maroon);
+      border-radius: 999px;
+      color: var(--apricot);
+      font-family: var(--display);
+      font-variation-settings: "SOFT" 50, "WONK" 1;
+      font-size: 15px;
+      font-weight: 900;
+      min-width: 46px;
+      padding: 5px 12px;
+      text-align: center;
+    }
+
+    .sb-head h3 {
+      margin: 0;
+    }
+
+    .sb-head .was-title {
+      color: var(--muted);
+      font-size: 13px;
+      width: 100%;
+    }
+
+    .sb-head .was-title b {
+      color: var(--red-deep);
+      font-weight: 600;
+    }
+
+    .kicker-line {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      margin: 10px 0 4px;
+      text-transform: uppercase;
+    }
+
+    .headline {
+      color: var(--maroon);
+      font-family: var(--display);
+      font-variation-settings: "SOFT" 50, "WONK" 1;
+      font-size: 23px;
+      font-weight: 700;
+      line-height: 1.15;
+      margin: 0 0 10px;
+    }
+
+    .takeaway {
+      background: var(--apricot-soft);
+      border: 1px dashed var(--apricot);
+      border-radius: 12px;
+      font-size: 14px;
+      margin-top: 12px;
+      padding: 10px 14px;
+    }
+
+    .takeaway b {
+      color: var(--maroon);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      font-size: 11px;
+      display: block;
+      margin-bottom: 3px;
+    }
+
+    .split {
+      display: grid;
+      gap: 14px;
+      grid-template-columns: 1fr 1fr;
+      margin-top: 10px;
+    }
+
+    .pane {
+      border-radius: 14px;
+      padding: 14px 16px;
+    }
+
+    .pane.no {
+      background: var(--red-soft);
+      border: 1px solid #F0C4C0;
+    }
+
+    .pane.yes {
+      background: var(--mint-soft);
+      border: 1px solid #BEE4D2;
+    }
+
+    .pane.plain {
+      background: var(--paper);
+      border: 1px solid var(--line);
+    }
+
+    .pane .plabel {
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+    }
+
+    .pane.no .plabel { color: var(--red-deep); }
+    .pane.yes .plabel { color: #2F7D5B; }
+    .pane.plain .plabel { color: var(--muted); }
+
+    .pane ul {
+      margin: 0;
+      padding-left: 20px;
+    }
+
+    .pane p:last-child {
+      margin-bottom: 0;
+    }
+
+    .sub {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .beats {
+      display: grid;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .beat {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      display: grid;
+      gap: 14px;
+      grid-template-columns: 130px 1fr;
+      padding: 14px 16px;
+    }
+
+    .beat .bl {
+      color: var(--maroon);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .beat .script {
+      margin: 0;
+    }
+
+    .stat-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 10px;
+    }
+
+    .stat {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-left: 5px solid var(--red);
+      border-radius: 12px;
+      flex: 1 1 200px;
+      padding: 12px 14px;
+    }
+
+    .stat b {
+      color: var(--maroon);
+      display: block;
+      font-family: var(--display);
+      font-variation-settings: "SOFT" 50, "WONK" 1;
+      font-size: 26px;
+      line-height: 1.1;
+      margin-bottom: 4px;
+    }
+
+    .viz {
+      background: var(--paper);
+      border: 1px dashed var(--muted-soft);
+      border-radius: 12px;
+      color: var(--muted);
+      font-size: 14px;
+      margin-top: 12px;
+      padding: 12px 14px;
+    }
+
+    .viz b {
+      color: var(--maroon);
+      display: block;
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      margin-bottom: 3px;
+      text-transform: uppercase;
+    }
+
+    /* ══════════ Rules list ══════════ */
+    .rules {
+      display: grid;
+      gap: 12px;
+      margin-top: 4px;
+    }
+
+    .rule-item {
+      background: var(--blush-soft);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      display: grid;
+      gap: 14px;
+      grid-template-columns: 52px 1fr;
+      padding: 16px 18px;
+    }
+
+    .rule-item .rn {
+      background: var(--maroon);
+      border-radius: 999px;
+      color: var(--apricot);
+      font-family: var(--display);
+      font-variation-settings: "SOFT" 50, "WONK" 1;
+      font-size: 18px;
+      font-weight: 900;
+      height: 38px;
+      line-height: 38px;
+      text-align: center;
+      width: 38px;
+    }
+
+    .rule-item strong {
+      color: var(--maroon);
+      display: block;
+      font-family: var(--display);
+      font-variation-settings: "SOFT" 50, "WONK" 0;
+      font-size: 17px;
+      margin-bottom: 4px;
+    }
+
+    /* ══════════ Paste block ══════════ */
+    .copy-head {
+      align-items: center;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .btn-copy {
+      background: var(--apricot);
+      border: none;
+      border-radius: 999px;
+      color: var(--maroon-ink);
+      cursor: pointer;
+      font-family: var(--sans);
+      font-size: 14px;
+      font-weight: 700;
+      padding: 11px 22px;
+      transition: background 0.15s;
+    }
+
+    .btn-copy:hover {
+      background: var(--amber);
+    }
+
+    pre.paste {
+      background: var(--maroon-ink);
+      border-radius: 16px;
+      color: var(--blush);
+      font-family: "Courier New", monospace;
+      font-size: 13px;
+      line-height: 1.55;
+      margin: 0;
+      overflow-x: auto;
+      padding: 18px;
+      white-space: pre-wrap;
+    }
+
+    details.paste-wrap summary {
+      color: var(--maroon);
+      cursor: pointer;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    /* ══════════ Footer ══════════ */
+    .gingham {
+      background-color: var(--blush);
+      background-image:
+        repeating-linear-gradient(0deg, rgba(69, 18, 25, 0.2) 0 15px, transparent 15px 30px),
+        repeating-linear-gradient(90deg, rgba(69, 18, 25, 0.2) 0 15px, transparent 15px 30px);
+      border-radius: 6px;
+      height: 30px;
+      margin: 32px 0 20px;
+    }
+
+    footer {
+      color: var(--muted);
+      font-size: 14px;
+      text-align: center;
+    }
+
+    footer .sign {
+      color: var(--maroon);
+      display: block;
+      font-family: var(--display);
+      font-variation-settings: "SOFT" 50, "WONK" 1;
+      font-size: 20px;
+      font-weight: 900;
+      letter-spacing: 0.06em;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+    }
+
+    @media (max-width: 760px) {
+      .split,
+      .beat,
+      .rule-item {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand-row">
+      <span class="wordmark">Marro</span>
+      <span class="rule"></span>
+      <span class="kicker">Retention Programme</span>
+    </div>
+    <h1>Retention Training <span class="amp">&mdash;</span> Copy and Design Review</h1>
+    <p>
+      A full proofread and redesign brief for the 26-slide <em>Retention Training</em> deck.
+      The argument in this deck is strong: <span class="pop">Box 1 is a tasting trial, not a
+      pass/fail test</span>. The writing is not yet carrying it. Below: every correction, rewritten
+      copy for all 26 slides, and the layout changes that would make it land in a room.
+    </p>
+    <div class="header-meta">
+      <span>Source: Retention Training (26 slides)</span>
+      <span>Language: UK English</span>
+      <span>Audience: telesales and retention agents</span>
+      <span>Status: ready to rebuild</span>
+    </div>
+  </header>
+
+  <div class="promo">
+    <div class="promo-track">
+      <span>103 fixes logged</span>
+      <span>20 outright misspellings</span>
+      <span>1 US spelling</span>
+      <span>7 slides need a rebuild</span>
+    </div>
+  </div>
+  <div class="scallop"></div>
+
+  <main>
+    <section class="card">
+      <h2>At a Glance</h2>
+      <div class="metric-grid">
+        <div class="metric">
+          <span class="big">103</span>
+          <span class="label">Corrections logged</span>
+          Spelling, grammar, punctuation, UK English, clarity and consistency, across 23 of the 26 slides.
+        </div>
+        <div class="metric gold">
+          <span class="big">20</span>
+          <span class="label">Outright misspellings</span>
+          Concentrated on the two closing slides: <em>Day 5+</em>, <em>Action point</em> and <em>Data point</em>.
+        </div>
+        <div class="metric blue">
+          <span class="big">1</span>
+          <span class="label">US spelling</span>
+          &ldquo;favorite&rdquo; on the customer script slide. Everything else is already UK English.
+        </div>
+        <div class="metric green">
+          <span class="big">7</span>
+          <span class="label">Slides needing a rebuild</span>
+          Not a copy problem: letter-spaced display type, headlines placed after the body, and one wall of script.
+        </div>
+      </div>
+
+      <div class="note warn">
+        <strong class="note-title">The single biggest issue is not spelling</strong>
+        Slides 12, 13 and 14 set their display type with heavy letter-spacing
+        (&ldquo;S t o p&nbsp;t r e a t i n g&nbsp;i t&nbsp;a s&rdquo;). At presentation size that is
+        close to unreadable from the back of a room, and it breaks the moment the deck is exported
+        to PDF. These are the three slides carrying the central reframe, so they are the ones that
+        must be easiest to read.
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Contents</h2>
+      <ul class="toc">
+        <li><a href="#verdict">Editorial Verdict</a></li>
+        <li><a href="#log">Corrections Log</a></li>
+        <li><a href="#style">House Style Sheet</a></li>
+        <li><a href="#copy">Revised Slide Copy</a></li>
+        <li><a href="#design">Design and Layout</a></li>
+        <li><a href="#queries">Author Queries</a></li>
+      </ul>
+      <h4>Related pages</h4>
+      <ul class="toc">
+        <li><a href="retention-improvement-master-plan.html">Retention Improvement Master Plan</a></li>
+        <li><a href="transition-texture-training-deck.html">Transition <span class="amp">&amp;</span> Texture &mdash; agent training deck</a></li>
+        <li><a href="first-72-hours-programme.html">The First 72 Hours &mdash; early-pause prevention</a></li>
+      </ul>
+    </section>
+
+    <!-- ══════════════════ VERDICT ══════════════════ -->
+    <section class="card" id="verdict">
+      <h2>Editorial Verdict</h2>
+      <p class="lede">
+        This deck already has the thing most training decks lack: a single, memorable idea. &ldquo;We
+        are not selling food, we are setting a finish line&rdquo; is the argument, and slides 12 to 14
+        execute it well. The problem is that the deck loses confidence as it goes. The first half is
+        written and proofed; the last five slides read like notes that never got tidied. An agent
+        reaching slide 24 sees &ldquo;texture trail&rdquo;, &ldquo;expections&rdquo;, &ldquo;reipice&rdquo;
+        and &ldquo;cusomer&rdquo; on the one slide that tells them what to actually do.
+      </p>
+
+      <div class="summary-grid">
+        <div class="summary-box ok">
+          <strong>Keep</strong>
+          The finish-line reframe, the two-finish-lines split, the &ldquo;match the first serve to the
+          last meal&rdquo; table, and the three mechanics. These are the best pages in the deck.
+        </div>
+        <div class="summary-box watch">
+          <strong>Tighten</strong>
+          The four recap slides (6&ndash;9) are dense and read as reference material, not training.
+          They need a comparison table and a takeaway line each.
+        </div>
+        <div class="summary-box">
+          <strong>Rebuild</strong>
+          Slides 12&ndash;15 (letter-spacing and a wall of script), 22, 24 and 26 (typos, broken
+          superscripts, conflated metrics).
+        </div>
+        <div class="summary-box ok">
+          <strong>Add</strong>
+          Slide numbers, a one-line takeaway strip on every content slide, and a closing
+          &ldquo;what good looks like&rdquo; recap before the action points.
+        </div>
+      </div>
+
+      <div class="band">
+        <span class="band-title">Five fixes, in priority order</span>
+        <ol>
+          <li><strong>Remove the letter-spacing</strong> on slides 12, 13 and 14. Nothing else improves
+            legibility as much for as little work.</li>
+          <li><strong>Reproof slides 22, 24 and 26.</strong> They carry 26 of the 103 corrections between
+            them, and they are the slides agents will screenshot.</li>
+          <li><strong>Move every headline to the top-left.</strong> Seven slides currently place the
+            title after the body content, which also scrambles the PDF export order.</li>
+          <li><strong>Break the script on slide 15</strong> into four numbered beats. Nobody reads a
+            four-paragraph slide out loud convincingly.</li>
+          <li><strong>Make each headline an assertion.</strong> &ldquo;Day 5 is a checkpoint, not a
+            verdict&rdquo; teaches. &ldquo;DAY 5+&rdquo; does not.</li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ══════════════════ CORRECTIONS LOG ══════════════════ -->
+    <section class="card" id="log">
+      <h2>Corrections Log</h2>
+      <p>
+        Every change, slide by slide, with the original wording so it can be found quickly in the
+        source file. Type tags:
+      </p>
+      <div class="key-row">
+        <span class="badge sp">Spelling</span>
+        <span class="badge gr">Grammar</span>
+        <span class="badge pu">Punctuation</span>
+        <span class="badge uk">UK English</span>
+        <span class="badge cl">Clarity</span>
+        <span class="badge co">Consistency</span>
+        <span class="badge ly">Layout</span>
+      </div>
+
+      <h3>Deck-wide</h3>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th style="width:30%">Issue</th><th style="width:45%">Fix</th><th style="width:25%">Type</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="was">Curly and straight apostrophes mixed (&ldquo;Don&rsquo;t&rdquo; on slide 4, &ldquo;doesn't&rdquo; on slide 11)</td>
+              <td class="now">Use typographic (curly) apostrophes and quotes throughout. Turn on smart quotes before the final export.</td>
+              <td><span class="badge co">Consistency</span></td>
+            </tr>
+            <tr>
+              <td class="was">Headline case switches between Title Case, sentence case and ALL CAPS</td>
+              <td class="now">Sentence case for all headlines. Reserve ALL CAPS for the small kicker label above the headline.</td>
+              <td><span class="badge co">Consistency</span></td>
+            </tr>
+            <tr>
+              <td class="was">Numbers styled four ways: &ldquo;7 days&rdquo;, &ldquo;ten seconds&rdquo;, &ldquo;Twenty minutes&rdquo;, &ldquo;2 days&rdquo;</td>
+              <td class="now">Words for one to nine, figures for 10 and above. Always figures for data, percentages and day numbers (&ldquo;day 5&rdquo;, &ldquo;35%&rdquo;).</td>
+              <td><span class="badge co">Consistency</span></td>
+            </tr>
+            <tr>
+              <td class="was">&ldquo;Box 1&rdquo; capitalised, &ldquo;box 2&rdquo; not</td>
+              <td class="now">Capitalise both: Box 1, Box 2.</td>
+              <td><span class="badge co">Consistency</span></td>
+            </tr>
+            <tr>
+              <td class="was">The cat is &ldquo;she&rdquo; on slides 11, 14 and 21, but &ldquo;they&rdquo; on slide 15</td>
+              <td class="now">Use &ldquo;they&rdquo; throughout. The agent does not know the cat&rsquo;s sex, and the script already models it.</td>
+              <td><span class="badge co">Consistency</span></td>
+            </tr>
+            <tr>
+              <td class="was">Bullets inconsistently end with a full stop</td>
+              <td class="now">No full stop on sentence fragments; full stops only where a bullet is a complete sentence. Apply one rule per slide.</td>
+              <td><span class="badge pu">Punctuation</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Slides 2 to 9</h3>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th style="width:8%">Slide</th><th style="width:30%">Original</th><th style="width:37%">Revised</th><th style="width:25%">Type</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="slide-ref">2</td>
+              <td class="was">&ldquo;Marro retention has drop&rdquo;</td>
+              <td class="now">&ldquo;Marro retention has dropped&rdquo;</td>
+              <td><span class="badge gr">Grammar</span></td>
+            </tr>
+            <tr>
+              <td class="slide-ref">2</td>
+              <td class="was">&ldquo;and we need to get back&rdquo;</td>
+              <td class="now">&ldquo;and we need to win it back.&rdquo; &mdash; the original has no object and no full stop</td>
+              <td><span class="badge gr">Grammar</span></td>
+            </tr>
+            <tr>
+              <td class="slide-ref">2</td>
+              <td class="was">Sentence has no terminal punctuation</td>
+              <td class="now">Add the full stop</td>
+              <td><span class="badge pu">Punctuation</span></td>
+            </tr>
+            <tr>
+              <td class="slide-ref">3</td>
+              <td class="was">&ldquo;23% of these pause happen&rdquo;</td>
+              <td class="now">&ldquo;23% of these pauses happen&rdquo;</td>
+              <td><span class="badge gr">Grammar</span></td>
+            </tr>
+            <tr>
+              <td class="slide-ref">3</td>
+              <td class="was">&ldquo;Day 5 is where we see the biggest drop of&rdquo;</td>
+              <td class="now">&ldquo;Day 5 is the single biggest drop-off point&rdquo; &mdash; the sentence stops mid-phrase</td>
+              <td><span class="badge gr">Grammar</span></td>
+            </tr>
+            <tr>
+              <td class="slide-ref">3</td>
+              <td class="was">&ldquo;23% of these pauses&rdquo; &mdash; unclear whether the denominator is all pauses or week-one pauses</td>
+              <td class="now">&ldquo;Almost a quarter of all pauses happen before the box has even arrived&rdquo;</td>
+              <td><span class="badge cl">Clarity</span></td>
+            </tr>
+            <tr>
+              <td class="slide-ref">3</td>
+              <td class="was">&ldquo;56.67%&rdquo;</td>
+              <td class="now">Round to 57% on the slide; keep 56.67% in the speaker notes. Two decimal places on a headline stat reads as false precision.</td>
+              <td><span class="badge cl">Clarity</span></td>
+            </tr>
+            <tr>
+              <td class="slide-ref">4</td>
+              <td class="was">&ldquo;Don&rsquo;t want subscription.&rdquo;</td>
+              <td class="now">&ldquo;I don&rsquo;t want a subscription.&rdquo; &mdash; missing article; set as a customer quote</td>
+              <td><span class="badge gr">Grammar</span></td>
+            </tr>
+            <tr>
+              <td class="slide-ref">4</td>
+              <td class="was">&ldquo;Pet did not eat food&rdquo;</td>
+              <td class="now">&ldquo;My cat wouldn&rsquo;t eat it.&rdquo; &mdash; missing articles, missing full stop, and &ldquo;pet&rdquo; is wrong for a cat brand</td>
+              <td><span class="badge gr">Grammar</span></td>
+            </tr>
+            <tr>
+              <td class="slide-ref">4</td>
+              <td class="was">One bullet ends in a full stop, the other does not</td>
+              <td class="now">Match them</td>
+              <td><span class="badge pu">Punctuation</span></td>
+            </tr>
+            <tr>
+              <td class="slide-ref">5</td>
+              <td class="was">&ldquo;We are setting a finish line&rdquo;</td>
+              <td class="now">&ldquo;We are setting a finish line.&rdquo;</td>
+              <td><span class="badge pu">Punctuation</span></td>
+            </tr>
+            <tr>
+              <td class="slide-ref">6</td>
+              <td class="was">&ldquo;vet approved&rdquo;</td>
+              <td class="now">&ldquo;vet-approved&rdquo; &mdash; hyphenate a compound modifier before a noun</td>
+              <td><span class="badge pu">Punctuation</span></td>
+            </tr>
+            <tr>
+              <td class="slide-ref">6</td>
+              <td class="was">&ldquo;Complete and balanced by design, vet approved, suitable for kittens through to seniors.&rdquo;</td>
+              <td class="now">&ldquo;Complete and balanced by design, vet-approved, kitten to senior&rdquo; &mdash; three ideas in one comma chain</td>
+              <td><span class="badge cl">Clarity</span></td>
+            </tr>
+            <tr>
+              <td class="slide-ref">6</td>
+              <td class="was">&ldquo;Prebiotics &mdash; MOS, FOS and psyllium seed &mdash; for gut health.&rdquo;</td>
+              <td class="now">&ldquo;Prebiotics (MOS, FOS and psyllium seed) for gut health&rdquo; &mdash; the deck uses em dashes for emphasis elsewhere; use brackets for asides</td>
+              <td><span class="badge co">Consistency</span></td>
+            </tr>
+            <tr>
+              <td class="slide-ref">7</td>
+              <td class="was">&ldquo;forced through a machine at over 150&deg;C under pressure&rdquo;</td>
+              <td class="now">&ldquo;Extruded: forced through a machine above 150&deg;C under pressure&rdquo; &mdash; name the process agents will hear</td>
+              <td><span class="badge cl">Clarity</span></td>
+            </tr>
+            <tr>
+              <td class="slide-ref">7</td>
+              <td class="was">&ldquo;Nutrients like taurine are destroyed&rdquo;</td>
+              <td class="now">&ldquo;Nutrients such as taurine are destroyed&rdquo; &mdash; &ldquo;such as&rdquo; for examples, &ldquo;like&rdquo; for comparisons</td>
+              <td><span class="badge gr">Grammar</span></td>
+            </tr>
+            <tr>
+              <td class="slide-ref">7</td>
+              <td class="was">&ldquo;And then the part that matters most to us:&rdquo;</td>
+              <td class="now">&ldquo;The part that matters most to us:&rdquo; &mdash; drop the conversational lead-in on a bullet</td>
+              <td><span class="badge cl">Clarity</span></td>
+            </tr>
+            <tr>
+              <td class="slide-ref">7</td>
+              <td class="was">&ldquo;Around 10% moisture. Between 25% and 50% carbohydrate.&rdquo;</td>
+              <td class="now">&ldquo;Around 10% moisture, and 25&ndash;50% carbohydrate&rdquo; &mdash; use an en dash for the range</td>
+              <td><span class="badge pu">Punctuation</span></td>
+            </tr>
+            <tr>
+              <td class="slide-ref">8</td>
+              <td class="was">&ldquo;Cooked at 121&deg;C+&rdquo;</td>
+              <td class="now">&ldquo;Cooked above 121&deg;C&rdquo; &mdash; a trailing plus sign is not a written convention</td>
+              <td><span class="badge pu">Punctuation</span></td>
+            </tr>
+            <tr>
+              <td class="slide-ref">8</td>
+              <td class="was">Straight double quotes around &ldquo;4% meat rule&rdquo; and &ldquo;with chicken&rdquo;</td>
+              <td class="now">Single curly quotes for terms being named; double quotes only for speech</td>
+              <td><span class="badge co">Consistency</span></td>
+            </tr>
+            <tr>
+              <td class="slide-ref">8</td>
+              <td class="was">&ldquo;Always check.&rdquo;</td>
+              <td class="now">&ldquo;Always check the label.&rdquo; &mdash; check what?</td>
+              <td><span class="badge cl">Clarity</span></td>
+            </tr>
+            <tr>
+              <td class="slide-ref">9</td>
+              <td class="was">&ldquo;The UK FSA&rdquo;</td>
+              <td class="now">&ldquo;The Food Standards Agency&rdquo; &mdash; spell out on first (and only) mention</td>
+              <td><span class="badge cl">Clarity</span></td>
+            </tr>
+            <tr>
+              <td class="slide-ref">9</td>
+              <td class="was">&ldquo;found harmful bacteria in 35% of raw products tested&rdquo;</td>
+              <td class="now">&ldquo;found harmful bacteria in 35% of the raw products it tested&rdquo;</td>
+              <td><span class="badge gr">Grammar</span></td>
+            </tr>
+            <tr>
+              <td class="slide-ref">9</td>
+              <td class="was">&ldquo;Fresh is raw&rsquo;s philosophy made safer and easier &mdash; that is the whole pitch.&rdquo;</td>
+              <td class="now">&ldquo;Fresh is raw&rsquo;s philosophy, made safer and easier. That is the whole pitch.&rdquo;</td>
+              <td><span class="badge pu">Punctuation</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Slides 11 to 17</h3>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th style="width:8%">Slide</th><th style="width:30%">Original</th><th style="width:37%">Revised</th><th style="width:25%">Type</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="slide-ref">11</td>
+              <td class="was">The title &ldquo;Myths&rdquo; sits below the table in the file&rsquo;s reading order</td>
+              <td class="now">Headline top-left, above the table. Also fixes the PDF and screen-reader order.</td>
+              <td><span class="badge ly">Layout</span></td>
+            </tr>
+            <tr>
+              <td class="slide-ref">11</td>
+              <td class="was">&ldquo;Myths&rdquo;</td>
+              <td class="now">&ldquo;Three myths you will hear this week&rdquo; &mdash; a headline that tells the agent what to expect</td>
+              <td><span class="badge cl">Clarity</span></td>
+            </tr>
+            <tr>
+              <td class="slide-ref">11</td>
+              <td class="was">&ldquo;The British Veterinary Association doesn&rsquo;t recommend dry food for dental care&rdquo;</td>
+              <td class="now">&ldquo;The British Veterinary Association does not endorse dry food as dental care&rdquo; &mdash; and see Author Queries: this claim needs a citable source before it goes in front of customers</td>
+              <td><span class="badge cl">Clarity</span></td>
+            </tr>
+            <tr>
+              <td class="slide-ref">11</td>
+              <td class="was">&ldquo;Brushing and vet checks are the only proven things.&rdquo;</td>
+              <td class="now">&ldquo;Brushing and vet checks are the only proven routes.&rdquo; &mdash; &ldquo;things&rdquo; is vague in a rebuttal</td>
+              <td><span class="badge cl">Clarity</span></td>
+            </tr>
+            <tr>
+              <td class="slide-ref">11</td>
+              <td class="was">&ldquo;a conditioned response, not a nutritional choice&rdquo;</td>
+              <td class="now">&ldquo;a conditioned response, not a nutritional verdict&rdquo; &mdash; sharper contrast</td>
+              <td><span class="badge cl">Clarity</span></td>
+            </tr>
+            <tr>
+              <td class="slide-ref">11</td>
+              <td class="was">&ldquo;doesn&rsquo;t&rdquo; and &ldquo;it&rsquo;s&rdquo; alongside formal phrasing elsewhere</td>
+              <td class="now">Contractions are right for the &ldquo;what you say&rdquo; column (it is spoken) and wrong for the &ldquo;what they say&rdquo; framing text. Set that rule and hold it.</td>
+              <td><span class="badge co">Consistency</span></td>
+            </tr>
+            <tr>
+              <td class="slide-ref">12</td>
+              <td class="was">&ldquo;S t o p&nbsp;t r e a t i n g&nbsp;i t&nbsp;a s&rdquo; (heavy letter-spacing)</td>
+              <td class="now">Remove the tracking entirely. Emphasise with size, weight and colour.</td>
+              <td><span class="badge ly">Layout</span></td>
+            </tr>
+            <tr>
+              <td class="slide-ref">12</td>
+              <td class="was">Headline &ldquo;Box 1 is not a delivery&rdquo; falls between the two panels</td>
+              <td class="now">Headline above both panels</td>
+              <td><span class="badge ly">Layout</span></td>
+            </tr>
+            <tr>
+              <td class="slide-ref">13</td>
+              <td class="was">&ldquo;If day 5 means &lsquo;tasted it and interested&rsquo;&rdquo;</td>
+              <td class="now">&ldquo;If day 5 means &lsquo;tasted it and stayed interested&rsquo;&rdquo; &mdash; the original is not parallel</td>
+              <td><span class="badge gr">Grammar</span></td>
+            </tr>
+            <tr>
+              <td class="slide-ref">13</td>
+              <td class="was">&ldquo;Failure feels like a wasted month coming.&rdquo;</td>
+              <td class="now">&ldquo;Failure feels like a wasted month ahead.&rdquo;</td>
+              <td><span class="badge cl">Clarity</span></td>
+            </tr>
+            <tr>
+              <td class="slide-ref">13</td>
+              <td class="was">Letter-spaced display type again</td>
+              <td class="now">Remove</td>
+              <td><span class="badge ly">Layout</span></td>
+            </tr>
+            <tr>
+              <td class="slide-ref">14</td>
+              <td class="was">&ldquo;Cats always take to this one.&rdquo; carries a closing quotation mark with no opening one</td>
+              <td class="now">Quote all four never-say lines, or none of them</td>
+              <td><span class="badge pu">Punctuation</span></td>
+            </tr>
+            <tr>
+              <td class="slide-ref">14</td>
+              <td class="was">&ldquo;Support at the moments it matter.&rdquo;</td>
+              <td class="now">&ldquo;Support at the moments that matter.&rdquo;</td>
+              <td><span class="badge gr">Grammar</span></td>
+            </tr>
+            <tr>
+              <td class="slide-ref">14</td>
+              <td class="was">Column labels &ldquo;Should not say&rdquo; and &ldquo;Promise freely&rdquo; are not parallel</td>
+              <td class="now">&ldquo;Never promise&rdquo; / &ldquo;Promise freely&rdquo;</td>
+              <td><span class="badge co">Consistency</span></td>
+            </tr>
+            <tr>
+              <td class="slide-ref">14</td>
+              <td class="was">Headline &ldquo;Reframe&rdquo;</td>
+              <td class="now">&ldquo;What we never promise, and what we always promise&rdquo;</td>
+              <td><span class="badge cl">Clarity</span></td>
+            </tr>
+            <tr>
+              <td class="slide-ref">15</td>
+              <td class="was">&ldquo;What this look like&rdquo;</td>
+              <td class="now">&ldquo;What this sounds like&rdquo; &mdash; fixes the agreement error, and it is a script, not a visual</td>
+              <td><span class="badge gr">Grammar</span></td>
+            </tr>
+            <tr>
+              <td class="slide-ref">15</td>
+              <td class="was">&ldquo;their favorite flavours&rdquo;</td>
+              <td class="now">&ldquo;their favourite flavours&rdquo;</td>
+              <td><span class="badge uk">UK English</span></td>
+            </tr>
+            <tr>
+              <td class="slide-ref">15</td>
+              <td class="was">&ldquo;So, on Tuesday, your tasting box arrives&hellip;&rdquo;</td>
+              <td class="now">&ldquo;So on Tuesday your tasting box arrives&hellip;&rdquo; &mdash; the commas slow a spoken line</td>
+              <td><span class="badge pu">Punctuation</span></td>
+            </tr>
+            <tr>
+              <td class="slide-ref">15</td>
+              <td class="was">&ldquo;Each one can actually be served two ways&rdquo;</td>
+              <td class="now">&ldquo;Every tray can be served two ways&rdquo; &mdash; &ldquo;actually&rdquo; sounds defensive</td>
+              <td><span class="badge cl">Clarity</span></td>
+            </tr>
+            <tr>
+              <td class="slide-ref">15</td>
+              <td class="was">&ldquo;don&rsquo;t worry, that&rsquo;s completely normal, and that&rsquo;s what this trial week is for.&rdquo;</td>
+              <td class="now">Split into two sentences; the original is a comma splice</td>
+              <td><span class="badge pu">Punctuation</span></td>
+            </tr>
+            <tr>
+              <td class="slide-ref">15</td>
+              <td class="was">&ldquo;I definitely recommend warming it up!&rdquo;</td>
+              <td class="now">&ldquo;I&rsquo;d always recommend warming it.&rdquo; &mdash; the exclamation mark is the only one in the deck</td>
+              <td><span class="badge co">Consistency</span></td>
+            </tr>
+            <tr>
+              <td class="slide-ref">15</td>
+              <td class="was">&ldquo;ten seconds&rdquo;, &ldquo;2 days&rdquo;, &ldquo;a week or two&rdquo; in the same script</td>
+              <td class="now">Apply the number rule: &ldquo;ten seconds&rdquo;, &ldquo;two days&rdquo;</td>
+              <td><span class="badge co">Consistency</span></td>
+            </tr>
+            <tr>
+              <td class="slide-ref">15</td>
+              <td class="was">Four dense paragraphs on one slide</td>
+              <td class="now">Four numbered beats on screen; the full script goes in the speaker notes</td>
+              <td><span class="badge ly">Layout</span></td>
+            </tr>
+            <tr>
+              <td class="slide-ref">16</td>
+              <td class="was">&ldquo;Our Flavours..&rdquo;</td>
+              <td class="now">&ldquo;Our flavours&rdquo; &mdash; two full stops is neither a full stop nor an ellipsis</td>
+              <td><span class="badge pu">Punctuation</span></td>
+            </tr>
+            <tr>
+              <td class="slide-ref">16</td>
+              <td class="was">&ldquo;Single Source of Protein.&rdquo;</td>
+              <td class="now">&ldquo;Single-protein recipes&rdquo;</td>
+              <td><span class="badge pu">Punctuation</span></td>
+            </tr>
+            <tr>
+              <td class="slide-ref">16</td>
+              <td class="was">&ldquo;DUAL FLAVOURS / 53% Salmon, 36% White Fish&rdquo; sits next to &ldquo;Single Source of Protein&rdquo;</td>
+              <td class="now">The two labels contradict each other as laid out. Separate them into clearly distinct recipe groups. See Author Queries.</td>
+              <td><span class="badge cl">Clarity</span></td>
+            </tr>
+            <tr>
+              <td class="slide-ref">16</td>
+              <td class="was">&ldquo;These have a softer texture for older cats!&rdquo;</td>
+              <td class="now">&ldquo;Softer textures, suited to older cats&rdquo;</td>
+              <td><span class="badge co">Consistency</span></td>
+            </tr>
+            <tr>
+              <td class="slide-ref">16</td>
+              <td class="was">&ldquo;THE FOOD ITSELF&rdquo; used as a headline</td>
+              <td class="now">Keep it as the small kicker; make &ldquo;Our flavours&rdquo; the headline</td>
+              <td><span class="badge co">Consistency</span></td>
+            </tr>
+            <tr>
+              <td class="slide-ref">17</td>
+              <td class="was">&ldquo;recomned&rdquo;</td>
+              <td class="now">&ldquo;recommend&rdquo;</td>
+              <td><span class="badge sp">Spelling</span></td>
+            </tr>
+            <tr>
+              <td class="slide-ref">17</td>
+              <td class="was">&ldquo;Always recomned warmed&rdquo;</td>
+              <td class="now">&ldquo;Always recommend warming it.&rdquo;</td>
+              <td><span class="badge gr">Grammar</span></td>
+            </tr>
+            <tr>
+              <td class="slide-ref">17</td>
+              <td class="was">&ldquo;Straight from the fridge&rdquo; / &ldquo;Warmed for ten seconds&rdquo; with no outcome stated</td>
+              <td class="now">Name the texture each one produces: &ldquo;a cool, firm jelly&rdquo; and &ldquo;a silky gravy&rdquo;</td>
+              <td><span class="badge cl">Clarity</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Slides 18 to 26</h3>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th style="width:8%">Slide</th><th style="width:30%">Original</th><th style="width:37%">Revised</th><th style="width:25%">Type</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="slide-ref">18</td>
+              <td class="was">&ldquo;Old food and treats out of the way.&rdquo;</td>
+              <td class="now">&ldquo;Move old food and treats out of the way.&rdquo; &mdash; instructions should be imperative, not fragments</td>
+              <td><span class="badge gr">Grammar</span></td>
+            </tr>
+            <tr>
+              <td class="slide-ref">18</td>
+              <td class="was">&ldquo;Aroma has to do the persuading, because the texture is completely new.&rdquo;</td>
+              <td class="now">Drop the comma before &ldquo;because&rdquo;</td>
+              <td><span class="badge pu">Punctuation</span></td>
+            </tr>
+            <tr>
+              <td class="slide-ref">18</td>
+              <td class="was">&ldquo;The palate just needs to reset off flavour digests.&rdquo;</td>
+              <td class="now">&ldquo;The palate just needs to reset after flavour digests.&rdquo;</td>
+              <td><span class="badge gr">Grammar</span></td>
+            </tr>
+            <tr>
+              <td class="slide-ref">18</td>
+              <td class="was">&ldquo;MATCH THE FIRST SERVE TO THE LAST MEAL&rdquo;</td>
+              <td class="now">Sentence case: &ldquo;Match the first serve to the last meal&rdquo;</td>
+              <td><span class="badge co">Consistency</span></td>
+            </tr>
+            <tr>
+              <td class="slide-ref">19</td>
+              <td class="was">&ldquo;This is normal procedure, not a fallback.&rdquo;</td>
+              <td class="now">&ldquo;This is the routine, not a fallback.&rdquo; &mdash; &ldquo;procedure&rdquo; is colder than the rest of the deck</td>
+              <td><span class="badge cl">Clarity</span></td>
+            </tr>
+            <tr>
+              <td class="slide-ref">19</td>
+              <td class="was">&ldquo;isn&rsquo;t the cat. It&rsquo;s a full portion&rdquo;</td>
+              <td class="now">Fine as written, but apply the same contraction rule as the rest of the deck</td>
+              <td><span class="badge co">Consistency</span></td>
+            </tr>
+            <tr>
+              <td class="slide-ref">19</td>
+              <td class="was">Cards run Warm it / Twenty minutes / Clean plate</td>
+              <td class="now">Number them and order them as they happen: plate, warm, twenty minutes</td>
+              <td><span class="badge ly">Layout</span></td>
+            </tr>
+            <tr>
+              <td class="slide-ref">20</td>
+              <td class="was">&ldquo;THE TRANSITION&rdquo;</td>
+              <td class="now">&ldquo;How long the switch really takes&rdquo;</td>
+              <td><span class="badge cl">Clarity</span></td>
+            </tr>
+            <tr>
+              <td class="slide-ref">20</td>
+              <td class="was">&ldquo;14 days, sometimes 3&ndash;4 weeks&rdquo; and &ldquo;7&ndash;10 days&rdquo; in a column headed &ldquo;How long, honestly&rdquo;</td>
+              <td class="now">Keep the honest tone; add the unit to the header: &ldquo;How long, honestly&rdquo; &rarr; typical time to a full switch</td>
+              <td><span class="badge cl">Clarity</span></td>
+            </tr>
+            <tr>
+              <td class="slide-ref">20</td>
+              <td class="was">&ldquo;Add a week to any of the above&rdquo; (no full stop, unlike neighbouring cells)</td>
+              <td class="now">Match the punctuation of the other cells</td>
+              <td><span class="badge pu">Punctuation</span></td>
+            </tr>
+            <tr>
+              <td class="slide-ref">20</td>
+              <td class="was">&ldquo;Most cats barely blink&rdquo; / &ldquo;most cats barely notice&rdquo; on slides 18 and 20</td>
+              <td class="now">Vary one of them; the repetition is noticeable two slides apart</td>
+              <td><span class="badge co">Consistency</span></td>
+            </tr>
+            <tr>
+              <td class="slide-ref">21</td>
+              <td class="was">Cards run Start small / Build familiarity / Increase slowly</td>
+              <td class="now">Reorder to day 1, day 2, day 3: start small, increase slowly, build familiarity</td>
+              <td><span class="badge ly">Layout</span></td>
+            </tr>
+            <tr>
+              <td class="slide-ref">21</td>
+              <td class="was">&ldquo;DAY 1 TO 3&rdquo;</td>
+              <td class="now">&ldquo;Days 1 to 3&rdquo;</td>
+              <td><span class="badge co">Consistency</span></td>
+            </tr>
+            <tr>
+              <td class="slide-ref">21</td>
+              <td class="was">&ldquo;If she didn&rsquo;t try it at all, simply repeat day one.&rdquo;</td>
+              <td class="now">&ldquo;If they did not try it, repeat day 1.&rdquo; &mdash; &ldquo;simply&rdquo; adds nothing and can sound dismissive</td>
+              <td><span class="badge cl">Clarity</span></td>
+            </tr>
+            <tr>
+              <td class="slide-ref">21</td>
+              <td class="was">&ldquo;Once she is settled on chicken&rdquo;</td>
+              <td class="now">&ldquo;Once they are settled on chicken&rdquo;</td>
+              <td><span class="badge co">Consistency</span></td>
+            </tr>
+            <tr>
+              <td class="slide-ref">22</td>
+              <td class="was">&ldquo;Day 5 is where we see the biggest drop of:&rdquo;</td>
+              <td class="now">&ldquo;Day 5 is where we see the biggest drop-off.&rdquo; &mdash; incomplete phrase plus a stray colon</td>
+              <td><span class="badge gr">Grammar</span></td>
+            </tr>
+            <tr>
+              <td class="slide-ref">22</td>
+              <td class="was">&ldquo;Most box&rsquo;s are on a 7 day trial&rdquo;</td>
+              <td class="now">&ldquo;Most boxes are on a seven-day cycle&rdquo; &mdash; plural, not possessive</td>
+              <td><span class="badge sp">Spelling</span></td>
+            </tr>
+            <tr>
+              <td class="slide-ref">22</td>
+              <td class="was">&ldquo;7 day trial&rdquo;</td>
+              <td class="now">&ldquo;seven-day cycle&rdquo; &mdash; hyphenate the compound modifier</td>
+              <td><span class="badge pu">Punctuation</span></td>
+            </tr>
+            <tr>
+              <td class="slide-ref">22</td>
+              <td class="was">&ldquo;so we nee to push this back&rdquo;</td>
+              <td class="now">&ldquo;so we need to push this back&rdquo;</td>
+              <td><span class="badge sp">Spelling</span></td>
+            </tr>
+            <tr>
+              <td class="slide-ref">22</td>
+              <td class="was">&ldquo;a couple of day&rdquo;</td>
+              <td class="now">&ldquo;a couple of days&rdquo;</td>
+              <td><span class="badge gr">Grammar</span></td>
+            </tr>
+            <tr>
+              <td class="slide-ref">22</td>
+              <td class="was">&ldquo;The will get a message&rdquo;</td>
+              <td class="now">&ldquo;They will get a message&rdquo;</td>
+              <td><span class="badge sp">Spelling</span></td>
+            </tr>
+            <tr>
+              <td class="slide-ref">22</td>
+              <td class="was">&ldquo;2 days before there box comes&rdquo;</td>
+              <td class="now">&ldquo;two days before their box arrives&rdquo;</td>
+              <td><span class="badge sp">Spelling</span></td>
+            </tr>
+            <tr>
+              <td class="slide-ref">22</td>
+              <td class="was">&ldquo;so let be proctive here&rdquo;</td>
+              <td class="now">&ldquo;so let&rsquo;s be proactive&rdquo;</td>
+              <td><span class="badge sp">Spelling</span></td>
+            </tr>
+            <tr>
+              <td class="slide-ref">22</td>
+              <td class="was">&ldquo;go into there acount&rdquo;</td>
+              <td class="now">&ldquo;log into their account&rdquo; &mdash; two errors in three words</td>
+              <td><span class="badge sp">Spelling</span></td>
+            </tr>
+            <tr>
+              <td class="slide-ref">22</td>
+              <td class="was">&ldquo;swap the recipes in box 2 to the once the cat liked the most&rdquo;</td>
+              <td class="now">&ldquo;swap Box 2 to the recipes the cat liked most&rdquo;</td>
+              <td><span class="badge sp">Spelling</span></td>
+            </tr>
+            <tr>
+              <td class="slide-ref">22</td>
+              <td class="was">&ldquo;What to change the mindset that if the cat dose not eat it that the end&rdquo;</td>
+              <td class="now">&ldquo;We need to change the mindset that a cat not eating on day 1 means it is over.&rdquo; &mdash; three errors in one line</td>
+              <td><span class="badge gr">Grammar</span></td>
+            </tr>
+            <tr>
+              <td class="slide-ref">22</td>
+              <td class="was">&ldquo;DAY 5+&rdquo; as the headline, placed after the body</td>
+              <td class="now">&ldquo;Day 5 is a checkpoint, not a verdict&rdquo;, top-left</td>
+              <td><span class="badge ly">Layout</span></td>
+            </tr>
+            <tr>
+              <td class="slide-ref">23</td>
+              <td class="was">&ldquo;What the team need to think about&rdquo;</td>
+              <td class="now">&ldquo;What the team needs to do&rdquo; &mdash; UK English permits a plural verb after a collective noun, but the deck treats &ldquo;team&rdquo; as singular elsewhere; &ldquo;do&rdquo; also beats &ldquo;think about&rdquo; before a list of actions</td>
+              <td><span class="badge co">Consistency</span></td>
+            </tr>
+            <tr>
+              <td class="slide-ref">24</td>
+              <td class="was">&ldquo;framed as a texture trail&rdquo;</td>
+              <td class="now">&ldquo;framed as a texture trial&rdquo;</td>
+              <td><span class="badge sp">Spelling</span></td>
+            </tr>
+            <tr>
+              <td class="slide-ref">24</td>
+              <td class="was">&ldquo;Set clear expections&rdquo;</td>
+              <td class="now">&ldquo;Set clear expectations&rdquo;</td>
+              <td><span class="badge sp">Spelling</span></td>
+            </tr>
+            <tr>
+              <td class="slide-ref">24</td>
+              <td class="was">&ldquo;Putting a mix of reipice in the frist box&rdquo;</td>
+              <td class="now">&ldquo;Put a mix of recipes in the first box&rdquo; &mdash; two misspellings in six words</td>
+              <td><span class="badge sp">Spelling</span></td>
+            </tr>
+            <tr>
+              <td class="slide-ref">24</td>
+              <td class="was">&ldquo;give the cusomer more time&rdquo;</td>
+              <td class="now">&ldquo;give the customer more time&rdquo;</td>
+              <td><span class="badge sp">Spelling</span></td>
+            </tr>
+            <tr>
+              <td class="slide-ref">24</td>
+              <td class="was">&ldquo;The customer should swape the reipice&rdquo;</td>
+              <td class="now">&ldquo;Get the customer to swap the recipes&rdquo;</td>
+              <td><span class="badge sp">Spelling</span></td>
+            </tr>
+            <tr>
+              <td class="slide-ref">24</td>
+              <td class="was">&ldquo;Moving the 2&hellip;delivery back&rdquo; with an orphaned &ldquo;nd&rdquo; below the tile</td>
+              <td class="now">The superscript ordinal breaks on export. Write &ldquo;the second delivery&rdquo; in full.</td>
+              <td><span class="badge ly">Layout</span></td>
+            </tr>
+            <tr>
+              <td class="slide-ref">24</td>
+              <td class="was">Six tiles written in four different grammatical forms (&ldquo;Retention should be&hellip;&rdquo;, &ldquo;Putting&hellip;&rdquo;, &ldquo;Moving&hellip;&rdquo;, &ldquo;The customer should&hellip;&rdquo;)</td>
+              <td class="now">One form: imperative verb first on every tile</td>
+              <td><span class="badge co">Consistency</span></td>
+            </tr>
+            <tr>
+              <td class="slide-ref">24</td>
+              <td class="was">&ldquo;ACTION POINT&rdquo; labelling six actions</td>
+              <td class="now">&ldquo;Action points&rdquo;</td>
+              <td><span class="badge gr">Grammar</span></td>
+            </tr>
+            <tr>
+              <td class="slide-ref">26</td>
+              <td class="was">&ldquo;Avg Distinct Decipe&rdquo;</td>
+              <td class="now">&ldquo;Average distinct recipes&rdquo;</td>
+              <td><span class="badge sp">Spelling</span></td>
+            </tr>
+            <tr>
+              <td class="slide-ref">26</td>
+              <td class="was">&ldquo;Last week number of pause before dlivery&rdquo;</td>
+              <td class="now">&ldquo;Pauses before delivery (last week)&rdquo;</td>
+              <td><span class="badge sp">Spelling</span></td>
+            </tr>
+            <tr>
+              <td class="slide-ref">26</td>
+              <td class="was">&ldquo;% of pause befor day 7&rdquo;</td>
+              <td class="now">&ldquo;% of pauses before day 7&rdquo;</td>
+              <td><span class="badge sp">Spelling</span></td>
+            </tr>
+            <tr>
+              <td class="slide-ref">26</td>
+              <td class="was">&ldquo;% of pause befor day 7 as a % of the sales&rdquo;</td>
+              <td class="now">Two different measures are run together. Split into &ldquo;Pauses before day 7, as a % of all pauses&rdquo; and &ldquo;Pauses before day 7, as a % of sales&rdquo;.</td>
+              <td><span class="badge cl">Clarity</span></td>
+            </tr>
+            <tr>
+              <td class="slide-ref">26</td>
+              <td class="was">&ldquo;Avg Pause day&rdquo;</td>
+              <td class="now">&ldquo;Average pause day&rdquo; &mdash; expand the abbreviation and fix the capitalisation</td>
+              <td><span class="badge co">Consistency</span></td>
+            </tr>
+            <tr>
+              <td class="slide-ref">26</td>
+              <td class="was">&ldquo;DATA POINT&rdquo; labelling four metrics</td>
+              <td class="now">&ldquo;Data points&rdquo;</td>
+              <td><span class="badge gr">Grammar</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ══════════════════ STYLE SHEET ══════════════════ -->
+    <section class="card" id="style">
+      <h2>House Style Sheet</h2>
+      <p>
+        One page to check against before the next export. Everything here is already implied by the
+        best-written slides in the deck; it just needs applying everywhere.
+      </p>
+      <div class="summary-grid">
+        <div class="summary-box">
+          <strong>Spelling</strong>
+          UK English throughout: optimise, analysing, flavour, programme, recognise, colour,
+          favourite. Set the document language to English (UK) so the checker catches the next one.
+        </div>
+        <div class="summary-box">
+          <strong>Numbers</strong>
+          Words for one to nine, figures for 10 and above. Always figures for days, percentages and
+          data (day 5, 35%, 14 days). En dashes for ranges: 7&ndash;10 days.
+        </div>
+        <div class="summary-box">
+          <strong>Headlines</strong>
+          Sentence case, no full stop, and an assertion wherever possible. ALL CAPS only for the
+          small kicker above the headline.
+        </div>
+        <div class="summary-box">
+          <strong>Quotes</strong>
+          Curly quotes throughout. Double quotes for things people say; single quotes for terms being
+          named (the &lsquo;4% meat rule&rsquo;).
+        </div>
+        <div class="summary-box">
+          <strong>The cat</strong>
+          &ldquo;They&rdquo;, not &ldquo;she&rdquo;. In scripts, use [Cat&rsquo;s name] in square
+          brackets so agents can see the placeholder at a glance.
+        </div>
+        <div class="summary-box">
+          <strong>Boxes and days</strong>
+          Box 1, Box 2 (capitalised). Day 1, day 5 (lower case in running text, capitalised at the
+          start of a line). Never &ldquo;Day 5+&rdquo;.
+        </div>
+        <div class="summary-box">
+          <strong>Bullets</strong>
+          Maximum six per slide, maximum 12 words each. Start with the verb. No full stops on
+          fragments.
+        </div>
+        <div class="summary-box">
+          <strong>Temperatures</strong>
+          &ldquo;above 150&deg;C&rdquo;, &ldquo;around 90&deg;C&rdquo;. No space before &deg;C, and
+          never a trailing plus sign.
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════ REVISED COPY ══════════════════ -->
+    <section class="card" id="copy">
+      <h2>Revised Slide Copy</h2>
+      <p class="lede">
+        Slide by slide, ready to drop in. Where the original headline changes, the old one is shown
+        beneath the new. Every content slide gets a one-line takeaway &mdash; that line is what the
+        agent should remember if they remember nothing else.
+      </p>
+
+      <div class="slide-block statement">
+        <div class="sb-head">
+          <span class="sn">01</span>
+          <h3>Title</h3>
+        </div>
+        <p class="kicker-line">Marro &middot; Retention Programme</p>
+        <p class="headline">Retention training</p>
+        <p><strong>Standfirst:</strong> Winning the first bowl &mdash; how we keep customers past week one.</p>
+        <div class="viz"><b>Visual</b> Full-bleed maroon slide, apricot wordmark, one product photograph of a warmed tray. No bullet points on a title slide.</div>
+      </div>
+
+      <div class="slide-block">
+        <div class="sb-head">
+          <span class="sn">02</span>
+          <h3>Why we are here</h3>
+          <span class="was-title">Was: <b>&ldquo;Why are we here? / Marro retention has drop and we need to get back&rdquo;</b></span>
+        </div>
+        <p class="kicker-line">The problem</p>
+        <p class="headline">Retention has dropped. This session is how we win it back.</p>
+        <p>Everything in the next 45 minutes points at one week: the first one.</p>
+        <div class="takeaway"><b>Takeaway strip</b> We are not fixing retention. We are fixing week one.</div>
+      </div>
+
+      <div class="slide-block rebuilt">
+        <div class="sb-head">
+          <span class="sn">03</span>
+          <h3>Where we lose customers</h3>
+        </div>
+        <p class="kicker-line">The evidence</p>
+        <p class="headline">More than half of everything we lose, we lose in week one</p>
+        <div class="stat-row">
+          <div class="stat"><b>57%</b> of all pauses happen inside the first seven days</div>
+          <div class="stat"><b>1 in 4</b> pauses happen before the box has even arrived</div>
+          <div class="stat"><b>Day 5</b> is the single biggest drop-off point</div>
+        </div>
+        <div class="takeaway"><b>Takeaway strip</b> If we fix week one, we fix retention.</div>
+      </div>
+
+      <div class="slide-block">
+        <div class="sb-head">
+          <span class="sn">04</span>
+          <h3>Why they actually leave</h3>
+        </div>
+        <p class="kicker-line">In their words</p>
+        <p class="headline">Two reasons, and only one of them is about food</p>
+        <div class="split">
+          <div class="pane plain">
+            <span class="plabel">Reason one</span>
+            <p>&ldquo;I don&rsquo;t want a subscription.&rdquo;</p>
+            <p class="sub"><em>A commitment problem. Answered by how we set the plan up on the call.</em></p>
+          </div>
+          <div class="pane plain">
+            <span class="plabel">Reason two</span>
+            <p>&ldquo;My cat wouldn&rsquo;t eat it.&rdquo;</p>
+            <p class="sub"><em>An acceptance problem. Answered by how we set expectations for week one.</em></p>
+          </div>
+        </div>
+        <div class="takeaway"><b>Takeaway strip</b> Both are decided before the box arrives.</div>
+      </div>
+
+      <div class="slide-block statement">
+        <div class="sb-head">
+          <span class="sn">05</span>
+          <h3>Statement slide</h3>
+        </div>
+        <p class="headline">We are not selling food. We are setting a finish line.</p>
+        <div class="viz"><b>Visual</b> Inverted maroon slide, one line of type, nothing else. Hold it for a beat before advancing.</div>
+      </div>
+
+      <div class="slide-block">
+        <div class="sb-head">
+          <span class="sn">06</span>
+          <h3>Recap: fresh</h3>
+        </div>
+        <p class="kicker-line">Recap &middot; Fresh</p>
+        <p class="headline">Real food, gently cooked, still wet</p>
+        <ul>
+          <li>Real, named meat and fish &mdash; you can see the protein and the percentage</li>
+          <li>Gently cooked at around 90&deg;C, then chilled or frozen, never made shelf-stable</li>
+          <li>High moisture, like wet food, so hydration comes with every meal</li>
+          <li>Complete and balanced by design, vet-approved, kitten to senior</li>
+          <li>Prebiotics (MOS, FOS and psyllium seed) for gut health</li>
+        </ul>
+        <div class="takeaway"><b>Takeaway strip</b> Everything good about raw, without the risk.</div>
+      </div>
+
+      <div class="slide-block">
+        <div class="sb-head">
+          <span class="sn">07</span>
+          <h3>Recap: kibble</h3>
+        </div>
+        <p class="kicker-line">Recap &middot; Kibble</p>
+        <p class="headline">Cooked hard, then made tasty again on the way out</p>
+        <ul>
+          <li>Extruded: mixed into a dough and forced through a machine above 150&deg;C under pressure</li>
+          <li>Around 10% moisture, and 25&ndash;50% carbohydrate</li>
+          <li>Heat destroys nutrients such as taurine, which are then added back synthetically</li>
+          <li>Sprayed with fat and flavour enhancers <em>after</em> cooking</li>
+        </ul>
+        <div class="takeaway"><b>Takeaway strip</b> That spray is not an accident. It is engineered to be irresistible &mdash; and cats are conditioned to want it.</div>
+      </div>
+
+      <div class="slide-block">
+        <div class="sb-head">
+          <span class="sn">08</span>
+          <h3>Recap: wet</h3>
+        </div>
+        <p class="kicker-line">Recap &middot; Wet</p>
+        <p class="headline">Wet is a texture, not a standard</p>
+        <ul>
+          <li>Cooked above 121&deg;C to make it shelf-stable</li>
+          <li>The &lsquo;4% meat rule&rsquo;: &lsquo;with chicken&rsquo; can legally mean 4% chicken</li>
+          <li>Complete or complementary, a meal or a topper &mdash; always check the label</li>
+          <li>Many pouches use engineered flavour &lsquo;digests&rsquo;, for the same reason kibble uses sprays</li>
+        </ul>
+        <div class="takeaway"><b>Takeaway strip</b> High moisture is a good start. It is not the whole story.</div>
+      </div>
+
+      <div class="slide-block">
+        <div class="sb-head">
+          <span class="sn">09</span>
+          <h3>Recap: raw</h3>
+        </div>
+        <p class="kicker-line">Recap &middot; Raw</p>
+        <p class="headline">Same intention as us, different risk</p>
+        <ul>
+          <li>Same philosophy: real meat, high moisture, minimal processing</li>
+          <li>The difference is cooking and handling, not intention</li>
+          <li>The Food Standards Agency found harmful bacteria in 35% of the raw products it tested</li>
+        </ul>
+        <div class="takeaway"><b>Takeaway strip</b> Fresh is raw&rsquo;s philosophy, made safer and easier. That is the whole pitch.</div>
+        <div class="viz"><b>Add a slide 9b</b> One four-column comparison table &mdash; fresh, kibble, wet, raw &mdash; against cook temperature, moisture, carbohydrate and processing. It is the single most useful page you can give a new agent, and it replaces re-reading slides 6&ndash;9.</div>
+      </div>
+
+      <div class="slide-block statement">
+        <div class="sb-head">
+          <span class="sn">10</span>
+          <h3>Statement slide</h3>
+        </div>
+        <p class="headline">Refusing it at first is habit, not preference.</p>
+        <div class="viz"><b>Visual</b> Inverted slide, single line. This is the hinge of the whole deck &mdash; give it the same treatment as slide 5 so the pair reads as a matched set.</div>
+      </div>
+
+      <div class="slide-block">
+        <div class="sb-head">
+          <span class="sn">11</span>
+          <h3>Three myths you will hear this week</h3>
+          <span class="was-title">Was: <b>&ldquo;Myths&rdquo;</b>, set below the table</span>
+        </div>
+        <p class="kicker-line">Objection handling</p>
+        <p class="headline">Three myths you will hear this week</p>
+        <div class="table-wrap">
+          <table style="min-width:640px">
+            <thead>
+              <tr><th style="width:32%">What they say</th><th>What you say</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="was">&ldquo;Kibble keeps her teeth clean.&rdquo;</td>
+                <td class="now">Crunching shifts a little surface plaque, but does nothing below the gumline &mdash; which is where dental disease starts. The British Veterinary Association does not endorse dry food as dental care. Brushing and vet checks are the only proven routes.</td>
+              </tr>
+              <tr>
+                <td class="was">&ldquo;She loves her kibble, so it must suit her.&rdquo;</td>
+                <td class="now">She loves the fat and flavour sprayed on after cooking. That is a conditioned response, not a nutritional verdict &mdash; the feline version of ultra-processed food.</td>
+              </tr>
+              <tr>
+                <td class="was">&ldquo;Premium kibble is basically the same as fresh.&rdquo;</td>
+                <td class="now">Premium is genuinely better than budget: more meat, better sourcing. It is still extruded above 150&deg;C, still around 10% moisture, and the nutrients still go back in afterwards.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="takeaway"><b>Takeaway strip</b> Never win the argument. Give them the fact and move to the plan.</div>
+      </div>
+
+      <div class="slide-block rebuilt">
+        <div class="sb-head">
+          <span class="sn">12</span>
+          <h3>Box 1 is not a delivery</h3>
+          <span class="was-title">Was: headline set between the two panels, body in letter-spaced type</span>
+        </div>
+        <p class="kicker-line">The reframe</p>
+        <p class="headline">Box 1 is not a delivery</p>
+        <div class="split">
+          <div class="pane no">
+            <span class="plabel">Stop treating it as</span>
+            <p>The first instalment of a standing order. Food arrives, cat eats it, subscription continues.</p>
+          </div>
+          <div class="pane yes">
+            <span class="plabel">Start treating it as</span>
+            <p>A tasting and texture trial. Several recipes, two ways to serve each one, and one job: find out what this cat goes for.</p>
+          </div>
+        </div>
+        <div class="takeaway"><b>Takeaway strip</b> Box 1 has one job: find the winner.</div>
+      </div>
+
+      <div class="slide-block rebuilt">
+        <div class="sb-head">
+          <span class="sn">13</span>
+          <h3>Two finish lines, same cat</h3>
+        </div>
+        <p class="kicker-line">The reframe</p>
+        <p class="headline">Two finish lines, same cat</p>
+        <div class="split">
+          <div class="pane no">
+            <span class="plabel">If day 5 means &lsquo;cleared the bowl&rsquo;</span>
+            <p>Most customers fail. Failure feels like a wasted month ahead. So they pause.</p>
+          </div>
+          <div class="pane yes">
+            <span class="plabel">If day 5 means &lsquo;tasted it and stayed interested&rsquo;</span>
+            <p>Most customers pass. Passing feels like progress. So they carry on.</p>
+          </div>
+        </div>
+        <div class="takeaway"><b>Takeaway strip</b> We choose which finish line the customer is running towards. We choose it on the call.</div>
+      </div>
+
+      <div class="slide-block rebuilt">
+        <div class="sb-head">
+          <span class="sn">14</span>
+          <h3>What we never promise, and what we always promise</h3>
+          <span class="was-title">Was: <b>&ldquo;Reframe&rdquo;</b>, with &ldquo;Should not say&rdquo; / &ldquo;Promise freely&rdquo;</span>
+        </div>
+        <p class="kicker-line">The reframe</p>
+        <p class="headline">What we never promise, and what we always promise</p>
+        <div class="split">
+          <div class="pane no">
+            <span class="plabel">Never promise</span>
+            <ul>
+              <li>&ldquo;She&rsquo;ll love it.&rdquo;</li>
+              <li>&ldquo;She&rsquo;ll eat it straight away.&rdquo;</li>
+              <li>&ldquo;Cats always take to this one.&rdquo;</li>
+              <li>&ldquo;It&rsquo;ll be easy.&rdquo;</li>
+            </ul>
+          </div>
+          <div class="pane yes">
+            <span class="plabel">Promise freely</span>
+            <ul>
+              <li>A plan built around what the cat is eating right now</li>
+              <li>Support at the moments that matter</li>
+              <li>Recipe and texture swaps for the first 28 days</li>
+              <li>Box 2 built around whatever wins</li>
+            </ul>
+          </div>
+        </div>
+        <div class="takeaway"><b>Takeaway strip</b> Never promise the cat&rsquo;s behaviour. Always promise ours.</div>
+      </div>
+
+      <div class="slide-block rebuilt">
+        <div class="sb-head">
+          <span class="sn">15</span>
+          <h3>What this sounds like</h3>
+          <span class="was-title">Was: <b>&ldquo;What this look like&rdquo;</b> &mdash; four paragraphs of unbroken script</span>
+        </div>
+        <p class="kicker-line">On the call</p>
+        <p class="headline">What this sounds like</p>
+        <div class="beats">
+          <div class="beat">
+            <span class="bl">1 &middot; The box</span>
+            <p class="script">&ldquo;So on Tuesday your tasting box arrives, with a mix of recipes for [Cat&rsquo;s name].&rdquo;</p>
+          </div>
+          <div class="beat">
+            <span class="bl">2 &middot; Two textures</span>
+            <p class="script">&ldquo;Every tray can be served two ways. Straight from the fridge it&rsquo;s a cool jelly; ten seconds in the microwave turns it into a silky gravy. I&rsquo;d always recommend warming it.&rdquo;</p>
+          </div>
+          <div class="beat">
+            <span class="bl">3 &middot; The only job</span>
+            <p class="script">&ldquo;Your only job this week is to find out which flavours they love most. And a quick heads-up: if [Cat&rsquo;s name] is coming off dry food, a full switch can take a week or two. So if they&rsquo;re cautious on day 1, that&rsquo;s completely normal. That&rsquo;s exactly what the trial week is for.&rdquo;</p>
+          </div>
+          <div class="beat">
+            <span class="bl">4 &middot; What I&rsquo;ve set up</span>
+            <p class="script">&ldquo;I&rsquo;ve added a discount to your second box, I&rsquo;ve shown you how to swap the recipes in your online account, and I&rsquo;ve pushed your second delivery back a few days &mdash; so you&rsquo;ve got time to test and make those changes.&rdquo;</p>
+          </div>
+        </div>
+        <div class="takeaway"><b>Takeaway strip</b> Four beats, 30 seconds. It is the cheapest retention work we do.</div>
+        <div class="viz"><b>Layout</b> Only the four beat labels and one line each go on the slide. The full script belongs in the speaker notes and on the printed handout.</div>
+      </div>
+
+      <div class="slide-block">
+        <div class="sb-head">
+          <span class="sn">16</span>
+          <h3>Our flavours</h3>
+          <span class="was-title">Was: <b>&ldquo;Our Flavours..&rdquo;</b></span>
+        </div>
+        <p class="kicker-line">The food itself</p>
+        <p class="headline">Our flavours</p>
+        <ul>
+          <li><strong>Dual protein</strong> &mdash; 53% salmon, 36% white fish</li>
+          <li><strong>Single protein</strong> &mdash; one named source, for sensitive cats</li>
+          <li><strong>Softer textures</strong> &mdash; suited to older cats</li>
+        </ul>
+        <div class="takeaway"><b>Takeaway strip</b> Put a mix in Box 1. You cannot find the winner with one recipe.</div>
+        <div class="note warn" style="margin-top:12px">
+          <strong class="note-title">Confirm before rebuilding</strong>
+          As laid out, &ldquo;dual flavours&rdquo; and &ldquo;single source of protein&rdquo; appear to
+          describe the same product. Please confirm which recipes are which, and the exact percentages
+          to quote.
+        </div>
+      </div>
+
+      <div class="slide-block">
+        <div class="sb-head">
+          <span class="sn">17</span>
+          <h3>Every tray is two textures</h3>
+        </div>
+        <p class="kicker-line">The food itself</p>
+        <p class="headline">Every tray is two textures</p>
+        <div class="split">
+          <div class="pane plain">
+            <span class="plabel">Straight from the fridge</span>
+            <p>A cool, firm jelly.</p>
+          </div>
+          <div class="pane plain">
+            <span class="plabel">Warmed for ten seconds</span>
+            <p>A silky gravy.</p>
+          </div>
+        </div>
+        <div class="takeaway"><b>Takeaway strip</b> Always recommend warming. Aroma is what persuades a cat.</div>
+      </div>
+
+      <div class="slide-block">
+        <div class="sb-head">
+          <span class="sn">18</span>
+          <h3>Match the first serve to the last meal</h3>
+        </div>
+        <p class="kicker-line">First serve</p>
+        <p class="headline">Match the first serve to the last meal</p>
+        <div class="table-wrap">
+          <table style="min-width:700px">
+            <thead>
+              <tr><th style="width:18%">Coming from</th><th style="width:41%">First serve</th><th style="width:41%">Why</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="slide-ref">Dry / kibble</td>
+                <td>A spoonful of chicken, warmed, on a clean plate. Move old food and treats out of the way.</td>
+                <td>Aroma has to do the persuading because the texture is completely new.</td>
+              </tr>
+              <tr>
+                <td class="slide-ref">Wet pouches</td>
+                <td>Chilled or barely warmed, mixed into the old food and increased slowly.</td>
+                <td>Texture is already familiar. The palate just needs to reset after flavour digests.</td>
+              </tr>
+              <tr>
+                <td class="slide-ref">Raw</td>
+                <td>Straight from the fridge, mixed into the raw, increasing gradually.</td>
+                <td>Both are moist and meat-rich, so most cats barely notice.</td>
+              </tr>
+              <tr>
+                <td class="slide-ref">Mixed feeding</td>
+                <td>Replace the wet meal first, then work on the dry one.</td>
+                <td>Take the easy win first. It builds the customer&rsquo;s confidence before the hard part.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="takeaway"><b>Takeaway strip</b> Ask what they eat now. Everything else follows from the answer.</div>
+      </div>
+
+      <div class="slide-block">
+        <div class="sb-head">
+          <span class="sn">19</span>
+          <h3>The three mechanics that do most of the work</h3>
+        </div>
+        <p class="kicker-line">First serve</p>
+        <p class="headline">Three mechanics do most of the work</p>
+        <ol>
+          <li><strong>A clean, shallow plate</strong> &mdash; not the usual bowl, not next to the kibble. Old food and treats out of reach between meals.</li>
+          <li><strong>Warm it</strong> &mdash; ten seconds in the microwave, or the tray in warm water for ten minutes. Lifts the aroma and turns jelly into gravy.</li>
+          <li><strong>Twenty minutes</strong> &mdash; then take it away and offer the usual dinner. Try again tomorrow. This is the routine, not a fallback.</li>
+        </ol>
+        <div class="takeaway"><b>Takeaway strip</b> The most common day-one failure is not the cat. It is a full portion, served cold, next to a bowl of kibble.</div>
+      </div>
+
+      <div class="slide-block">
+        <div class="sb-head">
+          <span class="sn">20</span>
+          <h3>How long the switch really takes</h3>
+          <span class="was-title">Was: <b>&ldquo;THE TRANSITION&rdquo;</b></span>
+        </div>
+        <p class="kicker-line">The transition</p>
+        <p class="headline">How long the switch really takes</p>
+        <div class="table-wrap">
+          <table style="min-width:700px">
+            <thead>
+              <tr><th style="width:18%">Coming from</th><th style="width:24%">How long, honestly</th><th>What you tell them</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="slide-ref">Dry / kibble</td>
+                <td>14 days, sometimes 3&ndash;4 weeks</td>
+                <td>&ldquo;This is the longest switch there is, and that&rsquo;s normal. She&rsquo;s unlearning a habit.&rdquo;</td>
+              </tr>
+              <tr>
+                <td class="slide-ref">Wet</td>
+                <td>7&ndash;10 days</td>
+                <td>&ldquo;The texture&rsquo;s already familiar, so this is usually a quick one.&rdquo;</td>
+              </tr>
+              <tr>
+                <td class="slide-ref">Raw</td>
+                <td>3&ndash;7 days</td>
+                <td>&ldquo;Same sort of food, just gently cooked. Most cats barely blink.&rdquo;</td>
+              </tr>
+              <tr>
+                <td class="slide-ref">Mixed</td>
+                <td>10&ndash;14 days</td>
+                <td>&ldquo;We&rsquo;ll do the wet meal first for a quick win, then the dry.&rdquo;</td>
+              </tr>
+              <tr>
+                <td class="slide-ref">Flagged fussy</td>
+                <td>Add a week to any of the above</td>
+                <td>&ldquo;We plan for longer with fussy ones. Patience is genuinely the strategy.&rdquo;</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="takeaway"><b>Takeaway strip</b> Say the number out loud on the call. An expected delay is not a problem; an unexpected one is a pause.</div>
+      </div>
+
+      <div class="slide-block">
+        <div class="sb-head">
+          <span class="sn">21</span>
+          <h3>Days 1 to 3</h3>
+          <span class="was-title">Was: <b>&ldquo;DAY 1 TO 3&rdquo;</b>, cards out of sequence</span>
+        </div>
+        <p class="kicker-line">The first 72 hours</p>
+        <p class="headline">Days 1 to 3</p>
+        <ol>
+          <li><strong>Day 1 &mdash; start small.</strong> A spoonful of warmed chicken on a clean plate, old food and treats removed. Twenty minutes, then take it away and offer the usual food.</li>
+          <li><strong>Day 2 &mdash; increase slowly.</strong> If they ate some, increase the portion a little and stay on chicken. If they did not try it, repeat day 1. No escalation.</li>
+          <li><strong>Day 3 &mdash; build familiarity.</strong> Keep increasing the fresh and reducing the kibble. Once they are settled on chicken, introduce a second recipe for variety.</li>
+        </ol>
+        <div class="takeaway"><b>Takeaway strip</b> One variable at a time. Chicken first, everything else later.</div>
+      </div>
+
+      <div class="slide-block rebuilt">
+        <div class="sb-head">
+          <span class="sn">22</span>
+          <h3>Day 5 is a checkpoint, not a verdict</h3>
+          <span class="was-title">Was: <b>&ldquo;DAY 5+&rdquo;</b> &mdash; 12 corrections on this slide alone</span>
+        </div>
+        <p class="kicker-line">The first 72 hours</p>
+        <p class="headline">Day 5 is a checkpoint, not a verdict</p>
+        <ul>
+          <li>Day 5 is where we see the biggest drop-off</li>
+          <li>Most boxes run on a seven-day cycle &mdash; push the second delivery back a few days so the swap has time to work</li>
+          <li>Customers get a message two days before the box ships. Get ahead of it: tell them to log into their account and swap Box 2 to the recipes the cat liked most</li>
+          <li>Change the mindset: a cat that has not cleared the bowl by day 5 is not a failed trial</li>
+        </ul>
+        <div class="takeaway"><b>Takeaway strip</b> Nobody should reach day 5 without knowing what day 5 is supposed to look like.</div>
+      </div>
+
+      <div class="slide-block divider">
+        <div class="sb-head">
+          <span class="sn">23</span>
+          <h3>Section divider</h3>
+          <span class="was-title">Was: <b>&ldquo;What the team need to think about&rdquo;</b></span>
+        </div>
+        <p class="headline">What the team needs to do</p>
+      </div>
+
+      <div class="slide-block rebuilt">
+        <div class="sb-head">
+          <span class="sn">24</span>
+          <h3>Action points</h3>
+          <span class="was-title">Was: <b>&ldquo;ACTION POINT&rdquo;</b> &mdash; six misspellings and a broken superscript</span>
+        </div>
+        <p class="kicker-line">Action points</p>
+        <p class="headline">Six things that change on Monday</p>
+        <ol>
+          <li><strong>Keep retention front of mind</strong> on every call</li>
+          <li><strong>Frame Box 1</strong> as a tasting and texture trial</li>
+          <li><strong>Set clear expectations</strong> based on what the cat eats today</li>
+          <li><strong>Put a mix of recipes</strong> in the first box</li>
+          <li><strong>Move the second delivery back</strong> to give the customer more time</li>
+          <li><strong>Get the customer to swap</strong> the recipes in Box 2</li>
+        </ol>
+        <div class="takeaway"><b>Takeaway strip</b> Six actions, one aim: nobody hits day 5 unprepared.</div>
+      </div>
+
+      <div class="slide-block divider">
+        <div class="sb-head">
+          <span class="sn">25</span>
+          <h3>Section divider</h3>
+        </div>
+        <p class="headline">How we will track it</p>
+      </div>
+
+      <div class="slide-block rebuilt">
+        <div class="sb-head">
+          <span class="sn">26</span>
+          <h3>Data points</h3>
+          <span class="was-title">Was: <b>&ldquo;DATA POINT / Early Pause&rdquo;</b> &mdash; four metrics, three misspellings, two measures conflated</span>
+        </div>
+        <p class="kicker-line">Early pause &middot; Data points</p>
+        <p class="headline">Four numbers we watch every week</p>
+        <ul>
+          <li><strong>Pauses before delivery</strong> &mdash; last week&rsquo;s count</li>
+          <li><strong>Pauses before day 7</strong> &mdash; as a % of sales</li>
+          <li><strong>Average pause day</strong> &mdash; is it moving later?</li>
+          <li><strong>Average distinct recipes per box</strong> &mdash; are we actually sending a mix?</li>
+        </ul>
+        <div class="takeaway"><b>Takeaway strip</b> If average pause day moves later, the reframe is working.</div>
+      </div>
+
+      <div class="flourish"><i></i></div>
+
+      <details class="paste-wrap">
+        <summary>Plain-text version of the revised deck, for pasting into slides</summary>
+        <div class="copy-head">
+          <span>Headlines, kickers, body copy and takeaway lines for all 26 slides.</span>
+          <button class="btn-copy" type="button" id="copyBtn">Copy revised copy</button>
+        </div>
+        <pre class="paste" id="pasteBlock">SLIDE 1 - TITLE
+Kicker: Marro - Retention Programme
+Headline: Retention training
+Standfirst: Winning the first bowl - how we keep customers past week one.
+
+SLIDE 2 - WHY WE ARE HERE
+Kicker: The problem
+Headline: Retention has dropped. This session is how we win it back.
+Body: Everything in the next 45 minutes points at one week: the first one.
+Takeaway: We are not fixing retention. We are fixing week one.
+
+SLIDE 3 - WHERE WE LOSE CUSTOMERS
+Kicker: The evidence
+Headline: More than half of everything we lose, we lose in week one
+- 57% of all pauses happen inside the first seven days
+- 1 in 4 pauses happen before the box has even arrived
+- Day 5 is the single biggest drop-off point
+Takeaway: If we fix week one, we fix retention.
+
+SLIDE 4 - WHY THEY ACTUALLY LEAVE
+Kicker: In their words
+Headline: Two reasons, and only one of them is about food
+Reason one: "I don't want a subscription." A commitment problem. Answered by how we set the plan up on the call.
+Reason two: "My cat wouldn't eat it." An acceptance problem. Answered by how we set expectations for week one.
+Takeaway: Both are decided before the box arrives.
+
+SLIDE 5 - STATEMENT
+We are not selling food. We are setting a finish line.
+
+SLIDE 6 - RECAP: FRESH
+Kicker: Recap - Fresh
+Headline: Real food, gently cooked, still wet
+- Real, named meat and fish - you can see the protein and the percentage
+- Gently cooked at around 90C, then chilled or frozen, never made shelf-stable
+- High moisture, like wet food, so hydration comes with every meal
+- Complete and balanced by design, vet-approved, kitten to senior
+- Prebiotics (MOS, FOS and psyllium seed) for gut health
+Takeaway: Everything good about raw, without the risk.
+
+SLIDE 7 - RECAP: KIBBLE
+Kicker: Recap - Kibble
+Headline: Cooked hard, then made tasty again on the way out
+- Extruded: mixed into a dough and forced through a machine above 150C under pressure
+- Around 10% moisture, and 25-50% carbohydrate
+- Heat destroys nutrients such as taurine, which are then added back synthetically
+- Sprayed with fat and flavour enhancers AFTER cooking
+Takeaway: That spray is not an accident. It is engineered to be irresistible - and cats are conditioned to want it.
+
+SLIDE 8 - RECAP: WET
+Kicker: Recap - Wet
+Headline: Wet is a texture, not a standard
+- Cooked above 121C to make it shelf-stable
+- The '4% meat rule': 'with chicken' can legally mean 4% chicken
+- Complete or complementary, a meal or a topper - always check the label
+- Many pouches use engineered flavour 'digests', for the same reason kibble uses sprays
+Takeaway: High moisture is a good start. It is not the whole story.
+
+SLIDE 9 - RECAP: RAW
+Kicker: Recap - Raw
+Headline: Same intention as us, different risk
+- Same philosophy: real meat, high moisture, minimal processing
+- The difference is cooking and handling, not intention
+- The Food Standards Agency found harmful bacteria in 35% of the raw products it tested
+Takeaway: Fresh is raw's philosophy, made safer and easier. That is the whole pitch.
+
+SLIDE 10 - STATEMENT
+Refusing it at first is habit, not preference.
+
+SLIDE 11 - THREE MYTHS YOU WILL HEAR THIS WEEK
+Kicker: Objection handling
+Headline: Three myths you will hear this week
+"Kibble keeps her teeth clean." | Crunching shifts a little surface plaque, but does nothing below the gumline - which is where dental disease starts. The British Veterinary Association does not endorse dry food as dental care. Brushing and vet checks are the only proven routes.
+"She loves her kibble, so it must suit her." | She loves the fat and flavour sprayed on after cooking. That is a conditioned response, not a nutritional verdict - the feline version of ultra-processed food.
+"Premium kibble is basically the same as fresh." | Premium is genuinely better than budget: more meat, better sourcing. It is still extruded above 150C, still around 10% moisture, and the nutrients still go back in afterwards.
+Takeaway: Never win the argument. Give them the fact and move to the plan.
+
+SLIDE 12 - BOX 1 IS NOT A DELIVERY
+Kicker: The reframe
+Headline: Box 1 is not a delivery
+Stop treating it as: The first instalment of a standing order. Food arrives, cat eats it, subscription continues.
+Start treating it as: A tasting and texture trial. Several recipes, two ways to serve each one, and one job: find out what this cat goes for.
+Takeaway: Box 1 has one job: find the winner.
+
+SLIDE 13 - TWO FINISH LINES, SAME CAT
+Kicker: The reframe
+Headline: Two finish lines, same cat
+If day 5 means 'cleared the bowl': Most customers fail. Failure feels like a wasted month ahead. So they pause.
+If day 5 means 'tasted it and stayed interested': Most customers pass. Passing feels like progress. So they carry on.
+Takeaway: We choose which finish line the customer is running towards. We choose it on the call.
+
+SLIDE 14 - WHAT WE NEVER PROMISE, AND WHAT WE ALWAYS PROMISE
+Kicker: The reframe
+Headline: What we never promise, and what we always promise
+Never promise: "She'll love it." / "She'll eat it straight away." / "Cats always take to this one." / "It'll be easy."
+Promise freely: A plan built around what the cat is eating right now / Support at the moments that matter / Recipe and texture swaps for the first 28 days / Box 2 built around whatever wins
+Takeaway: Never promise the cat's behaviour. Always promise ours.
+
+SLIDE 15 - WHAT THIS SOUNDS LIKE
+Kicker: On the call
+Headline: What this sounds like
+1. The box: "So on Tuesday your tasting box arrives, with a mix of recipes for [Cat's name]."
+2. Two textures: "Every tray can be served two ways. Straight from the fridge it's a cool jelly; ten seconds in the microwave turns it into a silky gravy. I'd always recommend warming it."
+3. The only job: "Your only job this week is to find out which flavours they love most. And a quick heads-up: if [Cat's name] is coming off dry food, a full switch can take a week or two. So if they're cautious on day 1, that's completely normal. That's exactly what the trial week is for."
+4. What I've set up: "I've added a discount to your second box, I've shown you how to swap the recipes in your online account, and I've pushed your second delivery back a few days - so you've got time to test and make those changes."
+Takeaway: Four beats, 30 seconds. It is the cheapest retention work we do.
+
+SLIDE 16 - OUR FLAVOURS
+Kicker: The food itself
+Headline: Our flavours
+- Dual protein - 53% salmon, 36% white fish
+- Single protein - one named source, for sensitive cats
+- Softer textures - suited to older cats
+Takeaway: Put a mix in Box 1. You cannot find the winner with one recipe.
+
+SLIDE 17 - EVERY TRAY IS TWO TEXTURES
+Kicker: The food itself
+Headline: Every tray is two textures
+Straight from the fridge: a cool, firm jelly.
+Warmed for ten seconds: a silky gravy.
+Takeaway: Always recommend warming. Aroma is what persuades a cat.
+
+SLIDE 18 - MATCH THE FIRST SERVE TO THE LAST MEAL
+Kicker: First serve
+Headline: Match the first serve to the last meal
+Dry / kibble | A spoonful of chicken, warmed, on a clean plate. Move old food and treats out of the way. | Aroma has to do the persuading because the texture is completely new.
+Wet pouches | Chilled or barely warmed, mixed into the old food and increased slowly. | Texture is already familiar. The palate just needs to reset after flavour digests.
+Raw | Straight from the fridge, mixed into the raw, increasing gradually. | Both are moist and meat-rich, so most cats barely notice.
+Mixed feeding | Replace the wet meal first, then work on the dry one. | Take the easy win first. It builds the customer's confidence before the hard part.
+Takeaway: Ask what they eat now. Everything else follows from the answer.
+
+SLIDE 19 - THREE MECHANICS DO MOST OF THE WORK
+Kicker: First serve
+Headline: Three mechanics do most of the work
+1. A clean, shallow plate - not the usual bowl, not next to the kibble. Old food and treats out of reach between meals.
+2. Warm it - ten seconds in the microwave, or the tray in warm water for ten minutes. Lifts the aroma and turns jelly into gravy.
+3. Twenty minutes - then take it away and offer the usual dinner. Try again tomorrow. This is the routine, not a fallback.
+Takeaway: The most common day-one failure is not the cat. It is a full portion, served cold, next to a bowl of kibble.
+
+SLIDE 20 - HOW LONG THE SWITCH REALLY TAKES
+Kicker: The transition
+Headline: How long the switch really takes
+Dry / kibble | 14 days, sometimes 3-4 weeks | "This is the longest switch there is, and that's normal. She's unlearning a habit."
+Wet | 7-10 days | "The texture's already familiar, so this is usually a quick one."
+Raw | 3-7 days | "Same sort of food, just gently cooked. Most cats barely blink."
+Mixed | 10-14 days | "We'll do the wet meal first for a quick win, then the dry."
+Flagged fussy | Add a week to any of the above | "We plan for longer with fussy ones. Patience is genuinely the strategy."
+Takeaway: Say the number out loud on the call. An expected delay is not a problem; an unexpected one is a pause.
+
+SLIDE 21 - DAYS 1 TO 3
+Kicker: The first 72 hours
+Headline: Days 1 to 3
+1. Day 1 - start small. A spoonful of warmed chicken on a clean plate, old food and treats removed. Twenty minutes, then take it away and offer the usual food.
+2. Day 2 - increase slowly. If they ate some, increase the portion a little and stay on chicken. If they did not try it, repeat day 1. No escalation.
+3. Day 3 - build familiarity. Keep increasing the fresh and reducing the kibble. Once they are settled on chicken, introduce a second recipe for variety.
+Takeaway: One variable at a time. Chicken first, everything else later.
+
+SLIDE 22 - DAY 5 IS A CHECKPOINT, NOT A VERDICT
+Kicker: The first 72 hours
+Headline: Day 5 is a checkpoint, not a verdict
+- Day 5 is where we see the biggest drop-off
+- Most boxes run on a seven-day cycle - push the second delivery back a few days so the swap has time to work
+- Customers get a message two days before the box ships. Get ahead of it: tell them to log into their account and swap Box 2 to the recipes the cat liked most
+- Change the mindset: a cat that has not cleared the bowl by day 5 is not a failed trial
+Takeaway: Nobody should reach day 5 without knowing what day 5 is supposed to look like.
+
+SLIDE 23 - DIVIDER
+What the team needs to do
+
+SLIDE 24 - ACTION POINTS
+Kicker: Action points
+Headline: Six things that change on Monday
+1. Keep retention front of mind on every call
+2. Frame Box 1 as a tasting and texture trial
+3. Set clear expectations based on what the cat eats today
+4. Put a mix of recipes in the first box
+5. Move the second delivery back to give the customer more time
+6. Get the customer to swap the recipes in Box 2
+Takeaway: Six actions, one aim: nobody hits day 5 unprepared.
+
+SLIDE 25 - DIVIDER
+How we will track it
+
+SLIDE 26 - DATA POINTS
+Kicker: Early pause - Data points
+Headline: Four numbers we watch every week
+- Pauses before delivery - last week's count
+- Pauses before day 7 - as a % of sales
+- Average pause day - is it moving later?
+- Average distinct recipes per box - are we actually sending a mix?
+Takeaway: If average pause day moves later, the reframe is working.</pre>
+      </details>
+    </section>
+
+    <!-- ══════════════════ DESIGN ══════════════════ -->
+    <section class="card" id="design">
+      <h2>Design and Layout</h2>
+      <p class="lede">
+        Ten rules that apply to the whole deck, then the specific slides worth redrawing. The aim
+        throughout is the same: an agent should be able to look up from their notes, read one slide
+        in three seconds, and look back down.
+      </p>
+
+      <div class="rules">
+        <div class="rule-item">
+          <span class="rn">1</span>
+          <div>
+            <strong>Delete the letter-spacing</strong>
+            Slides 12, 13 and 14 track their display type out to the point of illegibility. Wide
+            tracking is a decorative device for three or four words at most, never for a sentence.
+            Use size, weight and colour for emphasis instead.
+          </div>
+        </div>
+        <div class="rule-item">
+          <span class="rn">2</span>
+          <div>
+            <strong>Headline top-left, always</strong>
+            Seven slides place the title after the body content (11, 12, 15, 16, 22, 24, 26). English
+            readers scan from the top-left, so a headline anywhere else arrives too late &mdash; and
+            the same ordering carries into the PDF export and any screen reader.
+          </div>
+        </div>
+        <div class="rule-item">
+          <span class="rn">3</span>
+          <div>
+            <strong>Make the headline the point, not the topic</strong>
+            &ldquo;DAY 5+&rdquo; names a subject. &ldquo;Day 5 is a checkpoint, not a verdict&rdquo;
+            teaches something. If someone photographs one slide, the headline alone should carry the
+            lesson.
+          </div>
+        </div>
+        <div class="rule-item">
+          <span class="rn">4</span>
+          <div>
+            <strong>Three type sizes, no more</strong>
+            Kicker at roughly 14pt, headline at 40&ndash;44pt, body at 20&ndash;24pt. Nothing on a
+            training slide should ever be below 18pt, because someone will be reading it from the back
+            of the room or on a laptop in a side window.
+          </div>
+        </div>
+        <div class="rule-item">
+          <span class="rn">5</span>
+          <div>
+            <strong>Six bullets, twelve words</strong>
+            Six bullets per slide, twelve words each, verb first. Slides 6 and 7 currently run to
+            five long bullets of full prose; they read as a document, not a slide.
+          </div>
+        </div>
+        <div class="rule-item">
+          <span class="rn">6</span>
+          <div>
+            <strong>Fix the colour language</strong>
+            Use it consistently and only three ways: red for what we lose and what we never say, green
+            for what works and what we promise, maroon and apricot for everything else. The deck
+            already does this on slides 12 and 13 &mdash; extend it to 4, 14 and 22.
+          </div>
+        </div>
+        <div class="rule-item">
+          <span class="rn">7</span>
+          <div>
+            <strong>Add a takeaway strip</strong>
+            One line along the bottom of every content slide, in apricot, carrying the single sentence
+            you want remembered. It gives agents something to write down and gives you a natural
+            place to pause.
+          </div>
+        </div>
+        <div class="rule-item">
+          <span class="rn">8</span>
+          <div>
+            <strong>Number the slides and label the sections</strong>
+            The deck has dividers at 23 and 25 but no numbering and no section labels. Add slide
+            numbers and a small section name in the corner, so agents can say &ldquo;go back to
+            18&rdquo; in a live session.
+          </div>
+        </div>
+        <div class="rule-item">
+          <span class="rn">9</span>
+          <div>
+            <strong>Avoid superscript ordinals</strong>
+            The &ldquo;2<sup>nd</sup>&rdquo; on slide 24 breaks apart on export, leaving an orphaned
+            &ldquo;nd&rdquo; below the tile. Write &ldquo;second&rdquo;, or use &ldquo;Box 2&rdquo;.
+          </div>
+        </div>
+        <div class="rule-item">
+          <span class="rn">10</span>
+          <div>
+            <strong>Design the handout, not just the deck</strong>
+            Slides 15, 18, 20 and 21 are reference material agents will want beside them on a call.
+            Export those four as a one-page crib sheet. Everything else can stay presentation-only.
+          </div>
+        </div>
+      </div>
+
+      <h3>Slides worth redrawing</h3>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th style="width:10%">Slide</th><th style="width:32%">Problem</th><th style="width:58%">Recommended treatment</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="slide-ref">3</td>
+              <td>Four statements of equal weight; the day-5 point is buried in the middle</td>
+              <td>Three large stat tiles across the top, then a simple seven-day timeline strip underneath with a spike marked at day 5. The timeline is the visual the rest of the deck keeps referring back to &mdash; introduce it here and reuse it on slides 21 and 22.</td>
+            </tr>
+            <tr>
+              <td class="slide-ref">4</td>
+              <td>Two bare fragments on a mostly empty slide</td>
+              <td>Two speech bubbles in the customer&rsquo;s own words, each with a one-line diagnosis beneath in smaller type. Colour one red (subscription) and one amber (acceptance) to signal that they need different responses.</td>
+            </tr>
+            <tr>
+              <td class="slide-ref">6&ndash;9</td>
+              <td>Four dense text slides in a row; agents cannot compare formats without flicking back</td>
+              <td>Keep the four recaps, but add a fifth slide: a single comparison table of fresh, kibble, wet and raw against cook temperature, moisture, carbohydrate and processing. Add a small icon per format and reuse those same four icons on slides 18 and 20.</td>
+            </tr>
+            <tr>
+              <td class="slide-ref">11</td>
+              <td>A wide two-column table with the title stranded below it</td>
+              <td>Title at the top. Tint the myth column red and the response column green. Put each response&rsquo;s strongest six words in bold so the eye lands on the rebuttal, not the myth.</td>
+            </tr>
+            <tr>
+              <td class="slide-ref">12&ndash;13</td>
+              <td>Letter-spaced type, headline stranded between the panels</td>
+              <td>Clean two-panel split: red panel left, green panel right, headline above both, takeaway strip below. Consider one shared build: show the red panel, pause, then reveal the green.</td>
+            </tr>
+            <tr>
+              <td class="slide-ref">14</td>
+              <td>Two lists of equal weight with no visual distinction</td>
+              <td>Cross icons on the never-promise column, ticks on the promise-freely column. Same red and green as slides 12 and 13, so the three reframe slides read as a set.</td>
+            </tr>
+            <tr>
+              <td class="slide-ref">15</td>
+              <td>Four paragraphs of script; the densest slide in the deck by a distance</td>
+              <td>Four numbered beats on screen, one line each, with the full script in the speaker notes. Add a small phone icon so agents recognise instantly that this is a spoken slide and not something to read out verbatim.</td>
+            </tr>
+            <tr>
+              <td class="slide-ref">16&ndash;17</td>
+              <td>Product information as floating text labels</td>
+              <td>These are the two slides that should be photography-led. Slide 17 in particular: one tray shot cold next to the same tray warmed, with a simple temperature arrow between them. It sells the &ldquo;always warm it&rdquo; message better than any sentence.</td>
+            </tr>
+            <tr>
+              <td class="slide-ref">19</td>
+              <td>Three cards, out of sequence, no visual hierarchy</td>
+              <td>Three numbered icon cards in the order they happen: plate, microwave, clock. Put the &ldquo;most common day-one failure&rdquo; line in a red callout across the bottom &mdash; it is the best sentence on the slide.</td>
+            </tr>
+            <tr>
+              <td class="slide-ref">21</td>
+              <td>Three cards read as parallel options rather than sequential days</td>
+              <td>A horizontal three-step timeline with arrows: Day 1 &rarr; Day 2 &rarr; Day 3. The arrows do the work that the current layout leaves to the reader.</td>
+            </tr>
+            <tr>
+              <td class="slide-ref">22</td>
+              <td>A wall of small text on the most important operational slide</td>
+              <td>Reuse the seven-day timeline from slide 3, with day 5 marked as the cliff and the pre-delivery message marked two days earlier. Show the intervention landing before the cliff. That single picture is the argument.</td>
+            </tr>
+            <tr>
+              <td class="slide-ref">24</td>
+              <td>Six tiles of inconsistent length, broken superscripts, no ownership</td>
+              <td>A 3&times;2 grid of numbered tiles, each one an imperative of six words or fewer, with a small owner label and a start date. An action slide without an owner is a list of opinions.</td>
+            </tr>
+            <tr>
+              <td class="slide-ref">26</td>
+              <td>Four metric labels floating with no values and no shape</td>
+              <td>Lay it out as four KPI tiles, using the same visual style as the retention tab of the telesales dashboard. If the deck and the dashboard look the same, agents will read the dashboard.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="note">
+        <strong class="note-title">Accessibility, quickly</strong>
+        Body text no smaller than 18pt; contrast of at least 4.5:1 for body copy (apricot on white
+        fails this &mdash; use maroon); never rely on colour alone to carry meaning, so keep the
+        &ldquo;Never promise&rdquo; and &ldquo;Promise freely&rdquo; labels even when the panels are
+        red and green.
+      </div>
+    </section>
+
+    <!-- ══════════════════ QUERIES ══════════════════ -->
+    <section class="card" id="queries">
+      <h2>Author Queries</h2>
+      <p>
+        Five things a copy editor cannot resolve without you. All five affect claims made to
+        customers, so they are worth settling before the deck is rebuilt.
+      </p>
+      <div class="summary-grid">
+        <div class="summary-box watch">
+          <strong>1. The BVA claim</strong>
+          Slide 11 states that the British Veterinary Association does not recommend dry food for
+          dental care. Agents will be challenged on this. We need the exact source and its wording.
+        </div>
+        <div class="summary-box watch">
+          <strong>2. The 35% raw figure</strong>
+          Which Food Standards Agency study, and from when? Any statistic used against a competitor
+          category needs a date attached.
+        </div>
+        <div class="summary-box watch">
+          <strong>3. Dual versus single protein</strong>
+          Slide 16 labels the same product both ways. Confirm which recipes are dual protein, which
+          are single protein, and the percentages to quote for each.
+        </div>
+        <div class="summary-box watch">
+          <strong>4. The seven-day cycle</strong>
+          Slide 22 says most boxes are on a seven-day trial. Is that the delivery cadence, the trial
+          period, or both? The action &ldquo;push it back a couple of days&rdquo; needs a specific,
+          agreed number of days.
+        </div>
+        <div class="summary-box watch">
+          <strong>5. The 56.67% figure</strong>
+          Confirm the denominator: 56.67% of all pauses, or of pauses in a given period? Slide 3 then
+          says &ldquo;23% of these&rdquo;, which reads as 23% of that 57% rather than 23% of all
+          pauses.
+        </div>
+      </div>
+
+      <div class="band">
+        <span class="band-title">Suggested order of work</span>
+        <ul>
+          <li><strong>Pass one:</strong> apply the corrections log and set the document language to English (UK). Nothing structural, roughly an hour of work.</li>
+          <li><strong>Pass two:</strong> drop in the revised copy and move every headline to the top-left.</li>
+          <li><strong>Pass three:</strong> rebuild slides 12&ndash;15, 22, 24 and 26 to the layouts above, and add the takeaway strips.</li>
+          <li><strong>Pass four:</strong> resolve the five author queries, then export the four-slide crib sheet as the agent handout.</li>
+        </ul>
+      </div>
+    </section>
+
+    <div class="gingham"></div>
+
+    <footer>
+      <span class="sign">Marro &middot; Retention Programme</span>
+      Copy and design review of the <em>Retention Training</em> deck (26 slides). UK English.
+      Companion to the Retention Improvement Master Plan and the Transition
+      <span class="amp">&amp;</span> Texture training deck.
+    </footer>
+  </main>
+
+  <script>
+    document.getElementById('copyBtn').addEventListener('click', function () {
+      var text = document.getElementById('pasteBlock').innerText;
+      var button = this;
+      var done = function () {
+        button.textContent = 'Copied';
+        setTimeout(function () { button.textContent = 'Copy revised copy'; }, 2000);
+      };
+
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(done, function () { button.textContent = 'Copy failed'; });
+        return;
+      }
+
+      var area = document.createElement('textarea');
+      area.value = text;
+      document.body.appendChild(area);
+      area.select();
+      document.execCommand('copy');
+      document.body.removeChild(area);
+      done();
+    });
+  </script>
+</body>
+</html>
