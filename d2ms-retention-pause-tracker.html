@@ -1,0 +1,1245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>D2MS Retention &amp; Pause Tracker | Design Spec</title>
+  <style>
+    :root {
+      --brown: #522A10;
+      --cream: #FFF6D8;
+      --gold: #FFE180;
+      --coral: #ED6961;
+      --blue: #10507C;
+      --green: #2E7D32;
+      --amber: #B65A17;
+      --purple: #7B3FA0;
+      --paper: #FFFFFF;
+      --line: #E8D9B0;
+      --text: #2E261F;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--cream);
+      color: var(--text);
+      font-family: Arial, Verdana, sans-serif;
+      line-height: 1.45;
+    }
+
+    header {
+      background: var(--brown);
+      color: var(--gold);
+      padding: 24px;
+    }
+
+    header h1 { margin: 0 0 8px; font-size: clamp(24px, 4vw, 40px); }
+
+    header p { max-width: 820px; margin: 0 0 4px; color: #F8D98D; font-size: 18px; }
+
+    header .meta {
+      margin-top: 12px;
+      font-size: 14px;
+      color: #E8C877;
+    }
+
+    main { width: min(1180px, calc(100% - 32px)); margin: 24px auto 48px; }
+
+    .card {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      box-shadow: 0 8px 24px rgba(82, 42, 16, 0.08);
+      margin-bottom: 22px;
+      padding: 22px;
+    }
+
+    h2 { color: var(--brown); font-size: 24px; margin: 0 0 6px; }
+
+    h3 { color: var(--brown); font-size: 18px; margin: 22px 0 8px; }
+
+    h4 { color: var(--amber); font-size: 16px; margin: 16px 0 6px; }
+
+    .lede { margin: 0 0 16px; color: #5A4636; font-size: 16px; }
+
+    .step-tag {
+      display: inline-block;
+      background: var(--brown);
+      border-radius: 999px;
+      color: var(--gold);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.4px;
+      margin-bottom: 10px;
+      padding: 6px 13px;
+      text-transform: uppercase;
+    }
+
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 14px;
+    }
+
+    .kpi {
+      background: #FFF9E8;
+      border: 1px solid var(--line);
+      border-left: 6px solid var(--coral);
+      border-radius: 12px;
+      padding: 15px;
+    }
+
+    .kpi .label {
+      color: #6B5340;
+      display: block;
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+
+    .kpi .value { color: var(--brown); display: block; font-size: 30px; font-weight: 700; line-height: 1.1; }
+
+    .kpi .sub { color: #7A5A3A; display: block; font-size: 13px; margin-top: 5px; }
+
+    .kpi.blue { border-left-color: var(--blue); }
+    .kpi.green { border-left-color: var(--green); }
+    .kpi.amber { border-left-color: var(--amber); }
+    .kpi.purple { border-left-color: var(--purple); }
+
+    .table-wrap { overflow-x: auto; }
+
+    table { border-collapse: collapse; width: 100%; }
+
+    th, td {
+      border: 1px solid var(--line);
+      padding: 10px 12px;
+      text-align: left;
+      vertical-align: top;
+      font-size: 14px;
+    }
+
+    th { background: var(--brown); color: var(--gold); font-size: 13px; white-space: nowrap; }
+
+    tbody tr:nth-child(even) { background: #FFFBEF; }
+
+    td.num, th.num { text-align: right; white-space: nowrap; }
+
+    code {
+      background: #F3E9CC;
+      border-radius: 4px;
+      font-family: "Courier New", monospace;
+      font-size: 13px;
+      padding: 1px 5px;
+    }
+
+    .formula {
+      background: #2E261F;
+      border-radius: 12px;
+      color: #FFF1C2;
+      font-family: "Courier New", monospace;
+      font-size: 13px;
+      line-height: 1.55;
+      margin: 8px 0 4px;
+      overflow-x: auto;
+      padding: 14px 16px;
+      white-space: pre;
+    }
+
+    .formula .cmt { color: #9FBF8F; }
+    .formula .fn { color: #8FD3FF; }
+
+    .caption { color: #6B5340; font-size: 13px; margin: 0 0 14px; }
+
+    .note {
+      background: #EAF4FA;
+      border-left: 6px solid var(--blue);
+      border-radius: 12px;
+      margin: 14px 0;
+      padding: 15px;
+      font-size: 15px;
+    }
+
+    .warn {
+      background: #FDECEA;
+      border-left: 6px solid var(--coral);
+      border-radius: 12px;
+      margin: 14px 0;
+      padding: 15px;
+      font-size: 15px;
+    }
+
+    .good {
+      background: #EDF6EE;
+      border-left: 6px solid var(--green);
+      border-radius: 12px;
+      margin: 14px 0;
+      padding: 15px;
+      font-size: 15px;
+    }
+
+    .sev {
+      border-radius: 999px;
+      color: #fff;
+      display: inline-block;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 4px 10px;
+      text-align: center;
+      white-space: nowrap;
+    }
+
+    .sev.blocker { background: var(--coral); }
+    .sev.high { background: var(--amber); }
+    .sev.medium { background: var(--blue); }
+    .sev.low { background: #6D6257; }
+
+    ul, ol { margin: 8px 0 0; padding-left: 22px; }
+    li { margin: 6px 0; }
+
+    .cols {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+      gap: 14px;
+    }
+
+    .panel {
+      background: #FFF9E8;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 16px;
+    }
+
+    .panel h4 { margin-top: 0; }
+
+    .tabchip {
+      background: #F8E9B8;
+      border: 1px solid #E4C670;
+      border-radius: 8px;
+      color: var(--brown);
+      font-family: "Courier New", monospace;
+      font-weight: 700;
+      font-size: 13px;
+      padding: 3px 8px;
+      white-space: nowrap;
+    }
+
+    .bar-cell { min-width: 140px; }
+
+    .bar-track {
+      background: #F1E4C2;
+      border-radius: 999px;
+      height: 16px;
+      overflow: hidden;
+      position: relative;
+      width: 100%;
+    }
+
+    .bar-fill { background: var(--coral); border-radius: 999px; height: 100%; }
+    .bar-fill.blue { background: var(--blue); }
+    .bar-fill.green { background: var(--green); }
+
+    footer {
+      color: #7A5A3A;
+      font-size: 14px;
+      margin-top: 26px;
+      text-align: center;
+    }
+
+    @media (max-width: 700px) {
+      th, td { font-size: 13px; padding: 8px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>D2MS Retention &amp; Pause Tracker</h1>
+    <p>
+      A tracker design for early churn, rep attribution, product variety and pre-delivery pauses,
+      built against the <strong>Marro D2MS V3</strong> customer export.
+    </p>
+    <div class="meta">
+      Source: Marro D2MS V3 &middot; 38,656 exported rows &middot; 9,501 subscriptions &middot; 9,160 customers
+      &middot; sales dated 2025-05-13 to 2026-08-03 &middot; snapshot 2026-08-04
+    </div>
+  </header>
+
+  <main>
+
+    <!-- ============================================================ -->
+    <section class="card">
+      <h2>Read this first</h2>
+      <p class="lede">
+        The export cannot be measured as delivered. Before any of the five metrics will produce a
+        trustworthy number, the file needs de-duplicating and one column needs quarantining.
+      </p>
+
+      <div class="warn">
+        <strong>The export fans every subscription out into roughly four near-identical rows.</strong>
+        38,656 rows describe only 9,501 subscriptions (9,160 customers). Every count taken straight
+        from the raw sheet is inflated about 4&times;. The fan-out is a cross-product of
+        <code>Is Retained</code> (2 values) &times; <code>Interruption Reason</code> (blank / populated),
+        which is why 7,168 subscriptions appear exactly 4 times.
+      </div>
+
+      <div class="warn">
+        <strong><code>Is Retained (Yes / No)</code> is an exploded pivot dimension, not a fact.</strong>
+        Inside each fan-out group it splits 50/50 &mdash; a group of four always reads
+        <em>No, No, Yes, Yes</em>. Across the whole file it returns 49.3% "Yes" regardless of what
+        actually happened: customers with a second delivery split 2,508 Yes / 2,567 No, and customers
+        with no second delivery split 297 Yes / 426 No. Counting this column will always return
+        roughly half the file and tell you nothing. It must not be reported.
+      </div>
+
+      <div class="good">
+        <strong><code>14 Day Retention</code> and <code>28 Day Retention</code> are trustworthy once collapsed.</strong>
+        Unlike <code>Is Retained</code>, these never self-contradict: each subscription's group contains
+        either blanks and <code>0.00%</code>, or blanks and <code>100.00%</code>, never both
+        (0 contradictory groups out of 9,501). Take the single non-blank value per subscription and the
+        field is sound &mdash; but it arrives as <em>text</em>, and blank means "not yet eligible",
+        not "churned".
+      </div>
+
+      <h3>Baseline once the data is cleaned properly</h3>
+      <p class="caption">
+        The five requested metrics, measured on the de-duplicated table. These are the numbers the
+        tracker should reproduce on day one, so they double as its acceptance test.
+      </p>
+      <div class="kpi-grid">
+        <div class="kpi">
+          <span class="label">Early pauses, last full week</span>
+          <span class="value">48</span>
+          <span class="sub">week of 27 Jul &ndash; 2 Aug, across 9 reps (prior week: 50)</span>
+        </div>
+        <div class="kpi blue">
+          <span class="label">Avg days to first pause</span>
+          <span class="value">27.1</span>
+          <span class="sub">from sale; median just 9 days &mdash; report both</span>
+        </div>
+        <div class="kpi green">
+          <span class="label">Avg distinct recipes</span>
+          <span class="value">4.53</span>
+          <span class="sub">per subscription; only 1.6% take a single recipe</span>
+        </div>
+        <div class="kpi amber">
+          <span class="label">Pre-delivery pauses</span>
+          <span class="value">391</span>
+          <span class="sub">4.1% of sales, plus 64 more that never got a delivery date</span>
+        </div>
+        <div class="kpi purple">
+          <span class="label">Early pause rate &lt; day 7</span>
+          <span class="value">24.2%</span>
+          <span class="sub">2,260 of 9,357 sales old enough to be at risk</span>
+        </div>
+      </div>
+
+      <div class="note">
+        <strong>The headline risk:</strong> 30.2% of all pauses happen inside the first six days, and
+        <strong>40% of every pause is <code>pet_did_not_eat_food</code></strong>. Early churn is
+        overwhelmingly a food-acceptance problem, not a pricing problem &mdash; price is only 21.4%.
+        A tracker that only counts pauses will miss this; the pause-reason split is what makes it actionable.
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <section class="card">
+      <span class="step-tag">Step 1 &middot; Part A</span>
+      <h2>Data audit: what the export already gives you</h2>
+      <p class="lede">
+        42 columns, grouped by the job they do in this tracker. Fill rates are measured on the
+        de-duplicated table of 9,501 subscriptions, because raw-row fill rates are distorted by the fan-out.
+      </p>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Role in tracker</th>
+              <th>Columns</th>
+              <th class="num">Populated</th>
+              <th>Audit note</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Rep attribution</strong></td>
+              <td><code>Acquisition Discount Code</code></td>
+              <td class="num">100%</td>
+              <td>25 codes for 24 people &mdash; <code>D2MSJagoda</code> and <code>D2MSJagodaaaa</code> are the same rep, split across 361 and 214 rows. Needs an alias map.</td>
+            </tr>
+            <tr>
+              <td><strong>Sale date</strong></td>
+              <td><code>Subscription Created Date</code>, <code>Subscription Created Week</code>, <code>Subscription Created' Period Week</code>, <code>Subscription Created Year</code></td>
+              <td class="num">100%</td>
+              <td>Clean ISO dates, no unparseable values. <code>Subscription Created Week</code> is already a Monday week-start, so use it for cohorts rather than rebuilding one.</td>
+            </tr>
+            <tr>
+              <td><strong>Pause event</strong></td>
+              <td><code>First Pause Date</code>, <code>First Pause Reason</code></td>
+              <td class="num">79.4%</td>
+              <td>Date and reason are always populated together &mdash; no orphans. No pause ever precedes its sale date, so date arithmetic is safe without error guards.</td>
+            </tr>
+            <tr>
+              <td><strong>Delivery timeline</strong></td>
+              <td><code>Order 1 Delivery Date</code>, <code>Order 2 Delivery Date</code></td>
+              <td class="num">98.0% / 50.6%</td>
+              <td>190 subscriptions have no first delivery date at all &mdash; 64 of them have already paused. These cannot be assessed for pre-delivery pause and must be reported as their own bucket, not silently dropped.</td>
+            </tr>
+            <tr>
+              <td><strong>Product variety</strong></td>
+              <td><code>Distinct Recipes</code>, <code>Recipe Variety</code>, 5 &times; <code>Has &hellip; (Yes / No)</code></td>
+              <td class="num">99.4%</td>
+              <td>Ready to use. <code>Distinct Recipes</code> runs 1&ndash;7; <code>Recipe Variety</code> is just a label derived from it (<code>1 &rarr; All Same Recipe</code>). The 53 blanks coincide with blank <code>Pouch Size In Grams</code>.</td>
+            </tr>
+            <tr>
+              <td><strong>Retention outcome</strong></td>
+              <td><code>14 Day Retention</code>, <code>28 Day Retention</code></td>
+              <td class="num">92.9% / 89.3%</td>
+              <td>Usable after collapsing, but stored as text (<code>"100.00%"</code> / <code>"0.00%"</code>) so <code>AVERAGE</code> silently ignores them. Blank = not yet eligible.</td>
+            </tr>
+            <tr>
+              <td><strong>Do not report</strong></td>
+              <td><code>Is Retained (Yes / No)</code></td>
+              <td class="num">100%</td>
+              <td>Exploded pivot dimension, uncorrelated with the facts. Quarantine it.</td>
+            </tr>
+            <tr>
+              <td><strong>Do not report</strong></td>
+              <td><code>Count Animals</code></td>
+              <td class="num">100%</td>
+              <td>Always <code>1</code>, on all 38,656 rows. Carries no information; multi-pet households appear as separate rows instead (267 customers, 2.9%).</td>
+            </tr>
+            <tr>
+              <td><strong>Handle with care</strong></td>
+              <td><code>Days Since First Delivery</code></td>
+              <td class="num">98.7%</td>
+              <td>Measured from the day the file was exported, so it silently changes meaning between refreshes. Recompute from a pinned snapshot date instead.</td>
+            </tr>
+            <tr>
+              <td><strong>Segmentation</strong></td>
+              <td><code>Trial Box Duration In Days</code>, <code>Cadence In Days</code>, <code>Pouch Size In Grams</code>, <code>Eater Type</code>, <code>Body Type</code>, <code>Breed Name</code>, <code>Age In Months</code>, <code>Weight In Grams</code>, <code>Activity Level</code>, <code>Postcode</code></td>
+              <td class="num">98.5&ndash;100%</td>
+              <td>Good coverage. <code>Trial Box Duration</code> is the strongest single driver found (see Step 3). <code>Weight In Grams</code> is comma-formatted text (<code>"3,400"</code>) and needs cleaning before any numeric use.</td>
+            </tr>
+            <tr>
+              <td><strong>Secondary churn signal</strong></td>
+              <td><code>Interruption Reason</code>, <code>Interruption Subreason</code>, <code>Has Buyers Remorse</code></td>
+              <td class="num">varies</td>
+              <td>Part of the fan-out key, so these are blank on most rows by construction. Collapse per subscription. Buyers remorse is rare (186 rows) but worth a flag.</td>
+            </tr>
+            <tr>
+              <td><strong>Identity</strong></td>
+              <td><code>Admin User Link</code>, <code>Email</code>, <code>Recipient Name</code>, <code>Phone Number</code>, <code>Animal Name</code></td>
+              <td class="num">99.3&ndash;100%</td>
+              <td><code>Admin User Link</code> is the only reliable customer key; the numeric user ID must be extracted from it. Names and emails repeat across pets and are not unique.</td>
+            </tr>
+            <tr>
+              <td><strong>Sparse</strong></td>
+              <td><code>Health Issue Name</code></td>
+              <td class="num">3.0%</td>
+              <td>Too sparse to segment on. Keep as a flag (<em>has any health issue</em>) rather than a dimension.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <section class="card">
+      <span class="step-tag">Step 1 &middot; Part B</span>
+      <h2>Gap analysis: what is missing</h2>
+      <p class="lede">
+        Nine gaps stand between this export and the five requested metrics. The first three are
+        blockers: no metric is safe until they are closed.
+      </p>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Severity</th>
+              <th>Gap</th>
+              <th>Why it breaks the metrics</th>
+              <th>Fix</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="sev blocker">Blocker</span></td>
+              <td>No unique subscription key, and rows are fanned out ~4&times;</td>
+              <td>Every count, rate and average is inflated. "Total sales" reads 38,656 instead of 9,501, so the denominator of the early pause rate is wrong by 4&times;.</td>
+              <td>Build <code>Sub_Key</code> from the user ID in <code>Admin User Link</code> + <code>Animal Name</code> + <code>Subscription Created Date</code>, then keep only the first occurrence.</td>
+            </tr>
+            <tr>
+              <td><span class="sev blocker">Blocker</span></td>
+              <td><code>Is Retained</code> is an exploded dimension</td>
+              <td>Any retention figure built on it is a coin flip dressed up as a metric, and it will look plausible (~49%).</td>
+              <td>Quarantine the column. Derive retention from <code>28 Day Retention</code> collapsed per subscription, or from the pause and delivery dates.</td>
+            </tr>
+            <tr>
+              <td><span class="sev blocker">Blocker</span></td>
+              <td>No maturity filter, so cohorts are right-censored</td>
+              <td>A sale made yesterday cannot yet have paused within 7 days, but it still lands in the denominator and drags the rate down. 144 subscriptions in this file are younger than 7 days.</td>
+              <td>Add <code>Sub_Age_Days</code> and <code>Is_Mature</code>, and restrict <em>both</em> numerator and denominator to mature subscriptions.</td>
+            </tr>
+            <tr>
+              <td><span class="sev high">High</span></td>
+              <td>No date-difference helper columns</td>
+              <td>Days-to-pause, early-pause and pre-delivery flags cannot be filtered or averaged without them; nothing in the export measures elapsed time from a fixed point.</td>
+              <td>Add <code>Days_To_Pause</code>, <code>Days_Deliv_To_Pause</code>, <code>Pre_Delivery_Pause</code>, <code>Early_Pause</code>.</td>
+            </tr>
+            <tr>
+              <td><span class="sev high">High</span></td>
+              <td>No rep master table</td>
+              <td>Jagoda's results are split across two codes, so the league table understates her volume and misstates her rates. Nothing maps a code to a person, team or start date.</td>
+              <td>Add a <code>08_Rep_Lookup</code> tab: code &rarr; rep name, team, active flag, start date. Flag unmapped codes loudly.</td>
+            </tr>
+            <tr>
+              <td><span class="sev high">High</span></td>
+              <td>No dynamic "last week" logic, and no snapshot date</td>
+              <td>"Last week" has to be re-typed at every refresh, and week-over-week comparisons drift. <code>Days Since First Delivery</code> already moves silently between exports.</td>
+              <td>Pin <code>Snapshot_Date</code> once on a Control tab and derive every window from it.</td>
+            </tr>
+            <tr>
+              <td><span class="sev medium">Medium</span></td>
+              <td>Retention fields are text percentages</td>
+              <td><code>AVERAGE</code> ignores text, so a retention average returns a silent <code>0</code> or an error rather than a wrong-looking number. Blank is ambiguous between "churned" and "too soon to tell".</td>
+              <td>Convert to numeric on import and keep "not yet eligible" as a genuine blank, excluded from denominators.</td>
+            </tr>
+            <tr>
+              <td><span class="sev medium">Medium</span></td>
+              <td>Subscription grain vs customer grain is undefined</td>
+              <td>"Distinct recipes per customer" is ambiguous for the 267 customers with more than one pet, and they would be double-counted in per-customer averages.</td>
+              <td>Report per subscription as the headline, add an <code>Is_Primary_Pet</code> flag for a true per-customer cut.</td>
+            </tr>
+            <tr>
+              <td><span class="sev medium">Medium</span></td>
+              <td>No small-sample suppression</td>
+              <td>Reps with a handful of sales produce wild rates. In this file Jennifer shows 39.1% early pause on 23 sales and Yasmeen 16.7% on 6 &mdash; neither is a signal.</td>
+              <td>Set <code>Min_Cohort_Size</code> (30 suggested) and suppress rates below it instead of printing them.</td>
+            </tr>
+            <tr>
+              <td><span class="sev low">Low</span></td>
+              <td>No pause-type distinction</td>
+              <td>A deliberate skip and a churn-intent pause both land in <code>First Pause Date</code>. 6.1% of pauses say <code>i'm_coming_back</code>, which is not churn.</td>
+              <td>Classify reasons into <em>churn intent</em>, <em>deferral</em> and <em>out of our control</em>, and report early churn on churn-intent pauses too.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <section class="card">
+      <span class="step-tag">Step 2 &middot; Part A</span>
+      <h2>Control tab: one place for every parameter</h2>
+      <p class="lede">
+        Put these on <span class="tabchip">01_Control</span> and reference them everywhere. Nothing
+        downstream should contain a hard-coded date or threshold.
+      </p>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Cell</th><th>Named range</th><th>Formula / value</th><th>Purpose</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>B2</code></td><td><code>Snapshot_Date</code></td><td><code>=MAX('02_Raw_Import'!C:C, '02_Raw_Import'!D:D,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'02_Raw_Import'!I:I, '02_Raw_Import'!J:J)</code></td><td>Latest date anywhere in the file. Every age and window derives from this, so refreshes stay reproducible.</td></tr>
+            <tr><td><code>B3</code></td><td><code>Week_End</code></td><td><code>=Snapshot_Date - WEEKDAY(Snapshot_Date, 2)</code></td><td>The most recent <strong>complete</strong> Sunday. Excludes the part-week the snapshot sits in.</td></tr>
+            <tr><td><code>B4</code></td><td><code>Week_Start</code></td><td><code>=Week_End - 6</code></td><td>Monday of that week.</td></tr>
+            <tr><td><code>B5</code></td><td><code>Prior_Week_End</code></td><td><code>=Week_End - 7</code></td><td>Week-over-week comparison window.</td></tr>
+            <tr><td><code>B6</code></td><td><code>Prior_Week_Start</code></td><td><code>=Week_Start - 7</code></td><td>&nbsp;</td></tr>
+            <tr><td><code>B7</code></td><td><code>Early_Window_Days</code></td><td><code>7</code></td><td>Definition of "early". Change once here to re-cut the whole tracker at day 14 or 28.</td></tr>
+            <tr><td><code>B8</code></td><td><code>Maturity_Cutoff</code></td><td><code>=Snapshot_Date - Early_Window_Days</code></td><td>Sales after this date cannot yet have failed the test, so they are excluded from rates.</td></tr>
+            <tr><td><code>B9</code></td><td><code>Min_Cohort_Size</code></td><td><code>30</code></td><td>Below this, show <code>n/a</code> rather than a rate.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="note">
+        <strong>Why <code>WEEKDAY(date, 2)</code>:</strong> type 2 numbers Monday as 1 through Sunday as 7,
+        so subtracting it always lands on the previous Sunday. With the snapshot on Tuesday 2026-08-04 this
+        gives 2026-08-02, and <code>Week_Start</code> becomes Monday 2026-07-27 &mdash; the last week that
+        actually finished. Using the trailing 7 days instead would mix a part-week into the comparison and
+        make every Monday look artificially good.
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <section class="card">
+      <span class="step-tag">Step 2 &middot; Part B</span>
+      <h2>De-duplication: turning 38,656 rows into 9,501 subscriptions</h2>
+      <p class="lede">
+        Four helper columns on the raw import, then one query to build the clean base table.
+        This is the step that makes every later number correct.
+      </p>
+
+      <h4>1. Helper columns appended to <span class="tabchip">02_Raw_Import</span></h4>
+      <p class="caption">Paste the export into <code>A:AP</code> untouched, then add these to the right of it.</p>
+
+      <div class="formula"><span class="cmt">AR2  Sub_Key — the identity the export never provided</span>
+=IF($W2="", "", <span class="fn">REGEXEXTRACT</span>($W2, "users/(\d+)") &amp; "|" &amp;
+      <span class="fn">LOWER</span>(<span class="fn">TRIM</span>($M2)) &amp; "|" &amp; <span class="fn">TEXT</span>($C2, "yyyy-mm-dd"))
+
+<span class="cmt">AS2  Row_Seq — 1 on the first row of each fan-out group, 2+ on the copies</span>
+=IF($AR2="", "", <span class="fn">COUNTIF</span>($AR$2:$AR2, $AR2))
+
+<span class="cmt">AT2  Ret14_Num — text percentage to a real number, blank stays blank</span>
+=IF($AK2="", "", IF(<span class="fn">ISNUMBER</span>($AK2), $AK2, <span class="fn">IFERROR</span>(<span class="fn">VALUE</span>($AK2), "")))
+
+<span class="cmt">AU2  Ret28_Num — same treatment for the 28-day field</span>
+=IF($AL2="", "", IF(<span class="fn">ISNUMBER</span>($AL2), $AL2, <span class="fn">IFERROR</span>(<span class="fn">VALUE</span>($AL2), "")))</div>
+
+      <div class="note">
+        <code>Sub_Key</code> includes the created date deliberately. There are no resubscriptions in the
+        current file, but if a customer ever resubscribes the same pet, a key of user + pet alone would
+        merge two genuine sales into one and quietly understate volume.
+      </div>
+
+      <h4>2. Build <span class="tabchip">03_Base</span> &mdash; one row per subscription</h4>
+      <p class="caption">
+        A single formula in <code>A2</code>. The <code>Col43 = 1</code> filter is what removes the fan-out.
+        Tab names beginning with a digit must be single-quoted in Sheets formulas, as below.
+      </p>
+
+      <div class="formula"><span class="cmt">'03_Base'!A2 — keeps only the first row of each fan-out group</span>
+=<span class="fn">QUERY</span>(
+   {'02_Raw_Import'!$B$2:$AP, '02_Raw_Import'!$AR$2:$AS},
+   "select Col42, Col1, Col2, Col3, Col4, Col8, Col9, Col12, Col21, Col39, Col41, Col35
+    where Col43 = 1", 0)
+
+<span class="cmt">Resulting columns:</span>
+<span class="cmt">A Sub_Key   B Rep_Code    C Created    D Pause      E Pause_Reason  F Deliv_1</span>
+<span class="cmt">G Deliv_2   H Animal      I Trial_Days J Cohort_Week K Recipes       L Recipe_Variety</span></div>
+
+      <h4>3. Derived columns on <span class="tabchip">03_Base</span></h4>
+      <p class="caption">
+        These are the fields the export is missing entirely. Every metric in Step 2C reads from them,
+        which keeps the dashboard formulas short enough to audit by eye.
+      </p>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Col</th><th>Named range</th><th>Formula (row 2)</th><th>Why</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>M</code></td><td><code>Rep_Name</code></td>
+              <td><code>=IFERROR(VLOOKUP($B2, Rep_Lookup, 2, FALSE), "UNMAPPED: "&amp;$B2)</code></td>
+              <td>Merges <code>D2MSJagoda</code> / <code>D2MSJagodaaaa</code>. The <code>UNMAPPED</code> prefix makes a new rep code impossible to miss.</td>
+            </tr>
+            <tr>
+              <td><code>N</code></td><td><code>Days_To_Pause</code></td>
+              <td><code>=IF(OR($D2="", $C2=""), "", $D2-$C2)</code></td>
+              <td>Metric 2 and the &lt; day 7 test. Plain subtraction beats <code>DATEDIF</code>, which errors on negative gaps.</td>
+            </tr>
+            <tr>
+              <td><code>O</code></td><td><code>Days_Deliv_To_Pause</code></td>
+              <td><code>=IF(OR($D2="", $F2=""), "", $D2-$F2)</code></td>
+              <td>The delivery-anchored view of metric 2. Goes negative for pre-delivery pauses, which is the signal, not an error.</td>
+            </tr>
+            <tr>
+              <td><code>P</code></td><td><code>Pre_Delivery_Pause</code></td>
+              <td><code>=IF(AND($D2&lt;&gt;"", $F2&lt;&gt;"", $D2&lt;$F2), 1, 0)</code></td>
+              <td>Metric 4. Summing a 1/0 flag is cheaper and easier to audit than a nested <code>COUNTIFS</code>.</td>
+            </tr>
+            <tr>
+              <td><code>Q</code></td><td><code>Paused_No_Delivery</code></td>
+              <td><code>=IF(AND($D2&lt;&gt;"", $F2=""), 1, 0)</code></td>
+              <td>The 64 subscriptions that paused with no delivery date. Arguably the worst outcome, and invisible to metric 4.</td>
+            </tr>
+            <tr>
+              <td><code>R</code></td><td><code>Sub_Age_Days</code></td>
+              <td><code>=IF($C2="", "", Snapshot_Date-$C2)</code></td>
+              <td>Replaces the export's <code>Days Since First Delivery</code>, which shifts every refresh.</td>
+            </tr>
+            <tr>
+              <td><code>S</code></td><td><code>Is_Mature</code></td>
+              <td><code>=IF($R2="", 0, IF($R2&gt;=Early_Window_Days, 1, 0))</code></td>
+              <td>The censoring guard. Gates every rate in the tracker.</td>
+            </tr>
+            <tr>
+              <td><code>T</code></td><td><code>Early_Pause</code></td>
+              <td><code>=IF(AND($N2&lt;&gt;"", $N2&gt;=0, $N2&lt;Early_Window_Days), 1, 0)</code></td>
+              <td>Metrics 1 and 5. The <code>&gt;=0</code> test stops a bad date silently counting as early.</td>
+            </tr>
+            <tr>
+              <td><code>U</code></td><td><code>Pause_Week</code></td>
+              <td><code>=IF($D2="", "", $D2-WEEKDAY($D2, 3))</code></td>
+              <td>Monday of the pause week, for "when did pauses happen" trends. Distinct from <code>Cohort_Week</code>, which is when the sale happened.</td>
+            </tr>
+            <tr>
+              <td><code>V</code></td><td><code>Ret_14</code></td>
+              <td><code>=IF(COUNTIFS(Raw_Sub_Key, $A2, Raw_Ret14_Txt, "&lt;&gt;")=0, "",<br>&nbsp;&nbsp;&nbsp;MAXIFS(Raw_Ret14_Num, Raw_Sub_Key, $A2))</code></td>
+              <td>Collapses the fan-out to the one real value. The <code>COUNTIFS</code> guard keeps "not yet eligible" blank instead of turning it into a <code>0</code>.</td>
+            </tr>
+            <tr>
+              <td><code>W</code></td><td><code>Ret_28</code></td>
+              <td><code>=IF(COUNTIFS(Raw_Sub_Key, $A2, Raw_Ret28_Txt, "&lt;&gt;")=0, "",<br>&nbsp;&nbsp;&nbsp;MAXIFS(Raw_Ret28_Num, Raw_Sub_Key, $A2))</code></td>
+              <td>Same, for the 28-day field. This is the retention number to report instead of <code>Is Retained</code>.</td>
+            </tr>
+            <tr>
+              <td><code>X</code></td><td><code>User_ID</code></td>
+              <td><code>=IFERROR(REGEXEXTRACT($A2, "^([^|]+)"), "")</code></td>
+              <td>Customer-level grouping, pulled back out of the key.</td>
+            </tr>
+            <tr>
+              <td><code>Y</code></td><td><code>Is_Primary_Pet</code></td>
+              <td><code>=IF(COUNTIF($X$2:$X2, $X2)=1, 1, 0)</code></td>
+              <td>One row per customer, so per-customer averages do not double-count the 267 multi-pet households.</td>
+            </tr>
+            <tr>
+              <td><code>Z</code></td><td><code>Pause_Class</code></td>
+              <td><code>=IFS($D2="", "No pause",<br>&nbsp;&nbsp;COUNTIF(Deferral_Reasons, $E2)&gt;0, "Deferral",<br>&nbsp;&nbsp;COUNTIF(Uncontrollable_Reasons, $E2)&gt;0, "Out of our control",<br>&nbsp;&nbsp;TRUE, "Churn intent")</code></td>
+              <td>Separates the 6.1% <code>i'm_coming_back</code> deferrals and 3.6% bereavements from real churn, so coaching targets what reps can influence.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <section class="card">
+      <span class="step-tag">Step 2 &middot; Part C</span>
+      <h2>The five metrics</h2>
+      <p class="lede">
+        Each metric is given as a Google Sheets formula against the named ranges above, with the SQL
+        equivalent for when this moves off a spreadsheet. Every one reads from <code>03_Base</code>,
+        never from the raw import.
+      </p>
+
+      <h3>Metric 1 &middot; Early pauses last week, by rep</h3>
+      <p class="caption">
+        On <span class="tabchip">05_Rep_Performance</span> with the rep name in <code>$A2</code>.
+        Counts pauses that <em>happened</em> last week and were <em>early</em> relative to their own sale date &mdash;
+        two different conditions that are easy to conflate.
+      </p>
+      <div class="formula"><span class="cmt">Early pauses last week for this rep</span>
+=<span class="fn">COUNTIFS</span>(Rep_Name, $A2,
+           Pause, "&gt;="&amp;Week_Start,
+           Pause, "&lt;="&amp;Week_End,
+           Early_Pause, 1)
+
+<span class="cmt">Same window, prior week — for the week-over-week arrow</span>
+=<span class="fn">COUNTIFS</span>(Rep_Name, $A2,
+           Pause, "&gt;="&amp;Prior_Week_Start,
+           Pause, "&lt;="&amp;Prior_Week_End,
+           Early_Pause, 1)
+
+<span class="cmt">All pauses last week, early or not — the context column</span>
+=<span class="fn">COUNTIFS</span>(Rep_Name, $A2, Pause, "&gt;="&amp;Week_Start, Pause, "&lt;="&amp;Week_End)
+
+<span class="cmt">Team total for the summary tile</span>
+=<span class="fn">SUMIFS</span>(Early_Pause, Pause, "&gt;="&amp;Week_Start, Pause, "&lt;="&amp;Week_End)</div>
+
+      <div class="formula"><span class="cmt">SQL equivalent</span>
+<span class="fn">SELECT</span> rep_name,
+       <span class="fn">COUNT</span>(*) <span class="fn">AS</span> pauses_last_week,
+       <span class="fn">COUNT</span>(*) <span class="fn">FILTER</span> (<span class="fn">WHERE</span> first_pause_date - created_date &lt; 7) <span class="fn">AS</span> early_pauses
+<span class="fn">FROM</span>   base_subscriptions
+<span class="fn">WHERE</span>  first_pause_date <span class="fn">BETWEEN</span> :week_start <span class="fn">AND</span> :week_end
+<span class="fn">GROUP BY</span> rep_name
+<span class="fn">ORDER BY</span> early_pauses <span class="fn">DESC</span>;</div>
+
+      <div class="note">
+        <strong>Current reading (27 Jul &ndash; 2 Aug):</strong> 48 early pauses out of 164 total pauses,
+        against 50 the week before. Franco leads on volume with 10, but Jennifer is the one to look at:
+        6 of her 7 pauses that week were early, versus 10 of Franco's 32.
+      </div>
+
+      <h3>Metric 2 &middot; Average days to pause</h3>
+      <p class="caption">
+        Report the mean and the median together. The mean is 27.1 days and the median is 9 &mdash; a long
+        tail of late pauses is hiding how fast the typical customer leaves.
+      </p>
+      <div class="formula"><span class="cmt">From sale date — the headline</span>
+=<span class="fn">IFERROR</span>(<span class="fn">AVERAGEIFS</span>(Days_To_Pause, Days_To_Pause, "&gt;=0"), "n/a")
+
+<span class="cmt">Median, which is the more honest single number here</span>
+=<span class="fn">IFERROR</span>(<span class="fn">MEDIAN</span>(<span class="fn">FILTER</span>(Days_To_Pause, Days_To_Pause&lt;&gt;"")), "n/a")
+
+<span class="cmt">From first delivery — includes negatives, so no filter</span>
+=<span class="fn">IFERROR</span>(<span class="fn">AVERAGE</span>(<span class="fn">FILTER</span>(Days_Deliv_To_Pause, Days_Deliv_To_Pause&lt;&gt;"")), "n/a")
+
+<span class="cmt">Per rep, for the league table</span>
+=<span class="fn">IFERROR</span>(<span class="fn">AVERAGEIFS</span>(Days_To_Pause, Rep_Name, $A2, Days_To_Pause, "&gt;=0"), "n/a")</div>
+
+      <div class="formula"><span class="cmt">SQL equivalent</span>
+<span class="fn">SELECT</span> <span class="fn">AVG</span>(first_pause_date - created_date)                                  <span class="fn">AS</span> mean_days_to_pause,
+       <span class="fn">PERCENTILE_CONT</span>(0.5) <span class="fn">WITHIN GROUP</span> (<span class="fn">ORDER BY</span> first_pause_date - created_date) <span class="fn">AS</span> median_days,
+       <span class="fn">AVG</span>(first_pause_date - order_1_delivery_date)                       <span class="fn">AS</span> mean_days_from_delivery
+<span class="fn">FROM</span>   base_subscriptions
+<span class="fn">WHERE</span>  first_pause_date <span class="fn">IS NOT NULL</span>;</div>
+
+      <h3>Metric 3 &middot; Recipe diversity</h3>
+      <p class="caption">
+        <code>Distinct Recipes</code> is already a count, so this is the one metric the export supports
+        directly. The <code>"&gt;0"</code> criterion excludes the 53 blanks rather than scoring them zero.
+      </p>
+      <div class="formula"><span class="cmt">Per subscription — the headline figure</span>
+=<span class="fn">IFERROR</span>(<span class="fn">AVERAGEIF</span>(Recipes, "&gt;0"), "n/a")
+
+<span class="cmt">Per customer — excludes the 267 multi-pet households' extra pets</span>
+=<span class="fn">IFERROR</span>(<span class="fn">AVERAGEIFS</span>(Recipes, Is_Primary_Pet, 1, Recipes, "&gt;0"), "n/a")
+
+<span class="cmt">Per rep, to spot who is selling narrow baskets</span>
+=<span class="fn">IFERROR</span>(<span class="fn">AVERAGEIFS</span>(Recipes, Rep_Name, $A2, Recipes, "&gt;0"), "n/a")
+
+<span class="cmt">Share on a single recipe — the concentration risk</span>
+=<span class="fn">IFERROR</span>(<span class="fn">COUNTIF</span>(Recipes, 1) / <span class="fn">COUNTIF</span>(Recipes, "&gt;0"), "n/a")</div>
+
+      <div class="formula"><span class="cmt">SQL equivalent</span>
+<span class="fn">SELECT</span> <span class="fn">AVG</span>(distinct_recipes)                                                        <span class="fn">AS</span> avg_recipes,
+       <span class="fn">AVG</span>(distinct_recipes) <span class="fn">FILTER</span> (<span class="fn">WHERE</span> is_primary_pet)                       <span class="fn">AS</span> avg_recipes_per_customer,
+       <span class="fn">COUNT</span>(*) <span class="fn">FILTER</span> (<span class="fn">WHERE</span> distinct_recipes = 1)::numeric / <span class="fn">COUNT</span>(*)      <span class="fn">AS</span> single_recipe_share
+<span class="fn">FROM</span>   base_subscriptions
+<span class="fn">WHERE</span>  distinct_recipes <span class="fn">IS NOT NULL</span>;</div>
+
+      <h3>Metric 4 &middot; Pre-delivery pauses</h3>
+      <p class="caption">
+        Report the companion count alongside it. 391 subscriptions paused before their first delivery,
+        and a further 64 paused having never been given a delivery date at all &mdash; the strict
+        <code>Pause &lt; Delivery</code> test cannot see those.
+      </p>
+      <div class="formula"><span class="cmt">Headline count</span>
+=<span class="fn">SUM</span>(Pre_Delivery_Pause)
+
+<span class="cmt">As a share of all sales</span>
+=<span class="fn">IFERROR</span>(<span class="fn">SUM</span>(Pre_Delivery_Pause) / <span class="fn">COUNTA</span>(Sub_Key), "n/a")
+
+<span class="cmt">The blind spot — paused, never had a delivery date</span>
+=<span class="fn">SUM</span>(Paused_No_Delivery)
+
+<span class="cmt">Per rep</span>
+=<span class="fn">SUMIFS</span>(Pre_Delivery_Pause, Rep_Name, $A2)
+
+<span class="cmt">Last week only, for the weekly pack</span>
+=<span class="fn">SUMIFS</span>(Pre_Delivery_Pause, Pause, "&gt;="&amp;Week_Start, Pause, "&lt;="&amp;Week_End)</div>
+
+      <div class="formula"><span class="cmt">SQL equivalent</span>
+<span class="fn">SELECT</span> <span class="fn">COUNT</span>(*) <span class="fn">FILTER</span> (<span class="fn">WHERE</span> first_pause_date &lt; order_1_delivery_date)      <span class="fn">AS</span> pre_delivery_pauses,
+       <span class="fn">COUNT</span>(*) <span class="fn">FILTER</span> (<span class="fn">WHERE</span> first_pause_date <span class="fn">IS NOT NULL</span>
+                             <span class="fn">AND</span> order_1_delivery_date <span class="fn">IS NULL</span>)          <span class="fn">AS</span> paused_never_delivered,
+       <span class="fn">ROUND</span>(100.0 * <span class="fn">COUNT</span>(*) <span class="fn">FILTER</span> (<span class="fn">WHERE</span> first_pause_date &lt; order_1_delivery_date)
+             / <span class="fn">COUNT</span>(*), 1)                                                <span class="fn">AS</span> pre_delivery_pct
+<span class="fn">FROM</span>   base_subscriptions;</div>
+
+      <div class="warn">
+        <strong>Where the pre-delivery problem actually is.</strong> 60% of pre-delivery pauses say
+        <code>do_not_want_subscription</code> (233 of 391) and 18% say <code>i'm_coming_back</code> (70) &mdash;
+        against just 1.8% saying <code>pet_did_not_eat_food</code>. These customers are cancelling before
+        they have tried anything, which points at the sale itself rather than the product. Christian's rate
+        is 8.8% against a 4.1% average, and Braden's is 1.8% &mdash; a fivefold spread that a
+        rep-level cut will surface immediately.
+      </div>
+
+      <h3>Metric 5 &middot; Early pause rate (&lt; day 7)</h3>
+      <p class="caption">
+        The one metric where the maturity filter genuinely changes the answer. Both numerator and
+        denominator must be drawn from the same mature cohort.
+      </p>
+      <div class="formula"><span class="cmt">Overall, with a small-sample guard</span>
+=IF(<span class="fn">COUNTIFS</span>(Created, "&lt;="&amp;Maturity_Cutoff) &lt; Min_Cohort_Size,
+    "n/a",
+    <span class="fn">SUMIFS</span>(Early_Pause, Created, "&lt;="&amp;Maturity_Cutoff)
+      / <span class="fn">COUNTIFS</span>(Created, "&lt;="&amp;Maturity_Cutoff))
+
+<span class="cmt">Per rep — same guard, so thin reps show n/a instead of noise</span>
+=IF(<span class="fn">COUNTIFS</span>(Rep_Name, $A2, Created, "&lt;="&amp;Maturity_Cutoff) &lt; Min_Cohort_Size,
+    "n/a",
+    <span class="fn">SUMIFS</span>(Early_Pause, Rep_Name, $A2, Created, "&lt;="&amp;Maturity_Cutoff)
+      / <span class="fn">COUNTIFS</span>(Rep_Name, $A2, Created, "&lt;="&amp;Maturity_Cutoff))
+
+<span class="cmt">Per cohort week — this drives the trend chart</span>
+=IF(<span class="fn">COUNTIFS</span>(Cohort_Week, $A2, Created, "&lt;="&amp;Maturity_Cutoff) &lt; Min_Cohort_Size,
+    "n/a",
+    <span class="fn">SUMIFS</span>(Early_Pause, Cohort_Week, $A2, Created, "&lt;="&amp;Maturity_Cutoff)
+      / <span class="fn">COUNTIFS</span>(Cohort_Week, $A2, Created, "&lt;="&amp;Maturity_Cutoff))</div>
+
+      <div class="formula"><span class="cmt">SQL equivalent</span>
+<span class="fn">SELECT</span> cohort_week,
+       <span class="fn">COUNT</span>(*)                                                       <span class="fn">AS</span> mature_sales,
+       <span class="fn">COUNT</span>(*) <span class="fn">FILTER</span> (<span class="fn">WHERE</span> first_pause_date - created_date &lt; 7) <span class="fn">AS</span> early_pauses,
+       <span class="fn">ROUND</span>(100.0 * <span class="fn">COUNT</span>(*) <span class="fn">FILTER</span> (<span class="fn">WHERE</span> first_pause_date - created_date &lt; 7)
+             / <span class="fn">COUNT</span>(*), 1)                                            <span class="fn">AS</span> early_pause_rate
+<span class="fn">FROM</span>   base_subscriptions
+<span class="fn">WHERE</span>  created_date &lt;= :snapshot_date - 7   <span class="cmt">-- maturity filter, both sides</span>
+<span class="fn">GROUP BY</span> cohort_week
+<span class="fn">HAVING</span> <span class="fn">COUNT</span>(*) &gt;= 30                       <span class="cmt">-- small-sample suppression</span>
+<span class="fn">ORDER BY</span> cohort_week;</div>
+
+      <div class="warn">
+        <strong>The trap this filter avoids.</strong> Mixing a full-cohort numerator with a mature-only
+        denominator makes the newest week of this file read <strong>56.6%</strong> against a true
+        <strong>34.2%</strong>. Left unguarded, that lands as a fabricated crisis in the newest week,
+        every single week &mdash; and it always points at whoever sold most recently.
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <section class="card">
+      <span class="step-tag">Step 3 &middot; Part A</span>
+      <h2>Tab structure</h2>
+      <p class="lede">
+        Eleven tabs in a strict one-way flow: parameters, then raw, then clean, then presentation.
+        Numbered so the order survives other people editing the file, and so nothing downstream ever
+        writes back upstream.
+      </p>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Tab</th><th>Purpose</th><th>Contents</th><th>Audience</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="tabchip">00_README</span></td>
+              <td>Definitions and ownership</td>
+              <td>What "early pause" and "retained" mean, refresh cadence, owner, changelog, and the standing warning about <code>Is Retained</code>.</td>
+              <td>Anyone new</td>
+            </tr>
+            <tr>
+              <td><span class="tabchip">01_Control</span></td>
+              <td>Every parameter</td>
+              <td>Snapshot date, week windows, <code>Early_Window_Days</code>, <code>Min_Cohort_Size</code>, reason classification lists.</td>
+              <td>Analyst</td>
+            </tr>
+            <tr>
+              <td><span class="tabchip">02_Raw_Import</span></td>
+              <td>Untouched export</td>
+              <td>Columns <code>A:AP</code> pasted as-is; only <code>AR:AU</code> helpers added. Never edited by hand, never sorted.</td>
+              <td>Analyst</td>
+            </tr>
+            <tr>
+              <td><span class="tabchip">03_Base</span></td>
+              <td>The single source of truth</td>
+              <td>One row per subscription plus the derived columns. Everything else reads from here.</td>
+              <td>Analyst</td>
+            </tr>
+            <tr>
+              <td><span class="tabchip">04_Exec_Summary</span></td>
+              <td>The one-screen view</td>
+              <td>The five KPI tiles with week-over-week arrows, sparklines, snapshot date, and a red banner if data-quality checks fail.</td>
+              <td>Leadership</td>
+            </tr>
+            <tr>
+              <td><span class="tabchip">05_Rep_Performance</span></td>
+              <td>Rep attribution</td>
+              <td>League table: mature sales, early pauses and rate, pre-delivery pauses, avg days to pause, avg recipes, 28-day retention. Suppressed below 30 sales.</td>
+              <td>Sales managers</td>
+            </tr>
+            <tr>
+              <td><span class="tabchip">06_Pause_Deep_Dive</span></td>
+              <td>Why customers pause</td>
+              <td>Reason &times; timing-bucket matrix, reason mix by week, reason mix by rep, deferral vs churn-intent split.</td>
+              <td>Retention lead</td>
+            </tr>
+            <tr>
+              <td><span class="tabchip">07_Weekly_Trend</span></td>
+              <td>Chart feeder</td>
+              <td>One row per cohort week with sales, mature count, early pauses, rate, pre-delivery pauses, 14/28-day retention. Suppressed rows carry a reason.</td>
+              <td>Analyst</td>
+            </tr>
+            <tr>
+              <td><span class="tabchip">08_Rep_Lookup</span></td>
+              <td>Rep master</td>
+              <td>Discount code &rarr; rep name, team, active flag, start date. Where <code>D2MSJagodaaaa</code> gets folded into <code>Jagoda</code>.</td>
+              <td>Ops</td>
+            </tr>
+            <tr>
+              <td><span class="tabchip">09_Data_Quality</span></td>
+              <td>Trust checks</td>
+              <td>Automated pass/fail assertions, run on every refresh. See Part C.</td>
+              <td>Analyst</td>
+            </tr>
+            <tr>
+              <td><span class="tabchip">10_Action_List</span></td>
+              <td>Who to call</td>
+              <td>Live at-risk customers: sold, delivered, not yet paused, inside the first 14 days, with the admin link. The tracker's only operational output.</td>
+              <td>Retention team</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="note">
+        <strong>Why <code>02_Raw_Import</code> stays untouched.</strong> Re-pasting the export is the one
+        step done by hand every week, and it is where trackers usually break. If the raw tab holds no
+        manual edits and no sorting, a bad paste can be undone by pasting again &mdash; nothing else in
+        the file carries state.
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <section class="card">
+      <span class="step-tag">Step 3 &middot; Part B</span>
+      <h2>Charts and visuals</h2>
+      <p class="lede">
+        Six visuals cover the brief. The first two answer "is it getting better or worse", the next two
+        answer "who and why", and the last two are the ones that will actually change behaviour.
+      </p>
+
+      <div class="cols">
+        <div class="panel">
+          <h4>1. Early pause rate, week over week</h4>
+          <p><strong>Combo chart</strong> on <span class="tabchip">07_Weekly_Trend</span>: columns for weekly sales volume, line on a secondary axis for early pause rate.</p>
+          <ul>
+            <li>Plot cohort week on the x-axis, not pause week &mdash; you are judging the sale, not the calendar.</li>
+            <li>Leave suppressed weeks as genuine gaps. Do not plot a zero; a line dropping to the floor reads as success.</li>
+            <li>Add a target line. The average across the last 11 fully mature weeks is 27.8%.</li>
+          </ul>
+        </div>
+
+        <div class="panel">
+          <h4>2. Retention curve by cohort</h4>
+          <p><strong>Line chart</strong>, two series: 14-day and 28-day retention by cohort week, from the collapsed <code>Ret_14</code> and <code>Ret_28</code>.</p>
+          <ul>
+            <li>Current baseline: 45.1% at 14 days, 48.8% at 28 days.</li>
+            <li>28-day sitting above 14-day is a censoring artefact, not a recovery &mdash; different cohorts are eligible for each. Footnote it or the chart will be misread.</li>
+            <li>Show the eligible count next to each point.</li>
+          </ul>
+        </div>
+
+        <div class="panel">
+          <h4>3. Pause reason mix over time</h4>
+          <p><strong>100% stacked column</strong>: reason share by pause week, on <span class="tabchip">06_Pause_Deep_Dive</span>.</p>
+          <ul>
+            <li>Group the long tail below 2% into "Other" &mdash; there are 12 raw reasons and half are noise.</li>
+            <li>Order the stack by size, with <code>pet_did_not_eat_food</code> at the base so the trend is readable.</li>
+            <li>The shift to watch: <code>do_not_want_subscription</code> is 21.5% of all pauses but 26.5% of early ones.</li>
+          </ul>
+        </div>
+
+        <div class="panel">
+          <h4>4. Rep scatter, rate against volume</h4>
+          <p><strong>Bubble chart</strong>: sales volume on x, early pause rate on y, bubble size = pre-delivery pauses.</p>
+          <ul>
+            <li>Far better than a ranked list: it separates genuinely poor rates from small-sample noise visually.</li>
+            <li>Draw the team average as a crosshair to make four quadrants.</li>
+            <li>Christian lands high-volume and high-rate (736 sales, 32.5%); Jakub is the opposite corner (285 sales, 14.4%).</li>
+          </ul>
+        </div>
+
+        <div class="panel">
+          <h4>5. Days-to-pause histogram</h4>
+          <p><strong>Column chart</strong> over fixed buckets: day 0, 1&ndash;3, 4&ndash;6, 7&ndash;13, 14&ndash;27, 28&ndash;55, 56+.</p>
+          <ul>
+            <li>This is the chart that justifies the whole programme: 30.2% of pauses land before day 7 and 57.7% before day 14.</li>
+            <li>Shade the pre-day-7 bars in the alert colour to anchor the definition visually.</li>
+            <li>Overlay last week's distribution as a line to see whether intervention is shifting the shape rightwards.</li>
+          </ul>
+        </div>
+
+        <div class="panel">
+          <h4>6. Recipe variety against retention</h4>
+          <p><strong>Combo chart</strong>: columns of subscription counts by <code>Distinct Recipes</code> (1&ndash;7), line for 28-day retention.</p>
+          <ul>
+            <li>The signal is real: 7 recipes gives 56.4% retention and 19.3% early pause, against 46.7% and 25.1% at 4 recipes.</li>
+            <li>4 recipes is the default-looking mode at 4,778 of 9,448 subscriptions &mdash; likely a preset rather than a choice.</li>
+            <li>Treat as correlation. Engaged customers may simply pick more recipes, so validate before setting a rep target.</li>
+          </ul>
+        </div>
+      </div>
+
+      <h3>Conditional formatting rules worth setting up</h3>
+      <ul>
+        <li><strong>Rep league table:</strong> colour scale on early pause rate, green at 15% through red at 35%, so the eye goes to the outliers rather than the top of the list.</li>
+        <li><strong>Suppressed cells:</strong> render <code>n/a</code> in grey italic. It must be obvious that a number is withheld rather than zero.</li>
+        <li><strong>Unmapped rep codes:</strong> red fill on any <code>Rep_Name</code> starting <code>UNMAPPED</code>, so a new discount code is caught on the first refresh.</li>
+        <li><strong>Snapshot staleness:</strong> amber banner on <span class="tabchip">04_Exec_Summary</span> when <code>Snapshot_Date</code> is more than 8 days old.</li>
+      </ul>
+    </section>
+
+    <!-- ============================================================ -->
+    <section class="card">
+      <span class="step-tag">Step 3 &middot; Part C</span>
+      <h2>Data quality checks</h2>
+      <p class="lede">
+        Put these on <span class="tabchip">09_Data_Quality</span> as pass/fail assertions and surface any
+        failure as a banner on the summary tab. Each one corresponds to a way this specific export has
+        already been observed to mislead.
+      </p>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Check</th><th>Test</th><th>Expected</th><th>Catches</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Fan-out removed</td>
+              <td><code>=COUNTA(Sub_Key)</code> vs <code>=COUNTA(Raw_Sub_Key)</code></td>
+              <td>Base is roughly a quarter of raw; base has no duplicate keys</td>
+              <td>A failed de-dupe, which inflates every count about 4&times;</td>
+            </tr>
+            <tr>
+              <td>Keys unique</td>
+              <td><code>=COUNTA(Sub_Key)-COUNTA(UNIQUE(Sub_Key))</code></td>
+              <td><code>0</code></td>
+              <td>Fan-out groups the key failed to collapse</td>
+            </tr>
+            <tr>
+              <td>No negative ages</td>
+              <td><code>=COUNTIFS(Days_To_Pause, "&lt;0")</code></td>
+              <td><code>0</code></td>
+              <td>A pause dated before its own sale &mdash; currently clean, so any hit is a new upstream bug</td>
+            </tr>
+            <tr>
+              <td>Retention not contradictory</td>
+              <td>Per key, count distinct non-blank <code>28 Day Retention</code> values</td>
+              <td>Never more than <code>1</code></td>
+              <td>The collapse silently picking a value where the source disagrees</td>
+            </tr>
+            <tr>
+              <td>All reps mapped</td>
+              <td><code>=COUNTIF(Rep_Name, "UNMAPPED*")</code></td>
+              <td><code>0</code></td>
+              <td>New or misspelled discount codes falling out of the league table</td>
+            </tr>
+            <tr>
+              <td>Pause date and reason agree</td>
+              <td><code>=SUMPRODUCT((Pause&lt;&gt;"")*(Pause_Reason=""))</code></td>
+              <td><code>0</code></td>
+              <td>Partial pause records that would skew the reason mix</td>
+            </tr>
+            <tr>
+              <td>Snapshot is fresh</td>
+              <td><code>=TODAY()-Snapshot_Date</code></td>
+              <td><code>&lt;= 8</code></td>
+              <td>A stale paste being read as current performance</td>
+            </tr>
+            <tr>
+              <td>Retention never counted from <code>Is Retained</code></td>
+              <td>Manual review: no formula references column <code>AG</code></td>
+              <td>No references</td>
+              <td>The 49.3% coin-flip creeping back into a report</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <section class="card">
+      <h2>What the data already says</h2>
+      <p class="lede">
+        Findings from the current export that the tracker should be built to keep surfacing. These are
+        the reasons to build it, and the first things to check once it exists.
+      </p>
+
+      <h3>Early churn is a food-acceptance problem</h3>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Pause reason</th><th class="num">All pauses</th><th class="num">Share</th><th class="num">Early (&lt;7d)</th><th class="num">Share of early</th><th>Reading</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>pet_did_not_eat_food</code></td><td class="num">3,017</td><td class="num">40.0%</td><td class="num">828</td><td class="num">36.4%</td><td>The dominant cause at every stage. A product and transition problem, not a sales one.</td></tr>
+            <tr><td><code>do_not_want_subscription</code></td><td class="num">1,622</td><td class="num">21.5%</td><td class="num">603</td><td class="num">26.5%</td><td>Over-represented early, and 60% of pre-delivery pauses. Points at expectation-setting on the call.</td></tr>
+            <tr><td><code>price</code></td><td class="num">1,612</td><td class="num">21.4%</td><td class="num">433</td><td class="num">19.0%</td><td>Under-represented early. Price drives later churn, not first-week churn.</td></tr>
+            <tr><td><code>i'm_coming_back</code></td><td class="num">463</td><td class="num">6.1%</td><td class="num">165</td><td class="num">7.2%</td><td>A deferral, not churn. Counting it as churn overstates the problem.</td></tr>
+            <tr><td><code>marro_is_too_inconvenient_for_me</code></td><td class="num">259</td><td class="num">3.4%</td><td class="num">103</td><td class="num">4.5%</td><td>Skews early. Usually a cadence or portion mismatch set at point of sale.</td></tr>
+            <tr><td>Bereavement and health</td><td class="num">450</td><td class="num">6.0%</td><td class="num">90</td><td class="num">4.0%</td><td>Outside anyone's control. Exclude from rep scorecards.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>The 14-day trial box materially outperforms the 7-day</h3>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Trial box</th><th class="num">Mature sales</th><th class="num">Early pause rate</th><th class="bar-cell">&nbsp;</th><th class="num">28-day retention</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>7 days</td><td class="num">5,562</td><td class="num">27.2%</td>
+              <td class="bar-cell"><div class="bar-track"><div class="bar-fill" style="width:78%"></div></div></td>
+              <td class="num">48.7%</td>
+            </tr>
+            <tr>
+              <td>14 days</td><td class="num">3,793</td><td class="num">19.7%</td>
+              <td class="bar-cell"><div class="bar-track"><div class="bar-fill blue" style="width:56%"></div></div></td>
+              <td class="num">48.9%</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="caption">
+        A 7.5 point gap in early pause rate on samples of 5,562 and 3,793 &mdash; the largest single
+        effect in the dataset. Note that 28-day retention is flat between the two, so the longer trial
+        appears to delay the pause decision rather than prevent it. Worth an explicit test before
+        anyone treats it as a lever, and worth a permanent cut in the tracker either way.
+      </p>
+
+      <h3>Rep spread is wide enough to be worth coaching</h3>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Rep</th><th class="num">Mature sales</th><th class="num">Early pause</th><th class="bar-cell">&nbsp;</th><th class="num">Pre-delivery</th><th class="num">Avg recipes</th><th class="num">28-day retention</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Franco</td><td class="num">1,382</td><td class="num">22.1%</td><td class="bar-cell"><div class="bar-track"><div class="bar-fill" style="width:63%"></div></div></td><td class="num">4.2%</td><td class="num">4.29</td><td class="num">49.9%</td></tr>
+            <tr><td>Braden</td><td class="num">1,031</td><td class="num">21.5%</td><td class="bar-cell"><div class="bar-track"><div class="bar-fill" style="width:61%"></div></div></td><td class="num">1.8%</td><td class="num">4.57</td><td class="num">51.2%</td></tr>
+            <tr><td>Terrence</td><td class="num">961</td><td class="num">23.5%</td><td class="bar-cell"><div class="bar-track"><div class="bar-fill" style="width:67%"></div></div></td><td class="num">4.9%</td><td class="num">4.17</td><td class="num">48.5%</td></tr>
+            <tr><td>Charlene</td><td class="num">906</td><td class="num">25.9%</td><td class="bar-cell"><div class="bar-track"><div class="bar-fill" style="width:74%"></div></div></td><td class="num">4.2%</td><td class="num">4.44</td><td class="num">53.3%</td></tr>
+            <tr><td>Cian</td><td class="num">784</td><td class="num">26.8%</td><td class="bar-cell"><div class="bar-track"><div class="bar-fill" style="width:77%"></div></div></td><td class="num">4.6%</td><td class="num">4.68</td><td class="num">44.6%</td></tr>
+            <tr><td>Christian</td><td class="num">736</td><td class="num">32.5%</td><td class="bar-cell"><div class="bar-track"><div class="bar-fill" style="width:93%"></div></div></td><td class="num">8.8%</td><td class="num">4.37</td><td class="num">44.3%</td></tr>
+            <tr><td>Enis</td><td class="num">728</td><td class="num">22.1%</td><td class="bar-cell"><div class="bar-track"><div class="bar-fill" style="width:63%"></div></div></td><td class="num">4.3%</td><td class="num">4.45</td><td class="num">51.3%</td></tr>
+            <tr><td>Donna</td><td class="num">723</td><td class="num">25.6%</td><td class="bar-cell"><div class="bar-track"><div class="bar-fill" style="width:73%"></div></div></td><td class="num">4.1%</td><td class="num">5.68</td><td class="num">44.9%</td></tr>
+            <tr><td>Jakub</td><td class="num">285</td><td class="num">14.4%</td><td class="bar-cell"><div class="bar-track"><div class="bar-fill green" style="width:41%"></div></div></td><td class="num">2.5%</td><td class="num">3.52</td><td class="num">51.3%</td></tr>
+            <tr><td>Luke</td><td class="num">249</td><td class="num">28.9%</td><td class="bar-cell"><div class="bar-track"><div class="bar-fill" style="width:83%"></div></div></td><td class="num">5.2%</td><td class="num">4.38</td><td class="num">48.0%</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="caption">
+        Reps with at least 200 mature sales, ordered by volume. The full table runs to 24 reps; the 14
+        below 200 sales are shown but rate-suppressed. Two things stand out: Christian's early pause
+        rate is half again the team average and his pre-delivery rate is double anyone else's, while
+        Jakub posts the best early pause rate on the narrowest baskets (3.52 recipes) &mdash; which cuts
+        against the recipe-variety story and is worth understanding before it becomes a target.
+      </p>
+
+      <div class="note">
+        <strong>One caution on the rep numbers.</strong> Lead quality is not in this export. Reps do not
+        necessarily work comparable lists, so these figures identify where to look, not who to blame.
+        The <span class="tabchip">08_Rep_Lookup</span> tab should carry team and start date so like can
+        be compared with like.
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <section class="card">
+      <h2>Build order</h2>
+      <p class="lede">
+        Sequenced so that each step is verifiable before the next depends on it. Steps 1 to 4 are the
+        ones that must not be skipped &mdash; everything after them is presentation.
+      </p>
+      <ol>
+        <li><strong>Stand up <span class="tabchip">01_Control</span> and <span class="tabchip">08_Rep_Lookup</span>.</strong> Map all 25 discount codes to 24 reps. Verify by checking that no <code>Rep_Name</code> reads <code>UNMAPPED</code>.</li>
+        <li><strong>Paste the export into <span class="tabchip">02_Raw_Import</span> and add the four helper columns.</strong> Verify that <code>Row_Seq</code> reaches 1 exactly 9,501 times.</li>
+        <li><strong>Build <span class="tabchip">03_Base</span> and its derived columns.</strong> Verify against this page's baseline: 9,501 rows, 4.53 average recipes, 391 pre-delivery pauses.</li>
+        <li><strong>Wire up <span class="tabchip">09_Data_Quality</span>.</strong> Do this before any dashboard, so the first numbers anyone sees are already checked.</li>
+        <li><strong>Build <span class="tabchip">07_Weekly_Trend</span>, then <span class="tabchip">04_Exec_Summary</span> and <span class="tabchip">05_Rep_Performance</span> on top of it.</strong> Reconcile the five tiles against the baseline before sharing.</li>
+        <li><strong>Add <span class="tabchip">06_Pause_Deep_Dive</span> and <span class="tabchip">10_Action_List</span>.</strong> The action list is what turns the tracker from a report into an intervention.</li>
+        <li><strong>Fix the export upstream.</strong> Everything above is a workaround for a fan-out that should not be in the file. A query returning one row per subscription, with a real subscription ID and numeric retention fields, removes steps 2 and 3 permanently and eliminates the largest standing risk to the numbers.</li>
+      </ol>
+
+      <div class="good">
+        <strong>Reproducibility.</strong> <code>tools/d2ms_retention_audit.py</code> in this repository
+        recalculates every figure on this page straight from the CSV export. Run
+        <code>python3 tools/d2ms_retention_audit.py "Marro D2MS V3.csv"</code> after each refresh to
+        cross-check the spreadsheet, which guards against a broken formula going unnoticed.
+      </div>
+    </section>
+
+    <footer>
+      Standalone page. It does not change the existing dashboard homepage.<br>
+      Figures measured on the Marro D2MS V3 export, snapshot 2026-08-04.
+    </footer>
+  </main>
+</body>
+</html>
