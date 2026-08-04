@@ -2673,18 +2673,26 @@ Takeaway: If average pause day moves later, the reframe is working.</pre>
         setTimeout(function () { button.textContent = 'Copy revised copy'; }, 2000);
       };
 
+      var legacyCopy = function () {
+        var area = document.createElement('textarea');
+        area.value = text;
+        document.body.appendChild(area);
+        area.select();
+        var ok = document.execCommand('copy');
+        document.body.removeChild(area);
+        if (ok) {
+          done();
+        } else {
+          button.textContent = 'Copy failed';
+        }
+      };
+
       if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(text).then(done, function () { button.textContent = 'Copy failed'; });
+        navigator.clipboard.writeText(text).then(done, legacyCopy);
         return;
       }
 
-      var area = document.createElement('textarea');
-      area.value = text;
-      document.body.appendChild(area);
-      area.select();
-      document.execCommand('copy');
-      document.body.removeChild(area);
-      done();
+      legacyCopy();
     });
   </script>
 </body>
