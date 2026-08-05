@@ -1,0 +1,1881 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Business Proposition | D2MS Welcome Calls</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<style>
+:root {
+  --brown: #522A10;
+  --brown-dark: #3A1C0A;
+  --cream: #FFF6D8;
+  --gold: #FFE180;
+  --coral: #ED6961;
+  --blue: #10507C;
+  --green: #2E7D32;
+  --amber: #B65A17;
+  --purple: #7B3FA0;
+  --teal: #00897B;
+  --paper: #FFFFFF;
+  --line: #E8D9B0;
+  --text: #2E261F;
+  --muted: #7A5A3A;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--cream);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+  line-height: 1.5;
+}
+
+/* ── Header ── */
+header {
+  background: var(--brown);
+  color: var(--gold);
+  padding: 30px 28px 26px;
+}
+.header-inner { width: min(1180px, calc(100% - 32px)); margin: 0 auto; }
+.eyebrow {
+  display: inline-block;
+  background: rgba(255,225,128,0.15);
+  border: 1px solid rgba(255,225,128,0.4);
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  padding: 6px 14px;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+header h1 { font-size: clamp(26px, 4vw, 42px); line-height: 1.15; margin-bottom: 10px; }
+header .standfirst { color: #F8D98D; font-size: 18px; max-width: 820px; }
+.meta-row {
+  display: flex; flex-wrap: wrap; gap: 22px;
+  margin-top: 20px; padding-top: 18px;
+  border-top: 1px solid rgba(255,225,128,0.25);
+  font-size: 13px; color: #D9BC7C;
+}
+.meta-row div strong { display: block; color: var(--gold); font-size: 14px; }
+
+/* ── Nav ── */
+nav {
+  background: var(--brown-dark);
+  position: sticky; top: 0; z-index: 50;
+  overflow-x: auto;
+  box-shadow: 0 2px 10px rgba(82,42,16,0.3);
+}
+nav ul {
+  display: flex; list-style: none; gap: 2px;
+  width: min(1180px, 100%); margin: 0 auto; padding: 0 8px;
+}
+nav a {
+  display: block; white-space: nowrap;
+  color: #D9BC7C; text-decoration: none;
+  font-size: 13px; font-weight: 600;
+  padding: 13px 14px;
+  border-bottom: 3px solid transparent;
+}
+nav a:hover { color: var(--gold); background: rgba(255,225,128,0.08); border-bottom-color: var(--gold); }
+
+main { width: min(1180px, calc(100% - 32px)); margin: 26px auto 60px; }
+
+/* ── Cards ── */
+.card {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  box-shadow: 0 8px 24px rgba(82,42,16,0.07);
+  margin-bottom: 24px;
+  padding: 26px;
+}
+.card > h2 {
+  color: var(--brown); font-size: 25px; margin-bottom: 6px;
+  display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+}
+.card > h2 .num {
+  background: var(--brown); color: var(--gold);
+  border-radius: 10px; font-size: 15px;
+  width: 34px; height: 34px; flex: none;
+  display: inline-flex; align-items: center; justify-content: center;
+}
+.card > .lede { color: var(--muted); font-size: 15px; margin-bottom: 18px; max-width: 900px; }
+h3 { color: var(--brown); font-size: 18px; margin: 22px 0 10px; }
+h4 { color: var(--amber); font-size: 15px; margin: 16px 0 6px; }
+p { margin-bottom: 10px; }
+p:last-child { margin-bottom: 0; }
+
+/* ── The Ask ── */
+.ask {
+  background: linear-gradient(135deg, #522A10, #7A431C);
+  border: none; color: #FFF6E0;
+}
+.ask h2 { color: var(--gold); }
+.ask h2 .num { background: var(--gold); color: var(--brown); }
+.ask .lede { color: #F0D9A8; }
+.ask-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 14px; margin-top: 6px; }
+.ask-item {
+  background: rgba(255,255,255,0.09);
+  border: 1px solid rgba(255,225,128,0.3);
+  border-radius: 14px; padding: 16px;
+}
+.ask-item strong { display: block; color: var(--gold); font-size: 15px; margin-bottom: 6px; }
+.ask-item span { font-size: 14px; color: #F5E4C0; }
+.decision-strip {
+  margin-top: 18px; padding: 16px 18px;
+  background: var(--gold); color: var(--brown);
+  border-radius: 14px; font-size: 16px; font-weight: 600;
+}
+
+/* ── KPI tiles ── */
+.kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 14px; }
+.kpi {
+  background: #FFF9E8; border: 1px solid var(--line);
+  border-left: 6px solid var(--coral);
+  border-radius: 13px; padding: 16px;
+}
+.kpi.good { border-left-color: var(--green); }
+.kpi.info { border-left-color: var(--blue); }
+.kpi.warn { border-left-color: var(--amber); }
+.kpi .label { color: var(--muted); font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; }
+.kpi .value { color: var(--brown); font-size: 30px; font-weight: 700; line-height: 1.1; margin: 6px 0 4px; }
+.kpi .sub { color: var(--muted); font-size: 13px; }
+
+/* ── Tables ── */
+.table-wrap { overflow-x: auto; margin-top: 12px; border-radius: 12px; }
+table { border-collapse: collapse; width: 100%; font-size: 14px; }
+th, td { border: 1px solid var(--line); padding: 11px 12px; text-align: left; vertical-align: top; }
+th { background: var(--brown); color: var(--gold); font-size: 13px; font-weight: 700; }
+tbody tr:nth-child(even) { background: #FFFBEF; }
+td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+.marro-row { border-left: 5px solid var(--purple); }
+.bnb-row { border-left: 5px solid var(--teal); }
+
+.tag {
+  display: inline-block; border-radius: 999px;
+  font-size: 11px; font-weight: 700; padding: 3px 9px;
+  white-space: nowrap;
+}
+.tag.yes { background: #DFF2E0; color: #1B5E20; border: 1px solid #A5D6A7; }
+.tag.part { background: #FFF0D4; color: #8A5200; border: 1px solid #E8C37A; }
+.tag.no { background: #FBE0DE; color: #A32017; border: 1px solid #F0B3AE; }
+.tag.brand-marro { background: #EFE2F7; color: #4A1D66; border: 1px solid #C9A8DE; }
+.tag.brand-bnb { background: #D9F0ED; color: #00534A; border: 1px solid #8FCFC7; }
+
+/* ── Callouts ── */
+.note, .insight, .caution {
+  border-radius: 13px; padding: 16px 18px; margin: 16px 0;
+  font-size: 14.5px;
+}
+.note { background: #EAF4FA; border-left: 6px solid var(--blue); }
+.insight { background: #FFF4D6; border-left: 6px solid var(--amber); }
+.caution { background: #FDEDEC; border-left: 6px solid var(--coral); }
+.note strong, .insight strong, .caution strong { color: var(--brown); }
+
+/* ── Step / block grids ── */
+.blocks { display: grid; grid-template-columns: repeat(auto-fit, minmax(255px, 1fr)); gap: 14px; margin-top: 12px; }
+.block {
+  background: #FFF9E8; border: 1px solid var(--line);
+  border-radius: 14px; padding: 16px;
+}
+.block .step-no {
+  display: inline-block; background: var(--brown); color: var(--gold);
+  border-radius: 8px; font-size: 12px; font-weight: 700;
+  padding: 3px 9px; margin-bottom: 8px;
+}
+.block h4 { margin: 0 0 8px; color: var(--brown); font-size: 16px; }
+.block .mins { color: var(--muted); font-size: 12px; font-weight: 700; }
+ul, ol { margin: 8px 0 0 20px; }
+li { margin: 5px 0; font-size: 14px; }
+.tight li { margin: 3px 0; }
+
+/* ── Flow diagram ── */
+.flow { display: flex; flex-wrap: wrap; align-items: stretch; gap: 10px; margin-top: 14px; }
+.flow-step {
+  flex: 1 1 165px;
+  background: #FFF9E8; border: 2px solid var(--line);
+  border-radius: 14px; padding: 14px;
+}
+.flow-step .n { color: var(--coral); font-size: 12px; font-weight: 700; letter-spacing: 0.6px; }
+.flow-step strong { display: block; color: var(--brown); font-size: 15px; margin: 4px 0 6px; }
+.flow-step span { font-size: 13px; color: var(--muted); }
+.flow-arrow { align-self: center; color: var(--coral); font-size: 24px; font-weight: 700; }
+
+/* ── Charts ── */
+.chart-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 18px; margin-top: 14px; }
+.chart-box { background: #FFFDF6; border: 1px solid var(--line); border-radius: 14px; padding: 16px; }
+.chart-box h4 { margin: 0 0 10px; color: var(--brown); font-size: 15px; }
+/* Charts run with maintainAspectRatio off, so the canvas must sit in a
+   fixed-height positioned box or it grows to fill the page indefinitely. */
+.canvas-wrap { position: relative; height: 300px; }
+.canvas-wrap.tall { height: 330px; }
+.canvas-wrap canvas { position: absolute; inset: 0; }
+
+/* ── Calculator ── */
+.calc { display: grid; grid-template-columns: minmax(280px, 340px) 1fr; gap: 20px; margin-top: 14px; }
+.calc-inputs { background: #FFF9E8; border: 1px solid var(--line); border-radius: 14px; padding: 18px; }
+.calc-inputs h4 { margin-top: 0; }
+.field { margin-bottom: 13px; }
+.field label { display: block; font-size: 13px; font-weight: 600; color: var(--brown); margin-bottom: 4px; }
+.field .hint { display: block; font-size: 11.5px; color: var(--muted); font-weight: 400; }
+.field input {
+  width: 100%; padding: 9px 11px; font-size: 14px;
+  border: 2px solid var(--line); border-radius: 8px;
+  background: #fff; color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+.field input:focus { outline: none; border-color: var(--brown); }
+.calc-out { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 13px; align-content: start; }
+.out-tile {
+  background: var(--brown); color: var(--gold);
+  border-radius: 14px; padding: 16px;
+}
+.out-tile.alt { background: var(--blue); color: #EAF4FA; }
+.out-tile.pos { background: var(--green); color: #E8F5E9; }
+.out-tile .label { font-size: 11.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; opacity: 0.85; }
+.out-tile .value { font-size: 27px; font-weight: 700; line-height: 1.15; margin: 5px 0 3px; font-variant-numeric: tabular-nums; }
+.out-tile .sub { font-size: 12.5px; opacity: 0.85; }
+
+/* ── Gantt ── */
+.gantt table { min-width: 900px; }
+.bar {
+  display: block; border-radius: 999px; color: #fff;
+  font-size: 12px; font-weight: 700; padding: 7px 8px;
+  text-align: center; min-width: 62px;
+}
+.bar.setup { background: var(--blue); }
+.bar.build { background: var(--coral); }
+.bar.call { background: var(--teal); }
+.bar.measure { background: var(--green); }
+.bar.review { background: var(--purple); }
+.bar.decide { background: var(--brown); }
+td.empty { background: #FAF0CF; }
+
+/* ── Script appendix ── */
+.script { background: #FFFDF6; border: 1px solid var(--line); border-radius: 14px; padding: 18px; margin-top: 12px; }
+.script .say {
+  background: #fff; border-left: 5px solid var(--teal);
+  border-radius: 9px; padding: 12px 14px; margin: 9px 0;
+  font-size: 14px; font-style: italic; color: #2E261F;
+}
+.script .why { font-size: 13px; color: var(--muted); margin: 4px 0 14px 6px; }
+.script .why strong { color: var(--amber); font-style: normal; }
+
+/* ── Q&A list ── */
+.qa { counter-reset: q; list-style: none; margin-left: 0; }
+.qa li {
+  counter-increment: q;
+  background: #FFF9E8; border: 1px solid var(--line);
+  border-left: 6px solid var(--blue);
+  border-radius: 12px; padding: 14px 16px 14px 52px;
+  margin-bottom: 11px; position: relative; font-size: 14.5px;
+}
+.qa li::before {
+  content: "Q" counter(q);
+  position: absolute; left: 14px; top: 13px;
+  background: var(--blue); color: #fff;
+  border-radius: 7px; font-size: 11px; font-weight: 700;
+  padding: 3px 7px;
+}
+.qa li strong { display: block; color: var(--brown); margin-bottom: 4px; }
+.qa li .why-ask { color: var(--muted); font-size: 13px; }
+
+footer {
+  color: var(--muted); font-size: 13px;
+  text-align: center; margin-top: 30px; padding-top: 18px;
+  border-top: 1px solid var(--line);
+}
+.src { font-size: 12.5px; color: var(--muted); margin-top: 10px; font-style: italic; }
+
+@media (max-width: 860px) {
+  .calc { grid-template-columns: 1fr; }
+}
+@media print {
+  nav { display: none; }
+  body { background: #fff; }
+  .card { break-inside: avoid; box-shadow: none; }
+  header { background: #522A10 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <span class="eyebrow">Business Proposition &mdash; For Sign-Off</span>
+    <h1>D2MS Welcome Calls: protecting the customers we have just paid to acquire</h1>
+    <p class="standfirst">
+      A personally-delivered onboarding call to customers who signed up through D2MS in the previous week.
+      Marro on Tuesdays, Butternut Box on Fridays. Delivered through our existing Adversus dialer,
+      fed by a scheduled Looker pull. No new headcount, no new systems, no new spend.
+    </p>
+    <div class="meta-row">
+      <div><strong>Prepared by</strong>Greg Newton</div>
+      <div><strong>Decision owner</strong>Ed (Sign-off required)</div>
+      <div><strong>Channel</strong>D2MS &mdash; UK</div>
+      <div><strong>Brands</strong>Marro (phase 1) &rarr; Butternut Box (phase 2)</div>
+      <div><strong>Proposed shape</strong>12-week measured pilot</div>
+    </div>
+  </div>
+</header>
+
+<nav>
+  <ul>
+    <li><a href="#ask">The Ask</a></li>
+    <li><a href="#summary">Summary</a></li>
+    <li><a href="#problem">The Problem</a></li>
+    <li><a href="#why-marro">Why Marro First</a></li>
+    <li><a href="#proposition">The Proposition</a></li>
+    <li><a href="#call">The Call</a></li>
+    <li><a href="#operating">Operating Model</a></li>
+    <li><a href="#capacity">Capacity</a></li>
+    <li><a href="#data">Data &amp; Tech</a></li>
+    <li><a href="#measure">Measurement</a></li>
+    <li><a href="#value">Value Model</a></li>
+    <li><a href="#risks">Risks</a></li>
+    <li><a href="#compliance">Compliance</a></li>
+    <li><a href="#timeline">Timeline</a></li>
+    <li><a href="#questions">Open Questions</a></li>
+    <li><a href="#script">Call Guide</a></li>
+  </ul>
+</nav>
+
+<main>
+
+  <!-- ══════════ THE ASK ══════════ -->
+  <section class="card ask" id="ask">
+    <h2><span class="num">1</span> The Ask</h2>
+    <p class="lede">Four things. None require new spend, new headcount or new systems &mdash; but the third and fourth need your explicit backing, and the first is a real call on my time that I have costed openly in section 11.</p>
+    <div class="ask-grid">
+      <div class="ask-item">
+        <strong>1. My time</strong>
+        <span>Two days a week, ring-fenced for calling: <b>Tuesday = Marro</b>, <b>Friday = Butternut Box</b>. Phase 1 starts with Marro only.</span>
+      </div>
+      <div class="ask-item">
+        <strong>2. A Looker pull</strong>
+        <span>A scheduled Look listing the previous week's D2MS sign-ups with phone number, box dates and plan detail, delivered into Adversus.</span>
+      </div>
+      <div class="ask-item">
+        <strong>3. An Adversus campaign</strong>
+        <span>A dedicated non-sales "Welcome Call" campaign with its own list IDs, result codes and recording, kept separate from acquisition dialling.</span>
+      </div>
+      <div class="ask-item">
+        <strong>4. A holdout</strong>
+        <span>Permission to leave a randomised control group uncalled, so we can prove the effect rather than assert it.</span>
+      </div>
+    </div>
+    <div class="decision-strip">
+      Decision requested: approve a 12-week measured pilot on Marro, with a go / no-go gate at week 6 before Butternut Box is added.
+    </div>
+  </section>
+
+  <!-- ══════════ SUMMARY ══════════ -->
+  <section class="card" id="summary">
+    <h2><span class="num">2</span> Executive Summary</h2>
+    <p class="lede">
+      We spend roughly &pound;90&ndash;&pound;120 to acquire each D2MS customer, and then we never speak to them again.
+      Fewer than half of Marro's D2MS customers make it to box 2. The reasons they give us are overwhelmingly
+      things a five-minute conversation can fix.
+    </p>
+
+    <div class="kpi-grid">
+      <div class="kpi warn">
+        <div class="label">Marro D2MS &mdash; Box 2 retention</div>
+        <div class="value">48.6%</div>
+        <div class="sub">2,352 box 1 &rarr; 1,144 box 2 (W1&ndash;W24 cohorts)</div>
+      </div>
+      <div class="kpi good">
+        <div class="label">Butternut D2MS &mdash; Box 2 retention</div>
+        <div class="value">63.4%</div>
+        <div class="sub">2,533 box 1 &rarr; 1,607 box 2 (W1&ndash;W24 cohorts)</div>
+      </div>
+      <div class="kpi">
+        <div class="label">The gap</div>
+        <div class="value">14.8pp</div>
+        <div class="sub">Marro behind Butternut on the same channel</div>
+      </div>
+      <div class="kpi info">
+        <div class="label">Pauses a call can address</div>
+        <div class="value">85.5%</div>
+        <div class="sub">Marro: food refused, price, don't want subscription</div>
+      </div>
+      <div class="kpi info">
+        <div class="label">Incremental spend required</div>
+        <div class="value">&pound;0</div>
+        <div class="sub">Existing dialer and Looker. The real cost is my time &mdash; costed openly in section 11</div>
+      </div>
+    </div>
+
+    <h3>The argument in five lines</h3>
+    <ol>
+      <li><strong>We are losing customers we have already paid for.</strong> Marro D2MS box 2 retention has drifted from ~51% in Q1 to ~44% in recent mature cohorts, while acquisition cost per sale has been running at &pound;85&ndash;&pound;125.</li>
+      <li><strong>The stated reasons are solvable, not structural.</strong> 41.7% of Marro pauses are "pet did not eat the food" &mdash; a transition and feeding-guidance problem, not a product rejection. Add price (20.5%) and "don't want a subscription" (23.3%) and 85.5% of all Marro pauses sit squarely in the territory a welcome call covers.</li>
+      <li><strong>Nobody currently owns the first three weeks.</strong> D2MS is paid on the sale. Once the sale lands, the customer is handed to automated comms only. There is no human check-in between sign-up and the box 2 payment &mdash; which is exactly where we lose them.</li>
+      <li><strong>The infrastructure already exists.</strong> The D2MS and Marro Looker pulls already carry name, phone number, order 1 and order 2 delivery dates, plan type, pause date and pause reason. Adversus already ingests list-based imports. This is a configuration job, not a build.</li>
+      <li><strong>It is cheap to test and honest to measure.</strong> A randomised holdout means we will know within one retention cycle whether this works. If it does, the prize is not the ~35 customers I call each week &mdash; it is what we learn and then automate across all ~450 weekly D2MS sign-ups.</li>
+    </ol>
+
+    <div class="insight">
+      <strong>The single most useful thing I expect to learn:</strong> whether "the pet won't eat it" is a transition-coaching failure
+      or a genuine palatability problem. Those two       answers lead to completely different business decisions, and right now we are
+      guessing. Thirty-odd recorded conversations a week with real customers settles it.
+    </div>
+  </section>
+
+  <!-- ══════════ THE PROBLEM ══════════ -->
+  <section class="card" id="problem">
+    <h2><span class="num">3</span> The Problem, In Our Own Data</h2>
+    <p class="lede">
+      All figures below are pulled from the live Telesales System base &mdash; the same source as the Telesales
+      Command Center dashboard &mdash; filtered to the D2MS channel, UK market, 2026.
+    </p>
+
+    <h3>3.1 Box 2 retention by brand</h3>
+    <p>
+      I have deliberately used only cohorts old enough to have had a box 2 opportunity (weeks 1&ndash;24) and weighted by
+      volume rather than averaging weekly percentages, so the numbers are not flattered by small weeks.
+    </p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Brand</th>
+            <th>Cohort window</th>
+            <th class="num">Box 1</th>
+            <th class="num">Box 2</th>
+            <th class="num">Box 2 retention</th>
+            <th class="num">Avg weekly sign-ups</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="marro-row">
+            <td><span class="tag brand-marro">Marro</span></td>
+            <td>W1&ndash;W24 (all mature)</td>
+            <td class="num">2,352</td>
+            <td class="num">1,144</td>
+            <td class="num"><strong>48.6%</strong></td>
+            <td class="num">147</td>
+          </tr>
+          <tr class="marro-row">
+            <td><span class="tag brand-marro">Marro</span></td>
+            <td>W1&ndash;W13</td>
+            <td class="num">1,434</td>
+            <td class="num">733</td>
+            <td class="num">51.1%</td>
+            <td class="num">159</td>
+          </tr>
+          <tr class="marro-row">
+            <td><span class="tag brand-marro">Marro</span></td>
+            <td>W14&ndash;W24</td>
+            <td class="num">918</td>
+            <td class="num">411</td>
+            <td class="num">44.8%</td>
+            <td class="num">131</td>
+          </tr>
+          <tr class="bnb-row">
+            <td><span class="tag brand-bnb">Butternut</span></td>
+            <td>W1&ndash;W24 (all mature)</td>
+            <td class="num">2,533</td>
+            <td class="num">1,607</td>
+            <td class="num"><strong>63.4%</strong></td>
+            <td class="num">195</td>
+          </tr>
+          <tr class="bnb-row">
+            <td><span class="tag brand-bnb">Butternut</span></td>
+            <td>W1&ndash;W13</td>
+            <td class="num">1,972</td>
+            <td class="num">1,250</td>
+            <td class="num">63.4%</td>
+            <td class="num">197</td>
+          </tr>
+          <tr class="bnb-row">
+            <td><span class="tag brand-bnb">Butternut</span></td>
+            <td>W14&ndash;W24</td>
+            <td class="num">561</td>
+            <td class="num">357</td>
+            <td class="num">63.6%</td>
+            <td class="num">187</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="src">
+      Source: <code>&#128202; Weekly KPIs v2</code>, Telesales System base. Channel = D2MS, Market = UK, Year = 2026.
+      Brand-split box counts (<code>Box 1 Marro</code> / <code>Box 2 Marro</code> and the Butternut equivalents) summed across weeks.
+    </p>
+
+    <div class="chart-row">
+      <div class="chart-box">
+        <h4>Box 2 retention by sign-up week &mdash; D2MS</h4>
+        <div class="canvas-wrap"><canvas id="chartRetention"></canvas></div>
+      </div>
+      <div class="chart-box">
+        <h4>Weekly D2MS sign-ups by brand</h4>
+        <div class="canvas-wrap"><canvas id="chartVolume"></canvas></div>
+      </div>
+    </div>
+    <div class="note">
+      <strong>Note on the right-hand tail.</strong> Cohorts from week 25 onwards have not yet had a full box 2 opportunity,
+      so their retention reads artificially low. I have excluded them from every baseline in this document rather than
+      using them to make the problem look worse than it is.
+    </div>
+
+    <h3>3.2 Why customers pause &mdash; and whether a call can help</h3>
+    <p>
+      This is the heart of the case. These are the reasons customers themselves gave, across weeks 1&ndash;30 of 2026 on the
+      D2MS channel. The final column is my honest assessment of whether a welcome call before box 2 could plausibly
+      change the outcome.
+    </p>
+
+    <h4>Marro &mdash; 1,446 recorded pause events</h4>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Pause reason</th>
+            <th class="num">Events</th>
+            <th class="num">Share</th>
+            <th>Addressable by a welcome call?</th>
+            <th>What the call would actually do</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Pet did not eat food</td>
+            <td class="num">603</td>
+            <td class="num"><strong>41.7%</strong></td>
+            <td><span class="tag yes">Yes &mdash; high</span></td>
+            <td>Coach the transition properly: gradual mixing, portion size, serving at room temperature, giving a fussy cat more than one sitting to accept it. Set the expectation that week one can be bumpy.</td>
+          </tr>
+          <tr>
+            <td>Do not want subscription</td>
+            <td class="num">337</td>
+            <td class="num">23.3%</td>
+            <td><span class="tag yes">Yes &mdash; high</span></td>
+            <td>Show them in the app that they control frequency, portion and delivery date &mdash; that delaying a box is one tap and is not the same as cancelling.</td>
+          </tr>
+          <tr>
+            <td>Price</td>
+            <td class="num">296</td>
+            <td class="num">20.5%</td>
+            <td><span class="tag part">Partly</span></td>
+            <td>Pre-empt the box 1 &rarr; box 2 price step (see section 4). Explain the real weekly cost, and offer a smaller plan or longer interval before they walk.</td>
+          </tr>
+          <tr>
+            <td>I'm coming back</td>
+            <td class="num">57</td>
+            <td class="num">3.9%</td>
+            <td><span class="tag part">Partly</span></td>
+            <td>Convert an open-ended pause into a scheduled restart date.</td>
+          </tr>
+          <tr>
+            <td>Cat is no longer here / passed away</td>
+            <td class="num">56</td>
+            <td class="num">3.9%</td>
+            <td><span class="tag no">No</span></td>
+            <td>Not addressable. Handle with care and close respectfully.</td>
+          </tr>
+          <tr>
+            <td>Marro is too inconvenient for me</td>
+            <td class="num">44</td>
+            <td class="num">3.0%</td>
+            <td><span class="tag yes">Yes</span></td>
+            <td>Usually delivery timing or storage. Fix the delivery slot, explain storage and defrosting.</td>
+          </tr>
+          <tr>
+            <td>Cat's health requires a different diet</td>
+            <td class="num">34</td>
+            <td class="num">2.4%</td>
+            <td><span class="tag no">No</span></td>
+            <td>Legitimate. Refer to the vet-nurse line where appropriate.</td>
+          </tr>
+          <tr>
+            <td>Service unsatisfactory / quality / delivery</td>
+            <td class="num">19</td>
+            <td class="num">1.3%</td>
+            <td><span class="tag yes">Yes</span></td>
+            <td>Catch and resolve the specific service failure before it becomes a cancellation.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="insight">
+      <strong>85.5% of Marro pauses</strong> come from just three reasons &mdash; food refused, unwanted subscription, and price &mdash;
+      and all three are expectation-and-guidance problems rather than product problems. That is the strongest argument
+      for a human conversation in the first three weeks.
+    </div>
+
+    <h4>Butternut Box &mdash; 2,346 recorded pause events</h4>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Pause reason</th>
+            <th class="num">Events</th>
+            <th class="num">Share</th>
+            <th>Addressable by a welcome call?</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>The food</td><td class="num">782</td><td class="num"><strong>33.3%</strong></td><td><span class="tag yes">Yes &mdash; transition coaching</span></td></tr>
+          <tr><td>Price</td><td class="num">418</td><td class="num">17.8%</td><td><span class="tag part">Partly &mdash; plan right-sizing</span></td></tr>
+          <tr><td>Don't want subscription</td><td class="num">374</td><td class="num">15.9%</td><td><span class="tag yes">Yes &mdash; app flexibility</span></td></tr>
+          <tr><td>Food leftover</td><td class="num">147</td><td class="num">6.3%</td><td><span class="tag yes">Yes &mdash; portion / plan size</span></td></tr>
+          <tr><td>Other</td><td class="num">140</td><td class="num">6.0%</td><td><span class="tag part">Unknown &mdash; worth diagnosing</span></td></tr>
+          <tr><td>Dog health</td><td class="num">133</td><td class="num">5.7%</td><td><span class="tag no">Mostly no</span></td></tr>
+          <tr><td>Purchased in store</td><td class="num">104</td><td class="num">4.4%</td><td><span class="tag part">Partly</span></td></tr>
+          <tr><td>Coming back</td><td class="num">102</td><td class="num">4.3%</td><td><span class="tag part">Partly &mdash; schedule the restart</span></td></tr>
+          <tr><td>Freezer space</td><td class="num">48</td><td class="num">2.0%</td><td><span class="tag yes">Yes &mdash; plan size / delivery frequency</span></td></tr>
+          <tr><td>All other reasons</td><td class="num">98</td><td class="num">4.2%</td><td><span class="tag part">Mixed</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="src">
+      Source: <code>&#128269; Pause Reason Analysis</code>, Telesales System base. Channel = D2MS, ISO weeks W1&ndash;W30, 2026.
+      Counts are pause <em>events</em>, so a customer who paused and resumed may appear more than once; shares are therefore
+      best read as the mix of reasons rather than a headcount.
+    </p>
+
+    <div class="chart-row">
+      <div class="chart-box">
+        <h4>Marro &mdash; pause reason mix</h4>
+        <div class="canvas-wrap tall"><canvas id="chartMarroReasons"></canvas></div>
+      </div>
+      <div class="chart-box">
+        <h4>Butternut Box &mdash; pause reason mix</h4>
+        <div class="canvas-wrap tall"><canvas id="chartBnbReasons"></canvas></div>
+      </div>
+    </div>
+
+    <h3>3.3 The gap nobody owns</h3>
+    <div class="flow">
+      <div class="flow-step">
+        <span class="n">DAY 0</span>
+        <strong>D2MS makes the sale</strong>
+        <span>Field agent signs the customer. Commission is earned on the sale.</span>
+      </div>
+      <div class="flow-arrow">&rarr;</div>
+      <div class="flow-step" style="border-color: var(--coral); background: #FDEDEC;">
+        <span class="n">DAY 1&ndash;7</span>
+        <strong>Automated comms only</strong>
+        <span>Email and app notifications. No human contact. Customer has questions and nobody to ask.</span>
+      </div>
+      <div class="flow-arrow">&rarr;</div>
+      <div class="flow-step" style="border-color: var(--coral); background: #FDEDEC;">
+        <span class="n">DAY 7&ndash;14</span>
+        <strong>Box 1 arrives &mdash; the risk window</strong>
+        <span>Transition begins. Pet may refuse food. Freezer fills. Doubt sets in. <b>Still no human contact.</b></span>
+      </div>
+      <div class="flow-arrow">&rarr;</div>
+      <div class="flow-step" style="border-color: var(--coral); background: #FDEDEC;">
+        <span class="n">DAY 21&ndash;28</span>
+        <strong>Box 2 payment</strong>
+        <span>Bill lands. For Marro it is higher than box 1. Customer pauses. We find out afterwards.</span>
+      </div>
+      <div class="flow-arrow">&rarr;</div>
+      <div class="flow-step" style="border-color: var(--green); background: #EDF7ED;">
+        <span class="n">TOO LATE</span>
+        <strong>Pause reason logged</strong>
+        <span>We record why &mdash; after the customer has gone.</span>
+      </div>
+    </div>
+    <p style="margin-top:14px">
+      Everything in red above is unattended. The proposition is simply to put a person into the middle of that window,
+      before the box 2 payment rather than after it.
+    </p>
+  </section>
+
+  <!-- ══════════ WHY MARRO FIRST ══════════ -->
+  <section class="card" id="why-marro">
+    <h2><span class="num">4</span> Why Marro First</h2>
+    <p class="lede">
+      Marro is the right place to start for four reasons, and one of them is a finding I think we should act on
+      regardless of whether this proposal is approved.
+    </p>
+
+    <div class="insight">
+      <strong>Finding: Marro's discount structure creates a price cliff that Butternut's does not.</strong>
+      Across every week of 2026, Marro's box 1 discount is <strong>40%</strong> and its box 2 discount is <strong>30%</strong>.
+      Butternut Box runs <strong>30% on box 1 and 30% on box 2</strong> &mdash; flat. That means a Marro customer's
+      second bill is roughly <strong>17% higher</strong> than their first, arriving in the same fortnight they are still
+      deciding whether their cat likes the food. Butternut customers get no such shock. Marro's box 2 retention is
+      14.8pp lower and "price" accounts for 20.5% of its pauses. These facts are unlikely to be unrelated.
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Factor</th><th>Marro</th><th>Butternut Box</th><th>Implication</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Box 2 retention</strong></td>
+            <td>48.6%</td>
+            <td>63.4%</td>
+            <td>Marro has the most headroom, so the same effort yields a bigger measurable move.</td>
+          </tr>
+          <tr>
+            <td><strong>Box 1 &rarr; box 2 discount</strong></td>
+            <td>40% &rarr; 30% <em>(bill rises ~17%)</em></td>
+            <td>30% &rarr; 30% <em>(flat)</em></td>
+            <td>Marro has a specific, nameable, pre-emptible risk event. A call can defuse it; silence cannot.</td>
+          </tr>
+          <tr>
+            <td><strong>Top pause reason</strong></td>
+            <td>Pet did not eat food &mdash; 41.7%</td>
+            <td>The food &mdash; 33.3%</td>
+            <td>Cats are markedly fussier than dogs, so transition coaching should pay back harder on Marro.</td>
+          </tr>
+          <tr>
+            <td><strong>Weekly sign-up volume</strong></td>
+            <td>~130&ndash;200</td>
+            <td>~190&ndash;340</td>
+            <td>Marro is small enough for one person to cover a meaningful share of the cohort in a single day.</td>
+          </tr>
+          <tr>
+            <td><strong>84-day retention tracking</strong></td>
+            <td>Not reliably populated</td>
+            <td>~37.7% (W1&ndash;W15 avg)</td>
+            <td>A data gap on Marro that needs fixing to judge longer-term impact &mdash; see section 9.4.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p style="margin-top:14px">
+      Starting on Marro also keeps the pilot honest: it is the harder brand, on the fussier animal, with the
+      price cliff working against me. If welcome calls move the number on Marro, they will move it on Butternut Box.
+    </p>
+  </section>
+
+  <!-- ══════════ THE PROPOSITION ══════════ -->
+  <section class="card" id="proposition">
+    <h2><span class="num">5</span> The Proposition</h2>
+    <p class="lede">
+      I personally call customers who signed up through D2MS in the previous week, as their named point of contact,
+      to make sure they are happy, confident and correctly set up &mdash; and to answer the questions they never got to ask.
+    </p>
+
+    <div class="blocks">
+      <div class="block">
+        <span class="step-no">WHO</span>
+        <h4>Last week's D2MS sign-ups</h4>
+        <p style="font-size:14px">Customers whose subscription was created in the previous ISO week, on the D2MS channel, with a valid mobile number and no pause or cancellation already recorded.</p>
+      </div>
+      <div class="block">
+        <span class="step-no">WHEN</span>
+        <h4>Tuesday = Marro, Friday = Butternut</h4>
+        <p style="font-size:14px">Two ring-fenced calling days. Tuesday and Friday both sit in the sweet spot where box 1 has typically landed but the box 2 payment has not yet been taken.</p>
+      </div>
+      <div class="block">
+        <span class="step-no">WHAT</span>
+        <h4>A service call, not a sales call</h4>
+        <p style="font-size:14px">No upsell, no cross-sell, no target attached. The only objective is a confident, well-informed customer who knows how to run their subscription.</p>
+      </div>
+      <div class="block">
+        <span class="step-no">WHY ME</span>
+        <h4>The person who can act on what I hear</h4>
+        <p style="font-size:14px">I own the telesales performance picture. Hearing objections first-hand feeds directly into the D2MS scorecard, agent coaching, and the offer and onboarding decisions we are already debating.</p>
+      </div>
+    </div>
+
+    <h3>5.1 What the call is designed to prevent</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Call objective</th><th>Pause reason it defeats</th><th class="num">Marro share</th><th class="num">Butternut share</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Coach the food transition properly</td><td>Pet did not eat food / the food</td><td class="num">41.7%</td><td class="num">33.3%</td></tr>
+          <tr><td>Explain flexibility &amp; how to delay rather than cancel</td><td>Don't want subscription</td><td class="num">23.3%</td><td class="num">15.9%</td></tr>
+          <tr><td>Pre-empt the box 2 bill and right-size the plan</td><td>Price</td><td class="num">20.5%</td><td class="num">17.8%</td></tr>
+          <tr><td>Get portions and plan size right</td><td>Food leftover / freezer space</td><td class="num">&mdash;</td><td class="num">8.3%</td></tr>
+          <tr><td>Confirm the next delivery date and fix the slot</td><td>Too inconvenient / delivery</td><td class="num">3.1%</td><td class="num">1.2%</td></tr>
+          <tr><td>Catch service failures while they are still fixable</td><td>Service unsatisfactory</td><td class="num">1.2%</td><td class="num">2.3%</td></tr>
+          <tr style="background:#FFF4D6"><td><strong>Total addressable share of pauses</strong></td><td></td><td class="num"><strong>~89%</strong></td><td class="num"><strong>~79%</strong></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="caution">
+      <strong>To be clear about what "addressable" means.</strong> It does not mean we save 89% of pausing customers.
+      It means 89% of the reasons given are in scope for a conversation. The realistic conversion of "in scope" into
+      "retained" is exactly what the pilot exists to measure, and I have deliberately not assumed a number for it
+      anywhere in this document &mdash; section 11 lets you set it yourself.
+    </div>
+  </section>
+
+  <!-- ══════════ THE CALL ══════════ -->
+  <section class="card" id="call">
+    <h2><span class="num">6</span> Anatomy of the Call</h2>
+    <p class="lede">Target six to eight minutes of talk time, structured in six blocks. Full wording is in the appendix.</p>
+
+    <div class="blocks">
+      <div class="block">
+        <span class="step-no">BLOCK 1</span>
+        <h4>Warm, named introduction</h4>
+        <span class="mins">~45 seconds</span>
+        <ul class="tight">
+          <li>Who I am and that this is not a sales call</li>
+          <li>Use the pet's name from the Looker record</li>
+          <li>Confirm I am speaking to the account holder</li>
+        </ul>
+      </div>
+      <div class="block">
+        <span class="step-no">BLOCK 2</span>
+        <h4>Did it arrive, and how is it going?</h4>
+        <span class="mins">~90 seconds</span>
+        <ul class="tight">
+          <li>Confirm box 1 arrived and was as expected</li>
+          <li>Open question on how the pet is taking to it</li>
+          <li>Listen for hesitation &mdash; this is the diagnostic moment</li>
+        </ul>
+      </div>
+      <div class="block">
+        <span class="step-no">BLOCK 3</span>
+        <h4>Feeding &amp; transition coaching</h4>
+        <span class="mins">~2 minutes</span>
+        <ul class="tight">
+          <li>Gradual mixing over 7&ndash;10 days</li>
+          <li>Portioning, storage, defrosting, serving temperature</li>
+          <li>Explicitly normalise a fussy first week</li>
+          <li><em>Targets the single largest pause reason on both brands</em></li>
+        </ul>
+      </div>
+      <div class="block">
+        <span class="step-no">BLOCK 4</span>
+        <h4>App walkthrough, live on the call</h4>
+        <span class="mins">~2 minutes</span>
+        <ul class="tight">
+          <li>Confirm they have downloaded and logged in</li>
+          <li>Show where to change portion, frequency and delivery date</li>
+          <li>Show how to delay a box &mdash; the alternative to cancelling</li>
+          <li>Encourage adding the pet's profile and photo</li>
+        </ul>
+      </div>
+      <div class="block">
+        <span class="step-no">BLOCK 5</span>
+        <h4>Next box &amp; the honest money conversation</h4>
+        <span class="mins">~90 seconds</span>
+        <ul class="tight">
+          <li>State the box 2 delivery date and charge date from the record</li>
+          <li><strong>Marro:</strong> flag plainly that box 2 is at 30% off versus box 1 at 40%, so the bill will be a little higher</li>
+          <li>Offer to right-size the plan or lengthen the interval <em>now</em>, rather than lose them later</li>
+        </ul>
+      </div>
+      <div class="block">
+        <span class="step-no">BLOCK 6</span>
+        <h4>Questions, and a route back to a human</h4>
+        <span class="mins">~60 seconds</span>
+        <ul class="tight">
+          <li>Answer anything outstanding</li>
+          <li>Leave a clear contact route</li>
+          <li>Log outcome, risk flag and verbatim objection in Adversus</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="note">
+      <strong>Why the box 2 price conversation is worth having deliberately.</strong> It feels
+      counter-intuitive to raise price unprompted. But the customer will discover it anyway, at the worst possible
+      moment, with no one to explain it. Telling them early, while offering a smaller plan as an alternative,
+      converts a silent cancellation into a managed conversation. If the pilot shows this backfires, that is a
+      genuinely useful finding and we stop doing it.
+    </div>
+  </section>
+
+  <!-- ══════════ OPERATING MODEL ══════════ -->
+  <section class="card" id="operating">
+    <h2><span class="num">7</span> Operating Model</h2>
+    <p class="lede">Looker builds the list, Adversus dials it, results come back into the reporting base. Weekly, repeatable, low-touch.</p>
+
+    <h3>7.1 Data flow</h3>
+    <div class="flow">
+      <div class="flow-step">
+        <span class="n">STEP 1</span>
+        <strong>Looker Look</strong>
+        <span>"D2MS Welcome Call List" &mdash; previous ISO week's sign-ups, filtered and de-duplicated.</span>
+      </div>
+      <div class="flow-arrow">&rarr;</div>
+      <div class="flow-step">
+        <span class="n">STEP 2</span>
+        <strong>Scheduled delivery</strong>
+        <span>Runs Monday 07:00 (Marro) and Thursday 07:00 (Butternut) so the list is ready before each calling day.</span>
+      </div>
+      <div class="flow-arrow">&rarr;</div>
+      <div class="flow-step">
+        <span class="n">STEP 3</span>
+        <strong>Randomised split</strong>
+        <span>List divided into call group and holdout control before import, so allocation cannot be influenced by who is easy to reach.</span>
+      </div>
+      <div class="flow-arrow">&rarr;</div>
+      <div class="flow-step">
+        <span class="n">STEP 4</span>
+        <strong>Adversus import</strong>
+        <span>Call group loaded to a dedicated "Welcome Calls" campaign with its own list ID per brand per week.</span>
+      </div>
+      <div class="flow-arrow">&rarr;</div>
+      <div class="flow-step">
+        <span class="n">STEP 5</span>
+        <strong>Calling day</strong>
+        <span>Tuesday Marro, Friday Butternut. Outcomes and verbatims logged against custom result codes.</span>
+      </div>
+      <div class="flow-arrow">&rarr;</div>
+      <div class="flow-step">
+        <span class="n">STEP 6</span>
+        <strong>Read-back &amp; measure</strong>
+        <span>Adversus results join back to the retention data so called and control cohorts can be compared.</span>
+      </div>
+    </div>
+
+    <h3>7.2 The weekly rhythm</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Day</th><th>Activity</th><th>Owner</th><th>Time</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Monday</strong></td><td>Marro list lands from Looker; randomise; import to Adversus; sense-check numbers and exclusions</td><td>Me (with Data for the schedule)</td><td>30 mins</td></tr>
+          <tr style="background:#FFF4D6"><td><strong>Tuesday</strong></td><td><strong>Marro calling day</strong> &mdash; dial, converse, log outcomes and verbatims</td><td>Me</td><td>Ring-fenced day</td></tr>
+          <tr><td><strong>Wednesday</strong></td><td>Action anything urgent surfaced on Tuesday (service failures, plan changes, refunds)</td><td>Me / Customer Care</td><td>30 mins</td></tr>
+          <tr><td><strong>Thursday</strong></td><td>Butternut list lands; randomise; import <em>(phase 2 only)</em></td><td>Me</td><td>30 mins</td></tr>
+          <tr style="background:#FFF4D6"><td><strong>Friday</strong></td><td><strong>Butternut calling day</strong> <em>(phase 2 only)</em>, then log the week's themes</td><td>Me</td><td>Ring-fenced day</td></tr>
+          <tr><td><strong>Monthly</strong></td><td>Cohort read-out: called vs control retention, top objections, recommended fixes</td><td>Me &rarr; Ed</td><td>1 hour</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>7.3 List selection rules</h3>
+    <ul>
+      <li><strong>Include:</strong> subscription created in the previous ISO week; channel = D2MS; market = UK; valid mobile number present.</li>
+      <li><strong>Exclude:</strong> already paused or cancelled; already contacted by Customer Care about a live issue; flagged as vulnerable; opted out of phone contact; duplicate phone numbers within the week.</li>
+      <li><strong>Prioritise</strong> within the callable list, so that if I cannot get through everyone the highest-risk customers are dialled first (see 7.4).</li>
+      <li><strong>Cap</strong> at three dial attempts per customer across the day, at varied times, then retire the record.</li>
+    </ul>
+
+    <h3>7.4 Prioritisation, since I cannot call everyone</h3>
+    <p>
+      With ~150 Marro and ~300 Butternut sign-ups a week and one person calling, I will reach a meaningful sample
+      rather than the whole cohort. Rather than dial alphabetically, I would order the list by risk:
+    </p>
+    <ol>
+      <li>No app login recorded &mdash; most likely to be confused and unsupported.</li>
+      <li>No pet profile or photo added &mdash; weakly but consistently associated with lower retention in our own data.</li>
+      <li>Largest plan or highest box 2 value &mdash; most exposed to the price step.</li>
+      <li>Sold by an agent whose cohort retention is below the channel average &mdash; the sale may have been oversold.</li>
+      <li>Everyone else, randomised.</li>
+    </ol>
+    <div class="caution">
+      <strong>Important caveat on prioritisation and measurement.</strong> Risk-ordering the dial list and running a
+      clean randomised test pull in opposite directions. My recommendation is to <strong>randomise first</strong>
+      (call group vs holdout), then risk-order <em>within</em> the call group only. That keeps the comparison valid
+      while still making sure my dialling time goes where it matters most.
+    </div>
+  </section>
+
+  <!-- ══════════ CAPACITY ══════════ -->
+  <section class="card" id="capacity">
+    <h2><span class="num">8</span> Capacity: What One Person Can Realistically Do</h2>
+    <p class="lede">
+      I would rather present an honest capacity ceiling than promise full coverage and miss it. These are planning
+      assumptions, to be replaced by actuals after week one.
+    </p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Measure</th><th class="num">Planning assumption</th><th>Basis</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Productive dialling hours per calling day</td><td class="num">6.0</td><td>Allows for prep, wrap-up, breaks and follow-up actions.</td></tr>
+          <tr><td>Dials per hour (preview dialling, service call)</td><td class="num">14</td><td>Lower than acquisition dialling because records need reading before the call.</td></tr>
+          <tr><td>Dial attempts per day</td><td class="num">~84</td><td>6.0 &times; 14.</td></tr>
+          <tr><td>Connect rate</td><td class="num">40%</td><td>Assumption. Should beat cold outbound: these are brand-new customers expecting contact. <strong>To be validated in week 1.</strong></td></tr>
+          <tr><td>Conversations per calling day</td><td class="num">~34</td><td>84 dials &times; 40%.</td></tr>
+          <tr><td>Average talk time</td><td class="num">6&ndash;8 mins</td><td>Six-block structure in section 6.</td></tr>
+          <tr style="background:#FFF4D6"><td><strong>Marro coverage per week</strong></td><td class="num"><strong>~23%</strong></td><td>~34 conversations against ~150 weekly sign-ups.</td></tr>
+          <tr style="background:#FFF4D6"><td><strong>Butternut coverage per week</strong></td><td class="num"><strong>~11%</strong></td><td>~34 conversations against ~300 weekly sign-ups.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note">
+      <strong>Partial coverage is a feature, not a bug.</strong> Because I can only reach a fraction of each cohort,
+      the customers I do not reach form a natural comparison group. Combined with proper randomisation, that gives
+      us a genuine read on effect size &mdash; something we would not get from a full-coverage rollout.
+    </div>
+
+    <h3>8.1 Sample size reality check</h3>
+    <p>
+      At ~34 conversations a week, a 12-week Marro pilot yields roughly <strong>400 called customers</strong> against a
+      similarly-sized randomised control. On a 48.6% baseline, that sample can detect a retention difference of
+      very roughly <strong>7 percentage points</strong> with reasonable confidence. Smaller true effects will show as
+      a direction of travel rather than a statistically clean result.
+    </p>
+    <div class="caution">
+      <strong>I want to be straight about this up front.</strong> If the real effect is 2&ndash;3pp, a 12-week single-caller
+      pilot will not prove it conclusively. That is an argument for judging this pilot on <em>two</em> things:
+      the measured retention direction, and the qualitative insight from ~400 recorded customer conversations.
+      The second deliverable is guaranteed; the first is probabilistic. I would ask that we agree that framing before we start,
+      so success is not defined solely on a statistical threshold this sample cannot reach.
+    </div>
+  </section>
+
+  <!-- ══════════ DATA & TECH ══════════ -->
+  <section class="card" id="data">
+    <h2><span class="num">9</span> Data &amp; Technical Requirements</h2>
+    <p class="lede">
+      The good news: almost all of this already exists. Our current D2MS Looker pulls carry most of the fields
+      the dialer needs.
+    </p>
+
+    <h3>9.1 The Looker Look</h3>
+    <p>
+      One Look per brand, filtered to the previous ISO week, scheduled to deliver as CSV. Fields below are marked
+      with whether they already appear in the D2MS Looker pulls feeding our reporting base.
+    </p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Field</th><th>Purpose in the call</th><th>Butternut pull</th><th>Marro pull</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Full name / recipient name</td><td>Address the customer correctly</td><td><span class="tag yes">Exists</span></td><td><span class="tag yes">Exists</span></td></tr>
+          <tr><td>Phone number</td><td>Dialing</td><td><span class="tag yes">Exists</span></td><td><span class="tag yes">Exists</span></td></tr>
+          <tr><td>Email address</td><td>Follow-up, identity check</td><td><span class="tag yes">Exists</span></td><td><span class="tag yes">Exists</span></td></tr>
+          <tr><td>Subscription created date</td><td>Defines the weekly cohort</td><td><span class="tag yes">Exists</span></td><td><span class="tag yes">Exists</span></td></tr>
+          <tr><td>Pet name</td><td>Personalise the conversation</td><td><span class="tag yes">Exists</span></td><td><span class="tag yes">Exists</span></td></tr>
+          <tr><td>Order 1 delivery date</td><td>Confirm box 1 landed; time the call correctly</td><td><span class="tag yes">Exists</span></td><td><span class="tag yes">Exists</span></td></tr>
+          <tr><td>Order 2 delivery date</td><td>Tell the customer exactly when the next box comes</td><td><span class="tag yes">Exists</span></td><td><span class="tag yes">Exists</span></td></tr>
+          <tr><td>Order 1 invoice charged date</td><td>Explain the billing rhythm</td><td><span class="tag yes">Exists</span></td><td><span class="tag no">Needs adding</span></td></tr>
+          <tr><td>Plan type / portion size</td><td>Right-size the plan; portioning advice</td><td><span class="tag yes">Exists</span></td><td><span class="tag part">Weight in grams only</span></td></tr>
+          <tr><td>Pause date &amp; pause reason</td><td>Suppress anyone already gone</td><td><span class="tag yes">Exists</span></td><td><span class="tag yes">Exists</span></td></tr>
+          <tr><td>App launched flag</td><td>Prioritisation; decide whether to walk through the app</td><td><span class="tag part">Present but unusable</span></td><td><span class="tag no">Needs adding</span></td></tr>
+          <tr><td>Pet profile photo flag</td><td>Engagement signal for prioritisation</td><td><span class="tag yes">Exists</span></td><td><span class="tag no">Needs adding</span></td></tr>
+          <tr><td>Selling agent name</td><td>Feed objections back into D2MS coaching</td><td><span class="tag yes">Exists</span></td><td><span class="tag no">Needs adding</span></td></tr>
+          <tr><td>Acquisition discount code</td><td>Understand what they were promised</td><td><span class="tag part">Via plan fields</span></td><td><span class="tag yes">Exists</span></td></tr>
+          <tr><td>Pet age, breed, health flags</td><td>Tailor feeding guidance</td><td><span class="tag part">Partial</span></td><td><span class="tag yes">Exists</span></td></tr>
+          <tr><td>Postcode / county</td><td>Delivery-slot conversations</td><td><span class="tag yes">Exists</span></td><td><span class="tag yes">Exists</span></td></tr>
+          <tr style="background:#EAF4FA"><td><strong>Test / control flag</strong></td><td><strong>Measurement &mdash; must be stamped and stored</strong></td><td><span class="tag no">New</span></td><td><span class="tag no">New</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="src">
+      Assessed against <code>&#9881;&#65039; D2MS Looker</code> and <code>&#9881;&#65039; Marro D2MS Looker</code> in the Telesales System base.
+    </p>
+
+    <h3>9.2 Adversus configuration</h3>
+    <ul>
+      <li><strong>A dedicated campaign</strong> &mdash; "D2MS Welcome Calls" &mdash; entirely separate from acquisition dialling, so neither reporting nor dialling behaviour is contaminated.</li>
+      <li><strong>Weekly list IDs</strong> in the form <code>WELCOME-MARRO-W&lt;nn&gt;</code> and <code>WELCOME-BNB-W&lt;nn&gt;</code>, matching the existing convention of tracking an Original List ID per import.</li>
+      <li><strong>Preview dialling</strong>, not predictive. I need to read the record before I speak, and predictive dialling is inappropriate for a service call.</li>
+      <li><strong>Custom result codes</strong> that record the outcome and the reason, not just the disposition &mdash; see 9.3.</li>
+      <li><strong>Custom fields</strong> shown on-screen during the call: pet name, box 1 date, box 2 date, plan, discount code.</li>
+      <li><strong>Call recording enabled</strong>, so the conversations can be used for D2MS coaching and the retention scorecard.</li>
+      <li><strong>Outbound caller ID</strong> set to a recognised brand number with a working inbound route, so customers can call back.</li>
+    </ul>
+
+    <h3>9.3 Result codes to capture</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Group</th><th>Result codes</th><th>Why we need it</th></tr></thead>
+        <tbody>
+          <tr><td>Contact outcome</td><td>Spoke to customer / No answer / Voicemail / Wrong number / Call back requested</td><td>Connect rate and true coverage of the cohort</td></tr>
+          <tr><td>Customer sentiment</td><td>Happy and confident / Minor concerns / At risk / Wants to cancel</td><td>A leading indicator of churn, weeks before it shows in retention</td></tr>
+          <tr><td>Issue raised</td><td>Food refusal / Price concern / Doesn't want subscription / Portion or storage / Delivery / App confusion / Service failure / None</td><td>Maps directly onto our existing pause-reason taxonomy so calls and pauses can be compared</td></tr>
+          <tr><td>Action taken</td><td>Transition coaching / App walkthrough / Plan changed / Delivery rescheduled / Escalated to Care / Delay booked / None needed</td><td>Tells us which intervention actually moves retention</td></tr>
+          <tr><td>Verbatim note</td><td>Free text</td><td>The qualitative gold. This is what feeds the offer, onboarding and training decisions.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>9.4 Data-quality gaps I found while preparing this</h3>
+    <div class="caution">
+      Three issues worth fixing regardless of this proposal, because they currently limit our ability to see early-life churn at all:
+      <ol style="margin-top:8px">
+        <li><strong>The app-launch flag in the Butternut D2MS Looker pull is unusable.</strong> It reads as <code>true</code> for every one of the 3,000 records I sampled, so it cannot currently distinguish an engaged customer from a disengaged one. Either the field or the underlying view needs correcting.</li>
+        <li><strong>Marro has no 84-day retention figure.</strong> The field is present in the weekly KPI table but is effectively empty for Marro, so we can only see Marro's box 2 step and are blind beyond it.</li>
+        <li><strong>Order 2 delivery date coverage in the Looker pull is patchy</strong> relative to the aggregated box 2 counts in the weekly KPI table, so the two sources disagree. Worth reconciling before we use the Look for anything operational.</li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ══════════ MEASUREMENT ══════════ -->
+  <section class="card" id="measure">
+    <h2><span class="num">10</span> How We Will Know If It Worked</h2>
+    <p class="lede">
+      A randomised holdout, agreed metrics, and pre-committed decision gates &mdash; so the pilot cannot be
+      retrospectively declared a success.
+    </p>
+
+    <h3>10.1 Test design</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Element</th><th>Design</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Unit of randomisation</strong></td><td>Individual customer within each weekly brand cohort.</td></tr>
+          <tr><td><strong>Allocation</strong></td><td>Random split at list-build time, before any dialling. Stamped on the record and stored so it cannot be reconstructed after the fact.</td></tr>
+          <tr><td><strong>Test group</strong></td><td>Eligible for a welcome call. Includes those I attempt but fail to reach &mdash; measured on an intention-to-treat basis, which is the honest way to read it.</td></tr>
+          <tr><td><strong>Control group</strong></td><td>Randomly selected, receives the standard automated journey only, no welcome call.</td></tr>
+          <tr><td><strong>Secondary comparison</strong></td><td>Within the test group, spoke-to versus not-reached. Useful, but confounded &mdash; reachable customers may be inherently more engaged &mdash; so it will be reported as indicative only.</td></tr>
+          <tr><td><strong>Duration</strong></td><td>12 weeks of calling, plus a further ~6 weeks for the final cohorts to mature past box 2.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>10.2 Metrics</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Tier</th><th>Metric</th><th>Marro baseline</th><th>Butternut baseline</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Primary</strong></td><td>Box 2 retention (box 2 delivered / box 1 delivered)</td><td>48.6%</td><td>63.4%</td></tr>
+          <tr><td>Secondary</td><td>Pause rate before box 2</td><td>To be baselined at cohort level</td><td>To be baselined at cohort level</td></tr>
+          <tr><td>Secondary</td><td>84-day retention</td><td><em>Not currently tracked &mdash; see 9.4</em></td><td>~37.7%</td></tr>
+          <tr><td>Secondary</td><td>Mix of pause reasons (has the food/price mix shifted?)</td><td>Food 41.7% / Price 20.5%</td><td>Food 33.3% / Price 17.8%</td></tr>
+          <tr><td>Secondary</td><td>App activation and pet-profile completion</td><td>To be enabled</td><td>Blocked by the flag issue in 9.4</td></tr>
+          <tr><td>Operational</td><td>Connect rate, conversations per day, talk time, coverage of cohort</td><td>Assumed 40% / ~34 / 6&ndash;8 min / ~23%</td><td>Assumed 40% / ~34 / 6&ndash;8 min / ~11%</td></tr>
+          <tr><td>Qualitative</td><td>Themed objection log from every recorded conversation</td><td colspan="2">The guaranteed deliverable, regardless of the retention result</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>10.3 Decision gates</h3>
+    <div class="blocks">
+      <div class="block" style="border-left:6px solid var(--blue)">
+        <span class="step-no">WEEK 2</span>
+        <h4>Operational viability</h4>
+        <p style="font-size:14px">Is the Looker&rarr;Adversus flow working, and is the connect rate anywhere near 40%? If connect rates are very low, revisit call timing before spending more days on it.</p>
+      </div>
+      <div class="block" style="border-left:6px solid var(--amber)">
+        <span class="step-no">WEEK 6</span>
+        <h4>Go / no-go on Butternut</h4>
+        <p style="font-size:14px">Early Marro cohorts have passed box 2. If the direction is positive and the conversations are yielding usable insight, add Friday Butternut calls. If not, stay on Marro or stop.</p>
+      </div>
+      <div class="block" style="border-left:6px solid var(--green)">
+        <span class="step-no">WEEK 12</span>
+        <h4>Full read-out</h4>
+        <p style="font-size:14px">Called versus control retention, objection themes, and a costed recommendation: stop, continue as-is, or scale.</p>
+      </div>
+      <div class="block" style="border-left:6px solid var(--purple)">
+        <span class="step-no">WEEK 18</span>
+        <h4>Mature cohort confirmation</h4>
+        <p style="font-size:14px">Final cohorts fully matured past box 2, plus a first look at any 84-day effect.</p>
+      </div>
+    </div>
+
+    <div class="note">
+      <strong>What "scale" would mean if it works.</strong> Not me making more calls. It would mean either
+      (a) folding welcome calls into the internal telesales team's week, (b) automating the specific fixes we
+      discover &mdash; better transition guidance, clearer box 2 pricing, a nudged app walkthrough &mdash; across
+      every sign-up rather than the fraction I can phone, or (c) building the call into the D2MS commission model
+      so the agency has skin in the retention game. Option (b) is where the real money is.
+    </div>
+  </section>
+
+  <!-- ══════════ VALUE MODEL ══════════ -->
+  <section class="card" id="value">
+    <h2><span class="num">11</span> Value Model</h2>
+    <p class="lede">
+      I have not baked in a retention uplift, because I do not know it yet &mdash; that is the point of the pilot.
+      Instead, set the assumptions yourself and see what the pilot needs to achieve to be worth the time.
+      Defaults use our actual baselines.
+    </p>
+
+    <div class="calc">
+      <div class="calc-inputs">
+        <h4>Assumptions</h4>
+        <div class="field">
+          <label for="inSignups">Weekly D2MS sign-ups called on <span class="hint">Marro ~150, Butternut ~300 &mdash; total across both brands once phase 2 is live</span></label>
+          <input type="number" id="inSignups" value="450" min="0" step="10">
+        </div>
+        <div class="field">
+          <label for="inConvs">Conversations per calling day <span class="hint">From section 8: ~84 dials at 40% connect</span></label>
+          <input type="number" id="inConvs" value="34" min="0" step="1">
+        </div>
+        <div class="field">
+          <label for="inDays">Calling days per week <span class="hint">1 = Marro only (phase 1), 2 = both brands</span></label>
+          <input type="number" id="inDays" value="2" min="0" max="7" step="1">
+        </div>
+        <div class="field">
+          <label for="inUplift">Retention uplift on customers spoken to <span class="hint">Percentage points. Unknown &mdash; this is what we are testing</span></label>
+          <input type="number" id="inUplift" value="5" min="0" max="50" step="0.5">
+        </div>
+        <div class="field">
+          <label for="inLtv">Customer lifetime value <span class="hint">Butternut D2MS LTV has been running ~&pound;107&ndash;&pound;120</span></label>
+          <input type="number" id="inLtv" value="115" min="0" step="5">
+        </div>
+        <div class="field">
+          <label for="inCost">Fully-loaded cost of one of my calling days <span class="hint">Opportunity cost of my time &mdash; set this to whatever you think is right, Ed</span></label>
+          <input type="number" id="inCost" value="250" min="0" step="25">
+        </div>
+        <div class="field">
+          <label for="inScaleUplift">If learnings are automated across <em>all</em> sign-ups, uplift <span class="hint">Percentage points applied to the whole cohort, not just those called</span></label>
+          <input type="number" id="inScaleUplift" value="2" min="0" max="50" step="0.5">
+        </div>
+      </div>
+
+      <div class="calc-out" id="calcOut"></div>
+    </div>
+
+    <div class="caution" style="margin-top:18px">
+      <strong>Let me be the first to point out the awkward number.</strong> On the default assumptions
+      &mdash; two days a week valued at &pound;250 a day, 34 conversations a day, &pound;115 lifetime value &mdash;
+      each conversation costs about <strong>&pound;7.35</strong>, so I need to save one customer for roughly every
+      <strong>16 conversations</strong> just to break even. That is a <strong>6.4pp retention uplift</strong>, which is
+      a genuinely demanding target. On direct value alone, this pilot is somewhere between marginal and loss-making,
+      and you would be right to challenge it on that basis.
+      <p style="margin-top:10px">
+        I am not going to dress that up. <strong>The case for doing it does not rest on the direct return.</strong>
+        It rests on the three things below.
+      </p>
+    </div>
+
+    <div class="insight">
+      <strong>Why it is still worth two days a week.</strong>
+      <ol style="margin-top:8px">
+        <li><strong>The learnings scale; my dialling does not.</strong> Set the last input to even 1&ndash;2pp and look at
+        the final tile. If these conversations tell us how to fix the food-transition message, the box 2 price
+        expectation and the app walkthrough for <em>every</em> D2MS customer, a small uplift applied across ~450 weekly
+        sign-ups dwarfs anything I can achieve on the phone myself. The calls are cheap primary research that happens
+        to retain customers as a by-product.</li>
+        <li><strong>We currently have no qualitative view of early-life churn at all.</strong> We know 41.7% of Marro
+        customers pause because the cat did not eat the food. We do not know whether that is a transition-coaching
+        failure or genuine palatability &mdash; and the two answers point to completely different business decisions.
+        Commissioning research to answer that would cost considerably more than my time.</li>
+        <li><strong>It de-risks a much bigger decision.</strong> If we ever want to fund a proper early-life retention
+        team, or renegotiate D2MS commission around retained customers, we will need evidence that human contact in
+        the first three weeks changes behaviour. This pilot buys that evidence at the lowest possible cost.</li>
+      </ol>
+    </div>
+
+    <div class="note">
+      <strong>What would make the direct economics work.</strong> Three levers, in order of realism:
+      raising conversations per day (a better connect rate is the single biggest factor &mdash; every extra
+      conversation lowers cost per contact); targeting the calls at the highest-risk customers rather than the whole
+      cohort, so the uplift per conversation is larger than the average; and eventually moving delivery to someone
+      whose day costs less than mine. Try setting conversations per day to 45 and the cost to &pound;150 to see the
+      effect &mdash; which is essentially what a scaled, team-delivered version of this would look like.
+    </div>
+
+    <h3>11.1 The Marro-to-Butternut headroom, for scale</h3>
+    <p>
+      A useful upper bound: if Marro's box 2 retention matched Butternut's 63.4% rather than sitting at 48.6%,
+      that 14.8pp difference on ~150 sign-ups a week would be roughly <strong>22 additional customers reaching box 2
+      every week</strong>, or around <strong>1,150 a year</strong>. I am not claiming welcome calls close that whole gap
+      &mdash; some of it is brand, species and offer structure. But it does size the territory we are playing in,
+      and it suggests the discount-cliff finding in section 4 deserves attention in its own right.
+    </p>
+  </section>
+
+  <!-- ══════════ RISKS ══════════ -->
+  <section class="card" id="risks">
+    <h2><span class="num">12</span> Risks &amp; Mitigations</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Risk</th><th>Likelihood</th><th>Mitigation</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>The call reminds a wavering customer to cancel</strong> &mdash; we surface doubt that would otherwise have passed</td>
+            <td>Medium</td>
+            <td>This is the real risk and the holdout is precisely how we detect it. If the called group retains <em>worse</em>, we stop. Framing the call as service rather than sales, and never mentioning cancellation ourselves, reduces the chance.</td>
+          </tr>
+          <tr>
+            <td><strong>Raising the box 2 price triggers churn we caused</strong></td>
+            <td>Medium</td>
+            <td>Always paired with a concrete alternative &mdash; smaller plan, longer interval, delayed box. Tracked as its own result code so we can isolate its effect and drop it if it is net-negative.</td>
+          </tr>
+          <tr>
+            <td><strong>Customers experience it as an unwanted sales call</strong></td>
+            <td>Low&ndash;Medium</td>
+            <td>Open by stating it is not a sales call. No targets, no upsell. Honour opt-outs immediately and permanently.</td>
+          </tr>
+          <tr>
+            <td><strong>Two days a week of my time is a real cost</strong></td>
+            <td>High &mdash; certain</td>
+            <td>Phase 1 is one day, on Marro only. Week 6 gate before the second day is committed. Section 11 lets you judge the trade-off explicitly.</td>
+          </tr>
+          <tr>
+            <td><strong>Sample too small to prove a modest effect</strong></td>
+            <td>High</td>
+            <td>Acknowledged openly in section 8.1. Mitigated by judging the pilot on qualitative insight as well as the retention read, and by extending the window if the direction is promising but inconclusive.</td>
+          </tr>
+          <tr>
+            <td><strong>Poor phone data quality means low reach</strong></td>
+            <td>Medium</td>
+            <td>Phone number coverage in the current Looker pull is incomplete. Measure it in week 1; if reach is poor, that itself is a finding worth fixing at the point of sale.</td>
+          </tr>
+          <tr>
+            <td><strong>It works, but only because I am the one doing it</strong></td>
+            <td>Medium</td>
+            <td>Genuine risk to scalability. Mitigated by recording every call and documenting the guide, so the effect can be tested with another caller before we commit to scaling.</td>
+          </tr>
+          <tr>
+            <td><strong>D2MS reads this as criticism of their sales quality</strong></td>
+            <td>Medium</td>
+            <td>Position it as after-sales support that protects their commission too. Share the objection themes with them as coaching material, not as a scorecard.</td>
+          </tr>
+          <tr>
+            <td><strong>Cannibalising Customer Care's work or double-contacting</strong></td>
+            <td>Low</td>
+            <td>Suppress anyone with a live Care ticket. Agree the boundary with Care before week 1.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ══════════ COMPLIANCE ══════════ -->
+  <section class="card" id="compliance">
+    <h2><span class="num">13</span> Compliance &amp; Governance</h2>
+    <p class="lede">These calls are service communications to existing customers, but they still need to be done properly.</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Area</th><th>Requirement</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Lawful basis</strong></td><td>Confirm with Legal/Data Protection that post-sale onboarding calls to live customers fall under legitimate interests as a service communication, and that our privacy notice covers it.</td></tr>
+          <tr><td><strong>Preference suppression</strong></td><td>Honour any existing "no phone contact" preference. Screen against TPS where required, and treat customer opt-outs as immediate and permanent.</td></tr>
+          <tr><td><strong>Call recording</strong></td><td>Standard recording notice at the start of each call. Retain recordings in line with existing telesales retention policy, no longer.</td></tr>
+          <tr><td><strong>Data minimisation</strong></td><td>The Look carries only the fields needed for the call. No payment details in the export. List retired from Adversus once the week's calling is complete.</td></tr>
+          <tr><td><strong>Data transfer</strong></td><td>Confirm the Looker&rarr;Adversus route meets our existing standard for personal data leaving Looker &mdash; ideally the same mechanism already used for acquisition lead imports.</td></tr>
+          <tr><td><strong>Vulnerable customers</strong></td><td>Follow existing telesales policy. Suppress flagged accounts; escalate rather than handle if vulnerability emerges on a call.</td></tr>
+          <tr><td><strong>Calling hours</strong></td><td>Standard permitted hours only. No repeat dialling beyond three attempts.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ══════════ TIMELINE ══════════ -->
+  <section class="card" id="timeline">
+    <h2><span class="num">14</span> Timeline</h2>
+    <p class="lede">
+      Weeks are counted from sign-off. Setup runs in parallel with existing work; only the calling days need
+      ring-fencing.
+    </p>
+    <div class="table-wrap gantt">
+      <table>
+        <thead>
+          <tr>
+            <th>Workstream</th>
+            <th>W0</th><th>W1&ndash;2</th><th>W3&ndash;4</th><th>W5&ndash;6</th><th>W7&ndash;8</th><th>W9&ndash;10</th><th>W11&ndash;12</th><th>W13&ndash;18</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Sign-off &amp; scoping</strong></td>
+            <td><span class="bar decide">Approve</span></td>
+            <td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td>
+          </tr>
+          <tr>
+            <td><strong>Looker Look &amp; schedule</strong></td>
+            <td><span class="bar setup">Spec</span></td>
+            <td><span class="bar setup">Build</span></td>
+            <td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td>
+          </tr>
+          <tr>
+            <td><strong>Adversus campaign setup</strong></td>
+            <td class="empty"></td>
+            <td><span class="bar build">Configure</span></td>
+            <td><span class="bar build">Test import</span></td>
+            <td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td>
+          </tr>
+          <tr>
+            <td><strong>Call guide &amp; result codes</strong></td>
+            <td class="empty"></td>
+            <td><span class="bar build">Draft</span></td>
+            <td><span class="bar build">Pilot calls</span></td>
+            <td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td>
+          </tr>
+          <tr>
+            <td><strong>Compliance sign-off</strong></td>
+            <td class="empty"></td>
+            <td><span class="bar setup">Legal check</span></td>
+            <td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td>
+          </tr>
+          <tr style="background:#FFF4D6">
+            <td><strong>Marro calls (Tuesdays)</strong></td>
+            <td class="empty"></td><td class="empty"></td>
+            <td><span class="bar call">Live</span></td>
+            <td><span class="bar call">Live</span></td>
+            <td><span class="bar call">Live</span></td>
+            <td><span class="bar call">Live</span></td>
+            <td><span class="bar call">Live</span></td>
+            <td class="empty"></td>
+          </tr>
+          <tr>
+            <td><strong>Week 6 go / no-go</strong></td>
+            <td class="empty"></td><td class="empty"></td><td class="empty"></td>
+            <td><span class="bar decide">Gate</span></td>
+            <td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td>
+          </tr>
+          <tr style="background:#FFF4D6">
+            <td><strong>Butternut calls (Fridays)</strong></td>
+            <td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td>
+            <td><span class="bar call">Live</span></td>
+            <td><span class="bar call">Live</span></td>
+            <td><span class="bar call">Live</span></td>
+            <td class="empty"></td>
+          </tr>
+          <tr>
+            <td><strong>Cohort measurement</strong></td>
+            <td class="empty"></td><td class="empty"></td><td class="empty"></td>
+            <td><span class="bar measure">Track</span></td>
+            <td><span class="bar measure">Track</span></td>
+            <td><span class="bar measure">Track</span></td>
+            <td><span class="bar measure">Track</span></td>
+            <td><span class="bar measure">Mature</span></td>
+          </tr>
+          <tr>
+            <td><strong>Monthly read-outs to Ed</strong></td>
+            <td class="empty"></td><td class="empty"></td><td class="empty"></td>
+            <td><span class="bar review">Review 1</span></td>
+            <td class="empty"></td>
+            <td><span class="bar review">Review 2</span></td>
+            <td class="empty"></td>
+            <td><span class="bar review">Final</span></td>
+          </tr>
+          <tr>
+            <td><strong>Scale recommendation</strong></td>
+            <td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td>
+            <td class="empty"></td>
+            <td><span class="bar decide">Decide</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>14.1 What I need from whom</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Who</th><th>What</th><th>When</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Ed</strong></td><td>Approve the pilot, the two calling days, and the use of a holdout group</td><td>Week 0</td></tr>
+          <tr><td><strong>Data / Analytics</strong></td><td>Build the two scheduled Looks and add the missing Marro fields; fix the app-launch flag</td><td>Weeks 0&ndash;2</td></tr>
+          <tr><td><strong>Adversus owner</strong></td><td>Create the campaign, list-ID convention, result codes and custom on-screen fields</td><td>Weeks 1&ndash;2</td></tr>
+          <tr><td><strong>Legal / Data Protection</strong></td><td>Confirm lawful basis, recording notice and suppression requirements</td><td>Weeks 1&ndash;2</td></tr>
+          <tr><td><strong>Customer Care</strong></td><td>Agree the boundary, the suppression rule and the escalation route</td><td>Week 2</td></tr>
+          <tr><td><strong>Me</strong></td><td>Everything else &mdash; guide, list handling, calling, logging, analysis, read-outs</td><td>Throughout</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ══════════ OPEN QUESTIONS ══════════ -->
+  <section class="card" id="questions">
+    <h2><span class="num">15</span> Open Questions For This Meeting</h2>
+    <p class="lede">
+      Things I cannot resolve on my own, and where a decision from you unblocks me. I have put my own
+      recommendation against each so we can move quickly.
+    </p>
+    <ol class="qa">
+      <li>
+        <strong>Are you comfortable with a holdout group we deliberately do not call?</strong>
+        <span class="why-ask">It is the only way to prove the effect, but it does mean knowingly leaving some customers unsupported. <em>My recommendation: yes, and keep the holdout as small as the maths allows.</em></span>
+      </li>
+      <li>
+        <strong>Should I raise the box 2 price step on Marro calls, or wait to be asked?</strong>
+        <span class="why-ask">Pre-empting it is the bolder option and I think the right one, but it is your call. <em>My recommendation: pre-empt it, always paired with a plan-change offer, and track it separately so we can prove or disprove it.</em></span>
+      </li>
+      <li>
+        <strong>What is the right value to put on a day of my time?</strong>
+        <span class="why-ask">It drives the break-even in section 11 and I would rather you set it than I guess. Two days a week is a real trade-off against my other work.</span>
+      </li>
+      <li>
+        <strong>Do we tell D2MS we are doing this?</strong>
+        <span class="why-ask">Transparency builds goodwill and the objection themes are useful coaching material for them, but it may also change how they sell. <em>My recommendation: tell them, and share the themes.</em></span>
+      </li>
+      <li>
+        <strong>Is Marro-first the right sequencing, or would you rather start with Butternut Box?</strong>
+        <span class="why-ask">Marro has more headroom and the price cliff; Butternut has more volume and better data. <em>My recommendation: Marro first, exactly as proposed.</em></span>
+      </li>
+      <li>
+        <strong>Who owns the Looker build, and what is their lead time?</strong>
+        <span class="why-ask">This is the only genuine external dependency on the critical path.</span>
+      </li>
+      <li>
+        <strong>Does this need Legal sign-off, or is it covered by our existing customer-service contact basis?</strong>
+        <span class="why-ask">Affects whether week 1 or week 3 is a realistic start.</span>
+      </li>
+      <li>
+        <strong>Independent of this pilot &mdash; should we look at levelling Marro's 40% / 30% discount structure?</strong>
+        <span class="why-ask">It is the clearest structural difference between the two brands, and it lines up with a 14.8pp retention gap and 20.5% of pauses citing price. It may be a bigger lever than anything I can achieve on the phone.</span>
+      </li>
+      <li>
+        <strong>If it works, what does scaling look like &mdash; internal team capacity, automation, or the D2MS commission model?</strong>
+        <span class="why-ask">Worth agreeing the ambition now so the pilot is designed to answer the right question.</span>
+      </li>
+      <li>
+        <strong>How will you judge this at week 12 if the retention read is directionally positive but not statistically conclusive?</strong>
+        <span class="why-ask">Given the sample-size limits in section 8.1, this is the most likely outcome, and I would rather agree the decision rule before we start than argue about it afterwards.</span>
+      </li>
+    </ol>
+  </section>
+
+  <!-- ══════════ SCRIPT APPENDIX ══════════ -->
+  <section class="card" id="script">
+    <h2><span class="num">16</span> Appendix: Draft Call Guide</h2>
+    <p class="lede">
+      A guide, not a script &mdash; the tone should be a helpful human, not a read-out. Italics are indicative wording;
+      the notes underneath explain what each part is for.
+    </p>
+
+    <div class="script">
+      <h4>Block 1 &mdash; Introduction</h4>
+      <div class="say">
+        "Hi, is that [name]? My name's Greg, I'm calling from [Marro / Butternut Box] &mdash; nothing to worry about
+        and this isn't a sales call. You signed up with us last week for [pet name], and I just wanted to check in
+        personally, make sure everything's arrived and gone smoothly, and answer anything you're not sure about.
+        Have you got five minutes?"
+      </div>
+      <p class="why"><strong>Purpose:</strong> disarm the "why are they ringing me" reflex immediately, establish it is a service call, and use the pet's name to make it obviously personal.</p>
+
+      <h4>Block 2 &mdash; Did it arrive, how is it going?</h4>
+      <div class="say">
+        "So your first box should have arrived on [order 1 delivery date] &mdash; did that turn up alright?
+        &hellip; And how's [pet name] getting on with it so far?"
+      </div>
+      <p class="why"><strong>Purpose:</strong> the most important listening moment on the call. Any hedging &mdash; "she's a bit unsure", "he's picking at it" &mdash; is the food-refusal pause reason forming in real time. Go straight to block 3.</p>
+
+      <h4>Block 3 &mdash; Transition coaching</h4>
+      <div class="say">
+        "That's completely normal, and it's actually the most common thing we hear in the first week &mdash; especially
+        with cats, they can be pretty opinionated. The trick is not to switch them over all at once. Start with
+        about a quarter of the new food mixed into what they're used to, and build it up over a week or so.
+        A couple of other things that make a big difference: let it come up to room temperature rather than
+        serving it straight from the fridge, and if they walk away from it, don't panic &mdash; just take it up and
+        offer it again a bit later rather than putting something else down."
+      </div>
+      <p class="why"><strong>Purpose:</strong> directly targets 41.7% of Marro pauses and 33.3% of Butternut's. Normalising the fussy first week is as important as the practical advice, because it stops the customer concluding "my pet won't eat this" after two days.</p>
+
+      <h4>Block 4 &mdash; App walkthrough</h4>
+      <div class="say">
+        "Have you had a chance to get the app? &hellip; If you've got it to hand, I'll show you the two or three
+        things worth knowing, because it's where you control everything. So if a box is coming at an awkward time,
+        you can push it back &mdash; you don't have to cancel anything, you just delay it. Same with portion size
+        and how often it comes. And while you're in there, it's worth adding [pet name]'s details and a photo,
+        because that's what your portions get worked out from."
+      </div>
+      <p class="why"><strong>Purpose:</strong> "don't want a subscription" is 23.3% of Marro pauses and 15.9% of Butternut's. A lot of that is really "I don't want to be locked in". Showing them the delay button reframes the subscription as flexible. The photo prompt is a light engagement nudge that our data associates with slightly better retention.</p>
+
+      <h4>Block 5 &mdash; Next box and the money</h4>
+      <div class="say">
+        "Your next box is due [order 2 delivery date], and that'll be charged around [date]. One thing I want to
+        flag so it's not a surprise &mdash; your first box had a bigger introductory discount on it than the ongoing
+        one, so this next payment will be a bit higher than the first. It'll be [amount] rather than [amount].
+        If that's more than you were expecting, tell me now and we can look at a smaller plan or spacing the
+        deliveries out a bit further &mdash; there's usually a way to make it work."
+      </div>
+      <p class="why"><strong>Purpose:</strong> the highest-risk and highest-value part of the call, and specific to Marro's 40%&rarr;30% structure. We are trading a small amount of short-term discomfort for the chance to keep the customer at a price that suits them, instead of losing them silently at the box 2 charge.</p>
+
+      <h4>Block 6 &mdash; Close</h4>
+      <div class="say">
+        "Is there anything else you're unsure about? &hellip; Great. You've got my name &mdash; if anything comes up
+        with [pet name] or the deliveries, you can get us on [number] and there'll be a person on the end of it.
+        Thanks for giving me five minutes, and I hope [pet name] gets on well with it."
+      </div>
+      <p class="why"><strong>Purpose:</strong> leave a human route back in. A customer who knows they can reach a person is less likely to resolve a problem by cancelling.</p>
+    </div>
+
+    <h3>16.1 Objection handling &mdash; mapped to our actual pause reasons</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>What they say</th><th>What it really is</th><th>Response</th><th>Log as</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>"He/she won't touch it."</td>
+            <td>Transition too fast, or served cold</td>
+            <td>Full block 3 coaching. Offer to follow up. Suggest holding rather than cancelling until they have tried a slower transition.</td>
+            <td>Food refusal &rarr; transition coaching</td>
+          </tr>
+          <tr>
+            <td>"It's more expensive than I thought."</td>
+            <td>Discount step or plan too large</td>
+            <td>Be straight about the discount structure. Right-size the plan or lengthen the interval on the call.</td>
+            <td>Price concern &rarr; plan changed</td>
+          </tr>
+          <tr>
+            <td>"I don't really want to be tied into a subscription."</td>
+            <td>Perceived lack of control</td>
+            <td>App walkthrough. Show delay and interval controls. Emphasise no fixed term.</td>
+            <td>Doesn't want subscription &rarr; app walkthrough</td>
+          </tr>
+          <tr>
+            <td>"I've got loads left over."</td>
+            <td>Plan oversized at point of sale</td>
+            <td>Recalculate portions. Reduce plan or extend the interval. Worth feeding back to the selling agent.</td>
+            <td>Portion / storage &rarr; plan changed</td>
+          </tr>
+          <tr>
+            <td>"It doesn't fit in my freezer."</td>
+            <td>Delivery size, not product</td>
+            <td>Smaller, more frequent deliveries. Storage tips.</td>
+            <td>Portion / storage &rarr; delivery rescheduled</td>
+          </tr>
+          <tr>
+            <td>"I was told something different when I signed up."</td>
+            <td>Potential mis-selling</td>
+            <td>Do not defend it. Establish what they were told, put it right, and log it &mdash; this is high-value D2MS coaching material.</td>
+            <td>Service failure &rarr; escalated</td>
+          </tr>
+          <tr>
+            <td>"I want to cancel."</td>
+            <td>Varies &mdash; diagnose before responding</td>
+            <td>Understand the real reason first. Offer a delay as an alternative if appropriate. Never obstruct a genuine cancellation.</td>
+            <td>Wants to cancel + specific reason</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer>
+    <p>
+      <strong>D2MS Welcome Calls &mdash; Business Proposition.</strong>
+      Standalone page; it does not alter the Telesales Command Center dashboard or the existing D2MS retention project plan.
+    </p>
+    <p class="src">
+      All retention, volume, discount and pause-reason figures are drawn from the live Telesales System Airtable base
+      (<code>&#128202; Weekly KPIs v2</code>, <code>&#128269; Pause Reason Analysis</code>, <code>&#9881;&#65039; D2MS Looker</code>,
+      <code>&#9881;&#65039; Marro D2MS Looker</code>), filtered to the D2MS channel and the UK market for 2026, and were
+      current as at 28 July 2026. Every figure presented as an assumption rather than an actual is labelled as such.
+    </p>
+  </footer>
+
+</main>
+
+<script>
+// ══════════════════════════════════════════════════════════════
+// Chart defaults, matched to the dashboard's visual language
+// ══════════════════════════════════════════════════════════════
+const BROWN = '#522A10', CORAL = '#ED6961', TEAL = '#00897B', PURPLE = '#7B3FA0';
+const GRID = '#F0E6CC';
+
+Chart.defaults.font.family = "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif";
+Chart.defaults.color = '#7A5A3A';
+
+// ── Box 2 retention by sign-up week (mature cohorts only, W1-W25) ──
+const weekLabels = Array.from({ length: 25 }, (_, i) => 'W' + (i + 1));
+
+// Values are actuals from Weekly KPIs v2; null where the week has no D2MS cohort recorded.
+const marroRetention = [
+  null, 55.3, null, 54.3, 50.9, 50.5, 57.8, 43.4, null, 44.3,
+  null, 42.2, 52.8, null, 52.0, 52.2, 42.7, 37.3, null, null,
+  43.5, 43.0, 45.0, null, 41.2
+];
+const bnbRetention = [
+  71.7, 61.8, 70.4, 61.2, 65.7, 60.5, null, 58.3, 66.5, 64.4,
+  null, 56.3, null, 61.7, 67.4, null, null, null, null, null,
+  null, null, null, 61.8, null
+];
+
+new Chart(document.getElementById('chartRetention'), {
+  type: 'line',
+  data: {
+    labels: weekLabels,
+    datasets: [
+      {
+        label: 'Marro',
+        data: marroRetention,
+        borderColor: PURPLE,
+        backgroundColor: PURPLE + '18',
+        borderWidth: 2.5,
+        pointRadius: 3.5,
+        pointBackgroundColor: PURPLE,
+        tension: 0.25,
+        spanGaps: true,
+        fill: true
+      },
+      {
+        label: 'Butternut Box',
+        data: bnbRetention,
+        borderColor: TEAL,
+        backgroundColor: TEAL + '18',
+        borderWidth: 2.5,
+        pointRadius: 3.5,
+        pointBackgroundColor: TEAL,
+        tension: 0.25,
+        spanGaps: true,
+        fill: true
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 12 } } },
+      tooltip: {
+        callbacks: {
+          label: c => `${c.dataset.label}: ${c.parsed.y === null ? 'no data' : c.parsed.y.toFixed(1) + '%'}`
+        }
+      }
+    },
+    scales: {
+      x: { grid: { display: false }, title: { display: true, text: 'Sign-up week (2026)' } },
+      y: {
+        grid: { color: GRID },
+        min: 30,
+        max: 80,
+        ticks: { callback: v => v + '%' },
+        title: { display: true, text: 'Box 2 retention' }
+      }
+    }
+  }
+});
+
+// ── Weekly sign-up volume ──
+const volWeeks = ['W18', 'W21', 'W22', 'W23', 'W24', 'W25', 'W27', 'W28', 'W29', 'W30'];
+const volMarro = [150, 125, 136, 141, null, 155, 200, null, null, 182];
+const volBnb = [null, null, null, null, 235, null, 284, 339, 325, 309];
+
+new Chart(document.getElementById('chartVolume'), {
+  type: 'bar',
+  data: {
+    labels: volWeeks,
+    datasets: [
+      { label: 'Marro', data: volMarro, backgroundColor: PURPLE, borderRadius: 5 },
+      { label: 'Butternut Box', data: volBnb, backgroundColor: TEAL, borderRadius: 5 }
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 12 } } },
+      tooltip: { callbacks: { label: c => `${c.dataset.label}: ${c.parsed.y === null ? 'no data' : c.parsed.y + ' sign-ups'}` } }
+    },
+    scales: {
+      x: { grid: { display: false }, title: { display: true, text: 'Week (2026)' } },
+      y: { grid: { color: GRID }, beginAtZero: true, title: { display: true, text: 'D2MS sign-ups' } }
+    }
+  }
+});
+
+// ── Pause reason mixes ──
+function reasonChart(canvasId, labels, values, colour) {
+  new Chart(document.getElementById(canvasId), {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [{ data: values, backgroundColor: colour, borderRadius: 5 }]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: c => c.parsed.x.toFixed(1) + '% of pause events' } }
+      },
+      scales: {
+        x: { grid: { color: GRID }, ticks: { callback: v => v + '%' }, beginAtZero: true },
+        y: { grid: { display: false }, ticks: { font: { size: 11 } } }
+      }
+    }
+  });
+}
+
+reasonChart('chartMarroReasons',
+  ['Pet did not eat food', 'Don\u2019t want subscription', 'Price', 'Coming back', 'Cat no longer here', 'Too inconvenient', 'Health / diet', 'Service'],
+  [41.7, 23.3, 20.5, 3.9, 3.9, 3.0, 2.4, 1.3],
+  PURPLE
+);
+
+reasonChart('chartBnbReasons',
+  ['The food', 'Price', 'Don\u2019t want subscription', 'Food leftover', 'Other', 'Dog health', 'Purchased in store', 'Coming back', 'Freezer space'],
+  [33.3, 17.8, 15.9, 6.3, 6.0, 5.7, 4.4, 4.3, 2.0],
+  TEAL
+);
+
+// ══════════════════════════════════════════════════════════════
+// Value model
+// ══════════════════════════════════════════════════════════════
+const inputIds = ['inSignups', 'inConvs', 'inDays', 'inUplift', 'inLtv', 'inCost', 'inScaleUplift'];
+
+const gbp = n => '\u00A3' + Math.round(n).toLocaleString('en-GB');
+const num = (n, dp = 0) => n.toLocaleString('en-GB', { minimumFractionDigits: dp, maximumFractionDigits: dp });
+
+function val(id) {
+  const n = parseFloat(document.getElementById(id).value);
+  return isFinite(n) && n >= 0 ? n : 0;
+}
+
+function tile(cls, label, value, sub) {
+  return `<div class="out-tile ${cls}">
+    <div class="label">${label}</div>
+    <div class="value">${value}</div>
+    <div class="sub">${sub}</div>
+  </div>`;
+}
+
+function recalc() {
+  const signups = val('inSignups');
+  const convsPerDay = val('inConvs');
+  const days = val('inDays');
+  const upliftPP = val('inUplift');
+  const ltv = val('inLtv');
+  const costPerDay = val('inCost');
+  const scalePP = val('inScaleUplift');
+
+  const convsPerWeek = convsPerDay * days;
+  const coverage = signups > 0 ? (convsPerWeek / signups) * 100 : 0;
+
+  const extraPerWeek = convsPerWeek * (upliftPP / 100);
+  const extraPerYear = extraPerWeek * 52;
+  const grossPerYear = extraPerYear * ltv;
+
+  const costPerYear = costPerDay * days * 52;
+  const netPerYear = grossPerYear - costPerYear;
+
+  // Break-even uplift: the pp lift on called customers at which gross value equals cost.
+  const annualConvs = convsPerWeek * 52;
+  const breakEvenPP = annualConvs > 0 && ltv > 0 ? (costPerYear / (annualConvs * ltv)) * 100 : 0;
+
+  // Scale prize: learnings applied to the whole cohort, not just those called.
+  const scaleExtraPerYear = signups * 52 * (scalePP / 100);
+  const scaleGross = scaleExtraPerYear * ltv;
+
+  const roi = costPerYear > 0 ? (netPerYear / costPerYear) * 100 : null;
+
+  // Unit economics: the most intuitive way to sanity-check the whole model.
+  const costPerConv = convsPerDay > 0 ? costPerDay / convsPerDay : 0;
+  const convsPerSave = costPerConv > 0 ? ltv / costPerConv : 0;
+
+  document.getElementById('calcOut').innerHTML = [
+    tile('alt', 'Customers spoken to', num(convsPerWeek) + ' / week',
+      `${num(annualConvs)} a year &mdash; about ${num(coverage, 1)}% of the cohort`),
+
+    tile('', 'Extra customers reaching box 2', num(extraPerYear, 0) + ' / year',
+      `${num(extraPerWeek, 1)} a week at a ${num(upliftPP, 1)}pp uplift`),
+
+    tile('pos', 'Gross value of the calls', gbp(grossPerYear) + ' / year',
+      `at ${gbp(ltv)} lifetime value per customer`),
+
+    tile('', 'Cost of my time', gbp(costPerYear) + ' / year',
+      `${num(days)} day${days === 1 ? '' : 's'} a week at ${gbp(costPerDay)}`),
+
+    tile(netPerYear >= 0 ? 'pos' : 'alt', 'Net direct value',
+      (netPerYear >= 0 ? '' : '\u2212') + gbp(Math.abs(netPerYear)) + ' / year',
+      roi === null ? 'Set a cost per day to see the return'
+        : netPerYear >= 0 ? `Return of ${num(roi, 0)}% on my time`
+        : 'Direct value alone does not cover the time \u2014 see below'),
+
+    tile('', 'Cost per conversation', '\u00A3' + num(costPerConv, 2),
+      `${gbp(costPerDay)} spread over ${num(convsPerDay)} conversations`),
+
+    tile('alt', 'Break-even uplift required', num(breakEvenPP, 1) + 'pp',
+      `One saved customer per ${num(convsPerSave, 0)} conversations. Baselines: Marro 48.6%, Butternut 63.4%`),
+
+    tile('pos', 'The real prize \u2014 learnings applied to everyone', gbp(scaleGross) + ' / year',
+      `${num(scaleExtraPerYear, 0)} extra customers a year at a ${num(scalePP, 1)}pp uplift across all ${num(signups)} weekly sign-ups`)
+  ].join('');
+}
+
+inputIds.forEach(id => document.getElementById(id).addEventListener('input', recalc));
+recalc();
+</script>
+
+</body>
+</html>
