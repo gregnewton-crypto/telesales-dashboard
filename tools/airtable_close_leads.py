@@ -25,7 +25,13 @@ Usage:
     python3 tools/airtable_close_leads.py leads_a.csv leads_b.csv --apply
     python3 tools/airtable_close_leads.py --rollback out/rollback.json --apply
     python3 tools/airtable_close_leads.py --sync-auto-formula --apply
+    python3 tools/airtable_close_leads.py --mark-open-list open_leads.csv --apply
     python3 tools/airtable_close_leads.py --reconcile-open open_leads.csv --apply
+
+Writing "Lead open/closed" directly does not survive on this table: the
+"Databowl lead date IE" automation recomputes it on every run and overwrote a
+2,814-record update within seconds. Prefer --mark-open-list, which writes the
+field that automation reads. See tools/airtable_automation_lead_status.js.
 """
 
 import argparse
@@ -67,6 +73,13 @@ AUTO_FORMULA = (
     f'TRIM({_MANUAL}) = "{TARGET_STATUS}"'
     f'), "{TARGET_STATUS} ", "Open ")'
 )
+# Single select read by the "Databowl lead date IE" automation. That automation
+# rewrites Lead open/closed on every run, so writing the status directly does not
+# survive; this field is an input to it rather than an output of it.
+OPEN_LIST_FIELD = "In Adversus Open List"
+OPEN_LIST_YES = "Yes"
+OPEN_LIST_NO = "No"
+
 AUTO_DESCRIPTION = (
     "Closed when Adversus reports Not interested, Invalid, Success or Unqualified, "
     "or when Lead open/closed is set to Closed by hand. Prefer this over the manual "
@@ -517,6 +530,104 @@ def run_reconcile_open(token, paths, apply_changes, out_dir, open_value, closed_
         die(f"{len(wrong)} record(s) did not stick - something else is writing this field")
 
 
+def run_mark_open_list(token, paths, apply_changes, out_dir, create_field):
+    """Record, per lead, whether the Adversus export still lists it as open.
+
+    Writing Lead open/closed directly does not survive, because the automation on
+    this table recomputes it on every run. This writes the field the automation
+    reads instead, so the status it derives matches the export.
+    """
+    schema = request_json(f"{API_ROOT}/meta/bases/{BASE_ID}/tables", token)
+    table = next(t for t in schema["tables"] if t["id"] == TABLE_ID)
+    field = next((f for f in table["fields"] if f["name"] == OPEN_LIST_FIELD), None)
+
+    if field is None:
+        if not create_field:
+            die(
+                f"field {OPEN_LIST_FIELD!r} does not exist on {table['name']!r}. "
+                f"Re-run with --create-open-list-field to add it as a single select, "
+                f"or add it by hand with options {OPEN_LIST_YES!r} and {OPEN_LIST_NO!r}."
+            )
+        if not apply_changes:
+            print(f"dry run - would create single select {OPEN_LIST_FIELD!r} with options {OPEN_LIST_YES!r} / {OPEN_LIST_NO!r}")
+            return
+        payload = {
+            "name": OPEN_LIST_FIELD,
+            "type": "singleSelect",
+            "description": "Yes when the latest Adversus campaign export still lists this lead as open. Read by the 'Databowl lead date IE' automation; maintained by tools/airtable_close_leads.py.",
+            "options": {"choices": [{"name": OPEN_LIST_YES, "color": "greenLight2"}, {"name": OPEN_LIST_NO, "color": "redLight2"}]},
+        }
+        field = request_json(f"{API_ROOT}/meta/bases/{BASE_ID}/tables/{TABLE_ID}/fields", token, method="POST", payload=payload)
+        print(f"created field {field['name']!r} ({field['id']})")
+        print("paste this id into FIELD.ADVERSUS_OPEN_LIST in tools/airtable_automation_lead_status.js")
+
+    choices = {c["name"].strip().lower(): c["name"] for c in field.get("options", {}).get("choices", [])}
+    for label in (OPEN_LIST_YES, OPEN_LIST_NO):
+        if label.lower() not in choices:
+            die(f"field {OPEN_LIST_FIELD!r} has no {label!r} option; available: {sorted(choices.values())}")
+    yes, no = choices[OPEN_LIST_YES.lower()], choices[OPEN_LIST_NO.lower()]
+
+    rows = []
+    for path in paths:
+        export_rows, has_id = read_export(path)
+        print(f"read {len(export_rows):>5} rows from {path} ({'with lead ids' if has_id else 'no lead ids'})")
+        rows.extend(export_rows)
+
+    records = fetch_records(token)
+    print(f"read {len(records):>5} records from Airtable")
+    index = build_index(records)
+
+    keep, unresolved = set(), []
+    for row in rows:
+        accepted, _ = resolve_row(row, index)
+        if accepted:
+            keep.update(entry["record"]["id"] for entry in accepted)
+        else:
+            unresolved.append(row)
+
+    rate = (len(rows) - len(unresolved)) / len(rows) if rows else 0
+    updates = []
+    for record in records:
+        wanted = yes if record["id"] in keep else no
+        if (record["fields"].get(OPEN_LIST_FIELD) or "") != wanted:
+            updates.append({"id": record["id"], "fields": {OPEN_LIST_FIELD: wanted}, "_previous": record["fields"].get(OPEN_LIST_FIELD)})
+
+    summarise(
+        f"Marking {OPEN_LIST_FIELD!r}",
+        [
+            ("Rows in the open list", len(rows)),
+            ("Rows resolved to a record", f"{len(rows) - len(unresolved)} ({rate:.1%})"),
+            ("Rows that resolved to nothing", len(unresolved)),
+            (f"Records to mark {OPEN_LIST_YES!r}", len(keep)),
+            (f"Records to mark {OPEN_LIST_NO!r}", len(records) - len(keep)),
+            ("Records needing a change", len(updates)),
+        ],
+    )
+
+    if rate < 0.95:
+        die(f"only {rate:.1%} of the open list resolved to a record; refusing to mark on a list this unreliable")
+    if not updates:
+        print("nothing to change")
+        return
+    if not apply_changes:
+        print(f"dry run - pass --apply to write {OPEN_LIST_FIELD!r} on {len(updates)} record(s)")
+        return
+
+    os.makedirs(out_dir, exist_ok=True)
+    rollback_path = os.path.join(out_dir, "rollback_open_list.json")
+    with open(rollback_path, "w", encoding="utf-8") as handle:
+        json.dump({"base": BASE_ID, "table": TABLE_ID, "field": OPEN_LIST_FIELD,
+                   "records": [{"id": u["id"], "previous": u["_previous"]} for u in updates]}, handle, indent=2)
+    print(f"rollback file written to {rollback_path}")
+
+    patch_records(token, [{"id": u["id"], "fields": u["fields"]} for u in updates])
+    verify = {r["id"]: (r["fields"].get(OPEN_LIST_FIELD) or "") for r in fetch_records(token)}
+    wrong = [u for u in updates if verify.get(u["id"]) != u["fields"][OPEN_LIST_FIELD]]
+    print(f"verified {len(updates) - len(wrong)}/{len(updates)} record(s) hold the intended value")
+    if wrong:
+        die(f"{len(wrong)} record(s) did not stick - something else is writing this field too")
+
+
 def run_rollback(token, path, apply_changes):
     with open(path, encoding="utf-8") as handle:
         entries = json.load(handle)["records"]
@@ -542,6 +653,12 @@ def main():
         action="store_true",
         help="treat the export(s) as the definitive list of open leads and close everything else",
     )
+    parser.add_argument(
+        "--mark-open-list",
+        action="store_true",
+        help=f"record in {OPEN_LIST_FIELD!r} whether each lead is on the open list, for the automation to read",
+    )
+    parser.add_argument("--create-open-list-field", action="store_true", help=f"create {OPEN_LIST_FIELD!r} if it is missing")
     args = parser.parse_args()
 
     token = os.environ.get("AIRTABLE_API_KEY")
@@ -556,6 +673,10 @@ def main():
         return
     if not args.exports:
         die("give at least one CSV export, or use --rollback or --sync-auto-formula")
+
+    if args.mark_open_list:
+        run_mark_open_list(token, args.exports, args.apply, args.out, args.create_open_list_field)
+        return
 
     closed_value, open_value, choices = resolve_status_choice(token)
     if args.reconcile_open:
