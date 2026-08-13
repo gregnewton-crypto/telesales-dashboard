@@ -25,6 +25,7 @@ Usage:
     python3 tools/airtable_close_leads.py leads_a.csv leads_b.csv --apply
     python3 tools/airtable_close_leads.py --rollback out/rollback.json --apply
     python3 tools/airtable_close_leads.py --sync-auto-formula --apply
+    python3 tools/airtable_close_leads.py --reconcile-open open_leads.csv --apply
 """
 
 import argparse
@@ -245,10 +246,14 @@ def resolve_status_choice(token):
     if field is None:
         die(f"field {STATUS_FIELD!r} not found on table {table['name']!r}")
     choices = [c["name"] for c in field.get("options", {}).get("choices", [])]
-    exact = [c for c in choices if c.strip().lower() == TARGET_STATUS.lower()]
-    if not exact:
-        die(f"no {TARGET_STATUS!r} option on {STATUS_FIELD!r}; available: {choices}")
-    return exact[0], choices
+
+    def pick(label):
+        exact = [c for c in choices if c.strip().lower() == label.lower()]
+        if not exact:
+            die(f"no {label!r} option on {STATUS_FIELD!r}; available: {choices}")
+        return exact[0]
+
+    return pick(TARGET_STATUS), pick("Open"), choices
 
 
 def fetch_records(token, view=None):
@@ -414,6 +419,104 @@ def run_sync_auto_formula(token, apply_changes):
     print("\nformula updated and reported valid by Airtable")
 
 
+def run_reconcile_open(token, paths, apply_changes, out_dir, open_value, closed_value):
+    """Treat the export(s) as the definitive list of leads that are still open.
+
+    Everything the list does not name is closed, so a truncated or wrong-campaign
+    export would close most of the table. The match rate is checked first and the
+    run aborts if the list does not resolve cleanly.
+    """
+    rows = []
+    for path in paths:
+        export_rows, has_id = read_export(path)
+        print(f"read {len(export_rows):>5} rows from {path} ({'with lead ids' if has_id else 'no lead ids'})")
+        rows.extend(export_rows)
+
+    records = fetch_records(token)
+    print(f"read {len(records):>5} records from Airtable")
+    index = build_index(records)
+
+    keep, unresolved, review = set(), [], []
+    for row in rows:
+        accepted, rejected = resolve_row(row, index)
+        if accepted:
+            keep.update(entry["record"]["id"] for entry in accepted)
+        else:
+            unresolved.append(row)
+        review.extend((row, entry) for entry in rejected)
+
+    resolved = len(rows) - len(unresolved)
+    rate = resolved / len(rows) if rows else 0
+    to_close, to_open = [], []
+    for record in records:
+        current = (record["fields"].get(STATUS_FIELD) or "").strip().lower()
+        if record["id"] in keep:
+            if current != "open":
+                to_open.append({"id": record["id"], "fields": {STATUS_FIELD: open_value}, "_previous": record["fields"].get(STATUS_FIELD)})
+        elif current != TARGET_STATUS.lower():
+            to_close.append({"id": record["id"], "fields": {STATUS_FIELD: closed_value}, "_previous": record["fields"].get(STATUS_FIELD)})
+
+    summarise(
+        "Reconciliation against the open list",
+        [
+            ("Rows in the open list", len(rows)),
+            ("Rows resolved to a record", f"{resolved} ({rate:.1%})"),
+            ("Rows that resolved to nothing", len(unresolved)),
+            ("Airtable records to keep open", len(keep)),
+            ("Records to close", len(to_close)),
+            ("Records to re-open", len(to_open)),
+            ("Records left as they are", len(records) - len(to_close) - len(to_open)),
+            ("Resulting open / closed", f"{len(keep)} / {len(records) - len(keep)}"),
+        ],
+    )
+
+    os.makedirs(out_dir, exist_ok=True)
+    write_csv(
+        os.path.join(out_dir, "reconcile_changes.csv"),
+        ["record_id", "airtable_lead_id", "airtable_name", "airtable_email", "previous_status", "new_status"],
+        [
+            [
+                u["id"],
+                next(r for r in records if r["id"] == u["id"])["fields"].get(ID_FIELD, ""),
+                f"{next(r for r in records if r['id'] == u['id'])['fields'].get('First Name', '')} {next(r for r in records if r['id'] == u['id'])['fields'].get('Last Name', '')}".strip(),
+                next(r for r in records if r["id"] == u["id"])["fields"].get("Email", ""),
+                u["_previous"] or "",
+                u["fields"][STATUS_FIELD],
+            ]
+            for u in to_close + to_open
+        ],
+    )
+    write_csv(
+        os.path.join(out_dir, "reconcile_unresolved.csv"),
+        ["source_file", "source_line", "source_lead_id", "first_name", "email", "phone"],
+        [[r["_source"], r["_line"], r.get(ID_COLUMN, ""), r.get("First name", ""), r.get("Email", ""), r.get("Phone number", "")] for r in unresolved],
+    )
+    print(f"\nreports written to {out_dir}/")
+
+    if rate < 0.95:
+        die(f"only {rate:.1%} of the open list resolved to a record; refusing to close {len(to_close)} records on a list this unreliable")
+    updates = to_close + to_open
+    if not updates:
+        print("nothing to change")
+        return
+    if not apply_changes:
+        print(f"dry run - pass --apply to close {len(to_close)} and re-open {len(to_open)} record(s)")
+        return
+
+    rollback_path = os.path.join(out_dir, "rollback.json")
+    with open(rollback_path, "w", encoding="utf-8") as handle:
+        json.dump({"base": BASE_ID, "table": TABLE_ID, "field": STATUS_FIELD,
+                   "records": [{"id": u["id"], "previous": u["_previous"]} for u in updates]}, handle, indent=2)
+    print(f"rollback file written to {rollback_path}")
+
+    patch_records(token, [{"id": u["id"], "fields": u["fields"]} for u in updates])
+    verify = {r["id"]: (r["fields"].get(STATUS_FIELD) or "").strip() for r in fetch_records(token)}
+    wrong = [u for u in updates if verify.get(u["id"]) != u["fields"][STATUS_FIELD].strip()]
+    print(f"verified {len(updates) - len(wrong)}/{len(updates)} record(s) now hold the intended status")
+    if wrong:
+        die(f"{len(wrong)} record(s) did not stick - something else is writing this field")
+
+
 def run_rollback(token, path, apply_changes):
     with open(path, encoding="utf-8") as handle:
         entries = json.load(handle)["records"]
@@ -434,6 +537,11 @@ def main():
     parser.add_argument("--view", help="restrict the Airtable read to a single view")
     parser.add_argument("--rollback", help="restore statuses from a rollback file and exit")
     parser.add_argument("--sync-auto-formula", action="store_true", help="update the 'Lead open/closed (auto)' formula and exit")
+    parser.add_argument(
+        "--reconcile-open",
+        action="store_true",
+        help="treat the export(s) as the definitive list of open leads and close everything else",
+    )
     args = parser.parse_args()
 
     token = os.environ.get("AIRTABLE_API_KEY")
@@ -449,7 +557,12 @@ def main():
     if not args.exports:
         die("give at least one CSV export, or use --rollback or --sync-auto-formula")
 
-    closed_value, choices = resolve_status_choice(token)
+    closed_value, open_value, choices = resolve_status_choice(token)
+    if args.reconcile_open:
+        print(f"field {STATUS_FIELD!r} options: {choices}\n")
+        run_reconcile_open(token, args.exports, args.apply, args.out, open_value, closed_value)
+        return
+
     print(f"field {STATUS_FIELD!r} options: {choices}")
     print(f"writing {closed_value!r}\n")
 
