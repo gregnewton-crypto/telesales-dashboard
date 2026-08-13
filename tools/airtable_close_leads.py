@@ -11,6 +11,9 @@ Only the "Lead open/closed" field is ever written, via PATCH, so every other
 field on the record is left untouched. A rollback file recording the previous
 value of each touched record is written before the first write.
 
+The reports name individual leads, so --out defaults inside out/, which this
+repository ignores. This repo is public: keep the reports out of commits.
+
 Usage:
     export AIRTABLE_API_KEY=pat...
     python3 tools/airtable_close_leads.py leads_a.csv leads_b.csv            # dry run

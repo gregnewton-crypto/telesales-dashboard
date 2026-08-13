@@ -1,0 +1,3 @@
+# Reconciliation reports and rollback files name individual leads. This
+# repository is public, so they must never be committed.
+out/
