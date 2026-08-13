@@ -1,11 +1,16 @@
 #!/usr/bin/env python3
 """Match exported lead lists against the Databowl Leads table and close the matches.
 
-The exports carry no Databowl Lead ID, so records are matched on email and phone
-with the lead's first name as a tie-breaker. Airtable holds genuine duplicate
-submissions (the same person entering twice) alongside households that share one
-phone number, so a single key on its own is not safe: two of the three signals
-must agree before a record is closed.
+The Databowl lead id is the intended key and is used whenever the export carries
+one. It cannot be trusted on its own: a small number of ids in the table belong
+to a different lead entirely, complete with its own call history. An id match is
+therefore only accepted when the email or phone on the same record backs it up.
+
+When an id is contradicted by both contact fields, or when the export has no id
+column at all, the row falls back to contact matching. Airtable holds genuine
+duplicate submissions (the same person entering twice) alongside households that
+share one phone number, so that fallback requires two of email, phone and first
+name to agree before a record is closed.
 
 Only the "Lead open/closed" field is ever written, via PATCH, so every other
 field on the record is left untouched. A rollback file recording the previous
@@ -19,6 +24,7 @@ Usage:
     python3 tools/airtable_close_leads.py leads_a.csv leads_b.csv            # dry run
     python3 tools/airtable_close_leads.py leads_a.csv leads_b.csv --apply
     python3 tools/airtable_close_leads.py --rollback out/rollback.json --apply
+    python3 tools/airtable_close_leads.py --sync-auto-formula --apply
 """
 
 import argparse
@@ -40,6 +46,31 @@ BASE_ID = "appZoN6xBB9mDv8h4"
 TABLE_ID = "tbllpLbEtTkmMQOY9"
 STATUS_FIELD = "Lead open/closed"
 TARGET_STATUS = "Closed"
+
+# The lead id as it is spelled in the exports and on the table.
+ID_COLUMN = "Databowl LeadId"
+ID_FIELD = "Databowl Lead ID"
+
+# "Lead open/closed (auto)" originally read only the Adversus outcome, so a lead
+# closed by hand still showed as open in every view grouped on it. Field ids are
+# used rather than names because Airtable rewrites names inside stored formulas.
+AUTO_FIELD_ID = "fldiZLjWB3aXuUTW4"          # Lead open/closed (auto)
+_ADVERSUS = "{fld0XrXF3YtWqWSAN}"            # Adversus Lead Status (lookup)
+_MANUAL = "{fldBFGH4OGEBmuBID}"              # Lead open/closed (single select)
+AUTO_FORMULA = (
+    "IF(OR("
+    f'SEARCH("Not interested", ARRAYJOIN({_ADVERSUS})), '
+    f'SEARCH("Invalid", ARRAYJOIN({_ADVERSUS})), '
+    f'SEARCH("Success", ARRAYJOIN({_ADVERSUS})), '
+    f'SEARCH("Unqualified", ARRAYJOIN({_ADVERSUS})), '
+    f'TRIM({_MANUAL}) = "{TARGET_STATUS}"'
+    f'), "{TARGET_STATUS} ", "Open ")'
+)
+AUTO_DESCRIPTION = (
+    "Closed when Adversus reports Not interested, Invalid, Success or Unqualified, "
+    "or when Lead open/closed is set to Closed by hand. Prefer this over the manual "
+    "single-select field. Maintained by tools/airtable_close_leads.py --sync-auto-formula."
+)
 
 # Airtable allows 5 requests/second per base.
 REQUEST_INTERVAL = 0.22
@@ -269,54 +300,74 @@ def read_export(path):
             row["_source"] = os.path.basename(path)
             row["_line"] = line
             rows.append(row)
-    return rows
+        return rows, ID_COLUMN in (reader.fieldnames or [])
 
 
-def build_indexes(records):
-    by_email = defaultdict(list)
-    by_phone = defaultdict(list)
+def build_index(records):
+    index = {"id": defaultdict(list), "email": defaultdict(list), "phone": defaultdict(list)}
     for record in records:
         fields = record["fields"]
+        lead_id = fields.get(ID_FIELD)
+        if lead_id is not None:
+            index["id"][str(int(lead_id))].append(record)
         email = norm_email(fields.get("Email"))
-        phone = norm_phone(fields.get("Phone"))
         if email:
-            by_email[email].append(record)
+            index["email"][email].append(record)
+        phone = norm_phone(fields.get("Phone"))
         if phone:
-            by_phone[phone].append(record)
-    return by_email, by_phone
+            index["phone"][phone].append(record)
+    return index
 
 
-def score_candidates(row, by_email, by_phone):
-    """Score every candidate record for one export row.
-
-    Two of {email, phone, name} must agree. Email plus phone is treated as an
-    exact match; a lone key with a matching name is accepted as the same person
-    re-submitting with a new address or number.
-    """
+def contact_signals(row, fields):
     email = norm_email(row.get("Email"))
     phone = norm_phone(row.get("Phone number"))
+    return (
+        bool(email) and norm_email(fields.get("Email")) == email,
+        bool(phone) and norm_phone(fields.get("Phone")) == phone,
+    )
+
+
+def resolve_row(row, index):
+    """Pick the record(s) one export row refers to.
+
+    Returns (accepted, review). Anything in review is reported but never written,
+    so an ambiguous row leaves the table untouched.
+    """
+    lead_id = (row.get(ID_COLUMN) or "").strip()
+    by_id = index["id"].get(lead_id, []) if lead_id else []
+
+    # An id match wins outright, but only once a contact field agrees with it.
+    verified, contradicted = [], []
+    for record in by_id:
+        email_hit, phone_hit = contact_signals(row, record["fields"])
+        if email_hit or phone_hit:
+            signals = ["lead id"] + [s for s, hit in (("email", email_hit), ("phone", phone_hit)) if hit]
+            verified.append({"record": record, "tier": " + ".join(signals)})
+        elif not norm_email(row.get("Email")) and not norm_phone(row.get("Phone number")):
+            verified.append({"record": record, "tier": "lead id (no contact details to check)"})
+        else:
+            contradicted.append({"record": record, "tier": "lead id belongs to a different lead"})
+    if verified:
+        return verified, contradicted
+
+    # Otherwise fall back to contact matching: two of email, phone and name.
     candidates = {}
-    for record in by_email.get(email, []) + by_phone.get(phone, []):
+    for record in index["email"].get(norm_email(row.get("Email")), []) + index["phone"].get(norm_phone(row.get("Phone number")), []):
         candidates[record["id"]] = record
 
-    accepted, rejected = [], []
+    accepted = []
+    review = list(contradicted)
     for record in candidates.values():
-        fields = record["fields"]
-        email_hit = bool(email) and norm_email(fields.get("Email")) == email
-        phone_hit = bool(phone) and norm_phone(fields.get("Phone")) == phone
-        name_hit = names_agree(row.get("First name"), fields)
+        email_hit, phone_hit = contact_signals(row, record["fields"])
+        name_hit = names_agree(row.get("First name"), record["fields"])
         signals = [s for s, hit in (("email", email_hit), ("phone", phone_hit), ("name", name_hit)) if hit]
-        entry = {"record": record, "signals": signals}
-        if email_hit and phone_hit:
-            entry["tier"] = "exact (email+phone)"
-            accepted.append(entry)
-        elif len(signals) >= 2:
-            entry["tier"] = f"corroborated ({'+'.join(signals)})"
-            accepted.append(entry)
+        label = " + ".join(signals) or "none"
+        if len(signals) >= 2:
+            accepted.append({"record": record, "tier": f"no usable lead id, matched on {label}"})
         else:
-            entry["tier"] = f"weak ({'+'.join(signals) or 'none'})"
-            rejected.append(entry)
-    return accepted, rejected
+            review.append({"record": record, "tier": f"too weak to trust ({label})"})
+    return accepted, review
 
 
 # ------------------------------------------------------------------- reporting
@@ -341,6 +392,28 @@ def summarise(title, pairs):
 # ----------------------------------------------------------------------- driver
 
 
+def run_sync_auto_formula(token, apply_changes):
+    """Point the auto field at the manual field as well as the Adversus outcome."""
+    url = f"{API_ROOT}/meta/bases/{BASE_ID}/tables/{TABLE_ID}/fields/{AUTO_FIELD_ID}"
+    schema = request_json(f"{API_ROOT}/meta/bases/{BASE_ID}/tables", token)
+    table = next(t for t in schema["tables"] if t["id"] == TABLE_ID)
+    field = next(f for f in table["fields"] if f["id"] == AUTO_FIELD_ID)
+    current = field.get("options", {}).get("formula", "")
+    print(f"field   : {field['name']!r}")
+    print(f"current : {current}")
+    print(f"wanted  : {AUTO_FORMULA}")
+    if current == AUTO_FORMULA and field.get("description") == AUTO_DESCRIPTION:
+        print("already up to date")
+        return
+    if not apply_changes:
+        print("\ndry run - pass --apply to write the formula and description")
+        return
+    result = request_json(url, token, method="PATCH", payload={"options": {"formula": AUTO_FORMULA}, "description": AUTO_DESCRIPTION})
+    if not result.get("options", {}).get("isValid"):
+        die(f"Airtable rejected the formula: {result}")
+    print("\nformula updated and reported valid by Airtable")
+
+
 def run_rollback(token, path, apply_changes):
     with open(path, encoding="utf-8") as handle:
         entries = json.load(handle)["records"]
@@ -355,22 +428,26 @@ def run_rollback(token, path, apply_changes):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("exports", nargs="*", help="CSV export(s) of leads to close")
+    parser.add_argument("exports", nargs="*", help=f"CSV export(s) of leads to close; a {ID_COLUMN!r} column is used when present")
     parser.add_argument("--apply", action="store_true", help="write to Airtable (default is a dry run)")
     parser.add_argument("--out", default="out", help="directory for reports and the rollback file")
     parser.add_argument("--view", help="restrict the Airtable read to a single view")
     parser.add_argument("--rollback", help="restore statuses from a rollback file and exit")
+    parser.add_argument("--sync-auto-formula", action="store_true", help="update the 'Lead open/closed (auto)' formula and exit")
     args = parser.parse_args()
 
     token = os.environ.get("AIRTABLE_API_KEY")
     if not token:
         die("AIRTABLE_API_KEY is not set")
 
+    if args.sync_auto_formula:
+        run_sync_auto_formula(token, args.apply)
+        return
     if args.rollback:
         run_rollback(token, args.rollback, args.apply)
         return
     if not args.exports:
-        die("give at least one CSV export, or use --rollback")
+        die("give at least one CSV export, or use --rollback or --sync-auto-formula")
 
     closed_value, choices = resolve_status_choice(token)
     print(f"field {STATUS_FIELD!r} options: {choices}")
@@ -378,23 +455,24 @@ def main():
 
     rows = []
     for path in args.exports:
-        export_rows = read_export(path)
-        print(f"read {len(export_rows):>5} rows from {path}")
+        export_rows, has_id = read_export(path)
+        note = "with lead ids" if has_id else f"NO {ID_COLUMN!r} column - falling back to contact matching"
+        print(f"read {len(export_rows):>5} rows from {path} ({note})")
         rows.extend(export_rows)
 
     records = fetch_records(token, args.view)
     print(f"read {len(records):>5} records from Airtable{f' (view {args.view})' if args.view else ''}")
-    by_email, by_phone = build_indexes(records)
+    index = build_index(records)
 
     tier_counts = Counter()
     matched = {}          # record id -> (row, entry)
-    unmatched = []        # export rows with no acceptable candidate
-    review = []           # candidates rejected as too weak to trust
+    unmatched = []        # export rows with no trustworthy candidate
+    review = []           # candidates deliberately left untouched
     for row in rows:
-        accepted, rejected = score_candidates(row, by_email, by_phone)
+        accepted, rejected = resolve_row(row, index)
         if accepted:
             for entry in accepted:
-                tier_counts[entry["tier"].split(" ")[0]] += 1
+                tier_counts[entry["tier"]] += 1
                 matched.setdefault(entry["record"]["id"], (row, entry))
         else:
             unmatched.append(row)
@@ -409,31 +487,33 @@ def main():
         else:
             to_update.append({"id": record_id, "fields": {STATUS_FIELD: closed_value}, "_previous": current, "_row": row})
 
-    unique_leads = {(norm_email(r.get("Email")), norm_phone(r.get("Phone number"))) for r in rows}
+    unique_leads = {
+        (r.get(ID_COLUMN) or "").strip() or (norm_email(r.get("Email")), norm_phone(r.get("Phone number")))
+        for r in rows
+    }
     summarise(
         "Reconciliation",
         [
             ("Rows across all export files", len(rows)),
             ("Unique leads in exports", len(unique_leads)),
             ("Airtable records matched", len(matched)),
-            ("  - exact (email + phone)", tier_counts["exact"]),
-            ("  - corroborated by name", tier_counts["corroborated"]),
+            *[(f"  - {tier}", count) for tier, count in sorted(tier_counts.items())],
             ("Records needing a status change", len(to_update)),
             ("Records already Closed", len(already_closed)),
-            ("Export rows with no match", len(unmatched)),
-            ("Weak candidates held for review", len(review)),
+            ("Export rows with no trustworthy match", len(unmatched)),
+            ("Candidates left untouched for review", len(review)),
         ],
     )
 
     os.makedirs(args.out, exist_ok=True)
     write_csv(
         os.path.join(args.out, "matched.csv"),
-        ["record_id", "databowl_lead_id", "lead", "airtable_email", "airtable_phone", "previous_status", "new_status", "tier", "source_file", "source_line"],
+        ["record_id", "airtable_lead_id", "airtable_name", "airtable_email", "airtable_phone", "previous_status", "new_status", "matched_on", "source_file", "source_line", "source_lead_id"],
         [
             [
                 u["id"],
-                matched[u["id"]][1]["record"]["fields"].get("Databowl Lead ID", ""),
-                matched[u["id"]][1]["record"]["fields"].get("Lead", ""),
+                matched[u["id"]][1]["record"]["fields"].get(ID_FIELD, ""),
+                f"{matched[u['id']][1]['record']['fields'].get('First Name', '')} {matched[u['id']][1]['record']['fields'].get('Last Name', '')}".strip(),
                 matched[u["id"]][1]["record"]["fields"].get("Email", ""),
                 matched[u["id"]][1]["record"]["fields"].get("Phone", ""),
                 u["_previous"] or "",
@@ -441,23 +521,25 @@ def main():
                 matched[u["id"]][1]["tier"],
                 u["_row"]["_source"],
                 u["_row"]["_line"],
+                u["_row"].get(ID_COLUMN, ""),
             ]
             for u in to_update
         ],
     )
     write_csv(
         os.path.join(args.out, "exceptions_not_found.csv"),
-        ["source_file", "source_line", "first_name", "email", "phone", "campaign"],
-        [[r["_source"], r["_line"], r.get("First name", ""), r.get("Email", ""), r.get("Phone number", ""), r.get("Campaign", "")] for r in unmatched],
+        ["source_file", "source_line", "source_lead_id", "first_name", "email", "phone", "campaign"],
+        [[r["_source"], r["_line"], r.get(ID_COLUMN, ""), r.get("First name", ""), r.get("Email", ""), r.get("Phone number", ""), r.get("Campaign", "")] for r in unmatched],
     )
     write_csv(
-        os.path.join(args.out, "review_weak_matches.csv"),
-        ["source_file", "source_line", "csv_first_name", "csv_email", "csv_phone", "record_id", "airtable_lead", "airtable_email", "airtable_phone", "airtable_status", "matched_on"],
+        os.path.join(args.out, "review_left_untouched.csv"),
+        ["source_file", "source_line", "source_lead_id", "csv_first_name", "csv_email", "csv_phone", "record_id", "airtable_lead_id", "airtable_name", "airtable_email", "airtable_phone", "airtable_status", "reason"],
         [
             [
-                row["_source"], row["_line"], row.get("First name", ""), row.get("Email", ""), row.get("Phone number", ""),
+                row["_source"], row["_line"], row.get(ID_COLUMN, ""), row.get("First name", ""), row.get("Email", ""), row.get("Phone number", ""),
                 entry["record"]["id"],
-                entry["record"]["fields"].get("Lead", ""),
+                entry["record"]["fields"].get(ID_FIELD, ""),
+                f"{entry['record']['fields'].get('First Name', '')} {entry['record']['fields'].get('Last Name', '')}".strip(),
                 entry["record"]["fields"].get("Email", ""),
                 entry["record"]["fields"].get("Phone", ""),
                 entry["record"]["fields"].get(STATUS_FIELD, ""),
