@@ -64,7 +64,13 @@ ID_FIELD = "Databowl Lead ID"
 AUTO_FIELD_ID = "fldiZLjWB3aXuUTW4"          # Lead open/closed (auto)
 _ADVERSUS = "{fld0XrXF3YtWqWSAN}"            # Adversus Lead Status (lookup)
 _MANUAL = "{fldBFGH4OGEBmuBID}"              # Lead open/closed (single select)
-AUTO_FORMULA = (
+_OPEN_LIST = "{fldltpNNg1dKOMOAe}"           # In Adversus Open List
+
+# Mirrors the precedence the two lead automations use, so the two status fields
+# cannot disagree. Without the open list first, a lead Adversus still has queued
+# but whose last outcome was terminal reads Open in one field and Closed in the
+# other, which is the contradiction this whole exercise started from.
+_OUTCOME_RULE = (
     "IF(OR("
     f'SEARCH("Not interested", ARRAYJOIN({_ADVERSUS})), '
     f'SEARCH("Invalid", ARRAYJOIN({_ADVERSUS})), '
@@ -72,6 +78,10 @@ AUTO_FORMULA = (
     f'SEARCH("Unqualified", ARRAYJOIN({_ADVERSUS})), '
     f'TRIM({_MANUAL}) = "{TARGET_STATUS}"'
     f'), "{TARGET_STATUS} ", "Open ")'
+)
+AUTO_FORMULA = (
+    f'IF({_OPEN_LIST} = "No", "{TARGET_STATUS} ", '
+    f'IF({_OPEN_LIST} = "Yes", "Open ", {_OUTCOME_RULE}))'
 )
 # Single select read by the "Databowl lead date IE" automation. That automation
 # rewrites Lead open/closed on every run, so writing the status directly does not
@@ -81,9 +91,10 @@ OPEN_LIST_YES = "Yes"
 OPEN_LIST_NO = "No"
 
 AUTO_DESCRIPTION = (
-    "Closed when Adversus reports Not interested, Invalid, Success or Unqualified, "
-    "or when Lead open/closed is set to Closed by hand. Prefer this over the manual "
-    "single-select field. Maintained by tools/airtable_close_leads.py --sync-auto-formula."
+    "Follows In Adversus Open List when it is set, otherwise closes on an Adversus "
+    "outcome of Not interested, Invalid, Success or Unqualified, or on a manual close. "
+    "Same precedence as the lead automations, so it should always agree with "
+    "Lead open/closed. Maintained by tools/airtable_close_leads.py --sync-auto-formula."
 )
 
 # Airtable allows 5 requests/second per base.
@@ -628,6 +639,72 @@ def run_mark_open_list(token, paths, apply_changes, out_dir, create_field):
         die(f"{len(wrong)} record(s) did not stick - something else is writing this field too")
 
 
+def run_sync_status_from_open_list(token, apply_changes, out_dir, open_value, closed_value):
+    """Bring Lead open/closed into line with In Adversus Open List.
+
+    Preferred over --reconcile-open once the field is populated: the field is the
+    live source of truth, including any corrections made by hand in Airtable,
+    whereas an export file is only a snapshot of the moment it was taken.
+
+    Records with a blank field are left alone, because the automation falls back
+    to the Adversus outcome for those and this should not second-guess it.
+    """
+    records = fetch_records(token)
+    print(f"read {len(records):>5} records from Airtable")
+
+    updates, blank = [], 0
+    for record in records:
+        marker = (record["fields"].get(OPEN_LIST_FIELD) or "").strip().lower()
+        if marker == OPEN_LIST_YES.lower():
+            wanted = open_value
+        elif marker == OPEN_LIST_NO.lower():
+            wanted = closed_value
+        else:
+            blank += 1
+            continue
+        current = (record["fields"].get(STATUS_FIELD) or "").strip()
+        if current != wanted.strip():
+            updates.append({"id": record["id"], "fields": {STATUS_FIELD: wanted}, "_previous": record["fields"].get(STATUS_FIELD)})
+
+    marked = collections_counter(records)
+    summarise(
+        f"Syncing {STATUS_FIELD!r} from {OPEN_LIST_FIELD!r}",
+        [
+            ("Records read", len(records)),
+            *[(f"  marked {k!r}", v) for k, v in sorted(marked.items())],
+            ("Blank, left to the automation", blank),
+            ("Records needing a status change", len(updates)),
+        ],
+    )
+    if not updates:
+        print("nothing to change")
+        return
+    if not apply_changes:
+        print(f"dry run - pass --apply to update {len(updates)} record(s)")
+        return
+
+    os.makedirs(out_dir, exist_ok=True)
+    rollback_path = os.path.join(out_dir, "rollback_status_sync.json")
+    with open(rollback_path, "w", encoding="utf-8") as handle:
+        json.dump({"base": BASE_ID, "table": TABLE_ID, "field": STATUS_FIELD,
+                   "records": [{"id": u["id"], "previous": u["_previous"]} for u in updates]}, handle, indent=2)
+    print(f"rollback file written to {rollback_path}")
+
+    patch_records(token, [{"id": u["id"], "fields": u["fields"]} for u in updates])
+    verify = {r["id"]: (r["fields"].get(STATUS_FIELD) or "").strip() for r in fetch_records(token)}
+    wrong = [u for u in updates if verify.get(u["id"]) != u["fields"][STATUS_FIELD].strip()]
+    print(f"verified {len(updates) - len(wrong)}/{len(updates)} record(s) hold the intended status")
+    if wrong:
+        die(f"{len(wrong)} record(s) did not stick - an automation is still overwriting {STATUS_FIELD!r}")
+
+
+def collections_counter(records):
+    counts = Counter()
+    for record in records:
+        counts[(record["fields"].get(OPEN_LIST_FIELD) or "blank")] += 1
+    return counts
+
+
 def run_rollback(token, path, apply_changes):
     with open(path, encoding="utf-8") as handle:
         entries = json.load(handle)["records"]
@@ -659,6 +736,11 @@ def main():
         help=f"record in {OPEN_LIST_FIELD!r} whether each lead is on the open list, for the automation to read",
     )
     parser.add_argument("--create-open-list-field", action="store_true", help=f"create {OPEN_LIST_FIELD!r} if it is missing")
+    parser.add_argument(
+        "--sync-status-from-open-list",
+        action="store_true",
+        help=f"set {STATUS_FIELD!r} from {OPEN_LIST_FIELD!r}, honouring edits made in Airtable",
+    )
     args = parser.parse_args()
 
     token = os.environ.get("AIRTABLE_API_KEY")
@@ -670,6 +752,11 @@ def main():
         return
     if args.rollback:
         run_rollback(token, args.rollback, args.apply)
+        return
+    if args.sync_status_from_open_list:
+        closed_value, open_value, choices = resolve_status_choice(token)
+        print(f"field {STATUS_FIELD!r} options: {choices}\n")
+        run_sync_status_from_open_list(token, args.apply, args.out, open_value, closed_value)
         return
     if not args.exports:
         die("give at least one CSV export, or use --rollback or --sync-auto-formula")
