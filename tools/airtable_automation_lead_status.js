@@ -34,10 +34,12 @@
  *   - The standard limit now closes on the tenth attempt rather than the
  *     eleventh, matching "Max Call Attempts" in ⚙ Config.
  *
- *   TO FINISH SETUP: create a single select on ☘ Databowl Leads with options
- *   "Yes" and "No", paste its field id into FIELD.ADVERSUS_OPEN_LIST below, and
- *   populate it from the export. While it is null, or blank on a record, this
- *   script behaves exactly as v6 did.
+ *   The trigger does not watch "In Adversus Open List", so loading the export
+ *   does not re-run this script. Existing records keep whatever status they have
+ *   until the trigger fires again; run
+ *     python3 tools/airtable_close_leads.py --reconcile-open <export> --apply
+ *   once this version is live to bring them into line. That write survives from
+ *   then on, because this script computes the same answer.
  */
 
 const TABLE_ID = 'tbllpLbEtTkmMQOY9';
@@ -56,9 +58,8 @@ const FIELD = {
     LEAD_OPEN_CLOSED: 'fldBFGH4OGEBmuBID',
     // Single select with options "Yes" and "No", loaded from the Adversus
     // campaign export. Blank means the export has never been checked for this
-    // lead, which falls back to the outcome rule. Leave as null until the field
-    // exists.
-    ADVERSUS_OPEN_LIST: null,
+    // lead, which falls back to the outcome rule.
+    ADVERSUS_OPEN_LIST: 'fldltpNNg1dKOMOAe',
 };
 
 const CLOSED_STATUSES = new Set([
