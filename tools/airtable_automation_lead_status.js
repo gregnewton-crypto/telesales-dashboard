@@ -37,7 +37,7 @@
  *   The trigger does not watch "In Adversus Open List", so loading the export
  *   does not re-run this script. Existing records keep whatever status they have
  *   until the trigger fires again; run
- *     python3 tools/airtable_close_leads.py --reconcile-open <export> --apply
+ *     python3 tools/airtable_close_leads.py --sync-status-from-open-list --apply
  *   once this version is live to bring them into line. That write survives from
  *   then on, because this script computes the same answer.
  */
@@ -80,12 +80,11 @@ const STANDARD_CALL_LIMIT = 10;
 const VIP_PRIVATE_CALL_LIMIT = 15;
 const MAX_TIME_BUCKET = 20;
 
-// The Adversus Lead Status lookup can lag the campaign by weeks: eleven leads
-// read "Not interested" or "Invalid" in Airtable while Adversus still had them
-// queued as callbacks, some called the same day. When the export lists a lead as
-// open it is the more current of the two, so it wins. Set to false to let a
-// stale closing outcome keep closing the lead.
-const EXPORT_OVERRIDES_OUTCOME = true;
+// A lead whose last call ended in Not interested, Invalid, Success or Unqualified
+// is finished even while Adversus keeps it in a campaign, so the outcome is
+// allowed to close it. Set to true to let the export hold such leads open, which
+// held 66 finished leads open and read as a bug in the numbers.
+const EXPORT_OVERRIDES_OUTCOME = false;
 
 function selectName(cell) {
     if (cell == null) return '';

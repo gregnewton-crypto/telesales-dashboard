@@ -27,7 +27,7 @@
 //
 //   NOTE: the first run after this change has ~2,800 leads to correct, which
 //   risks the automation's execution limit. Run
-//     python3 tools/airtable_close_leads.py --reconcile-open <export> --apply
+//     python3 tools/airtable_close_leads.py --sync-status-from-open-list --apply
 //   once to clear the backlog; after that JOB 2 only ever sees small deltas.
 // ============================================================
 
@@ -83,12 +83,11 @@ var VIP_PRIVATE_STATUSES = {
 var STANDARD_CALL_LIMIT = 10;
 var VIP_PRIVATE_CALL_LIMIT = 15;
 
-// The Adversus Lead Status lookup can lag the campaign by weeks: eleven leads
-// read "Not interested" or "Invalid" here while Adversus still had them queued
-// as callbacks, some called the same day. When the export lists a lead as open it
-// is the more current of the two, so it wins. Set to false to let a stale closing
-// outcome keep closing the lead.
-var EXPORT_OVERRIDES_OUTCOME = true;
+// A lead whose last call ended in Not interested, Invalid, Success or Unqualified
+// is finished even while Adversus keeps it in a campaign, so the outcome is
+// allowed to close it. Set to true to let the export hold such leads open, which
+// held 66 finished leads open and read as a bug in the numbers.
+var EXPORT_OVERRIDES_OUTCOME = false;
 
 var adversusTable = base.getTable(ADVERSUS_TABLE_ID);
 var leadsTable = base.getTable(LEADS_TABLE_ID);

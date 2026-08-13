@@ -62,26 +62,26 @@ ID_FIELD = "Databowl Lead ID"
 # closed by hand still showed as open in every view grouped on it. Field ids are
 # used rather than names because Airtable rewrites names inside stored formulas.
 AUTO_FIELD_ID = "fldiZLjWB3aXuUTW4"          # Lead open/closed (auto)
-_ADVERSUS = "{fld0XrXF3YtWqWSAN}"            # Adversus Lead Status (lookup)
 _MANUAL = "{fldBFGH4OGEBmuBID}"              # Lead open/closed (single select)
 _OPEN_LIST = "{fldltpNNg1dKOMOAe}"           # In Adversus Open List
+_OUTCOME = "{fld9R1fOEzvXLCTzd}"             # Adversus Lead Status (single select)
 
-# Mirrors the precedence the two lead automations use, so the two status fields
-# cannot disagree. Without the open list first, a lead Adversus still has queued
-# but whose last outcome was terminal reads Open in one field and Closed in the
-# other, which is the contradiction this whole exercise started from.
-_OUTCOME_RULE = (
-    "IF(OR("
-    f'SEARCH("Not interested", ARRAYJOIN({_ADVERSUS})), '
-    f'SEARCH("Invalid", ARRAYJOIN({_ADVERSUS})), '
-    f'SEARCH("Success", ARRAYJOIN({_ADVERSUS})), '
-    f'SEARCH("Unqualified", ARRAYJOIN({_ADVERSUS})), '
-    f'TRIM({_MANUAL}) = "{TARGET_STATUS}"'
-    f'), "{TARGET_STATUS} ", "Open ")'
-)
+# The outcome is read from the single select rather than the "Adversus Lead
+# Status" lookup. The lookup returns one value however many calls are linked, and
+# it is not reliably the latest: across leads with two or more calls it matches
+# the most recent call on 94.1%, against 100% for the single select, which the
+# automations write from the latest call by session start.
+CLOSING_OUTCOMES = ("Not interested", "Invalid", "Success", "Unqualified")
+
+# Same precedence as the two lead automations, so the two status fields cannot
+# disagree: dropped from the campaign closes it, then a terminal outcome closes
+# it, then anything still on the export is open.
 AUTO_FORMULA = (
-    f'IF({_OPEN_LIST} = "No", "{TARGET_STATUS} ", '
-    f'IF({_OPEN_LIST} = "Yes", "Open ", {_OUTCOME_RULE}))'
+    f'IF(OR({_OPEN_LIST} = "No", '
+    + ", ".join(f'{_OUTCOME} = "{name}"' for name in CLOSING_OUTCOMES)
+    + f'), "{TARGET_STATUS} ", '
+    f'IF({_OPEN_LIST} = "Yes", "Open ", '
+    f'IF(TRIM({_MANUAL}) = "{TARGET_STATUS}", "{TARGET_STATUS} ", "Open ")))'
 )
 # Single select read by the "Databowl lead date IE" automation. That automation
 # rewrites Lead open/closed on every run, so writing the status directly does not
@@ -90,11 +90,17 @@ OPEN_LIST_FIELD = "In Adversus Open List"
 OPEN_LIST_YES = "Yes"
 OPEN_LIST_NO = "No"
 
+# The trustworthy copy of the latest Adversus outcome. See CLOSING_OUTCOMES below
+# for why the lookup of the same name is not used.
+OUTCOME_FIELD = "Adversus Lead Status (single select)"
+
 AUTO_DESCRIPTION = (
-    "Follows In Adversus Open List when it is set, otherwise closes on an Adversus "
-    "outcome of Not interested, Invalid, Success or Unqualified, or on a manual close. "
-    "Same precedence as the lead automations, so it should always agree with "
-    "Lead open/closed. Maintained by tools/airtable_close_leads.py --sync-auto-formula."
+    "Closed when In Adversus Open List is No, or when the latest Adversus outcome is "
+    "Not interested, Invalid, Success or Unqualified. Open when the lead is still on "
+    "the Adversus export. Same precedence as the lead automations, so it should always "
+    "agree with Lead open/closed. Reads the Adversus Lead Status single select, not the "
+    "lookup, which returns one value however many calls are linked. "
+    "Maintained by tools/airtable_close_leads.py --sync-auto-formula."
 )
 
 # Airtable allows 5 requests/second per base.
@@ -646,19 +652,27 @@ def run_sync_status_from_open_list(token, apply_changes, out_dir, open_value, cl
     live source of truth, including any corrections made by hand in Airtable,
     whereas an export file is only a snapshot of the moment it was taken.
 
+    A terminal Adversus outcome still closes a lead that is on the export, matching
+    the automations: a lead whose last call ended in Not interested, Invalid,
+    Success or Unqualified is finished even while Adversus keeps calling it.
+
     Records with a blank field are left alone, because the automation falls back
     to the Adversus outcome for those and this should not second-guess it.
     """
     records = fetch_records(token)
     print(f"read {len(records):>5} records from Airtable")
 
-    updates, blank = [], 0
+    closing = {name.lower() for name in CLOSING_OUTCOMES}
+    updates, blank, by_outcome = [], 0, 0
     for record in records:
         marker = (record["fields"].get(OPEN_LIST_FIELD) or "").strip().lower()
-        if marker == OPEN_LIST_YES.lower():
-            wanted = open_value
-        elif marker == OPEN_LIST_NO.lower():
+        outcome = (record["fields"].get(OUTCOME_FIELD) or "").strip().lower()
+        if marker == OPEN_LIST_NO.lower() or outcome in closing:
             wanted = closed_value
+            if marker == OPEN_LIST_YES.lower():
+                by_outcome += 1
+        elif marker == OPEN_LIST_YES.lower():
+            wanted = open_value
         else:
             blank += 1
             continue
@@ -672,6 +686,7 @@ def run_sync_status_from_open_list(token, apply_changes, out_dir, open_value, cl
         [
             ("Records read", len(records)),
             *[(f"  marked {k!r}", v) for k, v in sorted(marked.items())],
+            ("On the export but closed by outcome", by_outcome),
             ("Blank, left to the automation", blank),
             ("Records needing a status change", len(updates)),
         ],
