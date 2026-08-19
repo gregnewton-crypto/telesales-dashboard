@@ -1,22 +1,28 @@
 /*
- * Renders the micro-training Gantt chart, the week detail cards and the lesson
- * plan modal. No dependencies: the chart is a CSS grid and every block is a
- * real button, so keyboard and screen reader users get the same chart.
+ * Renders the micro-training Gantt chart, the section detail cards and the
+ * lesson plan modal. No dependencies: the chart is a CSS grid and every block
+ * is a real button, so keyboard and screen reader users get the same chart.
+ *
+ * Sections vary in length because each one runs for as many days as it has
+ * slide decks, so the schedule is built by walking the sections and handing
+ * out consecutive Monday-to-Thursday slots.
  */
 
 (function () {
   'use strict';
 
   const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  const DAY_NAMES = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
   const DAYS_PER_WEEK = PROGRAMME.days.length;
 
   const el = {
     gantt: document.getElementById('gantt'),
-    weeks: document.getElementById('weeks'),
+    sections: document.getElementById('sections'),
     summary: document.getElementById('summary'),
     questions: document.getElementById('questions'),
     startDate: document.getElementById('startDate'),
     statusFilter: document.getElementById('statusFilter'),
+    packing: document.getElementById('packing'),
     readingToggle: document.getElementById('readingToggle'),
     overlay: document.getElementById('overlay'),
     modal: document.getElementById('modal'),
@@ -28,6 +34,9 @@
 
   let startMonday = parseISO(PROGRAMME.startMonday);
   let statusFilter = 'all';
+  let packing = PROGRAMME.packing;
+  let schedule = [];
+  let totalSlots = 0;
   let lastFocused = null;
 
   /* ---------- dates ---------- */
@@ -45,8 +54,11 @@
     return new Date(date.getTime() + days * 86400000);
   }
 
-  function sessionDate(weekIndex, dayIndex) {
-    return addDays(startMonday, weekIndex * 7 + dayIndex);
+  // Slots only exist Monday to Thursday, so every four slots skips a weekend.
+  function dateForSlot(slot) {
+    const week = Math.floor(slot / DAYS_PER_WEEK);
+    const day = slot % DAYS_PER_WEEK;
+    return addDays(startMonday, week * 7 + day);
   }
 
   function shortDate(date) {
@@ -54,8 +66,8 @@
   }
 
   function longDate(date) {
-    const dayName = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][date.getUTCDay()];
-    return dayName + ' ' + date.getUTCDate() + ' ' + MONTHS[date.getUTCMonth()] + ' ' + date.getUTCFullYear();
+    return DAY_NAMES[date.getUTCDay()] + ' ' + date.getUTCDate() + ' ' +
+      MONTHS[date.getUTCMonth()] + ' ' + date.getUTCFullYear();
   }
 
   function holidayFor(date) {
@@ -67,18 +79,46 @@
     return toISO(new Date(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate())));
   }
 
-  /* ---------- helpers ---------- */
+  /* ---------- schedule ---------- */
 
-  function moduleId(weekIndex, dayIndex) {
-    return 'w' + (weekIndex + 1) + 'd' + (dayIndex + 1);
-  }
+  function buildSchedule() {
+    schedule = [];
+    let slot = 0;
 
-  function eachModule(fn) {
-    PROGRAMME.weeks.forEach(function (week, weekIndex) {
-      week.days.forEach(function (day, dayIndex) {
-        fn(day, week, weekIndex, dayIndex);
+    PROGRAMME.sections.forEach(function (section, sectionIndex) {
+      if (packing === 'weekAligned') {
+        const into = slot % DAYS_PER_WEEK;
+        if (into !== 0) slot += DAYS_PER_WEEK - into;
+      }
+      section.modules.forEach(function (module, moduleIndex) {
+        schedule.push({
+          sectionIndex: sectionIndex,
+          moduleIndex: moduleIndex,
+          section: section,
+          module: module,
+          slot: slot
+        });
+        slot += 1;
       });
     });
+
+    totalSlots = slot;
+  }
+
+  function weekCount() {
+    return Math.ceil(totalSlots / DAYS_PER_WEEK);
+  }
+
+  function slotsFor(sectionIndex) {
+    return schedule.filter(function (entry) {
+      return entry.sectionIndex === sectionIndex;
+    });
+  }
+
+  /* ---------- helpers ---------- */
+
+  function moduleId(sectionIndex, moduleIndex) {
+    return 's' + (sectionIndex + 1) + 'm' + (moduleIndex + 1);
   }
 
   function make(tag, className, text) {
@@ -88,25 +128,49 @@
     return node;
   }
 
-  function matchesFilter(day) {
-    return statusFilter === 'all' || day.status === statusFilter;
+  function matchesFilter(module) {
+    return statusFilter === 'all' || module.status === statusFilter;
+  }
+
+  function countByStatus() {
+    const counts = { ready: 0, building: 0, planned: 0 };
+    schedule.forEach(function (entry) {
+      counts[entry.module.status] += 1;
+    });
+    return counts;
   }
 
   /* ---------- summary ---------- */
 
   function renderSummary() {
-    const counts = { built: 0, adapt: 0, create: 0 };
-    let total = 0;
-    eachModule(function (day) {
-      counts[day.status] += 1;
-      total += 1;
-    });
+    const counts = countByStatus();
+    const lastSlot = totalSlots - 1;
 
     const tiles = [
-      { cls: '', big: total, label: 'Modules of 15 minutes', sub: PROGRAMME.weeks.length + ' weeks, Monday to Thursday' },
-      { cls: 'green', big: counts.built, label: 'Built \u2014 run as is', sub: 'Material already exists in this repository' },
-      { cls: 'blue', big: counts.adapt, label: 'Adapt \u2014 condense', sub: 'Exists but written for a longer session' },
-      { cls: 'purple', big: counts.create, label: 'New \u2014 write first', sub: 'Nothing covers this today' }
+      {
+        cls: '',
+        big: totalSlots,
+        label: 'Sessions of 15 minutes',
+        sub: PROGRAMME.sections.length + ' sections \u00b7 one deck a morning, Mon to Thu'
+      },
+      {
+        cls: 'blue',
+        big: weekCount(),
+        label: 'Weeks to run it',
+        sub: shortDate(dateForSlot(0)) + ' to ' + shortDate(dateForSlot(lastSlot))
+      },
+      {
+        cls: 'green',
+        big: counts.ready + counts.building,
+        label: 'Decks built or in progress',
+        sub: counts.ready + ' finished, ' + counts.building + ' being written now'
+      },
+      {
+        cls: 'purple',
+        big: counts.planned,
+        label: 'Decks still to build',
+        sub: 'Every one has a lesson plan ready to build from'
+      }
     ];
 
     el.summary.innerHTML = '';
@@ -123,133 +187,177 @@
 
   function renderGantt() {
     const today = todayISO();
+    const weeks = weekCount();
+    const columns = weeks * DAYS_PER_WEEK;
+
     el.gantt.innerHTML = '';
+    el.gantt.style.gridTemplateColumns =
+      '176px repeat(' + columns + ', minmax(76px, 1fr))';
     el.gantt.style.gridTemplateRows =
-      '34px 22px repeat(' + PROGRAMME.weeks.length + ', 70px)';
+      '34px 22px repeat(' + PROGRAMME.sections.length + ', 70px)';
+    el.gantt.style.minWidth = (176 + columns * 76) + 'px';
 
     // Opaque spacers so the scrolling time axis passes behind the sticky
-    // topic column rather than showing through it.
+    // section column rather than showing through it.
     [1, 2].forEach(function (row) {
       const corner = make('div', 'g-corner');
       corner.style.gridRow = String(row);
       el.gantt.appendChild(corner);
     });
 
-    PROGRAMME.weeks.forEach(function (week, weekIndex) {
-      const firstColumn = 2 + weekIndex * DAYS_PER_WEEK;
+    for (let week = 0; week < weeks; week += 1) {
+      const firstColumn = 2 + week * DAYS_PER_WEEK;
 
-      const divider = make('div', weekIndex === 0 ? 'g-line strong' : 'g-line strong');
+      const divider = make('div', 'g-line strong');
       divider.style.gridColumn = String(firstColumn);
       el.gantt.appendChild(divider);
 
       const weekHead = make('div', 'g-week');
       weekHead.style.gridColumn = firstColumn + ' / span ' + DAYS_PER_WEEK;
-      weekHead.appendChild(make('span', null, 'Week ' + (weekIndex + 1)));
-      weekHead.appendChild(make('small', null, 'w/c ' + shortDate(sessionDate(weekIndex, 0))));
+      weekHead.appendChild(make('span', null, 'Week ' + (week + 1)));
+      weekHead.appendChild(make('small', null, 'w/c ' + shortDate(dateForSlot(week * DAYS_PER_WEEK))));
       el.gantt.appendChild(weekHead);
 
-      const rowLabel = make('div', 'g-label');
-      rowLabel.style.gridRow = String(3 + weekIndex);
-      rowLabel.appendChild(make('span', null, week.topic));
-      rowLabel.appendChild(make('small', null, week.days.length + ' \u00d7 15 min'));
-      el.gantt.appendChild(rowLabel);
-
-      week.days.forEach(function (day, dayIndex) {
-        const column = firstColumn + dayIndex;
-        const date = sessionDate(weekIndex, dayIndex);
+      for (let day = 0; day < DAYS_PER_WEEK; day += 1) {
+        const slot = week * DAYS_PER_WEEK + day;
+        const date = dateForSlot(slot);
         const holiday = holidayFor(date);
-
         const dayHead = make('div', 'g-day' + (holiday ? ' holiday' : ''));
-        dayHead.style.gridColumn = String(column);
-        dayHead.textContent = PROGRAMME.days[dayIndex] + ' ' + date.getUTCDate();
+        dayHead.style.gridColumn = String(firstColumn + day);
+        dayHead.textContent = PROGRAMME.days[day] + ' ' + date.getUTCDate();
         el.gantt.appendChild(dayHead);
-
-        const bar = make('button', 'g-bar ' + week.colour + ' status-' + day.status);
-        bar.type = 'button';
-        bar.style.gridColumn = String(column);
-        bar.style.gridRow = String(3 + weekIndex);
-        bar.dataset.week = String(weekIndex);
-        bar.dataset.day = String(dayIndex);
-        if (!matchesFilter(day)) bar.classList.add('dimmed');
-        if (day.gap) bar.classList.add('flagged');
-        if (toISO(date) === today) bar.classList.add('today');
-
-        bar.appendChild(make('span', 'bar-title', CHART_LABELS[moduleId(weekIndex, dayIndex)] || day.title));
-        // No date on the block: the week header and the day column above it
-        // already carry it, and at this width it only clipped.
-        const foot = make('span', 'bar-foot');
-        foot.appendChild(make('span', 'bar-status', STATUS_LABELS[day.status].short));
-        bar.appendChild(foot);
-
-        bar.setAttribute(
-          'aria-label',
-          'Week ' + (weekIndex + 1) + ', ' + PROGRAMME.days[dayIndex] + ' ' + shortDate(date) +
-          '. ' + week.topic + ': ' + day.title +
-          '. ' + STATUS_LABELS[day.status].name +
-          (holiday ? '. Falls on a bank holiday' : '') +
-          '. Opens the 15 minute lesson plan.'
-        );
-
-        bar.addEventListener('click', function () {
-          openModule(weekIndex, dayIndex);
-        });
-
-        el.gantt.appendChild(bar);
-      });
-    });
+      }
+    }
 
     const endLine = make('div', 'g-line strong');
-    endLine.style.gridColumn = String(2 + PROGRAMME.weeks.length * DAYS_PER_WEEK);
+    endLine.style.gridColumn = String(2 + columns);
     el.gantt.appendChild(endLine);
+
+    PROGRAMME.sections.forEach(function (section, sectionIndex) {
+      const rowLabel = make('div', 'g-label');
+      rowLabel.style.gridRow = String(3 + sectionIndex);
+      rowLabel.appendChild(make('span', null, section.name));
+      rowLabel.appendChild(make('small', null, section.modules.length + ' decks \u00b7 ' +
+        section.modules.length + ' \u00d7 15 min'));
+      el.gantt.appendChild(rowLabel);
+    });
+
+    schedule.forEach(function (entry) {
+      const date = dateForSlot(entry.slot);
+      const holiday = holidayFor(date);
+      const module = entry.module;
+
+      const bar = make('button', 'g-bar ' + entry.section.colour + ' status-' + module.status);
+      bar.type = 'button';
+      bar.style.gridColumn = String(2 + entry.slot);
+      bar.style.gridRow = String(3 + entry.sectionIndex);
+      if (!matchesFilter(module)) bar.classList.add('dimmed');
+      if (module.gap) bar.classList.add('flagged');
+      if (toISO(date) === today) bar.classList.add('today');
+
+      bar.appendChild(make('span', 'bar-title', module.label || module.title));
+      const foot = make('span', 'bar-foot');
+      foot.appendChild(make('span', 'bar-status', STATUS_LABELS[module.status].short));
+      bar.appendChild(foot);
+
+      bar.setAttribute(
+        'aria-label',
+        entry.section.name + ', deck ' + (entry.moduleIndex + 1) + ' of ' +
+        entry.section.modules.length + '. ' +
+        PROGRAMME.days[entry.slot % DAYS_PER_WEEK] + ' ' + shortDate(date) + '. ' +
+        module.title + '. ' + STATUS_LABELS[module.status].name +
+        (holiday ? '. Falls on a bank holiday' : '') +
+        '. Opens the 15 minute lesson plan.'
+      );
+
+      bar.addEventListener('click', function () {
+        openModule(entry.sectionIndex, entry.moduleIndex);
+      });
+
+      el.gantt.appendChild(bar);
+    });
 
     el.gantt.setAttribute(
       'aria-label',
-      PROGRAMME.weeks.length + ' week training programme. One topic per week, four 15 minute modules ' +
-      'from Monday to Thursday. Starting week commencing ' + shortDate(startMonday) + '.'
+      PROGRAMME.sections.length + ' section training programme over ' + weekCount() +
+      ' weeks. ' + totalSlots + ' sessions of 15 minutes, Monday to Thursday, ' +
+      'starting week commencing ' + shortDate(startMonday) + '.'
     );
   }
 
-  /* ---------- week detail cards ---------- */
+  /* ---------- section detail cards ---------- */
 
-  function renderWeeks() {
-    el.weeks.innerHTML = '';
+  function renderSections() {
+    el.sections.innerHTML = '';
 
-    PROGRAMME.weeks.forEach(function (week, weekIndex) {
+    PROGRAMME.sections.forEach(function (section, sectionIndex) {
+      const entries = slotsFor(sectionIndex);
+      if (!entries.length) return;
+
+      const firstDate = dateForSlot(entries[0].slot);
+      const lastDate = dateForSlot(entries[entries.length - 1].slot);
+
       const block = make('section', 'week-block');
 
       const head = make('div', 'week-head');
-      head.appendChild(make('span', 'tag', 'Week ' + (weekIndex + 1)));
-      head.appendChild(make('h3', null, week.topic));
+      head.appendChild(make('span', 'tag', 'Section ' + (sectionIndex + 1)));
+      head.appendChild(make('h3', null, section.name));
       head.appendChild(make('span', 'when',
-        shortDate(sessionDate(weekIndex, 0)) + ' \u2013 ' + shortDate(sessionDate(weekIndex, DAYS_PER_WEEK - 1))));
+        shortDate(firstDate) + ' \u2013 ' + shortDate(lastDate)));
       block.appendChild(head);
 
+      const folder = make('p', 'folder-line');
+      folder.appendChild(make('strong', null, 'Drive folder: '));
+      if (section.driveUrl) {
+        const link = make('a', null, section.folder);
+        link.href = section.driveUrl;
+        link.rel = 'noopener';
+        folder.appendChild(link);
+      } else {
+        folder.appendChild(document.createTextNode(section.folder));
+      }
+      const ready = section.decksReady || 0;
+      const building = section.decksBuilding || 0;
+      folder.appendChild(document.createTextNode(
+        ' \u2014 ' + ready + ' of ' + section.modules.length + ' decks built' +
+        (building ? ', ' + building + ' in progress' : '') + '.'
+      ));
+      if (ready > 0) {
+        folder.appendChild(make('em', null,
+          ' Module names below are my proposal and are not yet matched to your deck titles.'));
+      }
+      block.appendChild(folder);
+
       const outcome = make('p', 'week-outcome');
-      outcome.appendChild(make('strong', null, 'By Thursday: '));
-      outcome.appendChild(document.createTextNode(week.outcome));
+      outcome.appendChild(make('strong', null, 'By the end of this section: '));
+      outcome.appendChild(document.createTextNode(section.outcome));
       block.appendChild(outcome);
 
       const grid = make('div', 'module-grid');
-      week.days.forEach(function (day, dayIndex) {
-        const date = sessionDate(weekIndex, dayIndex);
+      entries.forEach(function (entry) {
+        const date = dateForSlot(entry.slot);
         const holiday = holidayFor(date);
+        const module = entry.module;
 
         const card = make('button', 'module-card');
         card.type = 'button';
-        card.id = moduleId(weekIndex, dayIndex);
+        card.id = moduleId(sectionIndex, entry.moduleIndex);
         card.appendChild(make('span', 'mc-day',
-          PROGRAMME.days[dayIndex] + ' ' + shortDate(date) + (holiday ? ' \u2014 bank holiday' : '')));
-        card.appendChild(make('span', 'mc-title', day.title));
-        card.appendChild(make('span', 'mc-objective', day.objective));
-        card.appendChild(make('span', 'status-chip ' + day.status, STATUS_LABELS[day.status].name));
+          'Deck ' + (entry.moduleIndex + 1) + ' \u00b7 ' +
+          PROGRAMME.days[entry.slot % DAYS_PER_WEEK] + ' ' + shortDate(date) +
+          (holiday ? ' \u2014 bank holiday' : '')));
+        card.appendChild(make('span', 'mc-title', module.title));
+        card.appendChild(make('span', 'mc-objective', module.objective));
+        card.appendChild(make('span', 'status-chip ' + module.status,
+          STATUS_LABELS[module.status].name));
         card.addEventListener('click', function () {
-          openModule(weekIndex, dayIndex);
+          openModule(sectionIndex, entry.moduleIndex);
         });
         grid.appendChild(card);
       });
       block.appendChild(grid);
 
-      el.weeks.appendChild(block);
+      el.sections.appendChild(block);
     });
   }
 
@@ -274,46 +382,61 @@
 
   /* ---------- modal ---------- */
 
-  function openModule(weekIndex, dayIndex) {
-    const week = PROGRAMME.weeks[weekIndex];
-    const day = week.days[dayIndex];
-    const date = sessionDate(weekIndex, dayIndex);
+  function openModule(sectionIndex, moduleIndex) {
+    const section = PROGRAMME.sections[sectionIndex];
+    const module = section.modules[moduleIndex];
+    const entry = schedule.filter(function (item) {
+      return item.sectionIndex === sectionIndex && item.moduleIndex === moduleIndex;
+    })[0];
+    if (!entry) return;
+
+    const date = dateForSlot(entry.slot);
     const holiday = holidayFor(date);
 
     el.modalHead.innerHTML = '';
     el.modalBody.innerHTML = '';
 
     el.modalHead.appendChild(make('div', 'eyebrow',
-      'Week ' + (weekIndex + 1) + ' \u00b7 ' + week.topic + ' \u00b7 ' + PROGRAMME.days[dayIndex]));
+      section.name + ' \u00b7 deck ' + (moduleIndex + 1) + ' of ' + section.modules.length));
 
-    const heading = make('h2', null, day.title);
+    const heading = make('h2', null, module.title);
     heading.id = 'modalTitle';
     el.modalHead.appendChild(heading);
 
     const meta = make('div', 'modal-meta');
     meta.appendChild(make('span', null, longDate(date)));
     meta.appendChild(make('span', null, '15 minutes'));
-    meta.appendChild(make('span', null, STATUS_LABELS[day.status].name));
+    meta.appendChild(make('span', null, STATUS_LABELS[module.status].name));
     el.modalHead.appendChild(meta);
 
     const objective = make('p', 'objective');
     objective.appendChild(make('strong', null, 'Objective: '));
-    objective.appendChild(document.createTextNode(day.objective));
+    objective.appendChild(document.createTextNode(module.objective));
     el.modalBody.appendChild(objective);
+
+    if (module.status === 'ready') {
+      const note = make('div', 'callout');
+      note.appendChild(make('strong', null, 'A deck already exists for this slot'));
+      note.appendChild(document.createTextNode(
+        'It is in the ' + section.folder + ' folder. This lesson plan is my proposed ' +
+        '15-minute shape for it, written before I could see your deck titles \u2014 so ' +
+        'treat it as a suggestion to check the deck against, not a description of it.'));
+      el.modalBody.appendChild(note);
+    }
 
     if (holiday) {
       const warn = make('div', 'callout blocker');
       warn.appendChild(make('strong', null, 'This session lands on a bank holiday (' + holiday + ')'));
       warn.appendChild(document.createTextNode(
-        'Either run the week Tuesday to Friday, or push the whole topic on by a week. Do not drop the module \u2014 each week is four modules by design.'));
+        'Either run that week Tuesday to Friday, or push everything from here on by one day.'));
       el.modalBody.appendChild(warn);
     }
 
-    el.modalBody.appendChild(make('p', 'hook-line', day.hook));
+    el.modalBody.appendChild(make('p', 'hook-line', module.hook));
 
     el.modalBody.appendChild(make('h4', null, 'The 15 minutes'));
     const beats = make('ol', 'beats');
-    day.beats.forEach(function (beat) {
+    module.beats.forEach(function (beat) {
       const li = make('li', 'beat');
       const time = make('span', 'beat-time', beat.time + ' min');
       time.appendChild(make('small', null, beat.label));
@@ -323,15 +446,15 @@
     });
     el.modalBody.appendChild(beats);
 
-    if (day.metric) {
-      el.modalBody.appendChild(infoRow('Number to watch', day.metric));
+    if (module.metric) {
+      el.modalBody.appendChild(infoRow('Number to watch', module.metric));
     }
-    if (day.coach) {
-      el.modalBody.appendChild(infoRow('Coach note', day.coach));
+    if (module.coach) {
+      el.modalBody.appendChild(infoRow('Coach note', module.coach));
     }
-    if (day.sources && day.sources.length) {
+    if (module.sources && module.sources.length) {
       const list = make('ul');
-      day.sources.forEach(function (source) {
+      module.sources.forEach(function (source) {
         const li = make('li');
         const link = make('a', null, source.label);
         link.href = source.href;
@@ -341,10 +464,11 @@
       el.modalBody.appendChild(infoRow('Source material', list));
     }
 
-    if (day.gap) {
-      const gap = make('div', 'callout' + (/^Blocked/.test(day.gap) ? ' blocker' : ''));
-      gap.appendChild(make('strong', null, 'Before this can run'));
-      gap.appendChild(document.createTextNode(day.gap));
+    if (module.gap) {
+      const gap = make('div', 'callout' + (/^Blocked/.test(module.gap) ? ' blocker' : ''));
+      gap.appendChild(make('strong', null,
+        module.status === 'planned' ? 'Before this deck can be built' : 'Still needed'));
+      gap.appendChild(document.createTextNode(module.gap));
       el.modalBody.appendChild(gap);
     }
 
@@ -354,7 +478,7 @@
     el.modalClose.focus();
 
     if (history.replaceState) {
-      history.replaceState(null, '', '#' + moduleId(weekIndex, dayIndex));
+      history.replaceState(null, '', '#' + moduleId(sectionIndex, moduleIndex));
     }
   }
 
@@ -387,9 +511,10 @@
   }
 
   function renderAll() {
+    buildSchedule();
     renderSummary();
     renderGantt();
-    renderWeeks();
+    renderSections();
   }
 
   el.startDate.value = PROGRAMME.startMonday;
@@ -415,8 +540,17 @@
   el.statusFilter.addEventListener('change', function () {
     statusFilter = el.statusFilter.value;
     renderGantt();
-    const label = statusFilter === 'all' ? 'all modules' : STATUS_LABELS[statusFilter].name;
+    const label = statusFilter === 'all' ? 'all sessions' : STATUS_LABELS[statusFilter].name;
     announce('Chart highlighting ' + label + '.');
+  });
+
+  el.packing.value = packing;
+  el.packing.addEventListener('change', function () {
+    packing = el.packing.value;
+    renderAll();
+    announce(packing === 'weekAligned'
+      ? 'Every section now starts on a Monday. Programme runs ' + weekCount() + ' weeks.'
+      : 'Sections now run back to back. Programme runs ' + weekCount() + ' weeks.');
   });
 
   el.readingToggle.addEventListener('click', function () {
@@ -471,12 +605,13 @@
   /* ---------- boot ---------- */
 
   function openFromHash() {
-    const match = /^#w(\d+)d(\d+)$/.exec(location.hash);
+    const match = /^#s(\d+)m(\d+)$/.exec(location.hash);
     if (!match) return;
-    const weekIndex = Number(match[1]) - 1;
-    const dayIndex = Number(match[2]) - 1;
-    if (PROGRAMME.weeks[weekIndex] && PROGRAMME.weeks[weekIndex].days[dayIndex]) {
-      openModule(weekIndex, dayIndex);
+    const sectionIndex = Number(match[1]) - 1;
+    const moduleIndex = Number(match[2]) - 1;
+    const section = PROGRAMME.sections[sectionIndex];
+    if (section && section.modules[moduleIndex]) {
+      openModule(sectionIndex, moduleIndex);
     }
   }
 
