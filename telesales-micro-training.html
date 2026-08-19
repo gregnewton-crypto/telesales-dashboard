@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Telesales Micro-Training | 15 Minutes a Day, Mon-Thu</title>
+  <meta name="description" content="A seven-week telesales training curriculum built as 15-minute morning stand-up modules, shown as an interactive Gantt chart.">
+  <link rel="stylesheet" href="assets/curriculum.css">
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>Telesales Micro-Training</h1>
+      <p>
+        Seven topics, seven weeks, twenty-eight modules. Fifteen minutes every morning
+        from Monday to Thursday, run at stand-up. Click any block on the chart to open
+        that day&rsquo;s lesson plan.
+      </p>
+      <div class="header-meta">
+        <span>Mon&ndash;Thu only</span>
+        <span>15 minutes per session</span>
+        <span>28 modules across 7 weeks</span>
+        <span>Week 1 priority: SPH</span>
+      </div>
+      <nav class="header-links" aria-label="Related pages">
+        <a href="index.html">Telesales Dashboard</a>
+        <a href="telesales-onboarding-schedule.html">Onboarding Schedule</a>
+        <a href="transition-texture-training-deck.html">Transition &amp; Texture Deck</a>
+        <a href="retention-improvement-master-plan.html">Retention Master Plan</a>
+        <a href="d2ms-retention-pause-tracker.html">Pause Tracker</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="card">
+      <h2>How This Works</h2>
+      <div class="summary-grid" id="summary"></div>
+
+      <h3>The 15-minute shape, every day</h3>
+      <p class="hint">
+        Every module uses the same four beats. Agents learn the rhythm once, then the
+        content can change without anybody having to relearn the format.
+      </p>
+      <table>
+        <caption class="sr-only">The four beats that make up every 15-minute module</caption>
+        <thead>
+          <tr>
+            <th scope="col">Minutes</th>
+            <th scope="col">Beat</th>
+            <th scope="col">What happens</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>0&ndash;2</strong></td>
+            <td>Hook</td>
+            <td>One real number or one real call moment. No agenda, no recap of yesterday.</td>
+          </tr>
+          <tr>
+            <td><strong>2&ndash;7</strong></td>
+            <td>Teach</td>
+            <td>One idea only. If it needs two ideas, it needs two days.</td>
+          </tr>
+          <tr>
+            <td><strong>7&ndash;12</strong></td>
+            <td>Drill</td>
+            <td>Everybody says something out loud. Pairs, round-robin, or a live listen.</td>
+          </tr>
+          <tr>
+            <td><strong>12&ndash;15</strong></td>
+            <td>Commit</td>
+            <td>One behaviour for today and one number to watch. Then straight onto the phones.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="callout">
+        <strong>Why one topic per week</strong>
+        Four sessions on one subject builds a habit. Four sessions on four subjects builds
+        a newsletter. Each week ends with a behaviour that is already on the phones by
+        Thursday afternoon.
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>The Programme</h2>
+      <p class="hint">
+        Click or tab to any block to open the full lesson plan. The left edge of each block
+        shows whether the material already exists, so the chart doubles as a content gap audit.
+      </p>
+
+      <div class="controls" role="group" aria-label="Chart controls">
+        <label class="control">
+          <span>Programme starts</span>
+          <input type="date" id="startDate">
+        </label>
+        <label class="control">
+          <span>Highlight</span>
+          <select id="statusFilter">
+            <option value="all">All modules</option>
+            <option value="built">Built &mdash; run as is</option>
+            <option value="adapt">Adapt &mdash; condense existing</option>
+            <option value="create">New &mdash; write from scratch</option>
+          </select>
+        </label>
+        <button type="button" class="btn ghost" id="readingToggle" aria-pressed="false">
+          Reading mode
+        </button>
+        <button type="button" class="btn ghost" onclick="window.print()">
+          Print / save as PDF
+        </button>
+      </div>
+
+      <div class="gantt-wrap">
+        <div class="gantt" id="gantt" role="group"></div>
+      </div>
+
+      <div class="chart-key">
+        <span class="key-item"><span class="key-swatch built"></span> Built &mdash; run as is</span>
+        <span class="key-item"><span class="key-swatch adapt"></span> Adapt &mdash; condense existing</span>
+        <span class="key-item"><span class="key-swatch create"></span> New &mdash; write from scratch</span>
+        <span class="key-item">&#9650; needs something confirmed before it can run</span>
+        <span class="key-item">Thick outline marks today</span>
+      </div>
+
+      <p class="hint" style="margin-top: 14px;">
+        Changing the start date snaps to the nearest Monday and shifts the whole programme.
+        Any session landing on a UK bank holiday is flagged in red on the chart and in its
+        lesson plan.
+      </p>
+    </section>
+
+    <section class="card">
+      <h2>Week by Week</h2>
+      <p class="hint">
+        The same twenty-eight modules as a printable list. Each card opens the same lesson plan
+        as the chart.
+      </p>
+      <div id="weeks"></div>
+    </section>
+
+    <section class="card">
+      <h2>Content Gap Audit &mdash; What I Need From You</h2>
+      <p>
+        Five modules can run from material that already exists in this repository, five need
+        condensing from longer sessions, and eighteen need writing. Before the eighteen can be
+        written, these questions need answers. The three marked as blockers stop a module from
+        running at all.
+      </p>
+      <ol class="q-list" id="questions"></ol>
+    </section>
+
+    <section class="card">
+      <h2>Editing This Page</h2>
+      <p>
+        Every lesson plan lives in one file, <code>assets/curriculum-data.js</code>. Nothing in
+        the markup needs touching to change the curriculum.
+      </p>
+      <ul>
+        <li><strong>Change a lesson plan:</strong> edit the <code>days</code> entry for that week.</li>
+        <li><strong>Reorder the programme:</strong> move a week object inside <code>PROGRAMME.weeks</code>. Week numbers and dates follow position automatically.</li>
+        <li><strong>Add a week:</strong> add another object with four <code>days</code>. The chart widens itself.</li>
+        <li><strong>Change the start date permanently:</strong> edit <code>startMonday</code>.</li>
+        <li><strong>Move a module between statuses:</strong> change <code>status</code> to <code>built</code>, <code>adapt</code> or <code>create</code> as work gets done. The tiles and the chart both update.</li>
+      </ul>
+      <p>
+        Deep links work per module, so <code>#w1d1</code> opens Week&nbsp;1 Monday directly. Useful
+        for pasting a single lesson plan into Slack the night before.
+      </p>
+    </section>
+  </main>
+
+  <footer>
+    Telesales Micro-Training &middot; Monday to Thursday, 15 minutes, at stand-up
+  </footer>
+
+  <div class="overlay" id="overlay">
+    <div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modal-head">
+        <div id="modalHead"></div>
+        <button type="button" class="modal-close" id="modalClose" aria-label="Close lesson plan">&times;</button>
+      </div>
+      <div class="modal-body" id="modalBody"></div>
+    </div>
+  </div>
+
+  <div class="sr-only" id="liveRegion" role="status" aria-live="polite"></div>
+
+  <script src="assets/curriculum-data.js"></script>
+  <script src="assets/curriculum.js"></script>
+</body>
+</html>
