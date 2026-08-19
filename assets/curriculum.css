@@ -353,6 +353,9 @@ a {
   font-weight: 700;
   line-height: 1.25;
   overflow: hidden;
+  /* A long word wraps rather than being clipped mid-letter, so an edited
+     label can never silently lose characters. */
+  overflow-wrap: anywhere;
 }
 
 .g-bar .bar-foot {

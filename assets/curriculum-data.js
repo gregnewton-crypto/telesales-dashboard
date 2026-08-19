@@ -576,7 +576,7 @@ const CHART_LABELS = {
   w1d4: 'SPH that counts',
 
   w2d1: 'The four questions',
-  w2d2: 'Ask, don\u2019t interrogate',
+  w2d2: 'Ask, don\u2019t quiz',
   w2d3: 'Reason and risk',
   w2d4: 'Play it back',
 
@@ -588,11 +588,11 @@ const CHART_LABELS = {
   w4d1: 'The five beats',
   w4d2: 'Match, don\u2019t list',
   w4d3: 'Ask for the sale',
-  w4d4: 'Subscription objection',
+  w4d4: 'The contract question',
 
   w5d1: 'Numbers cold',
   w5d2: 'Cost per day',
-  w5d3: 'Five objections',
+  w5d3: 'Five answers ready',
   w5d4: 'Never discount',
 
   w6d1: 'What we know',
