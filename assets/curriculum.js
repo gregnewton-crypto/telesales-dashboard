@@ -161,7 +161,7 @@
 
         const dayHead = make('div', 'g-day' + (holiday ? ' holiday' : ''));
         dayHead.style.gridColumn = String(column);
-        dayHead.textContent = PROGRAMME.days[dayIndex];
+        dayHead.textContent = PROGRAMME.days[dayIndex] + ' ' + date.getUTCDate();
         el.gantt.appendChild(dayHead);
 
         const bar = make('button', 'g-bar ' + week.colour + ' status-' + day.status);
@@ -175,9 +175,10 @@
         if (toISO(date) === today) bar.classList.add('today');
 
         bar.appendChild(make('span', 'bar-title', CHART_LABELS[moduleId(weekIndex, dayIndex)] || day.title));
+        // No date on the block: the week header and the day column above it
+        // already carry it, and at this width it only clipped.
         const foot = make('span', 'bar-foot');
         foot.appendChild(make('span', 'bar-status', STATUS_LABELS[day.status].short));
-        foot.appendChild(make('span', 'bar-day', shortDate(date)));
         bar.appendChild(foot);
 
         bar.setAttribute(
