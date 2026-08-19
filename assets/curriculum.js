@@ -387,6 +387,14 @@
   el.startDate.addEventListener('change', function () {
     if (!el.startDate.value) return;
     const picked = parseISO(el.startDate.value);
+    // Date inputs report half-typed values, so a year of 19 or 1906 arrives here
+    // as a real date. Ignore anything outside a plausible range.
+    const year = picked.getUTCFullYear();
+    if (isNaN(year) || year < 2020 || year > 2100) {
+      el.startDate.value = toISO(startMonday);
+      announce('That start date was not recognised. Left unchanged.');
+      return;
+    }
     // The programme is a Monday-to-Thursday routine, so snap back to Monday.
     const offset = (picked.getUTCDay() + 6) % 7;
     startMonday = addDays(picked, -offset);
@@ -453,15 +461,21 @@
 
   /* ---------- boot ---------- */
 
-  renderAll();
-  renderQuestions();
-
-  const hashMatch = /^#w(\d+)d(\d+)$/.exec(location.hash);
-  if (hashMatch) {
-    const weekIndex = Number(hashMatch[1]) - 1;
-    const dayIndex = Number(hashMatch[2]) - 1;
+  function openFromHash() {
+    const match = /^#w(\d+)d(\d+)$/.exec(location.hash);
+    if (!match) return;
+    const weekIndex = Number(match[1]) - 1;
+    const dayIndex = Number(match[2]) - 1;
     if (PROGRAMME.weeks[weekIndex] && PROGRAMME.weeks[weekIndex].days[dayIndex]) {
       openModule(weekIndex, dayIndex);
     }
   }
+
+  renderAll();
+  renderQuestions();
+  openFromHash();
+
+  // Pasting a deep link into an already-open tab changes only the hash, which
+  // does not re-run this script.
+  window.addEventListener('hashchange', openFromHash);
 })();
