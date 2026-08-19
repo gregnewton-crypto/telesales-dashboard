@@ -125,7 +125,15 @@
     const today = todayISO();
     el.gantt.innerHTML = '';
     el.gantt.style.gridTemplateRows =
-      '34px 22px repeat(' + PROGRAMME.weeks.length + ', 62px)';
+      '34px 22px repeat(' + PROGRAMME.weeks.length + ', 70px)';
+
+    // Opaque spacers so the scrolling time axis passes behind the sticky
+    // topic column rather than showing through it.
+    [1, 2].forEach(function (row) {
+      const corner = make('div', 'g-corner');
+      corner.style.gridRow = String(row);
+      el.gantt.appendChild(corner);
+    });
 
     PROGRAMME.weeks.forEach(function (week, weekIndex) {
       const firstColumn = 2 + weekIndex * DAYS_PER_WEEK;
@@ -166,7 +174,7 @@
         if (day.gap) bar.classList.add('flagged');
         if (toISO(date) === today) bar.classList.add('today');
 
-        bar.appendChild(make('span', 'bar-title', day.title));
+        bar.appendChild(make('span', 'bar-title', CHART_LABELS[moduleId(weekIndex, dayIndex)] || day.title));
         const foot = make('span', 'bar-foot');
         foot.appendChild(make('span', 'bar-status', STATUS_LABELS[day.status].short));
         foot.appendChild(make('span', 'bar-day', shortDate(date)));

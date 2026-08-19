@@ -243,8 +243,8 @@ a {
 .gantt {
   display: grid;
   gap: 6px 0;
-  grid-template-columns: 172px repeat(28, minmax(46px, 1fr));
-  min-width: 1180px;
+  grid-template-columns: 176px repeat(28, minmax(76px, 1fr));
+  min-width: 2304px;
 }
 
 .g-line {
@@ -287,14 +287,32 @@ a {
   color: var(--coral);
 }
 
+/* The topic column stays put while the timeline scrolls, so you never lose
+   track of which row you are reading. */
+.g-label,
+.g-corner {
+  background: var(--paper);
+  grid-column: 1;
+  left: 0;
+  position: sticky;
+  z-index: 3;
+}
+
 .g-label {
-  align-self: center;
+  align-items: flex-end;
+  border-right: 2px solid var(--line);
   color: var(--brown);
+  display: flex;
+  flex-direction: column;
   font-size: 13px;
   font-weight: 700;
-  grid-column: 1;
+  justify-content: center;
   padding-right: 12px;
   text-align: right;
+}
+
+.g-corner {
+  border-right: 2px solid var(--line);
 }
 
 .g-label small {

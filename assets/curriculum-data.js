@@ -564,6 +564,48 @@ const PROGRAMME = {
   ]
 };
 
+/*
+ * Short labels for the chart blocks. A day column is too narrow for a full
+ * lesson title, and a truncated title is worse than a short one. Full titles
+ * stay on the week cards and in the lesson plan.
+ */
+const CHART_LABELS = {
+  w1d1: 'Your number',
+  w1d2: 'More calls an hour',
+  w1d3: 'Talk time that pays',
+  w1d4: 'SPH that counts',
+
+  w2d1: 'The four questions',
+  w2d2: 'Ask, don\u2019t interrogate',
+  w2d3: 'Reason and risk',
+  w2d4: 'Play it back',
+
+  w3d1: 'Range in 60 seconds',
+  w3d2: 'Four portion bands',
+  w3d3: 'Texture, not recipe',
+  w3d4: 'Variety sells',
+
+  w4d1: 'The five beats',
+  w4d2: 'Match, don\u2019t list',
+  w4d3: 'Ask for the sale',
+  w4d4: 'Subscription objection',
+
+  w5d1: 'Numbers cold',
+  w5d2: 'Cost per day',
+  w5d3: 'Five objections',
+  w5d4: 'Never discount',
+
+  w6d1: 'What we know',
+  w6d2: 'Four profiles',
+  w6d3: 'Household reality',
+  w6d4: 'Four openings',
+
+  w7d1: 'Where we lose them',
+  w7d2: 'Promise the process',
+  w7d3: 'The six mechanics',
+  w7d4: 'Swap, don\u2019t stop'
+};
+
 const OPEN_QUESTIONS = [
   {
     week: 'Week 3 \u2014 Product',
