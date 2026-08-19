@@ -575,7 +575,7 @@ const CHART_LABELS = {
   w1d3: 'Talk time that pays',
   w1d4: 'SPH that counts',
 
-  w2d1: 'The four questions',
+  w2d1: 'The four facts',
   w2d2: 'Ask, don\u2019t quiz',
   w2d3: 'Reason and risk',
   w2d4: 'Play it back',
@@ -597,12 +597,12 @@ const CHART_LABELS = {
 
   w6d1: 'What we know',
   w6d2: 'Four profiles',
-  w6d3: 'Household reality',
+  w6d3: 'Who feeds her',
   w6d4: 'Four openings',
 
   w7d1: 'Where we lose them',
   w7d2: 'Promise the process',
-  w7d3: 'The six mechanics',
+  w7d3: 'The six rules',
   w7d4: 'Swap, don\u2019t stop'
 };
 
