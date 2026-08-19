@@ -144,12 +144,14 @@
 
   function renderSummary() {
     const counts = countByStatus();
-    const lastSlot = totalSlots - 1;
+    // Not totalSlots: week-aligned packing leaves empty slots between sections,
+    // and an empty morning is not a session.
+    const lastSlot = schedule[schedule.length - 1].slot;
 
     const tiles = [
       {
         cls: '',
-        big: totalSlots,
+        big: schedule.length,
         label: 'Sessions of 15 minutes',
         sub: PROGRAMME.sections.length + ' sections \u00b7 one deck a morning, Mon to Thu'
       },
@@ -280,7 +282,7 @@
     el.gantt.setAttribute(
       'aria-label',
       PROGRAMME.sections.length + ' section training programme over ' + weekCount() +
-      ' weeks. ' + totalSlots + ' sessions of 15 minutes, Monday to Thursday, ' +
+      ' weeks. ' + schedule.length + ' sessions of 15 minutes, Monday to Thursday, ' +
       'starting week commencing ' + shortDate(startMonday) + '.'
     );
   }
