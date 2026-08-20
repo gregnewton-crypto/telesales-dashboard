@@ -388,7 +388,7 @@ a {
 
 /* Deck status is carried on the left edge so the chart doubles as a build audit. */
 .g-bar.status-ready { border-left-color: #A5D6A7; }
-.g-bar.status-building { border-left-color: var(--gold); }
+.g-bar.status-stub { border-left-color: var(--gold); }
 .g-bar.status-planned { border-left-color: #FFFFFF; border-left-style: dashed; }
 
 .g-bar.dimmed {
@@ -429,7 +429,7 @@ a {
 }
 
 .key-swatch.ready { background: #A5D6A7; }
-.key-swatch.building { background: var(--gold); }
+.key-swatch.stub { background: var(--gold); }
 .key-swatch.planned { background: var(--paper); border: 2px dashed var(--muted); }
 
 .hint {
@@ -543,8 +543,23 @@ a {
 }
 
 .status-chip.ready { background: #DFF3E0; color: #1B5E20; }
-.status-chip.building { background: var(--gold); color: #6B4A00; }
+.status-chip.stub { background: var(--gold); color: #6B4A00; }
 .status-chip.planned { background: #FBE3E1; color: #8E2A22; }
+
+.mc-deck {
+  color: var(--brown);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.deck-line {
+  background: #FFF9E8;
+  border-left: 6px solid var(--muted);
+  border-radius: 12px;
+  font-size: 15px;
+  margin: 0 0 16px;
+  padding: 12px 16px;
+}
 
 .folder-line {
   background: #FFF9E8;

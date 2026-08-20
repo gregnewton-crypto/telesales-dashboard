@@ -133,7 +133,7 @@
   }
 
   function countByStatus() {
-    const counts = { ready: 0, building: 0, planned: 0 };
+    const counts = { ready: 0, stub: 0, planned: 0 };
     schedule.forEach(function (entry) {
       counts[entry.module.status] += 1;
     });
@@ -163,9 +163,9 @@
       },
       {
         cls: 'green',
-        big: counts.ready + counts.building,
-        label: 'Decks built or in progress',
-        sub: counts.ready + ' finished, ' + counts.building + ' being written now'
+        big: counts.ready + counts.stub,
+        label: 'Decks in Drive',
+        sub: counts.ready + ' with real content, ' + counts.stub + ' still a placeholder inside'
       },
       {
         cls: 'purple',
@@ -308,25 +308,32 @@
         shortDate(firstDate) + ' \u2013 ' + shortDate(lastDate)));
       block.appendChild(head);
 
+      const inDrive = section.modules.filter(function (module) {
+        return module.status !== 'planned';
+      }).length;
+      const stubs = section.modules.filter(function (module) {
+        return module.status === 'stub';
+      }).length;
+
       const folder = make('p', 'folder-line');
       folder.appendChild(make('strong', null, 'Drive folder: '));
       if (section.driveUrl) {
         const link = make('a', null, section.folder);
         link.href = section.driveUrl;
         link.rel = 'noopener';
+        link.target = '_blank';
         folder.appendChild(link);
       } else {
         folder.appendChild(document.createTextNode(section.folder));
       }
-      const ready = section.decksReady || 0;
-      const building = section.decksBuilding || 0;
       folder.appendChild(document.createTextNode(
-        ' \u2014 ' + ready + ' of ' + section.modules.length + ' decks built' +
-        (building ? ', ' + building + ' in progress' : '') + '.'
+        ' \u2014 ' + inDrive + ' of ' + section.modules.length + ' decks in Drive' +
+        (stubs ? ', ' + stubs + ' of those still a placeholder inside' : '') + '.'
       ));
-      if (ready > 0) {
+      if (section.unread) {
         folder.appendChild(make('em', null,
-          ' Module names below are my proposal and are not yet matched to your deck titles.'));
+          ' Drive would not return the file links for this folder, so these lesson plans are ' +
+          'proposals rather than a reading of your decks.'));
       }
       block.appendChild(folder);
 
@@ -345,9 +352,10 @@
         card.type = 'button';
         card.id = moduleId(sectionIndex, entry.moduleIndex);
         card.appendChild(make('span', 'mc-day',
-          'Deck ' + (entry.moduleIndex + 1) + ' \u00b7 ' +
           PROGRAMME.days[entry.slot % DAYS_PER_WEEK] + ' ' + shortDate(date) +
           (holiday ? ' \u2014 bank holiday' : '')));
+        card.appendChild(make('span', 'mc-deck',
+          module.deckName || 'No deck in Drive yet'));
         card.appendChild(make('span', 'mc-title', module.title));
         card.appendChild(make('span', 'mc-objective', module.objective));
         card.appendChild(make('span', 'status-chip ' + module.status,
@@ -416,13 +424,29 @@
     objective.appendChild(document.createTextNode(module.objective));
     el.modalBody.appendChild(objective);
 
-    if (module.status === 'ready') {
+    const deckLine = make('p', 'deck-line');
+    deckLine.appendChild(make('strong', null, 'Slide deck: '));
+    if (module.deckUrl) {
+      const link = make('a', null, module.deckName);
+      link.href = module.deckUrl;
+      link.rel = 'noopener';
+      link.target = '_blank';
+      deckLine.appendChild(link);
+    } else if (module.deckName) {
+      deckLine.appendChild(document.createTextNode(module.deckName));
+    } else {
+      deckLine.appendChild(document.createTextNode('not created yet'));
+    }
+    deckLine.appendChild(document.createTextNode(' \u00b7 ' + section.folder + ' folder'));
+    el.modalBody.appendChild(deckLine);
+
+    if (section.unread) {
       const note = make('div', 'callout');
-      note.appendChild(make('strong', null, 'A deck already exists for this slot'));
+      note.appendChild(make('strong', null, 'I could not read this deck'));
       note.appendChild(document.createTextNode(
-        'It is in the ' + section.folder + ' folder. This lesson plan is my proposed ' +
-        '15-minute shape for it, written before I could see your deck titles \u2014 so ' +
-        'treat it as a suggestion to check the deck against, not a description of it.'));
+        'Drive would not return the file links for the ' + section.folder + ' folder, so this ' +
+        'lesson plan is my proposal rather than a reading of what is actually in the deck. ' +
+        'Send the titles over and I will correct it.'));
       el.modalBody.appendChild(note);
     }
 
@@ -469,7 +493,7 @@
     if (module.gap) {
       const gap = make('div', 'callout' + (/^Blocked/.test(module.gap) ? ' blocker' : ''));
       gap.appendChild(make('strong', null,
-        module.status === 'planned' ? 'Before this deck can be built' : 'Still needed'));
+        module.status === 'planned' ? 'Before this deck can be built' : 'What this deck needs'));
       gap.appendChild(document.createTextNode(module.gap));
       el.modalBody.appendChild(gap);
     }
