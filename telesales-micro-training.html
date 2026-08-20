@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Telesales Micro-Training | 15 Minutes a Day, Mon-Thu</title>
-  <meta name="description" content="A seven-week telesales training curriculum built as 15-minute morning stand-up modules, shown as an interactive Gantt chart.">
+  <meta name="description" content="The telesales training schedule: eight sections of slide decks run as 15-minute morning sessions, shown as an interactive Gantt chart.">
   <link rel="stylesheet" href="assets/curriculum.css">
 </head>
 <body>
@@ -12,15 +12,16 @@
     <div class="header-inner">
       <h1>Telesales Micro-Training</h1>
       <p>
-        Seven topics, seven weeks, twenty-eight modules. Fifteen minutes every morning
-        from Monday to Thursday, run at stand-up. Click any block on the chart to open
-        that day&rsquo;s lesson plan.
+        Eight sections, one slide deck a morning, fifteen minutes at stand-up,
+        Monday to Thursday. Each section runs for as many mornings as it has decks.
+        Click any block on the chart to open that day&rsquo;s lesson plan.
       </p>
       <div class="header-meta">
         <span>Mon&ndash;Thu only</span>
         <span>15 minutes per session</span>
-        <span>28 modules across 7 weeks</span>
-        <span>Week 1 priority: SPH</span>
+        <span>8 sections</span>
+        <span>1 deck = 1 morning</span>
+        <span>Section 1: SPH</span>
       </div>
       <nav class="header-links" aria-label="Related pages">
         <a href="index.html">Telesales Dashboard</a>
@@ -37,13 +38,14 @@
       <h2>How This Works</h2>
       <div class="summary-grid" id="summary"></div>
 
-      <h3>The 15-minute shape, every day</h3>
+      <h3>One deck, one morning, fifteen minutes</h3>
       <p class="hint">
-        Every module uses the same four beats. Agents learn the rhythm once, then the
-        content can change without anybody having to relearn the format.
+        The schedule mirrors the Drive folders. A section with seven decks runs for seven
+        mornings; a section with three runs for three. Every session uses the same four
+        beats, so agents learn the rhythm once and the content can change underneath it.
       </p>
       <table>
-        <caption class="sr-only">The four beats that make up every 15-minute module</caption>
+        <caption class="sr-only">The four beats that make up every 15-minute session</caption>
         <thead>
           <tr>
             <th scope="col">Minutes</th>
@@ -60,7 +62,7 @@
           <tr>
             <td><strong>2&ndash;7</strong></td>
             <td>Teach</td>
-            <td>One idea only. If it needs two ideas, it needs two days.</td>
+            <td>One idea only. If a deck needs two ideas, it needs two mornings.</td>
           </tr>
           <tr>
             <td><strong>7&ndash;12</strong></td>
@@ -76,21 +78,23 @@
       </table>
 
       <div class="callout">
-        <strong>Why one topic per week</strong>
-        Four sessions on one subject builds a habit. Four sessions on four subjects builds
-        a newsletter. Each week ends with a behaviour that is already on the phones by
-        Thursday afternoon.
+        <strong>What is still a proposal</strong>
+        The deck counts for SPH, Customer Needs, Objection Handling, Call Listening and
+        Demographics come from you. The counts for Product &amp; Food, Conversion and
+        Retention are my suggestion, and every module name on this page is my proposal
+        rather than a match to your actual deck titles. Send the Drive link and I will
+        map them one to one.
       </div>
     </section>
 
     <section class="card">
-      <h2>The Programme</h2>
+      <h2>The Schedule</h2>
       <p class="hint">
         Click or tab to any block to open the full lesson plan. The left edge of each block
-        shows whether the material already exists, so the chart doubles as a content gap audit.
-        Scroll the chart sideways to reach the later weeks &mdash; the topic column on the left
-        stays put. Blocks carry a short label; the full title is on the week cards below and in
-        every lesson plan.
+        shows whether the deck exists yet, so the chart doubles as a build tracker.
+        Scroll the chart sideways to reach the later weeks &mdash; the section column on the
+        left stays put. Blocks carry a short label; the full title is on the section cards
+        below and in every lesson plan.
       </p>
 
       <div class="controls" role="group" aria-label="Chart controls">
@@ -99,12 +103,19 @@
           <input type="date" id="startDate" min="2020-01-01" max="2100-12-31">
         </label>
         <label class="control">
+          <span>Section starts</span>
+          <select id="packing">
+            <option value="continuous">Back to back</option>
+            <option value="weekAligned">Always on a Monday</option>
+          </select>
+        </label>
+        <label class="control">
           <span>Highlight</span>
           <select id="statusFilter">
-            <option value="all">All modules</option>
-            <option value="built">Built &mdash; run as is</option>
-            <option value="adapt">Adapt &mdash; condense existing</option>
-            <option value="create">New &mdash; write from scratch</option>
+            <option value="all">All sessions</option>
+            <option value="ready">Deck built in Drive</option>
+            <option value="building">Deck in progress</option>
+            <option value="planned">Deck still to build</option>
           </select>
         </label>
         <button type="button" class="btn ghost" id="readingToggle" aria-pressed="false">
@@ -120,36 +131,35 @@
       </div>
 
       <div class="chart-key">
-        <span class="key-item"><span class="key-swatch built"></span> Built &mdash; run as is</span>
-        <span class="key-item"><span class="key-swatch adapt"></span> Adapt &mdash; condense existing</span>
-        <span class="key-item"><span class="key-swatch create"></span> New &mdash; write from scratch</span>
-        <span class="key-item">&#9650; needs something confirmed before it can run</span>
+        <span class="key-item"><span class="key-swatch ready"></span> Deck built in Drive</span>
+        <span class="key-item"><span class="key-swatch building"></span> Deck in progress</span>
+        <span class="key-item"><span class="key-swatch planned"></span> Deck still to build</span>
+        <span class="key-item">&#9650; needs something confirmed before it can be built</span>
         <span class="key-item">Thick outline marks today</span>
       </div>
 
       <p class="hint" style="margin-top: 14px;">
-        Changing the start date snaps to the nearest Monday and shifts the whole programme.
-        Any session landing on a UK bank holiday is flagged in red on the chart and in its
-        lesson plan.
+        <strong>Back to back</strong> runs the decks with no gaps and finishes soonest, but a
+        section can start mid-week. <strong>Always on a Monday</strong> is tidier to talk about
+        and adds about three weeks of empty mornings. Changing the start date snaps to the
+        nearest Monday. Any session landing on a UK bank holiday is flagged in red.
       </p>
     </section>
 
     <section class="card">
-      <h2>Week by Week</h2>
+      <h2>Section by Section</h2>
       <p class="hint">
-        The same twenty-eight modules as a printable list. Each card opens the same lesson plan
-        as the chart.
+        Every session as a printable list, grouped by Drive folder. Each card opens the same
+        lesson plan as the chart.
       </p>
-      <div id="weeks"></div>
+      <div id="sections"></div>
     </section>
 
     <section class="card">
-      <h2>Content Gap Audit &mdash; What I Need From You</h2>
+      <h2>What I Need From You</h2>
       <p>
-        Five modules can run from material that already exists in this repository, five need
-        condensing from longer sessions, and eighteen need writing. Before the eighteen can be
-        written, these questions need answers. The three marked as blockers stop a module from
-        running at all.
+        The items marked as blockers stop work rather than slow it down. The rest change the
+        shape of the schedule but do not stop a deck being written.
       </p>
       <ol class="q-list" id="questions"></ol>
     </section>
@@ -161,15 +171,15 @@
         the markup needs touching to change the curriculum.
       </p>
       <ul>
-        <li><strong>Change a lesson plan:</strong> edit the <code>days</code> entry for that week.</li>
-        <li><strong>Reorder the programme:</strong> move a week object inside <code>PROGRAMME.weeks</code>. Week numbers and dates follow position automatically.</li>
-        <li><strong>Add a week:</strong> add another object with four <code>days</code>. The chart widens itself.</li>
-        <li><strong>Change the start date permanently:</strong> edit <code>startMonday</code>.</li>
-        <li><strong>Move a module between statuses:</strong> change <code>status</code> to <code>built</code>, <code>adapt</code> or <code>create</code> as work gets done. The tiles and the chart both update.</li>
+        <li><strong>Add or remove a deck:</strong> add or remove an entry in that section&rsquo;s <code>modules</code> array. The chart lengthens or shortens and every later date shifts automatically.</li>
+        <li><strong>Mark a deck as built:</strong> change its <code>status</code> to <code>ready</code>, and bump <code>decksReady</code> on the section.</li>
+        <li><strong>Add the Drive link:</strong> set <code>driveUrl</code> on the section and the folder name becomes a link.</li>
+        <li><strong>Reorder sections:</strong> move a section object inside <code>PROGRAMME.sections</code>. Numbering and dates follow position.</li>
+        <li><strong>Rename a module to match your deck:</strong> edit <code>title</code>, and <code>label</code> for the short version shown on the chart. Keep label words to eight characters or fewer so they fit a day column.</li>
       </ul>
       <p>
-        Deep links work per module, so <code>#w1d1</code> opens Week&nbsp;1 Monday directly. Useful
-        for pasting a single lesson plan into Slack the night before.
+        Deep links work per session, so <code>#s1m1</code> opens the first deck of section one.
+        Useful for pasting a single lesson plan into Slack the night before.
       </p>
     </section>
   </main>

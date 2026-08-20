@@ -8,6 +8,7 @@
   --teal: #00897B;
   --purple: #7B3FA0;
   --rust: #B65A17;
+  --magenta: #A6215E;
   --paper: #FFFFFF;
   --line: #E8D9B0;
   --text: #2E261F;
@@ -240,11 +241,11 @@ a {
   padding-bottom: 10px;
 }
 
+/* Column count, min-width and row count are set by the script, because section
+   lengths and therefore the number of columns come from the data. */
 .gantt {
   display: grid;
   gap: 6px 0;
-  grid-template-columns: 176px repeat(28, minmax(76px, 1fr));
-  min-width: 2304px;
 }
 
 .g-line {
@@ -382,12 +383,13 @@ a {
 .g-bar.green { background: var(--green); }
 .g-bar.purple { background: var(--purple); }
 .g-bar.rust { background: var(--rust); }
+.g-bar.magenta { background: var(--magenta); }
 .g-bar.brown { background: var(--brown); }
 
-/* Build status is carried on the left edge so the chart doubles as a gap audit. */
-.g-bar.status-built { border-left-color: #A5D6A7; }
-.g-bar.status-adapt { border-left-color: var(--gold); }
-.g-bar.status-create { border-left-color: #FFFFFF; border-left-style: dashed; }
+/* Deck status is carried on the left edge so the chart doubles as a build audit. */
+.g-bar.status-ready { border-left-color: #A5D6A7; }
+.g-bar.status-building { border-left-color: var(--gold); }
+.g-bar.status-planned { border-left-color: #FFFFFF; border-left-style: dashed; }
 
 .g-bar.dimmed {
   filter: grayscale(0.85);
@@ -426,9 +428,9 @@ a {
   width: 22px;
 }
 
-.key-swatch.built { background: #A5D6A7; }
-.key-swatch.adapt { background: var(--gold); }
-.key-swatch.create { background: var(--paper); border: 2px dashed var(--muted); }
+.key-swatch.ready { background: #A5D6A7; }
+.key-swatch.building { background: var(--gold); }
+.key-swatch.planned { background: var(--paper); border: 2px dashed var(--muted); }
 
 .hint {
   color: var(--muted);
@@ -540,9 +542,22 @@ a {
   width: fit-content;
 }
 
-.status-chip.built { background: #DFF3E0; color: #1B5E20; }
-.status-chip.adapt { background: var(--gold); color: #6B4A00; }
-.status-chip.create { background: #FBE3E1; color: #8E2A22; }
+.status-chip.ready { background: #DFF3E0; color: #1B5E20; }
+.status-chip.building { background: var(--gold); color: #6B4A00; }
+.status-chip.planned { background: #FBE3E1; color: #8E2A22; }
+
+.folder-line {
+  background: #FFF9E8;
+  border-left: 6px solid var(--muted);
+  border-radius: 12px;
+  font-size: 15px;
+  margin: 12px 0 0;
+  padding: 12px 16px;
+}
+
+.folder-line em {
+  color: #8E2A22;
+}
 
 /* ---------- Modal ---------- */
 
