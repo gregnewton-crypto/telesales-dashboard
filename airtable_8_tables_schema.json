@@ -1,0 +1,4106 @@
+{
+  "live": {
+    "appId": "appwocx9mhLR8Mh33",
+    "name": "Live Base",
+    "tables": {
+      "tbllpLbEtTkmMQOY9": {
+        "tableName": "\u2618 Databowl Leads",
+        "tableId": "tbllpLbEtTkmMQOY9",
+        "primaryFieldId": "fld35FlzNdGA1omL6",
+        "fieldCount": 31,
+        "fields": [
+          {
+            "name": "Lead",
+            "id": "fld35FlzNdGA1omL6",
+            "type": "singleLineText",
+            "description": "Lead name (First Last)"
+          },
+          {
+            "name": "Created",
+            "id": "fld2qCGXTIq0J1qB3",
+            "type": "dateTime",
+            "options": {
+              "dateFormat": {
+                "name": "local",
+                "format": "l"
+              },
+              "timeFormat": {
+                "name": "12hour",
+                "format": "h:mma"
+              },
+              "timeZone": "client"
+            }
+          },
+          {
+            "name": "Databowl Lead ID",
+            "id": "fldMdPK5aJu048h5e",
+            "type": "number",
+            "description": "Unique Databowl identifier - key for API sync",
+            "options": {
+              "precision": 0
+            }
+          },
+          {
+            "name": "Lead Status",
+            "id": "fldfWyf537sFYxPdD",
+            "type": "singleSelect",
+            "description": "Databowl lead status",
+            "options": {
+              "choices": [
+                {
+                  "id": "seljlZDbvaOxaUvUn",
+                  "name": "Accepted",
+                  "color": "greenLight2"
+                },
+                {
+                  "id": "selRrSFilewWs2Px3",
+                  "name": "Rejected",
+                  "color": "redLight2"
+                },
+                {
+                  "id": "selAxyBiIzB4P1N15",
+                  "name": "Pending",
+                  "color": "yellowLight2"
+                },
+                {
+                  "id": "selP9waWe5Q5k93dq",
+                  "name": "Lead Status",
+                  "color": "blueLight2"
+                },
+                {
+                  "id": "seli9cvDnh94qk5Nu",
+                  "name": "lead_message",
+                  "color": "blueLight2"
+                },
+                {
+                  "id": "selROGaVg2comHYYk",
+                  "name": "Client Rejected",
+                  "color": "blueLight2"
+                }
+              ]
+            }
+          },
+          {
+            "name": "Email",
+            "id": "fldb9djQRWUX2A3td",
+            "type": "email",
+            "description": "Lead email address"
+          },
+          {
+            "name": "First Name",
+            "id": "fldAhr68Cuna8BqKF",
+            "type": "singleLineText"
+          },
+          {
+            "name": "Last Name",
+            "id": "fldCktqEGvzpPPBBO",
+            "type": "singleLineText"
+          },
+          {
+            "name": "Phone",
+            "id": "fldonWN2EKUjsm0gi",
+            "type": "phoneNumber"
+          },
+          {
+            "name": "Dog Name",
+            "id": "fldjlkgAhW91WHVeb",
+            "type": "singleLineText"
+          },
+          {
+            "name": "Dog Age",
+            "id": "fldU8LlU0vzXwY3ZG",
+            "type": "singleSelect",
+            "options": {
+              "choices": [
+                {
+                  "id": "selickTKcpfjJLuQO",
+                  "name": "0-5",
+                  "color": "blueLight2"
+                },
+                {
+                  "id": "selCK3Q5imuRCExqf",
+                  "name": "6-14",
+                  "color": "cyanLight2"
+                },
+                {
+                  "id": "selnq3yjVD7aZz1ma",
+                  "name": "14+",
+                  "color": "purpleLight2"
+                },
+                {
+                  "id": "selVoHS4XS0033b6S",
+                  "name": "Dog Age",
+                  "color": "blueLight2"
+                },
+                {
+                  "id": "seliRKaXfV7Fi8LMU",
+                  "name": "address1",
+                  "color": "blueLight2"
+                }
+              ]
+            }
+          },
+          {
+            "name": "Dog Weight",
+            "id": "fldHy61bYHpwbJUci",
+            "type": "singleSelect",
+            "options": {
+              "choices": [
+                {
+                  "id": "selWIpUYa3dRrz2g4",
+                  "name": "1 - 14KG",
+                  "color": "blueLight2"
+                },
+                {
+                  "id": "sel778muhK5hzCSSO",
+                  "name": "15 - 30KG",
+                  "color": "cyanLight2"
+                },
+                {
+                  "id": "sel61WECWwW2hympi",
+                  "name": "30KG +",
+                  "color": "purpleLight2"
+                },
+                {
+                  "id": "selZiceeXhyg4EXtj",
+                  "name": "Dog Weight",
+                  "color": "blueLight2"
+                },
+                {
+                  "id": "selkSIE6DikVLL7UW",
+                  "name": "address2",
+                  "color": "blueLight2"
+                }
+              ]
+            }
+          },
+          {
+            "name": "Lead Date",
+            "id": "fldWONi9bjOIJBmqq",
+            "type": "dateTime",
+            "description": "When the lead was submitted",
+            "options": {
+              "dateFormat": {
+                "name": "european",
+                "format": "D/M/YYYY"
+              },
+              "timeFormat": {
+                "name": "24hour",
+                "format": "HH:mm"
+              },
+              "timeZone": "Europe/Dublin"
+            }
+          },
+          {
+            "name": "Date",
+            "id": "fldFocENqMzcn3ySq",
+            "type": "date",
+            "description": "When the lead was submitted",
+            "options": {
+              "dateFormat": {
+                "name": "european",
+                "format": "D/M/YYYY"
+              }
+            }
+          },
+          {
+            "name": "LLID",
+            "id": "fldrlvJ8iKY5mEHEP",
+            "type": "number",
+            "description": "Leads.io lead ID",
+            "options": {
+              "precision": 0
+            }
+          },
+          {
+            "name": "Source",
+            "id": "fldobqbh7QFwKMZPK",
+            "type": "singleSelect",
+            "description": "Lead source / mapping name",
+            "options": {
+              "choices": [
+                {
+                  "id": "selFpzUwRAyAujPgP",
+                  "name": "Ireland_Leads.io_Meta",
+                  "color": "greenLight2"
+                },
+                {
+                  "id": "sel1MsvStKdJmu5Xe",
+                  "name": "Source",
+                  "color": "blueLight2"
+                },
+                {
+                  "id": "selroWZWKce8UHft0",
+                  "name": "county",
+                  "color": "blueLight2"
+                }
+              ]
+            }
+          },
+          {
+            "name": "\ud83d\udd17 Adversus Calls",
+            "id": "fld3DeParsIUfU1FL",
+            "type": "multipleRecordLinks",
+            "options": {
+              "linkedTableId": "tblQcfo7qgQCv7o3n",
+              "isReversed": false,
+              "prefersSingleRecordLink": false,
+              "inverseLinkFieldId": "fldXoPVNNChnJBYJE"
+            }
+          },
+          {
+            "name": "Times Lead has been Called",
+            "id": "fldsKBO1ZpAImfV8C",
+            "type": "rollup",
+            "options": {
+              "isValid": true,
+              "recordLinkFieldId": "fld3DeParsIUfU1FL",
+              "fieldIdInLinkedTable": "fldhUBZMgVCCtOvSQ",
+              "referencedFieldIds": [],
+              "result": {
+                "type": "number",
+                "options": {
+                  "precision": 0
+                }
+              }
+            }
+          },
+          {
+            "name": "All Calls",
+            "id": "fldkvrNZzYaNiynYy",
+            "type": "multipleLookupValues",
+            "options": {
+              "isValid": true,
+              "recordLinkFieldId": "fld3DeParsIUfU1FL",
+              "fieldIdInLinkedTable": "fld3B9Tf9tHjvj7zj",
+              "result": {
+                "type": "date",
+                "options": {
+                  "dateFormat": {
+                    "name": "local",
+                    "format": "l"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "name": "Date of First Call",
+            "id": "fldxkABnJ8ZJejuzK",
+            "type": "multipleLookupValues",
+            "options": {
+              "isValid": true,
+              "recordLinkFieldId": "fld3DeParsIUfU1FL",
+              "fieldIdInLinkedTable": "fld3B9Tf9tHjvj7zj",
+              "result": {
+                "type": "date",
+                "options": {
+                  "dateFormat": {
+                    "name": "local",
+                    "format": "l"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "name": "Date of Latest",
+            "id": "fldhkgaqRxRhZEBAN",
+            "type": "multipleLookupValues",
+            "options": {
+              "isValid": true,
+              "recordLinkFieldId": "fld3DeParsIUfU1FL",
+              "fieldIdInLinkedTable": "fld3B9Tf9tHjvj7zj",
+              "result": {
+                "type": "date",
+                "options": {
+                  "dateFormat": {
+                    "name": "local",
+                    "format": "l"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "name": "\u2699\ufe0f Lead Period",
+            "id": "fldR9ZWZC427boXv1",
+            "type": "singleSelect",
+            "description": "Period derived from calendar week (W1-W4=P1, W5-W8=P2, etc.)",
+            "options": {
+              "choices": [
+                {
+                  "id": "selIMXe4VzB6Cy8us",
+                  "name": "P1",
+                  "color": "blueLight2"
+                },
+                {
+                  "id": "selobcYELFUW2ZUVf",
+                  "name": "P2",
+                  "color": "blueLight2"
+                },
+                {
+                  "id": "selfSBXFaK8A5czYB",
+                  "name": "P3",
+                  "color": "blueLight2"
+                },
+                {
+                  "id": "sel4nhj6nf19wEPsD",
+                  "name": "P4",
+                  "color": "blueLight2"
+                },
+                {
+                  "id": "selQrB8ILjLudYUuP",
+                  "name": "P5",
+                  "color": "blueLight2"
+                },
+                {
+                  "id": "sel1DPZbu0fQd7hm6",
+                  "name": "P6",
+                  "color": "blueLight2"
+                },
+                {
+                  "id": "selkQmBKAP67kzDwb",
+                  "name": "P7",
+                  "color": "blueLight2"
+                },
+                {
+                  "id": "selmiqPWM1KKzwvQL",
+                  "name": "P8",
+                  "color": "blueLight2"
+                },
+                {
+                  "id": "selJcWH2KJlo1bGA8",
+                  "name": "P9",
+                  "color": "blueLight2"
+                },
+                {
+                  "id": "selCd1lm0sCSAyC2h",
+                  "name": "P10",
+                  "color": "blueLight2"
+                },
+                {
+                  "id": "selJRPkxa2GvyA29A",
+                  "name": "P11",
+                  "color": "blueLight2"
+                },
+                {
+                  "id": "selXy0YZbY1cSIurU",
+                  "name": "P12",
+                  "color": "blueLight2"
+                },
+                {
+                  "id": "sel8GABslLVuq03lh",
+                  "name": "P13",
+                  "color": "blueLight2"
+                }
+              ]
+            }
+          },
+          {
+            "name": "\u2699\ufe0f Lead Week",
+            "id": "fldhCZiJZKHL7jMa2",
+            "type": "singleSelect",
+            "description": "ISO calendar week from Lead Date",
+            "options": {
+              "choices": [
+                {
+                  "id": "selTk8qohI4rO0zhv",
+                  "name": "W1",
+                  "color": "tealLight2"
+                },
+                {
+                  "id": "selh6IIQvjYSz7MKz",
+                  "name": "W2",
+                  "color": "greenLight2"
+                },
+                {
+                  "id": "selOc6BEaM5xTgoRo",
+                  "name": "W3",
+                  "color": "tealLight2"
+                },
+                {
+                  "id": "seldpTGZS5pPQ13QE",
+                  "name": "W4",
+                  "color": "greenLight2"
+                },
+                {
+                  "id": "selRvnmp54qsSqNqZ",
+                  "name": "W5",
+                  "color": "tealLight2"
+                },
+                {
+                  "id": "selIGUotFqK9gUTnn",
+                  "name": "W6",
+                  "color": "greenLight2"
+                },
+                {
+                  "id": "selBMbtiwpFqKtWFN",
+                  "name": "W7",
+                  "color": "tealLight2"
+                },
+                {
+                  "id": "selPKLQPWNUHLrlzw",
+                  "name": "W8",
+                  "color": "greenLight2"
+                },
+                {
+                  "id": "selhsQG7N7fuj2vmw",
+                  "name": "W9",
+                  "color": "tealLight2"
+                },
+                {
+                  "id": "sel8zTiJV0bNDMkkK",
+                  "name": "W10",
+                  "color": "greenLight2"
+                },
+                {
+                  "id": "selTYc8Iz4V1RxNK7",
+                  "name": "W11",
+                  "color": "tealLight2"
+                },
+                {
+                  "id": "sel9W8CgD173dC7SJ",
+                  "name": "W12",
+                  "color": "greenLight2"
+                },
+                {
+                  "id": "selUWnesfB3Mb2R02",
+                  "name": "W13",
+                  "color": "tealLight2"
+                },
+                {
+                  "id": "selVS6fGiBRzhb38a",
+                  "name": "W14",
+                  "color": "greenLight2"
+                },
+                {
+                  "id": "selEasBOKZdKkkmGn",
+                  "name": "W15",
+                  "color": "tealLight2"
+                },
+                {
+                  "id": "selAJ52x89MLSz0PL",
+                  "name": "W16",
+                  "color": "greenLight2"
+                },
+                {
+                  "id": "selfFTU3qm71BOcQY",
+                  "name": "W17",
+                  "color": "tealLight2"
+                },
+                {
+                  "id": "selp6ThobWhaHgeqa",
+                  "name": "W18",
+                  "color": "greenLight2"
+                },
+                {
+                  "id": "sel6F1DmBVRw1X7sk",
+                  "name": "W19",
+                  "color": "tealLight2"
+                },
+                {
+                  "id": "selOjtn1RTWDt5r9e",
+                  "name": "W20",
+                  "color": "greenLight2"
+                },
+                {
+                  "id": "selfN36v9ZPiz3aDQ",
+                  "name": "W21",
+                  "color": "tealLight2"
+                },
+                {
+                  "id": "selv6up3i7kx7OZIl",
+                  "name": "W22",
+                  "color": "greenLight2"
+                },
+                {
+                  "id": "selufLy7bZnSHCqDK",
+                  "name": "W23",
+                  "color": "tealLight2"
+                },
+                {
+                  "id": "seli2MTRHoahl7LtC",
+                  "name": "W24",
+                  "color": "greenLight2"
+                },
+                {
+                  "id": "selIxIch4VWrZE8HD",
+                  "name": "W25",
+                  "color": "tealLight2"
+                },
+                {
+                  "id": "selnywJb4Xmi95BjE",
+                  "name": "W26",
+                  "color": "greenLight2"
+                },
+                {
+                  "id": "selsW7Bf0EPdN1dtW",
+                  "name": "W27",
+                  "color": "tealLight2"
+                },
+                {
+                  "id": "selZ7dIVU8R9Zkvmv",
+                  "name": "W28",
+                  "color": "greenLight2"
+                },
+                {
+                  "id": "selxxPvJHBGQGNn4f",
+                  "name": "W29",
+                  "color": "tealLight2"
+                },
+                {
+                  "id": "selq7dxG0M3YOhvIy",
+                  "name": "W30",
+                  "color": "greenLight2"
+                },
+                {
+                  "id": "selgBrxHZvBKNjdoW",
+                  "name": "W31",
+                  "color": "tealLight2"
+                },
+                {
+                  "id": "seluB3p08CwMc1WR5",
+                  "name": "W32",
+                  "color": "greenLight2"
+                },
+                {
+                  "id": "seloan0LWemr6lxEa",
+                  "name": "W33",
+                  "color": "tealLight2"
+                },
+                {
+                  "id": "selButlPis3faOts5",
+                  "name": "W34",
+                  "color": "greenLight2"
+                },
+                {
+                  "id": "selb0M7ljIDbi9TO5",
+                  "name": "W35",
+                  "color": "tealLight2"
+                },
+                {
+                  "id": "selOp0t406NNUyoSs",
+                  "name": "W36",
+                  "color": "greenLight2"
+                },
+                {
+                  "id": "selNiDxqzB7h0O2fm",
+                  "name": "W37",
+                  "color": "tealLight2"
+                },
+                {
+                  "id": "sel84MbCHJz0m0oxZ",
+                  "name": "W38",
+                  "color": "greenLight2"
+                },
+                {
+                  "id": "selojpnPU08bZ8Vym",
+                  "name": "W39",
+                  "color": "tealLight2"
+                },
+                {
+                  "id": "selsZlzb4BUdMrQqW",
+                  "name": "W40",
+                  "color": "greenLight2"
+                },
+                {
+                  "id": "selUqVhwJdwtS7sVq",
+                  "name": "W41",
+                  "color": "tealLight2"
+                },
+                {
+                  "id": "selU5goLET0lGuYIz",
+                  "name": "W42",
+                  "color": "greenLight2"
+                },
+                {
+                  "id": "selNHbddLAQq92ESA",
+                  "name": "W43",
+                  "color": "tealLight2"
+                },
+                {
+                  "id": "selc36HL4OVUmXbwg",
+                  "name": "W44",
+                  "color": "greenLight2"
+                },
+                {
+                  "id": "selT9evmrcTpSs1GA",
+                  "name": "W45",
+                  "color": "tealLight2"
+                },
+                {
+                  "id": "sel7IXLVzmdjkZo5p",
+                  "name": "W46",
+                  "color": "greenLight2"
+                },
+                {
+                  "id": "selKNrWbWib8zlu2z",
+                  "name": "W47",
+                  "color": "tealLight2"
+                },
+                {
+                  "id": "sel5EMRP2TTHfhYyO",
+                  "name": "W48",
+                  "color": "greenLight2"
+                },
+                {
+                  "id": "selbC0hTmFBt7srcS",
+                  "name": "W49",
+                  "color": "tealLight2"
+                },
+                {
+                  "id": "selIz8XuizQJ6o4j4",
+                  "name": "W50",
+                  "color": "greenLight2"
+                },
+                {
+                  "id": "selQW0XrtZP3aBqdQ",
+                  "name": "W51",
+                  "color": "tealLight2"
+                },
+                {
+                  "id": "sel9A6ElZgcy7B8kS",
+                  "name": "W52",
+                  "color": "greenLight2"
+                },
+                {
+                  "id": "selLQrZGD3J6i49UQ",
+                  "name": "W53",
+                  "color": "tealLight2"
+                }
+              ]
+            }
+          },
+          {
+            "name": "\u2699\ufe0f Called?",
+            "id": "fldbOzjdQ1ChPuOMg",
+            "type": "singleSelect",
+            "description": "Has the lead been called at least once?",
+            "options": {
+              "choices": [
+                {
+                  "id": "selBhWccYCVO4tSWV",
+                  "name": "Yes",
+                  "color": "greenBright"
+                },
+                {
+                  "id": "selk4XEkpSCUs3Oew",
+                  "name": "No",
+                  "color": "redLight2"
+                }
+              ]
+            }
+          },
+          {
+            "name": "\u2699\ufe0f Days to First Call",
+            "id": "fldp97ZD1u4gPdFig",
+            "type": "formula",
+            "description": "Days between Lead Date and first call",
+            "options": {
+              "isValid": true,
+              "formula": "IF({fldxkABnJ8ZJejuzK}, DATETIME_DIFF({fldxkABnJ8ZJejuzK}, {fldFocENqMzcn3ySq}, 'days'))\n",
+              "referencedFieldIds": [
+                "fldxkABnJ8ZJejuzK",
+                "fldFocENqMzcn3ySq"
+              ],
+              "result": {
+                "type": "number",
+                "options": {
+                  "precision": 0
+                }
+              }
+            }
+          },
+          {
+            "name": "First Call Date Time",
+            "id": "fldELdYdTTP151epV",
+            "type": "rollup",
+            "options": {
+              "isValid": true,
+              "recordLinkFieldId": "fld3DeParsIUfU1FL",
+              "fieldIdInLinkedTable": "fldXQGEGMg4gxxPhI",
+              "referencedFieldIds": [],
+              "result": {
+                "type": "singleLineText"
+              }
+            }
+          },
+          {
+            "name": "Adversus Lead Status",
+            "id": "fld0XrXF3YtWqWSAN",
+            "type": "multipleLookupValues",
+            "options": {
+              "isValid": true,
+              "recordLinkFieldId": "fld3DeParsIUfU1FL",
+              "fieldIdInLinkedTable": "fldYtOn2yX9OTdidf",
+              "result": {
+                "type": "singleLineText"
+              }
+            }
+          },
+          {
+            "name": "Lead open/closed",
+            "id": "fldBFGH4OGEBmuBID",
+            "type": "singleSelect",
+            "options": {
+              "choices": [
+                {
+                  "id": "selElalzRVNQFXuE6",
+                  "name": "Closed ",
+                  "color": "blueLight2"
+                },
+                {
+                  "id": "seleQRXMoh6EMKn1h",
+                  "name": "Open ",
+                  "color": "cyanLight2"
+                }
+              ]
+            }
+          },
+          {
+            "name": "Time lead has been called (single select)",
+            "id": "fldpGvpBn2J2DbXop",
+            "type": "singleSelect",
+            "options": {
+              "choices": [
+                {
+                  "id": "seldpAt5NciAJqj7h",
+                  "name": "1",
+                  "color": "blueLight2"
+                },
+                {
+                  "id": "sele7mcKaHvKojlGG",
+                  "name": "2",
+                  "color": "cyanLight2"
+                },
+                {
+                  "id": "selEbietPfMeDdcjP",
+                  "name": "3",
+                  "color": "tealLight2"
+                },
+                {
+                  "id": "selmryTqFmH4KXTtz",
+                  "name": "4",
+                  "color": "greenLight2"
+                },
+                {
+                  "id": "selq93ELXxYX9YerF",
+                  "name": "5",
+                  "color": "yellowLight2"
+                },
+                {
+                  "id": "selExhFB9URvuc0fl",
+                  "name": "6",
+                  "color": "orangeLight2"
+                },
+                {
+                  "id": "selegFPhkJutlEn3L",
+                  "name": "7",
+                  "color": "redLight2"
+                },
+                {
+                  "id": "selZZN3WvsRpXLr3Z",
+                  "name": "8",
+                  "color": "pinkLight2"
+                },
+                {
+                  "id": "selygVOoAwbJRJcnK",
+                  "name": "9",
+                  "color": "purpleLight2"
+                },
+                {
+                  "id": "selDZDdn0We7sC7Wf",
+                  "name": "10",
+                  "color": "grayLight2"
+                },
+                {
+                  "id": "selUdJYww9PFStPgy",
+                  "name": "11",
+                  "color": "blueLight1"
+                },
+                {
+                  "id": "selhw585PmEq51wGU",
+                  "name": "12",
+                  "color": "cyanLight1"
+                },
+                {
+                  "id": "seld4VeunkLWOlYgw",
+                  "name": "13",
+                  "color": "tealLight1"
+                },
+                {
+                  "id": "seluFAGrTvPQPNE1f",
+                  "name": "14",
+                  "color": "greenLight1"
+                },
+                {
+                  "id": "selibA9EKj3416zlu",
+                  "name": "15",
+                  "color": "yellowLight1"
+                },
+                {
+                  "id": "sellCDXZwBGrOkPeb",
+                  "name": "16",
+                  "color": "orangeLight1"
+                },
+                {
+                  "id": "selQVcGGiqMxQgjjX",
+                  "name": "17",
+                  "color": "redLight1"
+                },
+                {
+                  "id": "selHWAroJDMenhW6r",
+                  "name": "19",
+                  "color": "pinkLight1"
+                },
+                {
+                  "id": "selL6qmnkQppNVkIj",
+                  "name": "20",
+                  "color": "purpleLight1"
+                }
+              ]
+            }
+          },
+          {
+            "name": "Adversus Lead Status (single select)",
+            "id": "fld9R1fOEzvXLCTzd",
+            "type": "singleSelect",
+            "options": {
+              "choices": [
+                {
+                  "id": "seldh8sbi6D6xBg9P",
+                  "name": "Automatic redial",
+                  "color": "blueLight2"
+                },
+                {
+                  "id": "selIP5vho1U9uvOvL",
+                  "name": "VIP callback",
+                  "color": "cyanLight2"
+                },
+                {
+                  "id": "sel0Ojq2NUQlrtm92",
+                  "name": "Private callback",
+                  "color": "tealLight2"
+                },
+                {
+                  "id": "selkOuLR49qP3UfC0",
+                  "name": "Not interested",
+                  "color": "greenLight2"
+                },
+                {
+                  "id": "selXk8XkMDrsHsCPS",
+                  "name": "Success",
+                  "color": "yellowLight2"
+                },
+                {
+                  "id": "selgHw7QrY0ZfKrSR",
+                  "name": "Invalid",
+                  "color": "orangeLight2"
+                },
+                {
+                  "id": "selK7Xb5e9SdQR8Av",
+                  "name": "Shared callback",
+                  "color": "redLight2"
+                },
+                {
+                  "id": "selRYq1PHpGFq5w0Y",
+                  "name": "Unqualified",
+                  "color": "pinkLight2"
+                }
+              ]
+            }
+          },
+          {
+            "name": "Lead open/closed (auto)",
+            "id": "fldiZLjWB3aXuUTW4",
+            "type": "formula",
+            "description": "Computed from Adversus Lead Status lookup. Prefer this over the manual single-select field.",
+            "options": {
+              "isValid": true,
+              "formula": "IF(OR(SEARCH(\"Not interested\", ARRAYJOIN({fld0XrXF3YtWqWSAN})), SEARCH(\"Invalid\", ARRAYJOIN({fld0XrXF3YtWqWSAN})), SEARCH(\"Success\", ARRAYJOIN({fld0XrXF3YtWqWSAN})), SEARCH(\"Unqualified\", ARRAYJOIN({fld0XrXF3YtWqWSAN}))), \"Closed \", \"Open \")",
+              "referencedFieldIds": [
+                "fld0XrXF3YtWqWSAN"
+              ],
+              "result": {
+                "type": "singleLineText"
+              }
+            }
+          },
+          {
+            "name": "Agent Name (from \ud83d\udd17 Adversus Calls)",
+            "id": "fldQwLM18moo8nifp",
+            "type": "multipleLookupValues",
+            "options": {
+              "isValid": true,
+              "recordLinkFieldId": "fld3DeParsIUfU1FL",
+              "fieldIdInLinkedTable": "fldXHkssDpWANvBId",
+              "result": {
+                "type": "singleLineText"
+              }
+            }
+          }
+        ]
+      },
+      "tblKCC8nxriWKXrEG": {
+        "tableName": "\ud83c\uddec\ud83c\udde7 UK Databowl leads",
+        "tableId": "tblKCC8nxriWKXrEG",
+        "primaryFieldId": "fldfey2wpzYL18jsI",
+        "fieldCount": 25,
+        "fields": [
+          {
+            "name": "Lead",
+            "id": "fldfey2wpzYL18jsI",
+            "type": "singleLineText",
+            "description": "Text version of lead ID"
+          },
+          {
+            "name": "Databowl Lead ID",
+            "id": "fldfieeyeSxMYiiYY",
+            "type": "number",
+            "description": "Databowl lead ID number",
+            "options": {
+              "precision": 0
+            }
+          },
+          {
+            "name": "LLID",
+            "id": "fldLbtzLaHVQ5c282",
+            "type": "number",
+            "description": "Leads.io Lead ID",
+            "options": {
+              "precision": 0
+            }
+          },
+          {
+            "name": "Lead Date",
+            "id": "fldKWnPLByPemnWzy",
+            "type": "dateTime",
+            "description": "Date/time the lead was created in Databowl",
+            "options": {
+              "dateFormat": {
+                "name": "iso",
+                "format": "YYYY-MM-DD"
+              },
+              "timeFormat": {
+                "name": "24hour",
+                "format": "HH:mm"
+              },
+              "timeZone": "Europe/London"
+            }
+          },
+          {
+            "name": "Lead Status",
+            "id": "fldou9nj9JtM59AOA",
+            "type": "singleLineText",
+            "description": "Accepted / Client Rejected"
+          },
+          {
+            "name": "Source",
+            "id": "fldtuI3TcARwXkO5Z",
+            "type": "singleLineText",
+            "description": "Lead source from Databowl"
+          },
+          {
+            "name": "First Name",
+            "id": "fld3oNBMWFzGhqrwk",
+            "type": "singleLineText"
+          },
+          {
+            "name": "Last Name",
+            "id": "fldsGEpzC9R5hFmjS",
+            "type": "singleLineText"
+          },
+          {
+            "name": "Email",
+            "id": "fldmzMxrK3gh1GGE9",
+            "type": "email"
+          },
+          {
+            "name": "Phone",
+            "id": "fldJT8YIKFgl48xzn",
+            "type": "phoneNumber"
+          },
+          {
+            "name": "Dog Name",
+            "id": "fldSMeRbLJjyLJram",
+            "type": "singleLineText"
+          },
+          {
+            "name": "Dog Age",
+            "id": "fldemB3gym1rKDB7B",
+            "type": "singleSelect",
+            "description": "Dog age range",
+            "options": {
+              "choices": [
+                {
+                  "id": "sel6Oki3tTBHo8P6i",
+                  "name": "0-5",
+                  "color": "blueLight2"
+                },
+                {
+                  "id": "selLaMVrgF3qP0UCU",
+                  "name": "6-14",
+                  "color": "cyanLight2"
+                },
+                {
+                  "id": "selv6myznuKob2NzQ",
+                  "name": "14+",
+                  "color": "tealLight2"
+                },
+                {
+                  "id": "sel4D3CmaeBd0tMqH",
+                  "name": "Field 12",
+                  "color": "blueLight2"
+                }
+              ]
+            }
+          },
+          {
+            "name": "Dog Weight",
+            "id": "fldh71Usz5KKUvJa4",
+            "type": "singleSelect",
+            "description": "Dog weight range",
+            "options": {
+              "choices": [
+                {
+                  "id": "selMoe70xnG6ur0AI",
+                  "name": "1 - 14KG",
+                  "color": "greenLight2"
+                },
+                {
+                  "id": "selHYcDSGPe2dXL7L",
+                  "name": "15 - 30KG",
+                  "color": "yellowLight2"
+                },
+                {
+                  "id": "selot0eZxaqM04tgt",
+                  "name": "30KG +",
+                  "color": "orangeLight2"
+                }
+              ]
+            }
+          },
+          {
+            "name": "\ud83d\udd17 Adversus Calls",
+            "id": "fldlDyTgP0Cedamra",
+            "type": "multipleRecordLinks",
+            "description": "Links UK leads to their Adversus call records. Matched by Databowl Lead ID via automation.",
+            "options": {
+              "linkedTableId": "tblQcfo7qgQCv7o3n",
+              "isReversed": false,
+              "prefersSingleRecordLink": false,
+              "inverseLinkFieldId": "fldsqdT38k8fgtUom"
+            }
+          },
+          {
+            "name": "\u2699\ufe0f Lead Period",
+            "id": "fldUFDLokqWoUavsC",
+            "type": "singleSelect",
+            "description": "Which 4-week period the lead was generated in. Set by automation based on Lead Date.",
+            "options": {
+              "choices": [
+                {
+                  "id": "selqwT8xQ2O3c5egt",
+                  "name": "P1",
+                  "color": "blueLight2"
+                },
+                {
+                  "id": "selbkHMAsDhu8esKk",
+                  "name": "P2",
+                  "color": "blueLight2"
+                },
+                {
+                  "id": "selPcJxY1H1oeX6qY",
+                  "name": "P3",
+                  "color": "blueLight2"
+                },
+                {
+                  "id": "selEHBgCjFjsoOBIU",
+                  "name": "P4",
+                  "color": "blueLight2"
+                },
+                {
+                  "id": "selvAudNG24wP83x5",
+                  "name": "P5",
+                  "color": "blueLight2"
+                },
+                {
+                  "id": "sel5nhbqCb0vIixuX",
+                  "name": "P6",
+                  "color": "blueLight2"
+                },
+                {
+                  "id": "selVJ6NPdQV7IpH6u",
+                  "name": "P7",
+                  "color": "blueLight2"
+                },
+                {
+                  "id": "sel2wGtmKm15auSwV",
+                  "name": "P8",
+                  "color": "blueLight2"
+                },
+                {
+                  "id": "selNtkURbvJjRgXin",
+                  "name": "P9",
+                  "color": "blueLight2"
+                },
+                {
+                  "id": "sellbSvWmwIhbxPh3",
+                  "name": "P10",
+                  "color": "blueLight2"
+                },
+                {
+                  "id": "selVx3mODvm8H9DRo",
+                  "name": "P11",
+                  "color": "blueLight2"
+                },
+                {
+                  "id": "selmzpL87wcUTe3EN",
+                  "name": "P12",
+                  "color": "blueLight2"
+                },
+                {
+                  "id": "selL7jVspRI906jMi",
+                  "name": "P13",
+                  "color": "blueLight2"
+                }
+              ]
+            }
+          },
+          {
+            "name": "\u2699\ufe0f Lead Week",
+            "id": "fldFCEhEfNICZSgfY",
+            "type": "singleSelect",
+            "description": "ISO week the lead was generated in. Set by automation based on Lead Date.",
+            "options": {
+              "choices": [
+                {
+                  "id": "selNhe49FIlyvoAgl",
+                  "name": "W1",
+                  "color": "grayLight2"
+                },
+                {
+                  "id": "selBxslo9IipranAl",
+                  "name": "W2",
+                  "color": "grayLight2"
+                },
+                {
+                  "id": "selh0qKBXVXtbtDn1",
+                  "name": "W3",
+                  "color": "grayLight2"
+                },
+                {
+                  "id": "selZbO515kG9SoS2t",
+                  "name": "W4",
+                  "color": "grayLight2"
+                },
+                {
+                  "id": "selr8CUxamhAB0PT6",
+                  "name": "W5",
+                  "color": "grayLight2"
+                },
+                {
+                  "id": "selnJl9ULPxmhRKTb",
+                  "name": "W6",
+                  "color": "grayLight2"
+                },
+                {
+                  "id": "selntwhphnIhWQbMm",
+                  "name": "W7",
+                  "color": "grayLight2"
+                },
+                {
+                  "id": "seluZWMOZat2DgmTX",
+                  "name": "W8",
+                  "color": "grayLight2"
+                },
+                {
+                  "id": "selmDb1aXUEpq9Ms9",
+                  "name": "W9",
+                  "color": "grayLight2"
+                },
+                {
+                  "id": "selVJu1qBW0UIpyCo",
+                  "name": "W10",
+                  "color": "grayLight2"
+                },
+                {
+                  "id": "seltWqZR9GY9lJipG",
+                  "name": "W11",
+                  "color": "grayLight2"
+                },
+                {
+                  "id": "selsIEmytGR57Y6lP",
+                  "name": "W12",
+                  "color": "grayLight2"
+                },
+                {
+                  "id": "selayiq0Ruu3dW5wr",
+                  "name": "W13",
+                  "color": "grayLight2"
+                },
+                {
+                  "id": "selJ1Q2SDBG3DfjWt",
+                  "name": "W14",
+                  "color": "grayLight2"
+                },
+                {
+                  "id": "sel9CFmqftPiMOmCO",
+                  "name": "W15",
+                  "color": "grayLight2"
+                },
+                {
+                  "id": "selo4UNKERrjJTpjz",
+                  "name": "W16",
+                  "color": "grayLight2"
+                },
+                {
+                  "id": "sely7gJuqMOHIX1qL",
+                  "name": "W17",
+                  "color": "grayLight2"
+                },
+                {
+                  "id": "selT8LqdON1br0BzG",
+                  "name": "W18",
+                  "color": "grayLight2"
+                },
+                {
+                  "id": "selYxsr3vZzv3KLQr",
+                  "name": "W19",
+                  "color": "grayLight2"
+                },
+                {
+                  "id": "selnplAPPkrlGQe8h",
+                  "name": "W20",
+                  "color": "grayLight2"
+                },
+                {
+                  "id": "seljtmRO7OriLvY2p",
+                  "name": "W21",
+                  "color": "grayLight2"
+                },
+                {
+                  "id": "selvbGCDXMoMIGxc8",
+                  "name": "W22",
+                  "color": "grayLight2"
+                },
+                {
+                  "id": "seldDw4uTZIbIIzt2",
+                  "name": "W23",
+                  "color": "grayLight2"
+                },
+                {
+                  "id": "selEUTz2SiW1PffVx",
+                  "name": "W24",
+                  "color": "grayLight2"
+                },
+                {
+                  "id": "selq0W8jtFfKZC6LM",
+                  "name": "W25",
+                  "color": "grayLight2"
+                },
+                {
+                  "id": "sel5PakR1UdAmGEwL",
+                  "name": "W26",
+                  "color": "grayLight2"
+                },
+                {
+                  "id": "selBHK29YK7zG5te1",
+                  "name": "W27",
+                  "color": "grayLight2"
+                },
+                {
+                  "id": "selPuUAmoq0z99T7Z",
+                  "name": "W28",
+                  "color": "grayLight2"
+                },
+                {
+                  "id": "selY8PlCtj1Q47Ane",
+                  "name": "W29",
+                  "color": "grayLight2"
+                },
+                {
+                  "id": "seljDsXIH494TKth5",
+                  "name": "W30",
+                  "color": "grayLight2"
+                },
+                {
+                  "id": "selWtID8EV9oYsQsC",
+                  "name": "W31",
+                  "color": "grayLight2"
+                },
+                {
+                  "id": "seloOLh82RLiIJCud",
+                  "name": "W32",
+                  "color": "grayLight2"
+                },
+                {
+                  "id": "selZYe2TTFJT2hRFX",
+                  "name": "W33",
+                  "color": "grayLight2"
+                },
+                {
+                  "id": "selMOTlIPLS1dmGZh",
+                  "name": "W34",
+                  "color": "grayLight2"
+                },
+                {
+                  "id": "selqtPyRgejvVTRZl",
+                  "name": "W35",
+                  "color": "grayLight2"
+                },
+                {
+                  "id": "sel4YHKWvNHrtvrOX",
+                  "name": "W36",
+                  "color": "grayLight2"
+                },
+                {
+                  "id": "selgFlXvMmFv40Zzh",
+                  "name": "W37",
+                  "color": "grayLight2"
+                },
+                {
+                  "id": "selPUJ21HopwQy5Jj",
+                  "name": "W38",
+                  "color": "grayLight2"
+                },
+                {
+                  "id": "selrvkHCpF8TGzxCR",
+                  "name": "W39",
+                  "color": "grayLight2"
+                },
+                {
+                  "id": "selhSZB0dvvR6ds4t",
+                  "name": "W40",
+                  "color": "grayLight2"
+                },
+                {
+                  "id": "selZwTvWTIr7RFxxy",
+                  "name": "W41",
+                  "color": "grayLight2"
+                },
+                {
+                  "id": "selPs6S6UZ08eEzHo",
+                  "name": "W42",
+                  "color": "grayLight2"
+                },
+                {
+                  "id": "selzGrWmsnCRjKrL7",
+                  "name": "W43",
+                  "color": "grayLight2"
+                },
+                {
+                  "id": "selsCuQ3g7wQdNstN",
+                  "name": "W44",
+                  "color": "grayLight2"
+                },
+                {
+                  "id": "selNDzGR0MPROUwJA",
+                  "name": "W45",
+                  "color": "grayLight2"
+                },
+                {
+                  "id": "sel9tT2Y83gfrhVW0",
+                  "name": "W46",
+                  "color": "grayLight2"
+                },
+                {
+                  "id": "sel8jZ3MXQKmNV9pr",
+                  "name": "W47",
+                  "color": "grayLight2"
+                },
+                {
+                  "id": "sel0E3li80UOAXmIs",
+                  "name": "W48",
+                  "color": "grayLight2"
+                },
+                {
+                  "id": "selU9ooqLmuEgczJz",
+                  "name": "W49",
+                  "color": "grayLight2"
+                },
+                {
+                  "id": "selhEyLoIYByMHtb6",
+                  "name": "W50",
+                  "color": "grayLight2"
+                },
+                {
+                  "id": "selHtXvg2yFLiH29M",
+                  "name": "W51",
+                  "color": "grayLight2"
+                },
+                {
+                  "id": "selo8zOQcIFVuzzi7",
+                  "name": "W52",
+                  "color": "grayLight2"
+                },
+                {
+                  "id": "selxcCcJg0IWQ9m4U",
+                  "name": "W53",
+                  "color": "grayLight2"
+                }
+              ]
+            }
+          },
+          {
+            "name": "\u2699\ufe0f Called?",
+            "id": "fldA37YpPKOFlYXPj",
+            "type": "singleSelect",
+            "description": "Whether this lead has been called at least once via Adversus. Set by automation.",
+            "options": {
+              "choices": [
+                {
+                  "id": "seloNR7eDlXIvSl4R",
+                  "name": "Yes",
+                  "color": "greenLight2"
+                },
+                {
+                  "id": "seldRcY6WoFhoCqKH",
+                  "name": "No",
+                  "color": "redLight2"
+                }
+              ]
+            }
+          },
+          {
+            "name": "Times Lead has been Called",
+            "id": "fldiIBFrvrQz50g8n",
+            "type": "rollup",
+            "options": {
+              "isValid": true,
+              "recordLinkFieldId": "fldlDyTgP0Cedamra",
+              "fieldIdInLinkedTable": "fldhUBZMgVCCtOvSQ",
+              "referencedFieldIds": [],
+              "result": {
+                "type": "number",
+                "options": {
+                  "precision": 0
+                }
+              }
+            }
+          },
+          {
+            "name": "All Calls",
+            "id": "fldgAhWYQqEvunJ8f",
+            "type": "multipleLookupValues",
+            "options": {
+              "isValid": true,
+              "recordLinkFieldId": "fldlDyTgP0Cedamra",
+              "fieldIdInLinkedTable": "fld3B9Tf9tHjvj7zj",
+              "result": {
+                "type": "date",
+                "options": {
+                  "dateFormat": {
+                    "name": "local",
+                    "format": "l"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "name": "Date of First Call",
+            "id": "fldGw5BJGOiS8yf0E",
+            "type": "multipleLookupValues",
+            "options": {
+              "isValid": true,
+              "recordLinkFieldId": "fldlDyTgP0Cedamra",
+              "fieldIdInLinkedTable": "fld3B9Tf9tHjvj7zj",
+              "result": {
+                "type": "date",
+                "options": {
+                  "dateFormat": {
+                    "name": "local",
+                    "format": "l"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "name": "Date of Latest",
+            "id": "fldz3MpzHhKdMTXNV",
+            "type": "multipleLookupValues",
+            "options": {
+              "isValid": true,
+              "recordLinkFieldId": "fldlDyTgP0Cedamra",
+              "fieldIdInLinkedTable": "fld3B9Tf9tHjvj7zj",
+              "result": {
+                "type": "date",
+                "options": {
+                  "dateFormat": {
+                    "name": "local",
+                    "format": "l"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "name": "Days to First Call",
+            "id": "fld1ue5sjXfbYRSv7",
+            "type": "formula",
+            "options": {
+              "isValid": true,
+              "formula": "IF({fldGw5BJGOiS8yf0E}, DATETIME_DIFF({fldGw5BJGOiS8yf0E}, {fldKWnPLByPemnWzy}, 'days'))\n",
+              "referencedFieldIds": [
+                "fldGw5BJGOiS8yf0E",
+                "fldKWnPLByPemnWzy"
+              ],
+              "result": {
+                "type": "number",
+                "options": {
+                  "precision": 0
+                }
+              }
+            }
+          },
+          {
+            "name": "First Call Date Time",
+            "id": "fldA1i45p4yUK39mJ",
+            "type": "rollup",
+            "options": {
+              "isValid": true,
+              "recordLinkFieldId": "fldlDyTgP0Cedamra",
+              "fieldIdInLinkedTable": "fldXQGEGMg4gxxPhI",
+              "referencedFieldIds": [],
+              "result": {
+                "type": "singleLineText"
+              }
+            }
+          },
+          {
+            "name": "Adversus Lead Status",
+            "id": "fldTcQZ13KulaIyvX",
+            "type": "multipleLookupValues",
+            "options": {
+              "isValid": true,
+              "recordLinkFieldId": "fldlDyTgP0Cedamra",
+              "fieldIdInLinkedTable": "fldYtOn2yX9OTdidf",
+              "result": {
+                "type": "singleLineText"
+              }
+            }
+          },
+          {
+            "name": "Lead open/closed",
+            "id": "fldSdbYVrzOpzvZhg",
+            "type": "singleSelect",
+            "description": "Normalized open/closed status for lead attempt reporting. Populated by Lead Attempts Summary refresh script.",
+            "options": {
+              "choices": [
+                {
+                  "id": "selIsWJ1k7vLjaV5i",
+                  "name": "Closed ",
+                  "color": "blueLight2"
+                },
+                {
+                  "id": "selLJd2PLLpq8jPtE",
+                  "name": "Open ",
+                  "color": "cyanLight2"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "tblaP748fEZbHYJHc": {
+        "tableName": "2026 Databowl BNB API",
+        "tableId": "tblaP748fEZbHYJHc",
+        "primaryFieldId": "fldiLp3VzKn58GFjL",
+        "fieldCount": 28,
+        "fields": [
+          {
+            "name": "lead_id",
+            "id": "fldiLp3VzKn58GFjL",
+            "type": "singleLineText"
+          },
+          {
+            "name": "Created",
+            "id": "fldzGfgHd0BWQavCB",
+            "type": "dateTime",
+            "options": {
+              "dateFormat": {
+                "name": "local",
+                "format": "l"
+              },
+              "timeFormat": {
+                "name": "12hour",
+                "format": "h:mma"
+              },
+              "timeZone": "client"
+            }
+          },
+          {
+            "name": "lead_status",
+            "id": "fldIzl2YclDzBstqt",
+            "type": "singleSelect",
+            "options": {
+              "choices": [
+                {
+                  "id": "selRIzyGtjHMmTATo",
+                  "name": "Todo",
+                  "color": "redLight2"
+                },
+                {
+                  "id": "selAxUyuwWW0goj2G",
+                  "name": "In progress",
+                  "color": "yellowLight2"
+                },
+                {
+                  "id": "seljeuoqLtbpzQEjF",
+                  "name": "Done",
+                  "color": "greenLight2"
+                },
+                {
+                  "id": "sele1rp8C3sbO8bW9",
+                  "name": "lead_status",
+                  "color": "blueLight2"
+                },
+                {
+                  "id": "sel0A7cpSthe9iTqn",
+                  "name": "Accepted",
+                  "color": "cyanLight2"
+                },
+                {
+                  "id": "selzmZfQjKX1FD6Oy",
+                  "name": "Rejected",
+                  "color": "tealLight2"
+                },
+                {
+                  "id": "selde6Rb7cdJFl8On",
+                  "name": "Client Rejected",
+                  "color": "greenLight2"
+                },
+                {
+                  "id": "selQszjzOxobByWML",
+                  "name": "Received",
+                  "color": "blueLight2"
+                }
+              ]
+            }
+          },
+          {
+            "name": "lead_message",
+            "id": "fldKwLfe3GA4NDdTZ",
+            "type": "multilineText"
+          },
+          {
+            "name": "email",
+            "id": "fldGaCQqIkiqUu3CR",
+            "type": "email"
+          },
+          {
+            "name": "title",
+            "id": "fldbmbk2nR5aYtaZk",
+            "type": "singleLineText"
+          },
+          {
+            "name": "firstname",
+            "id": "fldeMT8PguGIII4rF",
+            "type": "singleLineText"
+          },
+          {
+            "name": "lastname",
+            "id": "fldFHH8Hi8J6MvAo7",
+            "type": "singleLineText"
+          },
+          {
+            "name": "phone1",
+            "id": "fldGMtRVKWlR2Bdaj",
+            "type": "phoneNumber"
+          },
+          {
+            "name": "dog_name",
+            "id": "fldwDuEC5VJt9uTk2",
+            "type": "singleLineText"
+          },
+          {
+            "name": "dog_age",
+            "id": "flde4Iod0U1BXhAHY",
+            "type": "singleLineText"
+          },
+          {
+            "name": "dog_weight",
+            "id": "fldMGAUsF8NobA1By",
+            "type": "singleLineText"
+          },
+          {
+            "name": "security_phrase",
+            "id": "fldVXNNstn43xmxfO",
+            "type": "singleLineText"
+          },
+          {
+            "name": "phone_code",
+            "id": "fld2HrB3WyUjbZqiJ",
+            "type": "singleLineText"
+          },
+          {
+            "name": "dog_breed",
+            "id": "fldvPxkmtcOVg4Udv",
+            "type": "singleLineText"
+          },
+          {
+            "name": "timestamp",
+            "id": "fldMfxuExC2ZPkFdB",
+            "type": "dateTime",
+            "options": {
+              "dateFormat": {
+                "name": "local",
+                "format": "l"
+              },
+              "timeFormat": {
+                "name": "12hour",
+                "format": "h:mma"
+              },
+              "timeZone": "client"
+            }
+          },
+          {
+            "name": "llid",
+            "id": "fldLccHkuNknnDCWH",
+            "type": "singleLineText"
+          },
+          {
+            "name": "mappingname",
+            "id": "fldQwzwzAVTHcS6jN",
+            "type": "singleLineText"
+          },
+          {
+            "name": "Weeks",
+            "id": "fldmT425PnS1kdURp",
+            "type": "formula",
+            "options": {
+              "isValid": true,
+              "formula": "IF(ISERROR(\"W\" & FLOOR((DATETIME_DIFF({fldMfxuExC2ZPkFdB}, DATETIME_PARSE(\"2025-12-29\", 'YYYY-MM-DD'), 'days')/7)+1)), BLANK(), \"W\" & FLOOR((DATETIME_DIFF({fldMfxuExC2ZPkFdB}, DATETIME_PARSE(\"2025-12-29\", 'YYYY-MM-DD'), 'days')/7)+1))",
+              "referencedFieldIds": [
+                "fldMfxuExC2ZPkFdB"
+              ],
+              "result": {
+                "type": "singleLineText"
+              }
+            }
+          },
+          {
+            "name": "Period",
+            "id": "fldGxWeGdILWgu5RF",
+            "type": "formula",
+            "options": {
+              "isValid": true,
+              "formula": "IF(\n  IS_BEFORE({fldMfxuExC2ZPkFdB}, \"2025-01-27\"), \"P1\",\nIF(\n  IS_BEFORE({fldMfxuExC2ZPkFdB}, \"2025-02-24\"), \"P2\",\nIF(\n  IS_BEFORE({fldMfxuExC2ZPkFdB}, \"2025-03-24\"), \"P3\",\nIF(\n  IS_BEFORE({fldMfxuExC2ZPkFdB}, \"2025-04-21\"), \"P4\",\nIF(\n  IS_BEFORE({fldMfxuExC2ZPkFdB}, \"2025-05-19\"), \"P5\",\nIF(\n  IS_BEFORE({fldMfxuExC2ZPkFdB}, \"2025-06-16\"), \"P6\",\nIF(\n  IS_BEFORE({fldMfxuExC2ZPkFdB}, \"2025-07-14\"), \"P7\",\nIF(\n  IS_BEFORE({fldMfxuExC2ZPkFdB}, \"2025-08-11\"), \"P8\",\nIF(\n  IS_BEFORE({fldMfxuExC2ZPkFdB}, \"2025-09-08\"), \"P9\",\nIF(\n  IS_BEFORE({fldMfxuExC2ZPkFdB}, \"2025-10-06\"), \"P10\",\nIF(\n  IS_BEFORE({fldMfxuExC2ZPkFdB}, \"2025-11-03\"), \"P11\",\nIF(\n  IS_BEFORE({fldMfxuExC2ZPkFdB}, \"2025-12-01\"), \"P12\",\nIF(\n  IS_BEFORE({fldMfxuExC2ZPkFdB}, \"2025-12-29\"), \"P13\",\n  \"P1 2026\"\n)))))))))))))",
+              "referencedFieldIds": [
+                "fldMfxuExC2ZPkFdB"
+              ],
+              "result": {
+                "type": "singleLineText"
+              }
+            }
+          },
+          {
+            "name": "Day Name",
+            "id": "flditYq0sJSCFXLk7",
+            "type": "formula",
+            "description": "Displays the full name of the day (e.g., Monday) from the timestamp field.",
+            "options": {
+              "isValid": true,
+              "formula": "IF(ISERROR(DATETIME_FORMAT({fldMfxuExC2ZPkFdB}, 'dddd')), BLANK(), DATETIME_FORMAT({fldMfxuExC2ZPkFdB}, 'dddd'))",
+              "referencedFieldIds": [
+                "fldMfxuExC2ZPkFdB"
+              ],
+              "result": {
+                "type": "singleLineText"
+              }
+            }
+          },
+          {
+            "name": "Day Name (Number)",
+            "id": "fldPEvuOnauUe5Hsa",
+            "type": "formula",
+            "description": "Displays the full name of the day (e.g., Monday) from the timestamp field.",
+            "options": {
+              "isValid": true,
+              "formula": "SWITCH({flditYq0sJSCFXLk7},\n  \"Monday\", 1,\n  \"Tuesday\", 2,\n  \"Wednesday\", 3,\n  \"Thursday\", 4,\n  \"Friday\", 5,\n  \"Saturday\", 6,\n  \"Sunday\", 7\n)",
+              "referencedFieldIds": [
+                "flditYq0sJSCFXLk7"
+              ],
+              "result": {
+                "type": "number",
+                "options": {
+                  "precision": 0
+                }
+              }
+            }
+          },
+          {
+            "name": "Hour of Day",
+            "id": "fld8WGFtAf43AWxen",
+            "type": "formula",
+            "description": "Displays the hour (0-23) from the timestamp field.",
+            "options": {
+              "isValid": true,
+              "formula": "IF(ISERROR(HOUR({fldMfxuExC2ZPkFdB})), BLANK(), HOUR({fldMfxuExC2ZPkFdB}))",
+              "referencedFieldIds": [
+                "fldMfxuExC2ZPkFdB"
+              ],
+              "result": {
+                "type": "number",
+                "options": {
+                  "precision": 0
+                }
+              }
+            }
+          },
+          {
+            "name": "Stage of Day",
+            "id": "fld2NEjLlkZ7Jhz3F",
+            "type": "formula",
+            "options": {
+              "isValid": true,
+              "formula": "\nIF(\n  {fld8WGFtAf43AWxen} < 6, \"Early Morning\",\n  IF(\n    {fld8WGFtAf43AWxen} < 12, \"Morning\",\n    IF(\n      {fld8WGFtAf43AWxen} < 18, \"Afternoon\",\n      \"Evening\"\n    )\n  )\n)",
+              "referencedFieldIds": [
+                "fld8WGFtAf43AWxen"
+              ],
+              "result": {
+                "type": "singleLineText"
+              }
+            }
+          },
+          {
+            "name": "Owner",
+            "id": "fldtIUqTCqBwDvhRH",
+            "type": "formula",
+            "options": {
+              "isValid": true,
+              "formula": "SWITCH(\n  {fldQwzwzAVTHcS6jN},\n  \"BNB_Leads.io_TikTok_Lead_Ads\", \"Leads.io\",\n  \"BNB Leads.io List\", \"Leads.io\",\n  \"BNB Leads.io TikTok\", \"Leads.io\",\n  \"BNB Dogmates 3\", \"Internal\",\n  \"BNB_MonEx_Generic\", \"Money Expert\",\n  \"BNB_CRM_5\", \"TDP\",\n  \"BNB_D2D_1\", \"Credico\",\n  \"BNB_MonEx_CB\", \"Money Expert\",\n  \"Unknown\"\n)",
+              "referencedFieldIds": [
+                "fldQwzwzAVTHcS6jN"
+              ],
+              "result": {
+                "type": "singleLineText"
+              }
+            }
+          },
+          {
+            "name": "Medium",
+            "id": "fldI3OdTds9GEEVQu",
+            "type": "formula",
+            "options": {
+              "isValid": true,
+              "formula": "SWITCH(\n  {fldQwzwzAVTHcS6jN},\n  \"BNB_Leads.io_TikTok_Lead_Ads\", \"Tiktok Lead Ads\",\n  \"BNB Leads.io List\", \"Meta\",\n  \"BNB Leads.io TikTok\", \"Tiktok\",\n  \"BNB Dogmates 3\", \"Email\",\n  \"BNB_MonEx_Generic\", \"Email\",\n  \"BNB_CRM_5\", \"Email\",\n  \"BNB_D2D_1\", \"D2D\",\n  \"BNB_MonEx_CB\", \"Email\",\n  \"Unknown\"\n)",
+              "referencedFieldIds": [
+                "fldQwzwzAVTHcS6jN"
+              ],
+              "result": {
+                "type": "singleLineText"
+              }
+            }
+          },
+          {
+            "name": "Date",
+            "id": "fldhJIgWpH7EbaBud",
+            "type": "formula",
+            "options": {
+              "isValid": true,
+              "formula": "IF(\n  {fldMfxuExC2ZPkFdB},\n  DATETIME_FORMAT({fldMfxuExC2ZPkFdB}, 'DD/MM/YYYY'),\n  \"\"\n)",
+              "referencedFieldIds": [
+                "fldMfxuExC2ZPkFdB"
+              ],
+              "result": {
+                "type": "singleLineText"
+              }
+            }
+          },
+          {
+            "name": "Date (Order)",
+            "id": "fldY8upp4U0Aqmeuo",
+            "type": "formula",
+            "options": {
+              "isValid": true,
+              "formula": "DATETIME_PARSE(DATESTR({fldMfxuExC2ZPkFdB}), 'YYYY-MM-DD')\n",
+              "referencedFieldIds": [
+                "fldMfxuExC2ZPkFdB"
+              ],
+              "result": {
+                "type": "date",
+                "options": {
+                  "dateFormat": {
+                    "name": "us",
+                    "format": "M/D/YYYY"
+                  }
+                }
+              }
+            }
+          }
+        ]
+      },
+      "tblPosmpZAiDpHAkS": {
+        "tableName": "2026 Databowl Marro API",
+        "tableId": "tblPosmpZAiDpHAkS",
+        "primaryFieldId": "fld0TOshdyaPZiYT2",
+        "fieldCount": 18,
+        "fields": [
+          {
+            "name": "lead_id",
+            "id": "fld0TOshdyaPZiYT2",
+            "type": "singleLineText"
+          },
+          {
+            "name": "timestamp",
+            "id": "fldLnFWjchY9NkucS",
+            "type": "date",
+            "options": {
+              "dateFormat": {
+                "name": "local",
+                "format": "l"
+              }
+            }
+          },
+          {
+            "name": "createdTime",
+            "id": "flddyynLGlrixdoEv",
+            "type": "createdTime",
+            "options": {
+              "result": {
+                "type": "dateTime",
+                "options": {
+                  "dateFormat": {
+                    "name": "local",
+                    "format": "l"
+                  },
+                  "timeFormat": {
+                    "name": "12hour",
+                    "format": "h:mma"
+                  },
+                  "timeZone": "client"
+                }
+              }
+            }
+          },
+          {
+            "name": "lead_status",
+            "id": "fldA3p2bUBY5on7OZ",
+            "type": "singleLineText"
+          },
+          {
+            "name": "lead_message",
+            "id": "fldWIZUasLc9Gv5UF",
+            "type": "multilineText"
+          },
+          {
+            "name": "email",
+            "id": "fldoAFrKvJYBo6J0W",
+            "type": "singleLineText"
+          },
+          {
+            "name": "title",
+            "id": "fldHVUHFyEGBXnKYW",
+            "type": "singleLineText"
+          },
+          {
+            "name": "firstname",
+            "id": "fldOadRC8hXqzLar7",
+            "type": "singleLineText"
+          },
+          {
+            "name": "lastname",
+            "id": "fld4Hv3xNJpulzJWQ",
+            "type": "singleLineText"
+          },
+          {
+            "name": "phone1",
+            "id": "fldIIzG0YslTTRkn6",
+            "type": "phoneNumber"
+          },
+          {
+            "name": "age",
+            "id": "fldGFCanyXHMoNcMx",
+            "type": "number",
+            "options": {
+              "precision": 0
+            }
+          },
+          {
+            "name": "security_phrase",
+            "id": "fld177jTQhVtNgfm0",
+            "type": "singleLineText"
+          },
+          {
+            "name": "phone_code",
+            "id": "fldzROADO427cfxMz",
+            "type": "singleLineText"
+          },
+          {
+            "name": "llid",
+            "id": "fldC48fdMX0LorA3z",
+            "type": "singleLineText"
+          },
+          {
+            "name": "mappingname",
+            "id": "fldMyWy61GygQN12A",
+            "type": "singleLineText"
+          },
+          {
+            "name": "cat_breed",
+            "id": "fldnyJVdctZYYFV2H",
+            "type": "singleLineText"
+          },
+          {
+            "name": "cat_name",
+            "id": "fldZV6FotiRUDuWsJ",
+            "type": "singleLineText"
+          },
+          {
+            "name": "cat_age",
+            "id": "fldNx3JXSC0gwlG8j",
+            "type": "singleLineText"
+          }
+        ]
+      }
+    }
+  },
+  "original": {
+    "appId": "appZoN6xBB9mDv8h4",
+    "name": "Original Base",
+    "tables": {
+      "tbllpLbEtTkmMQOY9": {
+        "tableName": "\u2618 Databowl Leads",
+        "tableId": "tbllpLbEtTkmMQOY9",
+        "primaryFieldId": "fld35FlzNdGA1omL6",
+        "fieldCount": 31,
+        "fields": [
+          {
+            "name": "Lead",
+            "id": "fld35FlzNdGA1omL6",
+            "type": "singleLineText",
+            "description": "Lead name (First Last)"
+          },
+          {
+            "name": "Databowl Lead ID",
+            "id": "fldMdPK5aJu048h5e",
+            "type": "number",
+            "description": "Unique Databowl identifier - key for API sync",
+            "options": {
+              "precision": 0
+            }
+          },
+          {
+            "name": "Lead Status",
+            "id": "fldfWyf537sFYxPdD",
+            "type": "singleSelect",
+            "description": "Databowl lead status",
+            "options": {
+              "choices": [
+                {
+                  "id": "seljlZDbvaOxaUvUn",
+                  "name": "Accepted",
+                  "color": "greenLight2"
+                },
+                {
+                  "id": "selRrSFilewWs2Px3",
+                  "name": "Rejected",
+                  "color": "redLight2"
+                },
+                {
+                  "id": "selAxyBiIzB4P1N15",
+                  "name": "Pending",
+                  "color": "yellowLight2"
+                },
+                {
+                  "id": "selP9waWe5Q5k93dq",
+                  "name": "Lead Status",
+                  "color": "blueLight2"
+                },
+                {
+                  "id": "seli9cvDnh94qk5Nu",
+                  "name": "lead_message",
+                  "color": "blueLight2"
+                },
+                {
+                  "id": "selROGaVg2comHYYk",
+                  "name": "Client Rejected",
+                  "color": "blueLight2"
+                }
+              ]
+            }
+          },
+          {
+            "name": "Email",
+            "id": "fldb9djQRWUX2A3td",
+            "type": "email",
+            "description": "Lead email address"
+          },
+          {
+            "name": "First Name",
+            "id": "fldAhr68Cuna8BqKF",
+            "type": "singleLineText"
+          },
+          {
+            "name": "Last Name",
+            "id": "fldCktqEGvzpPPBBO",
+            "type": "singleLineText"
+          },
+          {
+            "name": "Phone",
+            "id": "fldonWN2EKUjsm0gi",
+            "type": "phoneNumber"
+          },
+          {
+            "name": "Dog Name",
+            "id": "fldjlkgAhW91WHVeb",
+            "type": "singleLineText"
+          },
+          {
+            "name": "Dog Age",
+            "id": "fldU8LlU0vzXwY3ZG",
+            "type": "singleSelect",
+            "options": {
+              "choices": [
+                {
+                  "id": "selickTKcpfjJLuQO",
+                  "name": "0-5",
+                  "color": "blueLight2"
+                },
+                {
+                  "id": "selCK3Q5imuRCExqf",
+                  "name": "6-14",
+                  "color": "cyanLight2"
+                },
+                {
+                  "id": "selnq3yjVD7aZz1ma",
+                  "name": "14+",
+                  "color": "purpleLight2"
+                },
+                {
+                  "id": "selVoHS4XS0033b6S",
+                  "name": "Dog Age",
+                  "color": "blueLight2"
+                },
+                {
+                  "id": "seliRKaXfV7Fi8LMU",
+                  "name": "address1",
+                  "color": "blueLight2"
+                }
+              ]
+            }
+          },
+          {
+            "name": "Dog Weight",
+            "id": "fldHy61bYHpwbJUci",
+            "type": "singleSelect",
+            "options": {
+              "choices": [
+                {
+                  "id": "selWIpUYa3dRrz2g4",
+                  "name": "1 - 14KG",
+                  "color": "blueLight2"
+                },
+                {
+                  "id": "sel778muhK5hzCSSO",
+                  "name": "15 - 30KG",
+                  "color": "cyanLight2"
+                },
+                {
+                  "id": "sel61WECWwW2hympi",
+                  "name": "30KG +",
+                  "color": "purpleLight2"
+                },
+                {
+                  "id": "selZiceeXhyg4EXtj",
+                  "name": "Dog Weight",
+                  "color": "blueLight2"
+                },
+                {
+                  "id": "selkSIE6DikVLL7UW",
+                  "name": "address2",
+                  "color": "blueLight2"
+                }
+              ]
+            }
+          },
+          {
+            "name": "Lead Date",
+            "id": "fldWONi9bjOIJBmqq",
+            "type": "dateTime",
+            "description": "When the lead was submitted",
+            "options": {
+              "dateFormat": {
+                "name": "european",
+                "format": "D/M/YYYY"
+              },
+              "timeFormat": {
+                "name": "24hour",
+                "format": "HH:mm"
+              },
+              "timeZone": "Europe/Dublin"
+            }
+          },
+          {
+            "name": "Date",
+            "id": "fldFocENqMzcn3ySq",
+            "type": "date",
+            "description": "When the lead was submitted",
+            "options": {
+              "dateFormat": {
+                "name": "european",
+                "format": "D/M/YYYY"
+              }
+            }
+          },
+          {
+            "name": "LLID",
+            "id": "fldrlvJ8iKY5mEHEP",
+            "type": "number",
+            "description": "Leads.io lead ID",
+            "options": {
+              "precision": 0
+            }
+          },
+          {
+            "name": "Source",
+            "id": "fldobqbh7QFwKMZPK",
+            "type": "singleSelect",
+            "description": "Lead source / mapping name",
+            "options": {
+              "choices": [
+                {
+                  "id": "selFpzUwRAyAujPgP",
+                  "name": "Ireland_Leads.io_Meta",
+                  "color": "greenLight2"
+                },
+                {
+                  "id": "sel1MsvStKdJmu5Xe",
+                  "name": "Source",
+                  "color": "blueLight2"
+                },
+                {
+                  "id": "selroWZWKce8UHft0",
+                  "name": "county",
+                  "color": "blueLight2"
+                }
+              ]
+            }
+          },
+          {
+            "name": "\ud83d\udd17 Adversus Calls",
+            "id": "fld3DeParsIUfU1FL",
+            "type": "multipleRecordLinks",
+            "options": {
+              "linkedTableId": "tblQcfo7qgQCv7o3n",
+              "isReversed": false,
+              "prefersSingleRecordLink": false,
+              "inverseLinkFieldId": "fldXoPVNNChnJBYJE"
+            }
+          },
+          {
+            "name": "Times Lead has been Called",
+            "id": "fldsKBO1ZpAImfV8C",
+            "type": "rollup",
+            "options": {
+              "isValid": true,
+              "recordLinkFieldId": "fld3DeParsIUfU1FL",
+              "fieldIdInLinkedTable": "fldhUBZMgVCCtOvSQ",
+              "referencedFieldIds": [],
+              "result": {
+                "type": "number",
+                "options": {
+                  "precision": 0
+                }
+              }
+            }
+          },
+          {
+            "name": "All Calls",
+            "id": "fldkvrNZzYaNiynYy",
+            "type": "multipleLookupValues",
+            "options": {
+              "isValid": true,
+              "recordLinkFieldId": "fld3DeParsIUfU1FL",
+              "fieldIdInLinkedTable": "fld3B9Tf9tHjvj7zj",
+              "result": {
+                "type": "date",
+                "options": {
+                  "dateFormat": {
+                    "name": "local",
+                    "format": "l"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "name": "Date of First Call",
+            "id": "fldxkABnJ8ZJejuzK",
+            "type": "multipleLookupValues",
+            "options": {
+              "isValid": true,
+              "recordLinkFieldId": "fld3DeParsIUfU1FL",
+              "fieldIdInLinkedTable": "fld3B9Tf9tHjvj7zj",
+              "result": {
+                "type": "date",
+                "options": {
+                  "dateFormat": {
+                    "name": "local",
+                    "format": "l"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "name": "Date of Latest",
+            "id": "fldhkgaqRxRhZEBAN",
+            "type": "multipleLookupValues",
+            "options": {
+              "isValid": true,
+              "recordLinkFieldId": "fld3DeParsIUfU1FL",
+              "fieldIdInLinkedTable": "fld3B9Tf9tHjvj7zj",
+              "result": {
+                "type": "date",
+                "options": {
+                  "dateFormat": {
+                    "name": "local",
+                    "format": "l"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "name": "\u2699\ufe0f Lead Period",
+            "id": "fldR9ZWZC427boXv1",
+            "type": "singleSelect",
+            "description": "Period derived from calendar week (W1-W4=P1, W5-W8=P2, etc.)",
+            "options": {
+              "choices": [
+                {
+                  "id": "selIMXe4VzB6Cy8us",
+                  "name": "P1",
+                  "color": "blueLight2"
+                },
+                {
+                  "id": "selobcYELFUW2ZUVf",
+                  "name": "P2",
+                  "color": "blueLight2"
+                },
+                {
+                  "id": "selfSBXFaK8A5czYB",
+                  "name": "P3",
+                  "color": "blueLight2"
+                },
+                {
+                  "id": "sel4nhj6nf19wEPsD",
+                  "name": "P4",
+                  "color": "blueLight2"
+                },
+                {
+                  "id": "selQrB8ILjLudYUuP",
+                  "name": "P5",
+                  "color": "blueLight2"
+                },
+                {
+                  "id": "sel1DPZbu0fQd7hm6",
+                  "name": "P6",
+                  "color": "blueLight2"
+                },
+                {
+                  "id": "selkQmBKAP67kzDwb",
+                  "name": "P7",
+                  "color": "blueLight2"
+                },
+                {
+                  "id": "selmiqPWM1KKzwvQL",
+                  "name": "P8",
+                  "color": "blueLight2"
+                },
+                {
+                  "id": "selJcWH2KJlo1bGA8",
+                  "name": "P9",
+                  "color": "blueLight2"
+                },
+                {
+                  "id": "selCd1lm0sCSAyC2h",
+                  "name": "P10",
+                  "color": "blueLight2"
+                },
+                {
+                  "id": "selJRPkxa2GvyA29A",
+                  "name": "P11",
+                  "color": "blueLight2"
+                },
+                {
+                  "id": "selXy0YZbY1cSIurU",
+                  "name": "P12",
+                  "color": "blueLight2"
+                },
+                {
+                  "id": "sel8GABslLVuq03lh",
+                  "name": "P13",
+                  "color": "blueLight2"
+                }
+              ]
+            }
+          },
+          {
+            "name": "\u2699\ufe0f Lead Week",
+            "id": "fldhCZiJZKHL7jMa2",
+            "type": "singleSelect",
+            "description": "ISO calendar week from Lead Date",
+            "options": {
+              "choices": [
+                {
+                  "id": "selTk8qohI4rO0zhv",
+                  "name": "W1",
+                  "color": "tealLight2"
+                },
+                {
+                  "id": "selh6IIQvjYSz7MKz",
+                  "name": "W2",
+                  "color": "greenLight2"
+                },
+                {
+                  "id": "selOc6BEaM5xTgoRo",
+                  "name": "W3",
+                  "color": "tealLight2"
+                },
+                {
+                  "id": "seldpTGZS5pPQ13QE",
+                  "name": "W4",
+                  "color": "greenLight2"
+                },
+                {
+                  "id": "selRvnmp54qsSqNqZ",
+                  "name": "W5",
+                  "color": "tealLight2"
+                },
+                {
+                  "id": "selIGUotFqK9gUTnn",
+                  "name": "W6",
+                  "color": "greenLight2"
+                },
+                {
+                  "id": "selBMbtiwpFqKtWFN",
+                  "name": "W7",
+                  "color": "tealLight2"
+                },
+                {
+                  "id": "selPKLQPWNUHLrlzw",
+                  "name": "W8",
+                  "color": "greenLight2"
+                },
+                {
+                  "id": "selhsQG7N7fuj2vmw",
+                  "name": "W9",
+                  "color": "tealLight2"
+                },
+                {
+                  "id": "sel8zTiJV0bNDMkkK",
+                  "name": "W10",
+                  "color": "greenLight2"
+                },
+                {
+                  "id": "selTYc8Iz4V1RxNK7",
+                  "name": "W11",
+                  "color": "tealLight2"
+                },
+                {
+                  "id": "sel9W8CgD173dC7SJ",
+                  "name": "W12",
+                  "color": "greenLight2"
+                },
+                {
+                  "id": "selUWnesfB3Mb2R02",
+                  "name": "W13",
+                  "color": "tealLight2"
+                },
+                {
+                  "id": "selVS6fGiBRzhb38a",
+                  "name": "W14",
+                  "color": "greenLight2"
+                },
+                {
+                  "id": "selEasBOKZdKkkmGn",
+                  "name": "W15",
+                  "color": "tealLight2"
+                },
+                {
+                  "id": "selAJ52x89MLSz0PL",
+                  "name": "W16",
+                  "color": "greenLight2"
+                },
+                {
+                  "id": "selfFTU3qm71BOcQY",
+                  "name": "W17",
+                  "color": "tealLight2"
+                },
+                {
+                  "id": "selp6ThobWhaHgeqa",
+                  "name": "W18",
+                  "color": "greenLight2"
+                },
+                {
+                  "id": "sel6F1DmBVRw1X7sk",
+                  "name": "W19",
+                  "color": "tealLight2"
+                },
+                {
+                  "id": "selOjtn1RTWDt5r9e",
+                  "name": "W20",
+                  "color": "greenLight2"
+                },
+                {
+                  "id": "selfN36v9ZPiz3aDQ",
+                  "name": "W21",
+                  "color": "tealLight2"
+                },
+                {
+                  "id": "selv6up3i7kx7OZIl",
+                  "name": "W22",
+                  "color": "greenLight2"
+                },
+                {
+                  "id": "selufLy7bZnSHCqDK",
+                  "name": "W23",
+                  "color": "tealLight2"
+                },
+                {
+                  "id": "seli2MTRHoahl7LtC",
+                  "name": "W24",
+                  "color": "greenLight2"
+                },
+                {
+                  "id": "selIxIch4VWrZE8HD",
+                  "name": "W25",
+                  "color": "tealLight2"
+                },
+                {
+                  "id": "selnywJb4Xmi95BjE",
+                  "name": "W26",
+                  "color": "greenLight2"
+                },
+                {
+                  "id": "selsW7Bf0EPdN1dtW",
+                  "name": "W27",
+                  "color": "tealLight2"
+                },
+                {
+                  "id": "selZ7dIVU8R9Zkvmv",
+                  "name": "W28",
+                  "color": "greenLight2"
+                },
+                {
+                  "id": "selxxPvJHBGQGNn4f",
+                  "name": "W29",
+                  "color": "tealLight2"
+                },
+                {
+                  "id": "selq7dxG0M3YOhvIy",
+                  "name": "W30",
+                  "color": "greenLight2"
+                },
+                {
+                  "id": "selgBrxHZvBKNjdoW",
+                  "name": "W31",
+                  "color": "tealLight2"
+                },
+                {
+                  "id": "seluB3p08CwMc1WR5",
+                  "name": "W32",
+                  "color": "greenLight2"
+                },
+                {
+                  "id": "seloan0LWemr6lxEa",
+                  "name": "W33",
+                  "color": "tealLight2"
+                },
+                {
+                  "id": "selButlPis3faOts5",
+                  "name": "W34",
+                  "color": "greenLight2"
+                },
+                {
+                  "id": "selb0M7ljIDbi9TO5",
+                  "name": "W35",
+                  "color": "tealLight2"
+                },
+                {
+                  "id": "selOp0t406NNUyoSs",
+                  "name": "W36",
+                  "color": "greenLight2"
+                },
+                {
+                  "id": "selNiDxqzB7h0O2fm",
+                  "name": "W37",
+                  "color": "tealLight2"
+                },
+                {
+                  "id": "sel84MbCHJz0m0oxZ",
+                  "name": "W38",
+                  "color": "greenLight2"
+                },
+                {
+                  "id": "selojpnPU08bZ8Vym",
+                  "name": "W39",
+                  "color": "tealLight2"
+                },
+                {
+                  "id": "selsZlzb4BUdMrQqW",
+                  "name": "W40",
+                  "color": "greenLight2"
+                },
+                {
+                  "id": "selUqVhwJdwtS7sVq",
+                  "name": "W41",
+                  "color": "tealLight2"
+                },
+                {
+                  "id": "selU5goLET0lGuYIz",
+                  "name": "W42",
+                  "color": "greenLight2"
+                },
+                {
+                  "id": "selNHbddLAQq92ESA",
+                  "name": "W43",
+                  "color": "tealLight2"
+                },
+                {
+                  "id": "selc36HL4OVUmXbwg",
+                  "name": "W44",
+                  "color": "greenLight2"
+                },
+                {
+                  "id": "selT9evmrcTpSs1GA",
+                  "name": "W45",
+                  "color": "tealLight2"
+                },
+                {
+                  "id": "sel7IXLVzmdjkZo5p",
+                  "name": "W46",
+                  "color": "greenLight2"
+                },
+                {
+                  "id": "selKNrWbWib8zlu2z",
+                  "name": "W47",
+                  "color": "tealLight2"
+                },
+                {
+                  "id": "sel5EMRP2TTHfhYyO",
+                  "name": "W48",
+                  "color": "greenLight2"
+                },
+                {
+                  "id": "selbC0hTmFBt7srcS",
+                  "name": "W49",
+                  "color": "tealLight2"
+                },
+                {
+                  "id": "selIz8XuizQJ6o4j4",
+                  "name": "W50",
+                  "color": "greenLight2"
+                },
+                {
+                  "id": "selQW0XrtZP3aBqdQ",
+                  "name": "W51",
+                  "color": "tealLight2"
+                },
+                {
+                  "id": "sel9A6ElZgcy7B8kS",
+                  "name": "W52",
+                  "color": "greenLight2"
+                },
+                {
+                  "id": "selLQrZGD3J6i49UQ",
+                  "name": "W53",
+                  "color": "tealLight2"
+                }
+              ]
+            }
+          },
+          {
+            "name": "\u2699\ufe0f Called?",
+            "id": "fldbOzjdQ1ChPuOMg",
+            "type": "singleSelect",
+            "description": "Has the lead been called at least once?",
+            "options": {
+              "choices": [
+                {
+                  "id": "selBhWccYCVO4tSWV",
+                  "name": "Yes",
+                  "color": "greenBright"
+                },
+                {
+                  "id": "selk4XEkpSCUs3Oew",
+                  "name": "No",
+                  "color": "redLight2"
+                }
+              ]
+            }
+          },
+          {
+            "name": "\u2699\ufe0f Days to First Call",
+            "id": "fldp97ZD1u4gPdFig",
+            "type": "formula",
+            "description": "Days between Lead Date and first call",
+            "options": {
+              "isValid": true,
+              "formula": "IF({fldxkABnJ8ZJejuzK}, DATETIME_DIFF({fldxkABnJ8ZJejuzK}, {fldFocENqMzcn3ySq}, 'days'))\n",
+              "referencedFieldIds": [
+                "fldxkABnJ8ZJejuzK",
+                "fldFocENqMzcn3ySq"
+              ],
+              "result": {
+                "type": "number",
+                "options": {
+                  "precision": 0
+                }
+              }
+            }
+          },
+          {
+            "name": "First Call Date Time",
+            "id": "fldELdYdTTP151epV",
+            "type": "rollup",
+            "options": {
+              "isValid": true,
+              "recordLinkFieldId": "fld3DeParsIUfU1FL",
+              "fieldIdInLinkedTable": "fldXQGEGMg4gxxPhI",
+              "referencedFieldIds": [],
+              "result": {
+                "type": "singleLineText"
+              }
+            }
+          },
+          {
+            "name": "Adversus Lead Status",
+            "id": "fld0XrXF3YtWqWSAN",
+            "type": "multipleLookupValues",
+            "options": {
+              "isValid": true,
+              "recordLinkFieldId": "fld3DeParsIUfU1FL",
+              "fieldIdInLinkedTable": "fldYtOn2yX9OTdidf",
+              "result": {
+                "type": "singleLineText"
+              }
+            }
+          },
+          {
+            "name": "Lead open/closed",
+            "id": "fldBFGH4OGEBmuBID",
+            "type": "singleSelect",
+            "options": {
+              "choices": [
+                {
+                  "id": "selElalzRVNQFXuE6",
+                  "name": "Closed ",
+                  "color": "blueLight2"
+                },
+                {
+                  "id": "seleQRXMoh6EMKn1h",
+                  "name": "Open ",
+                  "color": "cyanLight2"
+                }
+              ]
+            }
+          },
+          {
+            "name": "Created",
+            "id": "fld2qCGXTIq0J1qB3",
+            "type": "createdTime",
+            "options": {
+              "result": {
+                "type": "dateTime",
+                "options": {
+                  "dateFormat": {
+                    "name": "local",
+                    "format": "l"
+                  },
+                  "timeFormat": {
+                    "name": "12hour",
+                    "format": "h:mma"
+                  },
+                  "timeZone": "client"
+                }
+              }
+            }
+          },
+          {
+            "name": "Time lead has been called (single select)",
+            "id": "fldpGvpBn2J2DbXop",
+            "type": "singleSelect",
+            "options": {
+              "choices": [
+                {
+                  "id": "seldpAt5NciAJqj7h",
+                  "name": "1",
+                  "color": "blueLight2"
+                },
+                {
+                  "id": "sele7mcKaHvKojlGG",
+                  "name": "2",
+                  "color": "cyanLight2"
+                },
+                {
+                  "id": "selEbietPfMeDdcjP",
+                  "name": "3",
+                  "color": "tealLight2"
+                },
+                {
+                  "id": "selmryTqFmH4KXTtz",
+                  "name": "4",
+                  "color": "greenLight2"
+                },
+                {
+                  "id": "selq93ELXxYX9YerF",
+                  "name": "5",
+                  "color": "yellowLight2"
+                },
+                {
+                  "id": "selExhFB9URvuc0fl",
+                  "name": "6",
+                  "color": "orangeLight2"
+                },
+                {
+                  "id": "selegFPhkJutlEn3L",
+                  "name": "7",
+                  "color": "redLight2"
+                },
+                {
+                  "id": "selZZN3WvsRpXLr3Z",
+                  "name": "8",
+                  "color": "pinkLight2"
+                },
+                {
+                  "id": "selygVOoAwbJRJcnK",
+                  "name": "9",
+                  "color": "purpleLight2"
+                },
+                {
+                  "id": "selDZDdn0We7sC7Wf",
+                  "name": "10",
+                  "color": "grayLight2"
+                },
+                {
+                  "id": "selUdJYww9PFStPgy",
+                  "name": "11",
+                  "color": "blueLight1"
+                },
+                {
+                  "id": "selhw585PmEq51wGU",
+                  "name": "12",
+                  "color": "cyanLight1"
+                },
+                {
+                  "id": "seld4VeunkLWOlYgw",
+                  "name": "13",
+                  "color": "tealLight1"
+                },
+                {
+                  "id": "seluFAGrTvPQPNE1f",
+                  "name": "14",
+                  "color": "greenLight1"
+                },
+                {
+                  "id": "selibA9EKj3416zlu",
+                  "name": "15",
+                  "color": "yellowLight1"
+                },
+                {
+                  "id": "sellCDXZwBGrOkPeb",
+                  "name": "16",
+                  "color": "orangeLight1"
+                },
+                {
+                  "id": "selQVcGGiqMxQgjjX",
+                  "name": "17",
+                  "color": "redLight1"
+                },
+                {
+                  "id": "selHWAroJDMenhW6r",
+                  "name": "19",
+                  "color": "pinkLight1"
+                },
+                {
+                  "id": "selL6qmnkQppNVkIj",
+                  "name": "20",
+                  "color": "purpleLight1"
+                }
+              ]
+            }
+          },
+          {
+            "name": "Adversus Lead Status (single select)",
+            "id": "fld9R1fOEzvXLCTzd",
+            "type": "singleSelect",
+            "options": {
+              "choices": [
+                {
+                  "id": "seldh8sbi6D6xBg9P",
+                  "name": "Automatic redial",
+                  "color": "blueLight2"
+                },
+                {
+                  "id": "selIP5vho1U9uvOvL",
+                  "name": "VIP callback",
+                  "color": "cyanLight2"
+                },
+                {
+                  "id": "sel0Ojq2NUQlrtm92",
+                  "name": "Private callback",
+                  "color": "tealLight2"
+                },
+                {
+                  "id": "selkOuLR49qP3UfC0",
+                  "name": "Not interested",
+                  "color": "greenLight2"
+                },
+                {
+                  "id": "selXk8XkMDrsHsCPS",
+                  "name": "Success",
+                  "color": "yellowLight2"
+                },
+                {
+                  "id": "selgHw7QrY0ZfKrSR",
+                  "name": "Invalid",
+                  "color": "orangeLight2"
+                },
+                {
+                  "id": "selK7Xb5e9SdQR8Av",
+                  "name": "Shared callback",
+                  "color": "redLight2"
+                },
+                {
+                  "id": "selRYq1PHpGFq5w0Y",
+                  "name": "Unqualified",
+                  "color": "pinkLight2"
+                }
+              ]
+            }
+          },
+          {
+            "name": "Lead open/closed (auto)",
+            "id": "fldiZLjWB3aXuUTW4",
+            "type": "formula",
+            "description": "Computed from Adversus Lead Status lookup. Prefer this over the manual single-select field.",
+            "options": {
+              "isValid": true,
+              "formula": "IF(OR(SEARCH(\"Not interested\", ARRAYJOIN({fld0XrXF3YtWqWSAN})), SEARCH(\"Invalid\", ARRAYJOIN({fld0XrXF3YtWqWSAN})), SEARCH(\"Success\", ARRAYJOIN({fld0XrXF3YtWqWSAN})), SEARCH(\"Unqualified\", ARRAYJOIN({fld0XrXF3YtWqWSAN}))), \"Closed \", \"Open \")",
+              "referencedFieldIds": [
+                "fld0XrXF3YtWqWSAN"
+              ],
+              "result": {
+                "type": "singleLineText"
+              }
+            }
+          },
+          {
+            "name": "Agent Name (from \ud83d\udd17 Adversus Calls)",
+            "id": "fldQwLM18moo8nifp",
+            "type": "multipleLookupValues",
+            "options": {
+              "isValid": true,
+              "recordLinkFieldId": "fld3DeParsIUfU1FL",
+              "fieldIdInLinkedTable": "fldXHkssDpWANvBId",
+              "result": {
+                "type": "singleLineText"
+              }
+            }
+          }
+        ]
+      },
+      "tblKCC8nxriWKXrEG": {
+        "tableName": "\ud83c\uddec\ud83c\udde7 UK Databowl leads",
+        "tableId": "tblKCC8nxriWKXrEG",
+        "primaryFieldId": "fldfey2wpzYL18jsI",
+        "fieldCount": 25,
+        "fields": [
+          {
+            "name": "Lead",
+            "id": "fldfey2wpzYL18jsI",
+            "type": "singleLineText",
+            "description": "Text version of lead ID"
+          },
+          {
+            "name": "Databowl Lead ID",
+            "id": "fldfieeyeSxMYiiYY",
+            "type": "number",
+            "description": "Databowl lead ID number",
+            "options": {
+              "precision": 0
+            }
+          },
+          {
+            "name": "LLID",
+            "id": "fldLbtzLaHVQ5c282",
+            "type": "number",
+            "description": "Leads.io Lead ID",
+            "options": {
+              "precision": 0
+            }
+          },
+          {
+            "name": "Lead Date",
+            "id": "fldKWnPLByPemnWzy",
+            "type": "dateTime",
+            "description": "Date/time the lead was created in Databowl",
+            "options": {
+              "dateFormat": {
+                "name": "iso",
+                "format": "YYYY-MM-DD"
+              },
+              "timeFormat": {
+                "name": "24hour",
+                "format": "HH:mm"
+              },
+              "timeZone": "Europe/London"
+            }
+          },
+          {
+            "name": "Lead Status",
+            "id": "fldou9nj9JtM59AOA",
+            "type": "singleLineText",
+            "description": "Accepted / Client Rejected"
+          },
+          {
+            "name": "Source",
+            "id": "fldtuI3TcARwXkO5Z",
+            "type": "singleLineText",
+            "description": "Lead source from Databowl"
+          },
+          {
+            "name": "First Name",
+            "id": "fld3oNBMWFzGhqrwk",
+            "type": "singleLineText"
+          },
+          {
+            "name": "Last Name",
+            "id": "fldsGEpzC9R5hFmjS",
+            "type": "singleLineText"
+          },
+          {
+            "name": "Email",
+            "id": "fldmzMxrK3gh1GGE9",
+            "type": "email"
+          },
+          {
+            "name": "Phone",
+            "id": "fldJT8YIKFgl48xzn",
+            "type": "phoneNumber"
+          },
+          {
+            "name": "Dog Name",
+            "id": "fldSMeRbLJjyLJram",
+            "type": "singleLineText"
+          },
+          {
+            "name": "Dog Age",
+            "id": "fldemB3gym1rKDB7B",
+            "type": "singleSelect",
+            "description": "Dog age range",
+            "options": {
+              "choices": [
+                {
+                  "id": "sel6Oki3tTBHo8P6i",
+                  "name": "0-5",
+                  "color": "blueLight2"
+                },
+                {
+                  "id": "selLaMVrgF3qP0UCU",
+                  "name": "6-14",
+                  "color": "cyanLight2"
+                },
+                {
+                  "id": "selv6myznuKob2NzQ",
+                  "name": "14+",
+                  "color": "tealLight2"
+                }
+              ]
+            }
+          },
+          {
+            "name": "Dog Weight",
+            "id": "fldh71Usz5KKUvJa4",
+            "type": "singleSelect",
+            "description": "Dog weight range",
+            "options": {
+              "choices": [
+                {
+                  "id": "selMoe70xnG6ur0AI",
+                  "name": "1 - 14KG",
+                  "color": "greenLight2"
+                },
+                {
+                  "id": "selHYcDSGPe2dXL7L",
+                  "name": "15 - 30KG",
+                  "color": "yellowLight2"
+                },
+                {
+                  "id": "selot0eZxaqM04tgt",
+                  "name": "30KG +",
+                  "color": "orangeLight2"
+                }
+              ]
+            }
+          },
+          {
+            "name": "\ud83d\udd17 Adversus Calls",
+            "id": "fldlDyTgP0Cedamra",
+            "type": "multipleRecordLinks",
+            "description": "Links UK leads to their Adversus call records. Matched by Databowl Lead ID via automation.",
+            "options": {
+              "linkedTableId": "tblQcfo7qgQCv7o3n",
+              "isReversed": false,
+              "prefersSingleRecordLink": false,
+              "inverseLinkFieldId": "fldsqdT38k8fgtUom"
+            }
+          },
+          {
+            "name": "\u2699\ufe0f Lead Period",
+            "id": "fldUFDLokqWoUavsC",
+            "type": "singleSelect",
+            "description": "Which 4-week period the lead was generated in. Set by automation based on Lead Date.",
+            "options": {
+              "choices": [
+                {
+                  "id": "selqwT8xQ2O3c5egt",
+                  "name": "P1",
+                  "color": "blueLight2"
+                },
+                {
+                  "id": "selbkHMAsDhu8esKk",
+                  "name": "P2",
+                  "color": "blueLight2"
+                },
+                {
+                  "id": "selPcJxY1H1oeX6qY",
+                  "name": "P3",
+                  "color": "blueLight2"
+                },
+                {
+                  "id": "selEHBgCjFjsoOBIU",
+                  "name": "P4",
+                  "color": "blueLight2"
+                },
+                {
+                  "id": "selvAudNG24wP83x5",
+                  "name": "P5",
+                  "color": "blueLight2"
+                },
+                {
+                  "id": "sel5nhbqCb0vIixuX",
+                  "name": "P6",
+                  "color": "blueLight2"
+                },
+                {
+                  "id": "selVJ6NPdQV7IpH6u",
+                  "name": "P7",
+                  "color": "blueLight2"
+                },
+                {
+                  "id": "sel2wGtmKm15auSwV",
+                  "name": "P8",
+                  "color": "blueLight2"
+                },
+                {
+                  "id": "selNtkURbvJjRgXin",
+                  "name": "P9",
+                  "color": "blueLight2"
+                },
+                {
+                  "id": "sellbSvWmwIhbxPh3",
+                  "name": "P10",
+                  "color": "blueLight2"
+                },
+                {
+                  "id": "selVx3mODvm8H9DRo",
+                  "name": "P11",
+                  "color": "blueLight2"
+                },
+                {
+                  "id": "selmzpL87wcUTe3EN",
+                  "name": "P12",
+                  "color": "blueLight2"
+                },
+                {
+                  "id": "selL7jVspRI906jMi",
+                  "name": "P13",
+                  "color": "blueLight2"
+                }
+              ]
+            }
+          },
+          {
+            "name": "\u2699\ufe0f Lead Week",
+            "id": "fldFCEhEfNICZSgfY",
+            "type": "singleSelect",
+            "description": "ISO week the lead was generated in. Set by automation based on Lead Date.",
+            "options": {
+              "choices": [
+                {
+                  "id": "selNhe49FIlyvoAgl",
+                  "name": "W1",
+                  "color": "grayLight2"
+                },
+                {
+                  "id": "selBxslo9IipranAl",
+                  "name": "W2",
+                  "color": "grayLight2"
+                },
+                {
+                  "id": "selh0qKBXVXtbtDn1",
+                  "name": "W3",
+                  "color": "grayLight2"
+                },
+                {
+                  "id": "selZbO515kG9SoS2t",
+                  "name": "W4",
+                  "color": "grayLight2"
+                },
+                {
+                  "id": "selr8CUxamhAB0PT6",
+                  "name": "W5",
+                  "color": "grayLight2"
+                },
+                {
+                  "id": "selnJl9ULPxmhRKTb",
+                  "name": "W6",
+                  "color": "grayLight2"
+                },
+                {
+                  "id": "selntwhphnIhWQbMm",
+                  "name": "W7",
+                  "color": "grayLight2"
+                },
+                {
+                  "id": "seluZWMOZat2DgmTX",
+                  "name": "W8",
+                  "color": "grayLight2"
+                },
+                {
+                  "id": "selmDb1aXUEpq9Ms9",
+                  "name": "W9",
+                  "color": "grayLight2"
+                },
+                {
+                  "id": "selVJu1qBW0UIpyCo",
+                  "name": "W10",
+                  "color": "grayLight2"
+                },
+                {
+                  "id": "seltWqZR9GY9lJipG",
+                  "name": "W11",
+                  "color": "grayLight2"
+                },
+                {
+                  "id": "selsIEmytGR57Y6lP",
+                  "name": "W12",
+                  "color": "grayLight2"
+                },
+                {
+                  "id": "selayiq0Ruu3dW5wr",
+                  "name": "W13",
+                  "color": "grayLight2"
+                },
+                {
+                  "id": "selJ1Q2SDBG3DfjWt",
+                  "name": "W14",
+                  "color": "grayLight2"
+                },
+                {
+                  "id": "sel9CFmqftPiMOmCO",
+                  "name": "W15",
+                  "color": "grayLight2"
+                },
+                {
+                  "id": "selo4UNKERrjJTpjz",
+                  "name": "W16",
+                  "color": "grayLight2"
+                },
+                {
+                  "id": "sely7gJuqMOHIX1qL",
+                  "name": "W17",
+                  "color": "grayLight2"
+                },
+                {
+                  "id": "selT8LqdON1br0BzG",
+                  "name": "W18",
+                  "color": "grayLight2"
+                },
+                {
+                  "id": "selYxsr3vZzv3KLQr",
+                  "name": "W19",
+                  "color": "grayLight2"
+                },
+                {
+                  "id": "selnplAPPkrlGQe8h",
+                  "name": "W20",
+                  "color": "grayLight2"
+                },
+                {
+                  "id": "seljtmRO7OriLvY2p",
+                  "name": "W21",
+                  "color": "grayLight2"
+                },
+                {
+                  "id": "selvbGCDXMoMIGxc8",
+                  "name": "W22",
+                  "color": "grayLight2"
+                },
+                {
+                  "id": "seldDw4uTZIbIIzt2",
+                  "name": "W23",
+                  "color": "grayLight2"
+                },
+                {
+                  "id": "selEUTz2SiW1PffVx",
+                  "name": "W24",
+                  "color": "grayLight2"
+                },
+                {
+                  "id": "selq0W8jtFfKZC6LM",
+                  "name": "W25",
+                  "color": "grayLight2"
+                },
+                {
+                  "id": "sel5PakR1UdAmGEwL",
+                  "name": "W26",
+                  "color": "grayLight2"
+                },
+                {
+                  "id": "selBHK29YK7zG5te1",
+                  "name": "W27",
+                  "color": "grayLight2"
+                },
+                {
+                  "id": "selPuUAmoq0z99T7Z",
+                  "name": "W28",
+                  "color": "grayLight2"
+                },
+                {
+                  "id": "selY8PlCtj1Q47Ane",
+                  "name": "W29",
+                  "color": "grayLight2"
+                },
+                {
+                  "id": "seljDsXIH494TKth5",
+                  "name": "W30",
+                  "color": "grayLight2"
+                },
+                {
+                  "id": "selWtID8EV9oYsQsC",
+                  "name": "W31",
+                  "color": "grayLight2"
+                },
+                {
+                  "id": "seloOLh82RLiIJCud",
+                  "name": "W32",
+                  "color": "grayLight2"
+                },
+                {
+                  "id": "selZYe2TTFJT2hRFX",
+                  "name": "W33",
+                  "color": "grayLight2"
+                },
+                {
+                  "id": "selMOTlIPLS1dmGZh",
+                  "name": "W34",
+                  "color": "grayLight2"
+                },
+                {
+                  "id": "selqtPyRgejvVTRZl",
+                  "name": "W35",
+                  "color": "grayLight2"
+                },
+                {
+                  "id": "sel4YHKWvNHrtvrOX",
+                  "name": "W36",
+                  "color": "grayLight2"
+                },
+                {
+                  "id": "selgFlXvMmFv40Zzh",
+                  "name": "W37",
+                  "color": "grayLight2"
+                },
+                {
+                  "id": "selPUJ21HopwQy5Jj",
+                  "name": "W38",
+                  "color": "grayLight2"
+                },
+                {
+                  "id": "selrvkHCpF8TGzxCR",
+                  "name": "W39",
+                  "color": "grayLight2"
+                },
+                {
+                  "id": "selhSZB0dvvR6ds4t",
+                  "name": "W40",
+                  "color": "grayLight2"
+                },
+                {
+                  "id": "selZwTvWTIr7RFxxy",
+                  "name": "W41",
+                  "color": "grayLight2"
+                },
+                {
+                  "id": "selPs6S6UZ08eEzHo",
+                  "name": "W42",
+                  "color": "grayLight2"
+                },
+                {
+                  "id": "selzGrWmsnCRjKrL7",
+                  "name": "W43",
+                  "color": "grayLight2"
+                },
+                {
+                  "id": "selsCuQ3g7wQdNstN",
+                  "name": "W44",
+                  "color": "grayLight2"
+                },
+                {
+                  "id": "selNDzGR0MPROUwJA",
+                  "name": "W45",
+                  "color": "grayLight2"
+                },
+                {
+                  "id": "sel9tT2Y83gfrhVW0",
+                  "name": "W46",
+                  "color": "grayLight2"
+                },
+                {
+                  "id": "sel8jZ3MXQKmNV9pr",
+                  "name": "W47",
+                  "color": "grayLight2"
+                },
+                {
+                  "id": "sel0E3li80UOAXmIs",
+                  "name": "W48",
+                  "color": "grayLight2"
+                },
+                {
+                  "id": "selU9ooqLmuEgczJz",
+                  "name": "W49",
+                  "color": "grayLight2"
+                },
+                {
+                  "id": "selhEyLoIYByMHtb6",
+                  "name": "W50",
+                  "color": "grayLight2"
+                },
+                {
+                  "id": "selHtXvg2yFLiH29M",
+                  "name": "W51",
+                  "color": "grayLight2"
+                },
+                {
+                  "id": "selo8zOQcIFVuzzi7",
+                  "name": "W52",
+                  "color": "grayLight2"
+                },
+                {
+                  "id": "selxcCcJg0IWQ9m4U",
+                  "name": "W53",
+                  "color": "grayLight2"
+                }
+              ]
+            }
+          },
+          {
+            "name": "\u2699\ufe0f Called?",
+            "id": "fldA37YpPKOFlYXPj",
+            "type": "singleSelect",
+            "description": "Whether this lead has been called at least once via Adversus. Set by automation.",
+            "options": {
+              "choices": [
+                {
+                  "id": "seloNR7eDlXIvSl4R",
+                  "name": "Yes",
+                  "color": "greenLight2"
+                },
+                {
+                  "id": "seldRcY6WoFhoCqKH",
+                  "name": "No",
+                  "color": "redLight2"
+                }
+              ]
+            }
+          },
+          {
+            "name": "Times Lead has been Called",
+            "id": "fldiIBFrvrQz50g8n",
+            "type": "rollup",
+            "options": {
+              "isValid": true,
+              "recordLinkFieldId": "fldlDyTgP0Cedamra",
+              "fieldIdInLinkedTable": "fldhUBZMgVCCtOvSQ",
+              "referencedFieldIds": [],
+              "result": {
+                "type": "number",
+                "options": {
+                  "precision": 0
+                }
+              }
+            }
+          },
+          {
+            "name": "All Calls",
+            "id": "fldgAhWYQqEvunJ8f",
+            "type": "multipleLookupValues",
+            "options": {
+              "isValid": true,
+              "recordLinkFieldId": "fldlDyTgP0Cedamra",
+              "fieldIdInLinkedTable": "fld3B9Tf9tHjvj7zj",
+              "result": {
+                "type": "date",
+                "options": {
+                  "dateFormat": {
+                    "name": "local",
+                    "format": "l"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "name": "Date of First Call",
+            "id": "fldGw5BJGOiS8yf0E",
+            "type": "multipleLookupValues",
+            "options": {
+              "isValid": true,
+              "recordLinkFieldId": "fldlDyTgP0Cedamra",
+              "fieldIdInLinkedTable": "fld3B9Tf9tHjvj7zj",
+              "result": {
+                "type": "date",
+                "options": {
+                  "dateFormat": {
+                    "name": "local",
+                    "format": "l"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "name": "Date of Latest",
+            "id": "fldz3MpzHhKdMTXNV",
+            "type": "multipleLookupValues",
+            "options": {
+              "isValid": true,
+              "recordLinkFieldId": "fldlDyTgP0Cedamra",
+              "fieldIdInLinkedTable": "fld3B9Tf9tHjvj7zj",
+              "result": {
+                "type": "date",
+                "options": {
+                  "dateFormat": {
+                    "name": "local",
+                    "format": "l"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "name": "Days to First Call",
+            "id": "fld1ue5sjXfbYRSv7",
+            "type": "formula",
+            "options": {
+              "isValid": true,
+              "formula": "IF({fldGw5BJGOiS8yf0E}, DATETIME_DIFF({fldGw5BJGOiS8yf0E}, {fldKWnPLByPemnWzy}, 'days'))\n",
+              "referencedFieldIds": [
+                "fldGw5BJGOiS8yf0E",
+                "fldKWnPLByPemnWzy"
+              ],
+              "result": {
+                "type": "number",
+                "options": {
+                  "precision": 0
+                }
+              }
+            }
+          },
+          {
+            "name": "First Call Date Time",
+            "id": "fldA1i45p4yUK39mJ",
+            "type": "rollup",
+            "options": {
+              "isValid": true,
+              "recordLinkFieldId": "fldlDyTgP0Cedamra",
+              "fieldIdInLinkedTable": "fldXQGEGMg4gxxPhI",
+              "referencedFieldIds": [],
+              "result": {
+                "type": "singleLineText"
+              }
+            }
+          },
+          {
+            "name": "Adversus Lead Status",
+            "id": "fldTcQZ13KulaIyvX",
+            "type": "multipleLookupValues",
+            "options": {
+              "isValid": true,
+              "recordLinkFieldId": "fldlDyTgP0Cedamra",
+              "fieldIdInLinkedTable": "fldYtOn2yX9OTdidf",
+              "result": {
+                "type": "singleLineText"
+              }
+            }
+          },
+          {
+            "name": "Lead open/closed",
+            "id": "fldSdbYVrzOpzvZhg",
+            "type": "singleSelect",
+            "description": "Normalized open/closed status for lead attempt reporting. Populated by Lead Attempts Summary refresh script.",
+            "options": {
+              "choices": [
+                {
+                  "id": "selIsWJ1k7vLjaV5i",
+                  "name": "Closed ",
+                  "color": "blueLight2"
+                },
+                {
+                  "id": "selLJd2PLLpq8jPtE",
+                  "name": "Open ",
+                  "color": "cyanLight2"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "tblaP748fEZbHYJHc": {
+        "tableName": "2026 Databowl BNB API",
+        "tableId": "tblaP748fEZbHYJHc",
+        "primaryFieldId": "fldiLp3VzKn58GFjL",
+        "fieldCount": 28,
+        "fields": [
+          {
+            "name": "lead_id",
+            "id": "fldiLp3VzKn58GFjL",
+            "type": "singleLineText"
+          },
+          {
+            "name": "lead_status",
+            "id": "fldIzl2YclDzBstqt",
+            "type": "singleSelect",
+            "options": {
+              "choices": [
+                {
+                  "id": "selRIzyGtjHMmTATo",
+                  "name": "Todo",
+                  "color": "redLight2"
+                },
+                {
+                  "id": "selAxUyuwWW0goj2G",
+                  "name": "In progress",
+                  "color": "yellowLight2"
+                },
+                {
+                  "id": "seljeuoqLtbpzQEjF",
+                  "name": "Done",
+                  "color": "greenLight2"
+                },
+                {
+                  "id": "sele1rp8C3sbO8bW9",
+                  "name": "lead_status",
+                  "color": "blueLight2"
+                },
+                {
+                  "id": "sel0A7cpSthe9iTqn",
+                  "name": "Accepted",
+                  "color": "cyanLight2"
+                },
+                {
+                  "id": "selzmZfQjKX1FD6Oy",
+                  "name": "Rejected",
+                  "color": "tealLight2"
+                },
+                {
+                  "id": "selde6Rb7cdJFl8On",
+                  "name": "Client Rejected",
+                  "color": "greenLight2"
+                },
+                {
+                  "id": "selQszjzOxobByWML",
+                  "name": "Received",
+                  "color": "blueLight2"
+                }
+              ]
+            }
+          },
+          {
+            "name": "lead_message",
+            "id": "fldKwLfe3GA4NDdTZ",
+            "type": "multilineText"
+          },
+          {
+            "name": "email",
+            "id": "fldGaCQqIkiqUu3CR",
+            "type": "email"
+          },
+          {
+            "name": "title",
+            "id": "fldbmbk2nR5aYtaZk",
+            "type": "singleLineText"
+          },
+          {
+            "name": "firstname",
+            "id": "fldeMT8PguGIII4rF",
+            "type": "singleLineText"
+          },
+          {
+            "name": "lastname",
+            "id": "fldFHH8Hi8J6MvAo7",
+            "type": "singleLineText"
+          },
+          {
+            "name": "phone1",
+            "id": "fldGMtRVKWlR2Bdaj",
+            "type": "phoneNumber"
+          },
+          {
+            "name": "dog_name",
+            "id": "fldwDuEC5VJt9uTk2",
+            "type": "singleLineText"
+          },
+          {
+            "name": "dog_age",
+            "id": "flde4Iod0U1BXhAHY",
+            "type": "singleLineText"
+          },
+          {
+            "name": "dog_weight",
+            "id": "fldMGAUsF8NobA1By",
+            "type": "singleLineText"
+          },
+          {
+            "name": "security_phrase",
+            "id": "fldVXNNstn43xmxfO",
+            "type": "singleLineText"
+          },
+          {
+            "name": "phone_code",
+            "id": "fld2HrB3WyUjbZqiJ",
+            "type": "singleLineText"
+          },
+          {
+            "name": "dog_breed",
+            "id": "fldvPxkmtcOVg4Udv",
+            "type": "singleLineText"
+          },
+          {
+            "name": "timestamp",
+            "id": "fldMfxuExC2ZPkFdB",
+            "type": "dateTime",
+            "options": {
+              "dateFormat": {
+                "name": "local",
+                "format": "l"
+              },
+              "timeFormat": {
+                "name": "12hour",
+                "format": "h:mma"
+              },
+              "timeZone": "client"
+            }
+          },
+          {
+            "name": "llid",
+            "id": "fldLccHkuNknnDCWH",
+            "type": "singleLineText"
+          },
+          {
+            "name": "mappingname",
+            "id": "fldQwzwzAVTHcS6jN",
+            "type": "singleLineText"
+          },
+          {
+            "name": "Weeks",
+            "id": "fldmT425PnS1kdURp",
+            "type": "formula",
+            "options": {
+              "isValid": true,
+              "formula": "IF(ISERROR(\"W\" & FLOOR((DATETIME_DIFF({fldMfxuExC2ZPkFdB}, DATETIME_PARSE(\"2025-12-29\", 'YYYY-MM-DD'), 'days')/7)+1)), BLANK(), \"W\" & FLOOR((DATETIME_DIFF({fldMfxuExC2ZPkFdB}, DATETIME_PARSE(\"2025-12-29\", 'YYYY-MM-DD'), 'days')/7)+1))",
+              "referencedFieldIds": [
+                "fldMfxuExC2ZPkFdB"
+              ],
+              "result": {
+                "type": "singleLineText"
+              }
+            }
+          },
+          {
+            "name": "Period",
+            "id": "fldGxWeGdILWgu5RF",
+            "type": "formula",
+            "options": {
+              "isValid": true,
+              "formula": "IF(\n  IS_BEFORE({fldMfxuExC2ZPkFdB}, \"2025-01-27\"), \"P1\",\nIF(\n  IS_BEFORE({fldMfxuExC2ZPkFdB}, \"2025-02-24\"), \"P2\",\nIF(\n  IS_BEFORE({fldMfxuExC2ZPkFdB}, \"2025-03-24\"), \"P3\",\nIF(\n  IS_BEFORE({fldMfxuExC2ZPkFdB}, \"2025-04-21\"), \"P4\",\nIF(\n  IS_BEFORE({fldMfxuExC2ZPkFdB}, \"2025-05-19\"), \"P5\",\nIF(\n  IS_BEFORE({fldMfxuExC2ZPkFdB}, \"2025-06-16\"), \"P6\",\nIF(\n  IS_BEFORE({fldMfxuExC2ZPkFdB}, \"2025-07-14\"), \"P7\",\nIF(\n  IS_BEFORE({fldMfxuExC2ZPkFdB}, \"2025-08-11\"), \"P8\",\nIF(\n  IS_BEFORE({fldMfxuExC2ZPkFdB}, \"2025-09-08\"), \"P9\",\nIF(\n  IS_BEFORE({fldMfxuExC2ZPkFdB}, \"2025-10-06\"), \"P10\",\nIF(\n  IS_BEFORE({fldMfxuExC2ZPkFdB}, \"2025-11-03\"), \"P11\",\nIF(\n  IS_BEFORE({fldMfxuExC2ZPkFdB}, \"2025-12-01\"), \"P12\",\nIF(\n  IS_BEFORE({fldMfxuExC2ZPkFdB}, \"2025-12-29\"), \"P13\",\n  \"P1 2026\"\n)))))))))))))",
+              "referencedFieldIds": [
+                "fldMfxuExC2ZPkFdB"
+              ],
+              "result": {
+                "type": "singleLineText"
+              }
+            }
+          },
+          {
+            "name": "Day Name",
+            "id": "flditYq0sJSCFXLk7",
+            "type": "formula",
+            "description": "Displays the full name of the day (e.g., Monday) from the timestamp field.",
+            "options": {
+              "isValid": true,
+              "formula": "IF(ISERROR(DATETIME_FORMAT({fldMfxuExC2ZPkFdB}, 'dddd')), BLANK(), DATETIME_FORMAT({fldMfxuExC2ZPkFdB}, 'dddd'))",
+              "referencedFieldIds": [
+                "fldMfxuExC2ZPkFdB"
+              ],
+              "result": {
+                "type": "singleLineText"
+              }
+            }
+          },
+          {
+            "name": "Day Name (Number)",
+            "id": "fldPEvuOnauUe5Hsa",
+            "type": "formula",
+            "description": "Displays the full name of the day (e.g., Monday) from the timestamp field.",
+            "options": {
+              "isValid": true,
+              "formula": "SWITCH({flditYq0sJSCFXLk7},\n  \"Monday\", 1,\n  \"Tuesday\", 2,\n  \"Wednesday\", 3,\n  \"Thursday\", 4,\n  \"Friday\", 5,\n  \"Saturday\", 6,\n  \"Sunday\", 7\n)",
+              "referencedFieldIds": [
+                "flditYq0sJSCFXLk7"
+              ],
+              "result": {
+                "type": "number",
+                "options": {
+                  "precision": 0
+                }
+              }
+            }
+          },
+          {
+            "name": "Hour of Day",
+            "id": "fld8WGFtAf43AWxen",
+            "type": "formula",
+            "description": "Displays the hour (0-23) from the timestamp field.",
+            "options": {
+              "isValid": true,
+              "formula": "IF(ISERROR(HOUR({fldMfxuExC2ZPkFdB})), BLANK(), HOUR({fldMfxuExC2ZPkFdB}))",
+              "referencedFieldIds": [
+                "fldMfxuExC2ZPkFdB"
+              ],
+              "result": {
+                "type": "number",
+                "options": {
+                  "precision": 0
+                }
+              }
+            }
+          },
+          {
+            "name": "Stage of Day",
+            "id": "fld2NEjLlkZ7Jhz3F",
+            "type": "formula",
+            "options": {
+              "isValid": true,
+              "formula": "\nIF(\n  {fld8WGFtAf43AWxen} < 6, \"Early Morning\",\n  IF(\n    {fld8WGFtAf43AWxen} < 12, \"Morning\",\n    IF(\n      {fld8WGFtAf43AWxen} < 18, \"Afternoon\",\n      \"Evening\"\n    )\n  )\n)",
+              "referencedFieldIds": [
+                "fld8WGFtAf43AWxen"
+              ],
+              "result": {
+                "type": "singleLineText"
+              }
+            }
+          },
+          {
+            "name": "Owner",
+            "id": "fldtIUqTCqBwDvhRH",
+            "type": "formula",
+            "options": {
+              "isValid": true,
+              "formula": "SWITCH(\n  {fldQwzwzAVTHcS6jN},\n  \"BNB_Leads.io_TikTok_Lead_Ads\", \"Leads.io\",\n  \"BNB Leads.io List\", \"Leads.io\",\n  \"BNB Leads.io TikTok\", \"Leads.io\",\n  \"BNB Dogmates 3\", \"Internal\",\n  \"BNB_MonEx_Generic\", \"Money Expert\",\n  \"BNB_CRM_5\", \"TDP\",\n  \"BNB_D2D_1\", \"Credico\",\n  \"BNB_MonEx_CB\", \"Money Expert\",\n  \"Unknown\"\n)",
+              "referencedFieldIds": [
+                "fldQwzwzAVTHcS6jN"
+              ],
+              "result": {
+                "type": "singleLineText"
+              }
+            }
+          },
+          {
+            "name": "Medium",
+            "id": "fldI3OdTds9GEEVQu",
+            "type": "formula",
+            "options": {
+              "isValid": true,
+              "formula": "SWITCH(\n  {fldQwzwzAVTHcS6jN},\n  \"BNB_Leads.io_TikTok_Lead_Ads\", \"Tiktok Lead Ads\",\n  \"BNB Leads.io List\", \"Meta\",\n  \"BNB Leads.io TikTok\", \"Tiktok\",\n  \"BNB Dogmates 3\", \"Email\",\n  \"BNB_MonEx_Generic\", \"Email\",\n  \"BNB_CRM_5\", \"Email\",\n  \"BNB_D2D_1\", \"D2D\",\n  \"BNB_MonEx_CB\", \"Email\",\n  \"Unknown\"\n)",
+              "referencedFieldIds": [
+                "fldQwzwzAVTHcS6jN"
+              ],
+              "result": {
+                "type": "singleLineText"
+              }
+            }
+          },
+          {
+            "name": "Date",
+            "id": "fldhJIgWpH7EbaBud",
+            "type": "formula",
+            "options": {
+              "isValid": true,
+              "formula": "IF(\n  {fldMfxuExC2ZPkFdB},\n  DATETIME_FORMAT({fldMfxuExC2ZPkFdB}, 'DD/MM/YYYY'),\n  \"\"\n)",
+              "referencedFieldIds": [
+                "fldMfxuExC2ZPkFdB"
+              ],
+              "result": {
+                "type": "singleLineText"
+              }
+            }
+          },
+          {
+            "name": "Date (Order)",
+            "id": "fldY8upp4U0Aqmeuo",
+            "type": "formula",
+            "options": {
+              "isValid": true,
+              "formula": "DATETIME_PARSE(DATESTR({fldMfxuExC2ZPkFdB}), 'YYYY-MM-DD')\n",
+              "referencedFieldIds": [
+                "fldMfxuExC2ZPkFdB"
+              ],
+              "result": {
+                "type": "date",
+                "options": {
+                  "dateFormat": {
+                    "name": "us",
+                    "format": "M/D/YYYY"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "name": "Created",
+            "id": "fldzGfgHd0BWQavCB",
+            "type": "createdTime",
+            "options": {
+              "result": {
+                "type": "dateTime",
+                "options": {
+                  "dateFormat": {
+                    "name": "local",
+                    "format": "l"
+                  },
+                  "timeFormat": {
+                    "name": "12hour",
+                    "format": "h:mma"
+                  },
+                  "timeZone": "client"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "tblPosmpZAiDpHAkS": {
+        "tableName": "2026 Databowl Marro API",
+        "tableId": "tblPosmpZAiDpHAkS",
+        "primaryFieldId": "fld0TOshdyaPZiYT2",
+        "fieldCount": 17,
+        "fields": [
+          {
+            "name": "lead_id",
+            "id": "fld0TOshdyaPZiYT2",
+            "type": "singleLineText"
+          },
+          {
+            "name": "lead_status",
+            "id": "fldA3p2bUBY5on7OZ",
+            "type": "singleLineText"
+          },
+          {
+            "name": "timestamp",
+            "id": "fldLnFWjchY9NkucS",
+            "type": "date",
+            "options": {
+              "dateFormat": {
+                "name": "local",
+                "format": "l"
+              }
+            }
+          },
+          {
+            "name": "lead_message",
+            "id": "fldWIZUasLc9Gv5UF",
+            "type": "multilineText"
+          },
+          {
+            "name": "email",
+            "id": "fldoAFrKvJYBo6J0W",
+            "type": "singleLineText"
+          },
+          {
+            "name": "title",
+            "id": "fldHVUHFyEGBXnKYW",
+            "type": "singleLineText"
+          },
+          {
+            "name": "firstname",
+            "id": "fldOadRC8hXqzLar7",
+            "type": "singleLineText"
+          },
+          {
+            "name": "lastname",
+            "id": "fld4Hv3xNJpulzJWQ",
+            "type": "singleLineText"
+          },
+          {
+            "name": "phone1",
+            "id": "fldIIzG0YslTTRkn6",
+            "type": "phoneNumber"
+          },
+          {
+            "name": "age",
+            "id": "fldGFCanyXHMoNcMx",
+            "type": "number",
+            "options": {
+              "precision": 0
+            }
+          },
+          {
+            "name": "security_phrase",
+            "id": "fld177jTQhVtNgfm0",
+            "type": "singleLineText"
+          },
+          {
+            "name": "phone_code",
+            "id": "fldzROADO427cfxMz",
+            "type": "singleLineText"
+          },
+          {
+            "name": "llid",
+            "id": "fldC48fdMX0LorA3z",
+            "type": "singleLineText"
+          },
+          {
+            "name": "mappingname",
+            "id": "fldMyWy61GygQN12A",
+            "type": "singleLineText"
+          },
+          {
+            "name": "cat_breed",
+            "id": "fldnyJVdctZYYFV2H",
+            "type": "singleLineText"
+          },
+          {
+            "name": "cat_name",
+            "id": "fldZV6FotiRUDuWsJ",
+            "type": "singleLineText"
+          },
+          {
+            "name": "cat_age",
+            "id": "fldNx3JXSC0gwlG8j",
+            "type": "singleLineText"
+          }
+        ]
+      }
+    }
+  }
+}
