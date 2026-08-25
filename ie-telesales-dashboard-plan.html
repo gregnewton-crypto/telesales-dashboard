@@ -1,0 +1,1561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ireland Telesales Dashboard — Data Audit &amp; Page-by-Page Plan</title>
+  <style>
+    :root {
+      --brown: #522A10;
+      --cream: #FFF6D8;
+      --gold: #FFE180;
+      --coral: #ED6961;
+      --blue: #10507C;
+      --green: #2E7D32;
+      --amber: #B8860B;
+      --red: #B3261E;
+      --paper: #FFFFFF;
+      --line: #E8D9B0;
+      --text: #2E261F;
+      --muted: #6B5B47;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--cream);
+      color: var(--text);
+      font-family: Arial, Verdana, sans-serif;
+      line-height: 1.5;
+    }
+
+    header {
+      background: var(--brown);
+      color: var(--gold);
+      padding: 28px 24px;
+    }
+    header h1 { margin: 0 0 10px; font-size: clamp(24px, 4vw, 38px); }
+    header p { max-width: 900px; margin: 0 0 6px; color: #F8D98D; font-size: 17px; }
+    header .meta { color: #C9A96B; font-size: 14px; margin-top: 12px; }
+
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: #3A1C0A;
+      padding: 10px 24px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      box-shadow: 0 2px 10px rgba(82,42,16,.3);
+    }
+    nav a {
+      color: var(--gold);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 700;
+      padding: 6px 11px;
+      border: 1px solid #7A5A3A;
+      border-radius: 999px;
+      white-space: nowrap;
+    }
+    nav a:hover { background: #5A3A1A; }
+
+    main { width: min(1240px, calc(100% - 32px)); margin: 24px auto 64px; }
+
+    .card {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      box-shadow: 0 8px 24px rgba(82,42,16,.08);
+      margin-bottom: 22px;
+      padding: 24px;
+    }
+
+    h2 {
+      color: var(--brown);
+      font-size: 25px;
+      margin: 0 0 6px;
+      padding-bottom: 10px;
+      border-bottom: 3px solid var(--gold);
+    }
+    h2 .num {
+      display: inline-block;
+      background: var(--brown);
+      color: var(--gold);
+      border-radius: 8px;
+      padding: 2px 10px;
+      margin-right: 10px;
+      font-size: 19px;
+    }
+    h3 { color: var(--brown); font-size: 19px; margin: 26px 0 8px; }
+    h4 { color: var(--blue); font-size: 16px; margin: 18px 0 6px; }
+    p { margin: 0 0 12px; }
+    .lede { font-size: 17px; color: var(--muted); margin-bottom: 18px; }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 14px;
+      margin: 18px 0;
+    }
+    .summary-box {
+      border-left: 6px solid var(--coral);
+      background: #FFF9E8;
+      border-radius: 12px;
+      padding: 14px 16px;
+    }
+    .summary-box strong { display: block; color: var(--brown); font-size: 22px; margin-bottom: 3px; }
+    .summary-box span { font-size: 13px; color: var(--muted); }
+    .summary-box.good { border-left-color: var(--green); }
+    .summary-box.warn { border-left-color: var(--amber); }
+    .summary-box.bad  { border-left-color: var(--red); }
+
+    .table-wrap { overflow-x: auto; margin: 14px 0; }
+    table { border-collapse: collapse; width: 100%; font-size: 14px; }
+    th, td { border: 1px solid var(--line); padding: 9px 11px; text-align: left; vertical-align: top; }
+    th { background: var(--brown); color: var(--gold); font-size: 13px; position: sticky; top: 0; }
+    tbody tr:nth-child(even) { background: #FFFCF2; }
+    td code, p code, li code {
+      background: #F4EAD2;
+      border-radius: 4px;
+      padding: 1px 5px;
+      font-family: "SF Mono", Menlo, Consolas, monospace;
+      font-size: 12.5px;
+      color: #6B3A12;
+    }
+
+    .tag {
+      display: inline-block;
+      border-radius: 999px;
+      padding: 2px 9px;
+      font-size: 11.5px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .tag.ok      { background: #DCEDC8; color: #33691E; border: 1px solid #AED581; }
+    .tag.partial { background: #FFF3CD; color: #8A6100; border: 1px solid #FFD54D; }
+    .tag.missing { background: #FADBD8; color: #922B21; border: 1px solid #F1948A; }
+    .tag.new     { background: #D6EAF8; color: #1A5276; border: 1px solid #85C1E9; }
+    .tag.p1      { background: var(--brown); color: var(--gold); }
+    .tag.p2      { background: #E8D9B0; color: #6B3A12; }
+
+    .callout {
+      border-left: 6px solid var(--blue);
+      background: #EAF3F9;
+      border-radius: 12px;
+      padding: 14px 18px;
+      margin: 16px 0;
+    }
+    .callout.warn { border-left-color: var(--amber); background: #FFF8E1; }
+    .callout.bad  { border-left-color: var(--red);   background: #FDEDEC; }
+    .callout.good { border-left-color: var(--green); background: #EDF7EE; }
+    .callout strong { color: var(--brown); }
+
+    .chart-spec {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      margin: 18px 0;
+      overflow: hidden;
+    }
+    .chart-spec > .head {
+      background: #F4EAD2;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--line);
+    }
+    .chart-spec > .head .id {
+      display: inline-block;
+      background: var(--brown);
+      color: var(--gold);
+      border-radius: 6px;
+      padding: 2px 9px;
+      font-size: 12.5px;
+      font-weight: 700;
+      margin-right: 9px;
+    }
+    .chart-spec > .head .title { font-weight: 700; color: var(--brown); font-size: 16.5px; }
+    .chart-spec > .head .type {
+      float: right;
+      font-size: 12.5px;
+      color: var(--muted);
+      background: #FFF;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 2px 10px;
+    }
+    .chart-spec > .body { padding: 4px 16px 14px; }
+    .chart-spec dl { display: grid; grid-template-columns: 170px 1fr; gap: 0; margin: 0; }
+    .chart-spec dt {
+      font-weight: 700;
+      color: var(--blue);
+      font-size: 13px;
+      padding: 8px 10px 8px 0;
+      border-bottom: 1px solid #F2E8CF;
+    }
+    .chart-spec dd {
+      margin: 0;
+      padding: 8px 0;
+      font-size: 14px;
+      border-bottom: 1px solid #F2E8CF;
+    }
+    .chart-spec dl > dt:last-of-type, .chart-spec dl > dd:last-of-type { border-bottom: none; }
+    .chart-spec .reads { background: #EDF7EE; border-left: 4px solid var(--green); padding: 9px 12px; border-radius: 8px; margin-top: 10px; font-size: 13.5px; }
+    .chart-spec .reads b { color: #1B5E20; }
+    .chart-spec .why { background: #FFF9E8; border-left: 4px solid var(--gold); padding: 9px 12px; border-radius: 8px; margin-top: 8px; font-size: 13.5px; }
+
+    .kpi-strip {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(165px, 1fr));
+      gap: 10px;
+      margin: 14px 0 20px;
+    }
+    .kpi {
+      background: #FFFCF2;
+      border: 1px solid var(--line);
+      border-top: 4px solid var(--coral);
+      border-radius: 10px;
+      padding: 11px 13px;
+    }
+    .kpi .lab { font-size: 11.5px; text-transform: uppercase; letter-spacing: .4px; color: var(--muted); font-weight: 700; }
+    .kpi .val { font-size: 21px; font-weight: 700; color: var(--brown); margin: 3px 0; }
+    .kpi .def { font-size: 12px; color: var(--muted); line-height: 1.35; }
+
+    ul, ol { margin: 0 0 12px; padding-left: 22px; }
+    li { margin-bottom: 6px; }
+
+    .page-head {
+      background: var(--brown);
+      color: var(--gold);
+      border-radius: 14px;
+      padding: 16px 20px;
+      margin-bottom: 6px;
+    }
+    .page-head h3 { color: var(--gold); margin: 0 0 4px; font-size: 21px; }
+    .page-head p { margin: 0; color: #F0CE86; font-size: 14.5px; }
+
+    .swatch { display: inline-block; width: 12px; height: 12px; border-radius: 3px; vertical-align: -1px; margin-right: 5px; border: 1px solid rgba(0,0,0,.15); }
+
+    footer { text-align: center; color: var(--muted); font-size: 13px; padding: 20px; }
+
+    @media (max-width: 720px) {
+      .chart-spec dl { grid-template-columns: 1fr; }
+      .chart-spec dt { padding-bottom: 0; border-bottom: none; }
+      .chart-spec dd { padding-top: 2px; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Ireland Telesales Dashboard</h1>
+  <p>Data audit of the IE Telesales Airtable base, and a page-by-page build specification with an exact definition for every chart.</p>
+  <p class="meta">
+    Source base: <code style="color:#FFE180;background:#3A1C0A">IE Telesales System</code> (appIxUjQdnPPLvSrp) &nbsp;·&nbsp;
+    Reference: UK Telesales Command Center &nbsp;·&nbsp;
+    Data profiled: 7,472 leads and 23,957 calls, W12–W35 2026 (20 Mar – 25 Aug)
+  </p>
+</header>
+
+<nav>
+  <a href="#summary">Summary</a>
+  <a href="#audit">1. Data we have</a>
+  <a href="#gaps">2. Data we are missing</a>
+  <a href="#quality">3. Fixes before build</a>
+  <a href="#mapping">4. UK → IE mapping</a>
+  <a href="#shell">5. Global shell</a>
+  <a href="#p1">P1 Command Centre</a>
+  <a href="#p2">P2 Funnel</a>
+  <a href="#p3">P3 Cadence</a>
+  <a href="#p4">P4 Timing</a>
+  <a href="#p5">P5 Agents</a>
+  <a href="#p6">P6 Pipeline</a>
+  <a href="#p7">P7 Objections</a>
+  <a href="#p8">P8 Data Health</a>
+  <a href="#phase2">Phase 2</a>
+  <a href="#dictionary">Dictionary</a>
+  <a href="#build">Build order</a>
+</nav>
+
+<main>
+
+<!-- ══════════════════════════════════════════════ SUMMARY -->
+<section class="card" id="summary">
+  <h2><span class="num">0</span>Executive summary</h2>
+  <p class="lede">
+    The IE base holds enough clean call and lead data to build a genuinely useful dashboard today, but it
+    cannot reproduce the UK dashboard as-is. Roughly half of what the UK version shows is money and
+    retention data that does not exist anywhere in the Ireland base.
+  </p>
+
+  <div class="summary-grid">
+    <div class="summary-box good">
+      <strong>7,472</strong>
+      <span>leads, 99.6% of them dialled at least once</span>
+    </div>
+    <div class="summary-box good">
+      <strong>23,957</strong>
+      <span>calls with agent, timestamp, duration and outcome</span>
+    </div>
+    <div class="summary-box good">
+      <strong>99.6%</strong>
+      <span>of calls join cleanly back to a lead record</span>
+    </div>
+    <div class="summary-box warn">
+      <strong>8.7%</strong>
+      <span>of calls carry a loss reason — the biggest fixable gap</span>
+    </div>
+    <div class="summary-box bad">
+      <strong>0</strong>
+      <span>spend, budget, target or revenue records in the base</span>
+    </div>
+    <div class="summary-box bad">
+      <strong>2 weeks</strong>
+      <span>of call data missing entirely (W13 and W32)</span>
+    </div>
+  </div>
+
+  <h3>What I recommend we do</h3>
+  <ol>
+    <li><strong>Build eight pages, not six.</strong> Replicate the three UK pages the data supports
+      (Overview, Leads, a reworked Staffing), drop the two it cannot support yet (Costs, Retention), and add
+      four pages that the UK dashboard does not have but that this data strongly justifies —
+      dialling cadence, call timing, live pipeline, and data health.</li>
+    <li><strong>Fix six data issues first.</strong> They are all small, and until they are fixed several
+      headline numbers on the dashboard would be quietly wrong. Agent name spellings alone split one
+      rep's activity across two rows.</li>
+    <li><strong>Add three small Airtable tables</strong> — targets, spend, and shift hours — to unlock the
+      cost and productivity half of the UK dashboard. Nothing else is blocking.</li>
+  </ol>
+
+  <div class="callout">
+    <strong>The single most valuable thing this dashboard can show.</strong>
+    The team currently places the largest share of its dials (15.2%) in the 18:00 hour, which is the
+    worst-converting hour of the day at 1.43 sales per 100 dials. The best hour, 12:00, gets 12.4% of dials
+    and returns 3.79. Separately, 1,927 leads (25.9%) were dialled repeatedly and never once answered,
+    burning 6,510 dials — 27.3% of all dialling effort. Neither fact is visible in any tool today.
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════ 1. AUDIT -->
+<section class="card" id="audit">
+  <h2><span class="num">1</span>The data we have</h2>
+  <p class="lede">
+    The base has two tables. Between them they cover the whole lead-to-outcome journey at both lead level
+    and individual call level, which is the important thing — call-level data is what makes the interesting
+    analysis possible.
+  </p>
+
+  <h3>Table 1 — <code>Ireland Leads</code> (7,472 records, one row per lead)</h3>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th style="width:210px">Field</th><th style="width:110px">Type</th><th style="width:90px">Filled</th><th>What it gives us</th><th style="width:110px">Verdict</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>Databowl Lead ID</code></td><td>Number</td><td>100%</td><td>Primary key; joins to the calls table</td><td><span class="tag ok">Use</span></td></tr>
+        <tr><td><code>Lead Date</code></td><td>DateTime</td><td>100%</td><td>Arrival timestamp — anchors every cohort and speed-to-lead metric</td><td><span class="tag ok">Use</span></td></tr>
+        <tr><td><code>⚙️ Lead Week</code> / <code>⚙️ Lead Period</code></td><td>Select</td><td>100%</td><td>W13–W35, P4–P9 — the time grain for all trend charts</td><td><span class="tag ok">Use</span></td></tr>
+        <tr><td><code>Adversus Lead Status (single select)</code></td><td>Select</td><td>99.6%</td><td>Final outcome. 583 <code>Success</code> = our sales number</td><td><span class="tag partial">Use, with fix</span></td></tr>
+        <tr><td><code>Times Lead has been Called</code></td><td>Number</td><td>100%</td><td>Attempt count per lead, 0–15</td><td><span class="tag ok">Use</span></td></tr>
+        <tr><td><code>⚙️ Days to First Call</code></td><td>Number</td><td>99.6%</td><td>Speed to lead, 0–76 days</td><td><span class="tag ok">Use</span></td></tr>
+        <tr><td><code>⚙️ Called?</code></td><td>Select</td><td>100%</td><td>Yes/No — 30 leads never dialled</td><td><span class="tag ok">Use</span></td></tr>
+        <tr><td><code>Lead open/closed</code></td><td>Select</td><td>100%</td><td>846 open / 6,626 closed — pipeline sizing</td><td><span class="tag ok">Use</span></td></tr>
+        <tr><td><code>In Adversus Open List</code></td><td>Select</td><td>93.8%</td><td>928 leads currently loaded in the dialler</td><td><span class="tag ok">Use</span></td></tr>
+        <tr><td><code>Dog Age</code> / <code>Dog Weight</code></td><td>Select</td><td>100%</td><td>Clean 3-way segments on both — real conversion differences</td><td><span class="tag ok">Use</span></td></tr>
+        <tr><td><code>Date of First Call</code> / <code>Date of Latest</code></td><td>Text</td><td>99.6%</td><td>Recency; needed for the stale-callback alert</td><td><span class="tag partial">Reformat</span></td></tr>
+        <tr><td><code>Adversus Lead Status</code> (text)</td><td>Text</td><td>99.6%</td><td>Duplicate of the select field, disagrees on 7.3% of rows</td><td><span class="tag missing">Retire</span></td></tr>
+        <tr><td><code>Lead Status</code></td><td>Select</td><td>100%</td><td>Every row says <code>Accepted</code> — no information</td><td><span class="tag missing">Ignore</span></td></tr>
+        <tr><td><code>Source</code></td><td>Select</td><td>98.9%</td><td>One value only (<code>Ireland_Leads.io_Meta</code>) — no channel split possible</td><td><span class="tag missing">Ignore</span></td></tr>
+        <tr><td><code>Created</code></td><td>Date</td><td>72.9%</td><td>Airtable import date, not a business date</td><td><span class="tag missing">Ignore</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Table 2 — <code>Adversus Ireland</code> (23,957 records, one row per call)</h3>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th style="width:210px">Field</th><th style="width:110px">Type</th><th style="width:90px">Filled</th><th>What it gives us</th><th style="width:110px">Verdict</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>Databowl LeadId</code> + <code>☘ Databowl Leads</code></td><td>Number / Link</td><td>99.6%</td><td>Join to lead. 23,856 of 23,957 calls match</td><td><span class="tag ok">Use</span></td></tr>
+        <tr><td><code>Agent Name</code></td><td>Text</td><td>100%</td><td>13 raw spellings → 8 real agents after cleaning</td><td><span class="tag partial">Use, with fix</span></td></tr>
+        <tr><td><code>Session Start (No Offset)</code></td><td>Text</td><td>99.8%</td><td>Local Dublin timestamp — powers all hour-of-day analysis</td><td><span class="tag ok">Use</span></td></tr>
+        <tr><td><code>Call Duration</code></td><td>Duration (s)</td><td>91.9%</td><td>Talk time. Cleanly separates answered from unanswered</td><td><span class="tag ok">Use</span></td></tr>
+        <tr><td><code>Call # for Lead</code></td><td>Number</td><td>99.9%</td><td>Attempt sequence 1–15 — the key to cadence analysis</td><td><span class="tag ok">Use</span></td></tr>
+        <tr><td><code>Lead Status</code></td><td>Text</td><td>100%</td><td>Per-call outcome, 8 values including 639 <code>Success</code></td><td><span class="tag ok">Use</span></td></tr>
+        <tr><td><code>⚙️ Call Week (formula)</code> / <code>⚙️ Call Period (formula)</code></td><td>Formula</td><td>100%</td><td>Time grain for activity charts</td><td><span class="tag ok">Use</span></td></tr>
+        <tr><td><code>Day for the week</code></td><td>Formula</td><td>100%</td><td>Monday–Sunday</td><td><span class="tag ok">Use</span></td></tr>
+        <tr><td><code>Disposition</code></td><td>Text</td><td><strong>8.7%</strong></td><td>11 clean loss reasons, but on only 2,089 of 23,957 calls</td><td><span class="tag partial">Use, flagged</span></td></tr>
+        <tr><td><code>Recording</code></td><td>URL</td><td>24.7%</td><td>Call recording links — useful for QA drill-down</td><td><span class="tag partial">Use, flagged</span></td></tr>
+        <tr><td><code>⚙️ Call Week</code> / <code>⚙️ Call Period</code> (select)</td><td>Select</td><td><strong>77.0%</strong></td><td>Stale manual copies of the formula fields</td><td><span class="tag missing">Retire</span></td></tr>
+        <tr><td><code>Sales Team</code></td><td>Text</td><td>43.5%</td><td>Contains agent names, not teams — no team hierarchy exists</td><td><span class="tag missing">Ignore</span></td></tr>
+        <tr><td><code>Time between calls</code></td><td>Duration</td><td>80.9%</td><td><strong>Values do not match reality</strong> — see §3</td><td><span class="tag missing">Do not use</span></td></tr>
+        <tr><td><code>Campaign Name</code></td><td>Text</td><td>100%</td><td>99.97% is one campaign — no meaningful split</td><td><span class="tag missing">Ignore</span></td></tr>
+        <tr><td><code>Messages</code></td><td>Text</td><td>0.9%</td><td>Free-text agent notes, too sparse to chart</td><td><span class="tag missing">Ignore</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout good">
+    <strong>The join is solid.</strong> 23,856 of 23,957 calls (99.6%) link to a lead, and 7,451 of 7,472
+    leads have at least one call. This is what makes the funnel, cadence and cohort pages possible —
+    we can follow a single lead from arrival, through every dial, to its outcome.
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════ 2. GAPS -->
+<section class="card" id="gaps">
+  <h2><span class="num">2</span>The data we are missing</h2>
+  <p class="lede">
+    Everything below appears on the UK dashboard and cannot be produced from the Ireland base today.
+    I have grouped it by what it would take to close the gap.
+  </p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th style="width:190px">What we cannot show</th>
+          <th style="width:150px">Why not</th>
+          <th>What we would need to add</th>
+          <th style="width:100px">Effort</th>
+          <th style="width:90px">Priority</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>CPA, CPL, spend, budget variance</strong><br><span style="color:var(--muted);font-size:13px">Entire Costs page</span></td>
+          <td>No monetary value on any record in the base</td>
+          <td>A <code>IE Spend Tracker</code> table: one row per ISO week with lead spend, dialler/system cost, incentives and commission. The UK base already has exactly this shape — copy it.</td>
+          <td>Small — one table, weekly manual or API entry</td>
+          <td><span class="tag p1">High</span></td>
+        </tr>
+        <tr>
+          <td><strong>Actual vs budget, forecast, RAG status</strong><br><span style="color:var(--muted);font-size:13px">Every "vs target" element</span></td>
+          <td>No target or budget table</td>
+          <td>An <code>IE Weekly Targets</code> table: ISO week, target sales, target CVR, target dials, target connect rate — at team level and per agent.</td>
+          <td>Small — one table</td>
+          <td><span class="tag p1">High</span></td>
+        </tr>
+        <tr>
+          <td><strong>Sales per hour, calls per hour, occupancy, utilisation</strong><br><span style="color:var(--muted);font-size:13px">Half the Staffing page</span></td>
+          <td>We know when calls happened but not when agents were rostered or logged in</td>
+          <td>An <code>IE Shift Log</code> table: date, agent, scheduled hours, logged-in hours. Adversus exposes agent session data via API if we would rather not key it in.</td>
+          <td>Medium — needs a rota feed or Adversus session export</td>
+          <td><span class="tag p1">High</span></td>
+        </tr>
+        <tr>
+          <td><strong>Loss reasons at scale</strong><br><span style="color:var(--muted);font-size:13px">Objections page is thin</span></td>
+          <td><code>Disposition</code> is filled on only 8.7% of calls</td>
+          <td>No new table — make disposition mandatory in Adversus when an agent sets a negative outcome. Coverage should reach ~100% of dispositioned calls.</td>
+          <td>Small — an Adversus config change</td>
+          <td><span class="tag p1">High</span></td>
+        </tr>
+        <tr>
+          <td><strong>Retention, B2 rate, pauses, pause reasons</strong><br><span style="color:var(--muted);font-size:13px">Entire Retention page</span></td>
+          <td>No order or subscription data — a sale is a flag, not an order</td>
+          <td>A feed of IE orders keyed on <code>Databowl Lead ID</code>: order date, box 1 / box 2 dates, pause date and reason. This is the same Snowflake feed the UK base uses.</td>
+          <td>Large — needs a data pipeline</td>
+          <td><span class="tag p2">Phase 2</span></td>
+        </tr>
+        <tr>
+          <td><strong>Revenue, AOV, discount depth, margin</strong></td>
+          <td>No monetary value on a sale</td>
+          <td>Same order feed as above, plus order value and discount</td>
+          <td>Large</td>
+          <td><span class="tag p2">Phase 2</span></td>
+        </tr>
+        <tr>
+          <td><strong>Channel and brand comparison</strong></td>
+          <td><code>Source</code> has one value; <code>Campaign Name</code> is 99.97% one campaign; Butternut only</td>
+          <td>Nothing to do until IE actually runs a second source, brand or campaign. Build the filter now so it works the day that happens.</td>
+          <td>None today</td>
+          <td><span class="tag p2">Later</span></td>
+        </tr>
+        <tr>
+          <td><strong>Team and manager roll-ups</strong></td>
+          <td><code>Sales Team</code> holds agent names, not teams</td>
+          <td>An <code>IE Agents</code> table: agent, team, manager, start date, active flag. This also becomes the canonical spelling list that fixes the name problem in §3.</td>
+          <td>Small — one table of ~8 rows</td>
+          <td><span class="tag p1">High</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout warn">
+    <strong>The short version.</strong> Four small Airtable tables — spend, targets, shift hours and an agent
+    roster — plus one Adversus configuration change would take the Ireland dashboard from
+    roughly 60% to roughly 95% of what the UK team sees. Only retention and revenue need real engineering.
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════ 3. QUALITY -->
+<section class="card" id="quality">
+  <h2><span class="num">3</span>Six things to fix before we build</h2>
+  <p class="lede">
+    These are not cosmetic. Each one would put a visibly wrong number on the dashboard if we built on top
+    of the data as it stands.
+  </p>
+
+  <h3>3.1 &nbsp;Agent names are spelled several ways <span class="tag missing">Blocking</span></h3>
+  <p>
+    Three of the eight agents appear under more than one spelling, so every per-agent metric is split
+    across two rows and the top performer looks like two mediocre ones.
+  </p>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th style="width:280px">Spellings found in the data</th><th style="width:120px">Calls each</th><th>Should be</th></tr></thead>
+      <tbody>
+        <tr><td><code>Holly Mc donagh</code> + <code>Holly McDonagh</code></td><td>10,384 + 1,606</td><td><strong>Holly McDonagh</strong> — 11,990 calls, the highest-volume agent on the team</td></tr>
+        <tr><td><code>Saoirse Oflaherty</code> + <code>Saoirse O'Flaherty</code></td><td>2,084 + 343</td><td><strong>Saoirse O'Flaherty</strong> — 2,427 calls</td></tr>
+        <tr><td><code>Megan O'Neill</code> + <code>Megan oneil</code></td><td>1,040 + 156</td><td><strong>Megan O'Neill</strong> — 1,196 calls</td></tr>
+        <tr><td><code>Greg Newton</code>, <code>Adversus Support - ndn</code></td><td>26 + 2</td><td>Flag as non-agent and exclude from leaderboards</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p><strong>Fix:</strong> create the <code>IE Agents</code> table from §2, and map on it rather than on the
+  raw Adversus string. Until that exists, the dashboard applies the alias map in
+  <code>tools/ie_deep_insights.py</code>.</p>
+
+  <h3>3.2 &nbsp;Two outcome fields that disagree <span class="tag missing">Blocking</span></h3>
+  <p>
+    <code>Adversus Lead Status</code> (text) and <code>Adversus Lead Status (single select)</code> disagree on
+    <strong>547 leads, 7.3% of the base</strong>. They give different sales totals — 513 versus 583 — a 13.6%
+    difference in the single most important number on the dashboard.
+  </p>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Outcome</th><th>Text field</th><th>Single-select field</th><th>Difference</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Success</strong></td><td>513</td><td><strong>583</strong></td><td style="color:var(--red)">+70</td></tr>
+        <tr><td>Automatic redial</td><td>3,694</td><td>3,445</td><td>−249</td></tr>
+        <tr><td>Not interested</td><td>2,060</td><td>2,379</td><td>+319</td></tr>
+        <tr><td>Private callback</td><td>267</td><td>119</td><td>−148</td></tr>
+        <tr><td>VIP callback</td><td>110</td><td>47</td><td>−63</td></tr>
+        <tr><td>Invalid</td><td>632</td><td>687</td><td>+55</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p><strong>Fix:</strong> pick one as canonical, delete the other. I recommend the single-select, because
+  it is constrained to eight valid values and matches the per-call <code>Lead Status</code> vocabulary.
+  <em>This needs a decision from whoever owns the Adversus sync before we build.</em></p>
+
+  <h3>3.3 &nbsp;Two weeks of calls are missing <span class="tag missing">Blocking</span></h3>
+  <p>
+    W13 has 504 leads and <strong>zero calls</strong>. W32 has 515 leads and <strong>zero calls</strong>. Both
+    weeks recorded sales, so the calls certainly happened — they are absent from the export. W30 has nothing
+    on either side.
+  </p>
+  <p><strong>Fix:</strong> re-run the Adversus export for 23–29 Mar and 3–9 Aug. Until then, the dashboard
+  must render those weeks as an explicit gap rather than as a collapse in activity, or every activity chart
+  will show two dramatic troughs that never happened.</p>
+
+  <h3>3.4 &nbsp;<code>Time between calls</code> is not measuring time between calls <span class="tag missing">Do not use</span></h3>
+  <p>
+    The field reports a median of 5 with 9,396 records sharing that exact value. Computing the real gap from
+    the call timestamps gives a median of <strong>2.0 days</strong> and a 90th percentile of
+    <strong>18.8 days</strong>. Sampled side by side, a record showing <code>5</code> has a true gap of 167.8
+    hours and one showing <code>10</code> has 187.2 hours. The values are unrelated to reality — most likely
+    the dialler's configured redial delay rather than an observation.
+  </p>
+  <p><strong>Fix:</strong> exclude the field. The dashboard derives cadence from
+  <code>Session Start (No Offset)</code> and <code>Call # for Lead</code> instead, which is verified correct.</p>
+
+  <h3>3.5 &nbsp;The stale <code>⚙️ Call Week</code> / <code>⚙️ Call Period</code> select fields <span class="tag partial">Important</span></h3>
+  <p>
+    These are filled on only 77% of calls, while the formula versions of the same fields are filled on 100%.
+    They appear to be a manual snapshot that stopped being maintained around W27. Anything grouping on the
+    select version silently loses 5,515 calls.
+  </p>
+  <p><strong>Fix:</strong> delete the select fields and use <code>⚙️ Call Week (formula)</code> and
+  <code>⚙️ Call Period (formula)</code> everywhere.</p>
+
+  <h3>3.6 &nbsp;An outcome is stamped on the lead's last dial, not the dial that earned it <span class="tag partial">Design around it</span></h3>
+  <p>
+    115 of the 623 calls marked <code>Success</code> lasted 20 seconds or less, and the 10th percentile
+    duration for a "successful" call is 1 second. A sale is not made in one second — the outcome flag is
+    being written onto whichever call record was last touched.
+  </p>
+  <p><strong>Fix:</strong> for "which attempt won the sale", attribute to the lead's <em>longest connected
+  call</em> rather than to the call flagged <code>Success</code>. The dashboard should state which rule it
+  uses. Every attempt-level number in this document already uses the flag as-is, so treat attempt attribution
+  as approximate until this is settled.</p>
+</section>
+
+<!-- ══════════════════════════════════════════════ 4. MAPPING -->
+<section class="card" id="mapping">
+  <h2><span class="num">4</span>What carries over from the UK dashboard</h2>
+  <p class="lede">
+    The UK Telesales Command Center has six tabs. Here is what each one becomes for Ireland.
+  </p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th style="width:150px">UK tab</th><th style="width:130px">Status for IE</th><th>Reasoning</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Team Overview</strong></td>
+          <td><span class="tag partial">Rebuilt</span></td>
+          <td>Keep the shape — KPI strip plus a weekly trend. Drop the budget, forecast and CPA series, because none of that data exists. Replace them with cohort-aware conversion and a driver waterfall, which are more useful anyway. → <a href="#p1">Page 1</a></td>
+        </tr>
+        <tr>
+          <td><strong>Retention</strong></td>
+          <td><span class="tag missing">Deferred</span></td>
+          <td>Needs order and subscription data that IE does not have. → <a href="#phase2">Phase 2</a></td>
+        </tr>
+        <tr>
+          <td><strong>Leads</strong></td>
+          <td><span class="tag ok">Direct port</span></td>
+          <td>The funnel, CVR trend and lead-freshness charts all work on IE data, and we can go further with cohort maturity and dog segments. → <a href="#p2">Page 2</a></td>
+        </tr>
+        <tr>
+          <td><strong>Costs</strong></td>
+          <td><span class="tag missing">Deferred</span></td>
+          <td>No spend data. Unblocked by one small table. → <a href="#phase2">Phase 2</a></td>
+        </tr>
+        <tr>
+          <td><strong>Daily</strong></td>
+          <td><span class="tag ok">Solved</span></td>
+          <td>This tab is an empty placeholder in the UK build. IE has true call-level data, so daily granularity works from day one — it becomes a date filter across every page rather than a tab of its own.</td>
+        </tr>
+        <tr>
+          <td><strong>Staffing</strong></td>
+          <td><span class="tag partial">Rebuilt</span></td>
+          <td>Call counts, connect rate and talk time all work. Sales-per-hour and calls-per-hour do not, because we have no rostered hours. Rebuilt as an agent effectiveness page that separates reaching people from converting them. → <a href="#p5">Page 5</a></td>
+        </tr>
+        <tr>
+          <td colspan="3" style="background:#F4EAD2;font-weight:700;color:var(--brown)">New pages the UK dashboard does not have</td>
+        </tr>
+        <tr><td><strong>Call Effort &amp; Cadence</strong></td><td><span class="tag new">New</span></td><td>Nothing anywhere shows what the 3rd, 4th and 5th dial are actually worth. → <a href="#p3">Page 3</a></td></tr>
+        <tr><td><strong>When To Call</strong></td><td><span class="tag new">New</span></td><td>The clearest, cheapest win in the data. → <a href="#p4">Page 4</a></td></tr>
+        <tr><td><strong>Live Pipeline</strong></td><td><span class="tag new">New</span></td><td>Turns the dashboard from a report into something the team opens each morning. → <a href="#p6">Page 6</a></td></tr>
+        <tr><td><strong>Data Health</strong></td><td><span class="tag new">New</span></td><td>This base has real integrity issues; hiding them makes the dashboard untrustworthy. → <a href="#p8">Page 8</a></td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════ 5. SHELL -->
+<section class="card" id="shell">
+  <h2><span class="num">5</span>Global shell — filters, states and conventions</h2>
+
+  <h3>5.1 &nbsp;Filter bar (sticky, applies to every page)</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th style="width:150px">Control</th><th style="width:230px">Options</th><th>Behaviour</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Date range</strong></td><td>Last 7 / 28 / 90 days · This period · Last period · Custom · All time</td><td>Defaults to <em>Last 28 days</em>. Filters on <code>Lead Date</code> for lead-based charts and on <code>Session Start</code> for call-based charts — each chart states which.</td></tr>
+        <tr><td><strong>Grain</strong></td><td>Day / Week / Period</td><td>Defaults to Week. Period follows the existing 4-week model (P1 = W1–W4).</td></tr>
+        <tr><td><strong>Agent</strong></td><td>All + the 8 real agents</td><td>Multi-select. Sourced from the <code>IE Agents</code> roster, never from the raw string.</td></tr>
+        <tr><td><strong>Dog segment</strong></td><td>Age (0-5 / 6-14 / 14+) and Weight (1-14KG / 15-30KG / 30KG+)</td><td>Multi-select, independent.</td></tr>
+        <tr><td><strong>Outcome</strong></td><td>The 8 <code>Adversus Lead Status</code> values</td><td>Multi-select. Off by default.</td></tr>
+        <tr><td><strong>Source / Campaign</strong></td><td>All (only one value today)</td><td>Built now, hidden until a second value exists.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>5.2 &nbsp;Colour palette — matches the UK dashboard</h3>
+  <ul>
+    <li><span class="swatch" style="background:#ED6961"></span><strong>Coral #ED6961</strong> — actual performance, the primary series</li>
+    <li><span class="swatch" style="background:#10507C"></span><strong>Blue #10507C</strong> — target or budget, always dashed</li>
+    <li><span class="swatch" style="background:#FFD54D"></span><strong>Amber #FFD54D</strong> — forecast or projection</li>
+    <li><span class="swatch" style="background:#4CAF50"></span><strong>Green #4CAF50</strong> — volume and counts</li>
+    <li><span class="swatch" style="background:#522A10"></span><strong>Brown #522A10</strong> — chrome, headers, tooltips</li>
+    <li><span class="swatch" style="background:#9E9E9E"></span><strong>Grey #9E9E9E</strong> — immature, incomplete or below-sample data</li>
+  </ul>
+
+  <h3>5.3 &nbsp;Three conventions every chart must honour</h3>
+  <div class="callout">
+    <p style="margin:0 0 8px"><strong>1. Immature cohorts are visually distinct.</strong> A lead week is only
+    59.7% converted after 7 days and 90.2% after 28. Any week whose leads are less than 28 days old renders
+    in grey hatching with the tooltip note "still maturing — expect this to rise". Without this, the last
+    three weeks always look like a performance collapse.</p>
+    <p style="margin:0 0 8px"><strong>2. Small samples are suppressed.</strong> Any bucket with fewer than
+    50 dials or fewer than 20 leads renders in grey and is excluded from ranking, with the note
+    "sample too small". The 10:00 hour is the live example — it looks like the best hour on the board at
+    8.38 sales per 100 dials, but it has only 167 dials behind it.</p>
+    <p style="margin:0"><strong>3. Known data gaps are drawn as gaps.</strong> W13, W30 and W32 render as a
+    hatched break in the line with the label "no call data exported", not as zero.</p>
+  </div>
+
+  <h3>5.4 &nbsp;Refresh and access</h3>
+  <p>
+    Follow the UK build: a static page reading the Airtable REST API directly, token entered once and held in
+    <code>localStorage</code>, auto-refresh every 5 minutes, hosted on Cloudflare Pages behind Cloudflare
+    Access. At 7.5k leads and 24k calls the calls table is roughly 240 API pages, so the client should cache
+    the last successful payload and show a "last updated" stamp rather than blocking on a cold load.
+  </p>
+</section>
+
+<!-- ══════════════════════════════════════════════ PAGE 1 -->
+<section class="card" id="p1">
+  <h2><span class="num">P1</span>Command Centre</h2>
+  <div class="page-head">
+    <h3>Who it is for and what it answers</h3>
+    <p>The page you open first. Answers "are we ahead or behind, and what changed?" in under ten seconds.</p>
+  </div>
+
+  <h3>KPI strip — seven cards across the top</h3>
+  <div class="kpi-strip">
+    <div class="kpi"><div class="lab">Leads In</div><div class="val">7,472</div><div class="def">Count of leads with <code>Lead Date</code> in range</div></div>
+    <div class="kpi"><div class="lab">Leads Dialled</div><div class="val">99.6%</div><div class="def">Leads with ≥1 call ÷ leads in</div></div>
+    <div class="kpi"><div class="lab">Leads Reached</div><div class="val">73.9%</div><div class="def">Leads with ≥1 call over 20s ÷ leads in</div></div>
+    <div class="kpi"><div class="lab">Sales</div><div class="val">583</div><div class="def">Leads where outcome = <code>Success</code></div></div>
+    <div class="kpi"><div class="lab">Lead → Sale CVR</div><div class="val">7.8%</div><div class="def">Sales ÷ leads in</div></div>
+    <div class="kpi"><div class="lab">Close Rate</div><div class="val">10.6%</div><div class="def">Sales ÷ leads reached</div></div>
+    <div class="kpi"><div class="lab">Dials per Sale</div><div class="val">41.1</div><div class="def">Total dials ÷ sales</div></div>
+  </div>
+  <p style="font-size:13.5px;color:var(--muted)">
+    Each card shows the current value, the prior equivalent period beneath it, and an arrow coloured green or
+    red. Once the targets table exists, the target replaces the prior period and the card border turns
+    red / amber / green against it.
+  </p>
+
+  <div class="chart-spec">
+    <div class="head"><span class="id">C1.1</span><span class="title">Weekly performance — volume against conversion</span><span class="type">Combo: stacked bars + line, dual axis</span></div>
+    <div class="body">
+      <dl>
+        <dt>X axis label</dt><dd>“ISO week (by lead arrival date)”</dd>
+        <dt>X axis values</dt><dd><code>W13</code> … <code>W35</code>, chronological. Grain follows the global toggle: day, week or period.</dd>
+        <dt>Y axis (left) label</dt><dd>“Leads and sales (count)”</dd>
+        <dt>Y axis (left) scale</dt><dd>Linear from 0, auto-max. Integer ticks.</dd>
+        <dt>Y axis (right) label</dt><dd>“Lead → sale conversion (%)”</dd>
+        <dt>Y axis (right) scale</dt><dd>Linear, fixed 0–15%, ticks every 2.5%, formatted <code>0.0%</code>. Fixed so the eye can compare week to week without the axis rescaling.</dd>
+        <dt>Series 1</dt><dd><span class="swatch" style="background:#4CAF50"></span>Bar, left axis — “Leads in” = count of leads whose <code>Lead Date</code> falls in the bucket</dd>
+        <dt>Series 2</dt><dd><span class="swatch" style="background:#ED6961"></span>Bar, left axis, overlaid at 55% bar width — “Sales” = leads in that bucket with outcome <code>Success</code></dd>
+        <dt>Series 3</dt><dd><span class="swatch" style="background:#522A10"></span>Line with points, right axis, 3px — “Conversion %” = series 2 ÷ series 1</dd>
+        <dt>Source</dt><dd><code>Ireland Leads</code>: <code>Lead Date</code>, <code>⚙️ Lead Week</code>, <code>Adversus Lead Status (single select)</code></dd>
+        <dt>Special rendering</dt><dd>Weeks less than 28 days old draw with 40% opacity and diagonal hatching. W13 and W32 draw the lead bar normally but overlay the label “call data missing”.</dd>
+        <dt>Tooltip</dt><dd>“W26 · 429 leads · 48 sales · 11.2% conversion · 2,137 dials placed”</dd>
+        <dt>Interaction</dt><dd>Click a bar to filter the whole page to that week.</dd>
+      </dl>
+      <div class="reads"><b>What it reads today:</b> conversion has roughly halved over the period, from 10.5% in W13 to 5.5% in W33, while weekly lead volume dropped from ~500 to ~250 in the middle of the period and then recovered. The decline is real and predates the immature weeks.</div>
+      <div class="why"><b>Decision it drives:</b> whether a bad week is a volume problem or a conversion problem — the two need completely different responses.</div>
+    </div>
+  </div>
+
+  <div class="chart-spec">
+    <div class="head"><span class="id">C1.2</span><span class="title">The funnel, end to end</span><span class="type">Horizontal stepped funnel</span></div>
+    <div class="body">
+      <dl>
+        <dt>X axis label</dt><dd>“Leads (count)” — bar length is proportional to count</dd>
+        <dt>Y axis label</dt><dd>None; four labelled stages read top to bottom</dd>
+        <dt>Stages</dt><dd>
+          <strong>1. Leads loaded</strong> — all leads in range<br>
+          <strong>2. Dialled</strong> — leads with ≥1 call<br>
+          <strong>3. Reached</strong> — leads with ≥1 call over 20 seconds<br>
+          <strong>4. Sold</strong> — leads with outcome <code>Success</code>
+        </dd>
+        <dt>Bar labels</dt><dd>Absolute count inside the bar; step conversion in the gap between bars, as “↓ 99.6% of previous”; cumulative rate at the right, as “7.8% of all leads”</dd>
+        <dt>Colour</dt><dd>A single brown ramp darkening down the funnel, so the eye follows the drop</dd>
+        <dt>Source</dt><dd>Both tables, joined on <code>Databowl Lead ID</code></dd>
+        <dt>Interaction</dt><dd>Click any stage to export that lead list to CSV</dd>
+      </dl>
+      <div class="reads"><b>What it reads today:</b> 7,472 → 7,442 → 5,520 → 583. The dialling is near-perfect and the losses are concentrated in two places: 1,922 leads are never reached at all, and 89.4% of the people we do reach say no.</div>
+      <div class="why"><b>Decision it drives:</b> where to spend improvement effort. Chasing the 0.4% who never get dialled is worthless; the reach step and the close step are where the volume is.</div>
+    </div>
+  </div>
+
+  <div class="chart-spec">
+    <div class="head"><span class="id">C1.3</span><span class="title">What moved the sales number</span><span class="type">Waterfall</span></div>
+    <div class="body">
+      <dl>
+        <dt>X axis label</dt><dd>“Driver”</dd>
+        <dt>X axis values</dt><dd>“Prior period sales” → “Effect of lead volume” → “Effect of reach rate” → “Effect of close rate” → “Current period sales”</dd>
+        <dt>Y axis label</dt><dd>“Sales (count)”</dd>
+        <dt>Y axis scale</dt><dd>Linear, zero-based, integer ticks</dd>
+        <dt>Method</dt><dd>Sales decompose exactly as <code>leads × reach rate × close rate</code>. Each bar isolates one factor by holding the other two at their prior-period value, so the three effects sum to the total change.</dd>
+        <dt>Colour</dt><dd>Endpoints brown; positive contributions green; negative contributions coral</dd>
+        <dt>Source</dt><dd>Both tables, current range versus the immediately preceding range of equal length</dd>
+        <dt>Tooltip</dt><dd>“Reach rate fell from 78.1% to 71.4%, costing 19 sales”</dd>
+      </dl>
+      <div class="reads"><b>Why this over a CPA chart:</b> the UK dashboard puts CPA in this slot, which we cannot compute. This is the more useful question anyway — not just that sales fell, but which of the three things we control caused it.</div>
+      <div class="why"><b>Decision it drives:</b> it routes the problem to an owner. Lead volume is a marketing conversation, reach rate is a dialling and timing conversation, close rate is a coaching conversation.</div>
+    </div>
+  </div>
+
+  <div class="chart-spec">
+    <div class="head"><span class="id">C1.4</span><span class="title">Rolling 4-week conversion</span><span class="type">Line with confidence band</span></div>
+    <div class="body">
+      <dl>
+        <dt>X axis label</dt><dd>“ISO week (by lead arrival date)”</dd>
+        <dt>Y axis label</dt><dd>“Lead → sale conversion, 4-week rolling (%)”</dd>
+        <dt>Y axis scale</dt><dd>Linear, 0–15%, ticks every 2.5%</dd>
+        <dt>Series 1</dt><dd><span class="swatch" style="background:#ED6961"></span>Solid line — trailing 4-week conversion, recalculated each week</dd>
+        <dt>Series 2</dt><dd>Shaded band — 95% Wilson interval on the same rate, so a small week is visibly less certain</dd>
+        <dt>Series 3</dt><dd><span class="swatch" style="background:#10507C"></span>Dashed horizontal — period-to-date average, as a reference line</dd>
+        <dt>Source</dt><dd><code>Ireland Leads</code></dd>
+      </dl>
+      <div class="why"><b>Why the band matters:</b> weekly lead counts swing between 66 and 598. Without an interval, a 250-lead week that lands at 5.5% looks like a crisis when it is well within normal variation. The band stops the team reacting to noise.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════ PAGE 2 -->
+<section class="card" id="p2">
+  <h2><span class="num">P2</span>Lead Funnel &amp; Conversion</h2>
+  <div class="page-head">
+    <h3>Who it is for and what it answers</h3>
+    <p>For whoever owns lead quality and supply. Answers "which leads are worth having, and how long before we know?"</p>
+  </div>
+
+  <div class="kpi-strip">
+    <div class="kpi"><div class="lab">Leads In</div><div class="val">7,472</div><div class="def">In the selected range</div></div>
+    <div class="kpi"><div class="lab">Median Speed to Lead</div><div class="val">3 days</div><div class="def">Median <code>⚙️ Days to First Call</code></div></div>
+    <div class="kpi"><div class="lab">Same-day Contact</div><div class="val">25.5%</div><div class="def">Leads first dialled on arrival day</div></div>
+    <div class="kpi"><div class="lab">Median Days to Sale</div><div class="val">6 days</div><div class="def">Lead date → selling call</div></div>
+    <div class="kpi"><div class="lab">Cohort Maturity</div><div class="val">90.2%</div><div class="def">Share of eventual sales landed by day 28</div></div>
+  </div>
+
+  <div class="chart-spec">
+    <div class="head"><span class="id">C2.1</span><span class="title">How long before a lead cohort is finished</span><span class="type">Cumulative line</span></div>
+    <div class="body">
+      <dl>
+        <dt>X axis label</dt><dd>“Days since the lead arrived”</dd>
+        <dt>X axis values</dt><dd>0 to 60, linear, ticks every 7 days</dd>
+        <dt>Y axis label</dt><dd>“Share of the cohort’s eventual sales landed (%)”</dd>
+        <dt>Y axis scale</dt><dd>Linear, fixed 0–100%, ticks every 20%</dd>
+        <dt>Series 1</dt><dd><span class="swatch" style="background:#ED6961"></span>Solid line — all leads</dd>
+        <dt>Series 2+</dt><dd>Optional faint lines, one per lead month, to show whether the curve is speeding up or slowing down</dd>
+        <dt>Reference lines</dt><dd>Vertical dashed at day 7 labelled “59.7% — too early to judge”, and at day 28 labelled “90.2% — safe to judge”</dd>
+        <dt>Source</dt><dd><code>Lead Date</code> minus the timestamp of the selling call, for all 602 sales with both</dd>
+        <dt>Sample note</dt><dd>Based on 602 sales. Footnote states the attribution caveat from §3.6.</dd>
+      </dl>
+      <div class="reads"><b>What it reads today:</b> 13.0% of a cohort's sales land on day 0, 59.7% by day 7, 90.2% by day 28 and 99.2% by day 60.</div>
+      <div class="why"><b>Decision it drives:</b> this is the chart that stops the team panicking every Monday. It sets the "do not judge a week until it is 28 days old" rule, and it justifies keeping leads in the dialler far longer than instinct suggests.</div>
+    </div>
+  </div>
+
+  <div class="chart-spec">
+    <div class="head"><span class="id">C2.2</span><span class="title">Conversion by lead week, locked at day 28</span><span class="type">Bar with reference line</span></div>
+    <div class="body">
+      <dl>
+        <dt>X axis label</dt><dd>“ISO week the lead arrived”</dd>
+        <dt>X axis values</dt><dd>Only weeks at least 28 days old, chronological</dd>
+        <dt>Y axis label</dt><dd>“Conversion within 28 days of arrival (%)”</dd>
+        <dt>Y axis scale</dt><dd>Linear, 0–15%, ticks every 2.5%</dd>
+        <dt>Series 1</dt><dd><span class="swatch" style="background:#ED6961"></span>Bars — sales landed within 28 days ÷ leads in that week</dd>
+        <dt>Series 2</dt><dd><span class="swatch" style="background:#10507C"></span>Dashed horizontal — all-time 28-day average</dd>
+        <dt>Source</dt><dd><code>Ireland Leads</code> joined to selling-call timestamps</dd>
+      </dl>
+      <div class="why"><b>Why this exists alongside C1.1:</b> C1.1 shows the raw picture including partial weeks. This one is the apples-to-apples version — every week gets exactly 28 days to prove itself, so a genuine decline can be separated from a cohort that simply has not finished yet. If the decline from ~10% to ~5.5% survives here, it is real.</div>
+    </div>
+  </div>
+
+  <div class="chart-spec">
+    <div class="head"><span class="id">C2.3</span><span class="title">Speed to lead against conversion</span><span class="type">Combo: bars + line, dual axis</span></div>
+    <div class="body">
+      <dl>
+        <dt>X axis label</dt><dd>“Time from lead arriving to first dial”</dd>
+        <dt>X axis values</dt><dd>Six ordered bands: <code>Same day</code>, <code>1 day</code>, <code>2–3 days</code>, <code>4–7 days</code>, <code>8–14 days</code>, <code>15+ days</code></dd>
+        <dt>Y axis (left) label</dt><dd>“Leads (count)”</dd>
+        <dt>Y axis (right) label</dt><dd>“Lead → sale conversion (%)”</dd>
+        <dt>Y axis (right) scale</dt><dd>Linear, 0–12%, ticks every 2%</dd>
+        <dt>Series 1</dt><dd><span class="swatch" style="background:#4CAF50"></span>Bars, left axis — leads in each band</dd>
+        <dt>Series 2</dt><dd><span class="swatch" style="background:#ED6961"></span>Line, right axis — conversion of that band</dd>
+        <dt>Source</dt><dd><code>⚙️ Days to First Call</code> and <code>Adversus Lead Status (single select)</code></dd>
+      </dl>
+      <div class="reads"><b>What it reads today:</b> same day 9.0% (1,907 leads), 1 day 7.5%, 2–3 days 7.4%, 4–7 days 7.5%, 8–14 days 8.3%, 15+ days 5.9%.</div>
+      <div class="why"><b>Read this one carefully.</b> Same-day contact is the best band, but the effect is smaller than telesales orthodoxy claims — 9.0% against 7.5% — and it is not monotonic, since 8–14 days beats 2–7 days. The honest conclusion is that speed helps a little and only the 15+ day tail genuinely hurts. Putting this on the wall stops the team over-investing in a marginal gain.</div>
+    </div>
+  </div>
+
+  <div class="chart-spec">
+    <div class="head"><span class="id">C2.4</span><span class="title">Which dogs convert</span><span class="type">Heatmap, 3 × 3</span></div>
+    <div class="body">
+      <dl>
+        <dt>X axis label</dt><dd>“Dog age band (years)”</dd>
+        <dt>X axis values</dt><dd><code>0-5</code>, <code>6-14</code>, <code>14+</code></dd>
+        <dt>Y axis label</dt><dd>“Dog weight band”</dd>
+        <dt>Y axis values</dt><dd><code>1 - 14KG</code>, <code>15 - 30KG</code>, <code>30KG +</code></dd>
+        <dt>Cell value</dt><dd>Lead → sale conversion for that combination</dd>
+        <dt>Cell label</dt><dd>Two lines: conversion to one decimal, then “n = leads” beneath in smaller grey type</dd>
+        <dt>Colour scale</dt><dd>Sequential white → coral, anchored on the overall 7.8% so above and below average are instantly readable. Cells with fewer than 20 leads render flat grey with the label “low n”.</dd>
+        <dt>Source</dt><dd><code>Dog Age</code>, <code>Dog Weight</code>, <code>Adversus Lead Status (single select)</code> — both fields are 100% filled on the lead table</dd>
+      </dl>
+      <div class="reads"><b>What it reads today, on the single-variable cuts:</b> small dogs convert at 9.0% against 6.4% for both larger bands, and young dogs at 8.5% against 6.7% for 6–14 years. Small and young is the strongest combination.</div>
+      <div class="why"><b>Decision it drives:</b> a 9.0% versus 6.4% spread is worth roughly 40% more sales per lead. If the lead supplier can weight towards small dogs, that is a bigger and cheaper win than anything the dialling team can do. Note the caveat that dog fields on the call table are dirty (46 and 65 distinct values); always read these from the lead table, which is clean.</div>
+    </div>
+  </div>
+
+  <div class="chart-spec">
+    <div class="head"><span class="id">C2.5</span><span class="title">Where every lead ended up</span><span class="type">Stacked 100% area</span></div>
+    <div class="body">
+      <dl>
+        <dt>X axis label</dt><dd>“ISO week the lead arrived”</dd>
+        <dt>Y axis label</dt><dd>“Share of the week’s leads (%)”</dd>
+        <dt>Y axis scale</dt><dd>Linear, fixed 0–100%, ticks every 20%</dd>
+        <dt>Series</dt><dd>One band per outcome, stacked in a fixed order so the colours never move: <code>Success</code> (green), <code>Automatic redial</code> (grey), <code>Not interested</code> (coral), <code>Invalid</code> (dark grey), <code>Unqualified</code> (brown), the three callback states (blue)</dd>
+        <dt>Source</dt><dd><code>Adversus Lead Status (single select)</code> grouped by <code>⚙️ Lead Week</code></dd>
+      </dl>
+      <div class="why"><b>Decision it drives:</b> it shows whether a falling conversion rate is caused by more rejection or by more leads stuck unresolved on automatic redial. Today 3,445 leads — 46% of the base — sit in <code>Automatic redial</code>, which is neither a win nor a loss. If that band is growing, the problem is throughput, not persuasion.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════ PAGE 3 -->
+<section class="card" id="p3">
+  <h2><span class="num">P3</span>Call Effort &amp; Cadence</h2>
+  <div class="page-head">
+    <h3>Who it is for and what it answers</h3>
+    <p>For the team lead setting dialler rules. Answers "how many times should we call, and how far apart?" — the single biggest lever on capacity, and invisible in every tool we have today.</p>
+  </div>
+
+  <div class="callout warn">
+    <strong>A warning about the obvious version of this analysis.</strong> Grouping leads by their total
+    attempt count suggests conversion collapses after two calls — 13.9% at one attempt, 14.4% at two, then
+    7.0%, 3.7%, 1.5%. That chart is wrong, and acting on it would cost real sales. A lead that converts stops
+    being dialled, so converters pile up in the low-attempt buckets by construction. Every chart on this page
+    uses the survivorship-corrected form: <em>of the leads that actually received an Nth dial, what share
+    converted on it</em>. The corrected picture is far less dramatic and points to a different decision.
+  </div>
+
+  <div class="kpi-strip">
+    <div class="kpi"><div class="lab">Total Dials</div><div class="val">23,957</div><div class="def">Rows in <code>Adversus Ireland</code></div></div>
+    <div class="kpi"><div class="lab">Dials per Lead</div><div class="val">3.2</div><div class="def">Mean <code>Times Lead has been Called</code></div></div>
+    <div class="kpi"><div class="lab">Connect Rate</div><div class="val">38.7%</div><div class="def">Dials over 20s ÷ all dials</div></div>
+    <div class="kpi"><div class="lab">Never Reached</div><div class="val">25.9%</div><div class="def">Leads with no call ever over 20s</div></div>
+    <div class="kpi"><div class="lab">Wasted Dials</div><div class="val">27.3%</div><div class="def">Dials spent on never-reached leads</div></div>
+    <div class="kpi"><div class="lab">Median Gap</div><div class="val">2.0 days</div><div class="def">Between consecutive attempts</div></div>
+  </div>
+
+  <div class="chart-spec">
+    <div class="head"><span class="id">C3.1</span><span class="title">What each successive dial is actually worth</span><span class="type">Combo: bars + two lines, dual axis</span></div>
+    <div class="body">
+      <dl>
+        <dt>X axis label</dt><dd>“Attempt number for that lead”</dd>
+        <dt>X axis values</dt><dd><code>1st dial</code> … <code>8th dial</code>. Attempts beyond 8 are pooled as <code>9th+</code> and greyed, since fewer than 50 dials sit behind them.</dd>
+        <dt>Y axis (left) label</dt><dd>“Dials placed (count)”</dd>
+        <dt>Y axis (left) scale</dt><dd>Linear, zero-based</dd>
+        <dt>Y axis (right) label</dt><dd>“Rate (%) — connect rate, and sales per 100 dials”</dd>
+        <dt>Y axis (right) scale</dt><dd>Linear, 0–50%, ticks every 10%</dd>
+        <dt>Series 1</dt><dd><span class="swatch" style="background:#4CAF50"></span>Bars, left axis — dials placed at that attempt number</dd>
+        <dt>Series 2</dt><dd><span class="swatch" style="background:#10507C"></span>Line, right axis — connect rate at that attempt (<code>Call Duration</code> over 20s)</dd>
+        <dt>Series 3</dt><dd><span class="swatch" style="background:#ED6961"></span>Line, right axis, plotted ×10 with the tooltip showing the true value — sales per 100 dials at that attempt</dd>
+        <dt>Source</dt><dd><code>Call # for Lead</code>, <code>Call Duration</code>, <code>Lead Status</code></dd>
+        <dt>Tooltip</dt><dd>“3rd dial · 4,797 placed · 34.9% connected · 119 sales · 2.48 sales per 100 dials”</dd>
+      </dl>
+      <div class="reads"><b>What it reads today:</b> sales per 100 dials runs 2.84, 3.07, 2.48, 1.85, 1.61 across the first five attempts. Connect rate falls steadily from 45.5% to 29.4%. The <strong>second</strong> dial is the most productive of all, not the first.</div>
+      <div class="why"><b>Decision it drives:</b> the decline is real but gentle — the 5th dial is still 57% as productive as the 1st. There is no obvious cliff to cut at, which is a genuinely useful and counter-intuitive finding.</div>
+    </div>
+  </div>
+
+  <div class="chart-spec">
+    <div class="head"><span class="id">C3.2</span><span class="title">Attempt cap simulator</span><span class="type">Dual line, interactive</span></div>
+    <div class="body">
+      <dl>
+        <dt>X axis label</dt><dd>“Maximum attempts allowed per lead”</dd>
+        <dt>X axis values</dt><dd>1 to 8, integer</dd>
+        <dt>Y axis label</dt><dd>“Share of today’s total (%)”</dd>
+        <dt>Y axis scale</dt><dd>Linear, fixed 0–100%, ticks every 20%</dd>
+        <dt>Series 1</dt><dd><span class="swatch" style="background:#4CAF50"></span>“Dialling effort saved” — share of all dials that would not be placed under that cap</dd>
+        <dt>Series 2</dt><dd><span class="swatch" style="background:#ED6961"></span>“Sales forgone” — share of all sales that would be lost under that cap</dd>
+        <dt>Reading rule</dt><dd>A cap is worth taking only where the green line sits meaningfully above the coral one. The chart shades that region green and annotates the widest gap.</dd>
+        <dt>Source</dt><dd>Aggregated from <code>Call # for Lead</code> crossed with <code>Lead Status</code></dd>
+      </dl>
+      <div class="reads"><b>What it reads today:</b> capping at 5 saves 2.3% of dialling and forgoes 5.2% of sales. Capping at 4 saves 10.1% and forgoes 9.9%. Capping at 3 saves 23.6% and forgoes 19.2%. <strong>The coral line is at or above the green line everywhere</strong> — there is no cap that pays for itself.</div>
+      <div class="why"><b>Decision it drives:</b> the honest answer is "do not cap attempts, cap on the quality signal instead". That routes straight to C3.3, which is where the real waste is. Building the simulator and having it say "no" is far more valuable than not asking.</div>
+    </div>
+  </div>
+
+  <div class="chart-spec">
+    <div class="head"><span class="id">C3.3</span><span class="title">Leads we never reached, and what we spent trying</span><span class="type">Bar with cumulative overlay</span></div>
+    <div class="body">
+      <dl>
+        <dt>X axis label</dt><dd>“Dials placed before the lead was abandoned”</dd>
+        <dt>X axis values</dt><dd>1 to 7, integer</dd>
+        <dt>Y axis (left) label</dt><dd>“Leads never once answered (count)”</dd>
+        <dt>Y axis (right) label</dt><dd>“Cumulative dials spent on them (count)”</dd>
+        <dt>Series 1</dt><dd><span class="swatch" style="background:#9E9E9E"></span>Bars, left axis — leads whose longest call never exceeded 20 seconds</dd>
+        <dt>Series 2</dt><dd><span class="swatch" style="background:#ED6961"></span>Cumulative line, right axis — total dials consumed</dd>
+        <dt>Source</dt><dd>Per-lead maximum of <code>Call Duration</code> across all its calls</dd>
+      </dl>
+      <div class="reads"><b>What it reads today:</b> 1,927 leads — 25.9% of everything we bought — were never once answered. They absorbed 6,510 dials, 27.3% of all dialling. 516 of them were dialled five separate times without a single answer, and 473 were dialled four times.</div>
+      <div class="why"><b>Decision it drives:</b> this is the biggest single efficiency lever in the data, and it is a cleaner cut than an attempt cap because it targets leads that have given a clear negative signal rather than all leads equally. Two follow-ups: how many of these numbers are simply dead, which points at lead quality and a refund conversation with the supplier; and whether a different time of day would reach them, which points at Page 4.</div>
+    </div>
+  </div>
+
+  <div class="chart-spec">
+    <div class="head"><span class="id">C3.4</span><span class="title">Does the gap between attempts matter?</span><span class="type">Combo: bars + line, dual axis</span></div>
+    <div class="body">
+      <dl>
+        <dt>X axis label</dt><dd>“Time since the previous attempt on that lead”</dd>
+        <dt>X axis values</dt><dd>Six ordered bands: <code>Under 1 hour</code>, <code>1–4 hours</code>, <code>4–24 hours</code>, <code>1–3 days</code>, <code>3–7 days</code>, <code>7+ days</code></dd>
+        <dt>Y axis (left) label</dt><dd>“Dials placed (count)”</dd>
+        <dt>Y axis (right) label</dt><dd>“Connect rate on that dial (%)”</dd>
+        <dt>Y axis (right) scale</dt><dd>Linear, 0–70%, ticks every 10%</dd>
+        <dt>Series 1</dt><dd><span class="swatch" style="background:#4CAF50"></span>Bars, left axis — dials in that gap band</dd>
+        <dt>Series 2</dt><dd><span class="swatch" style="background:#10507C"></span>Line, right axis — connect rate</dd>
+        <dt>Series 3</dt><dd><span class="swatch" style="background:#ED6961"></span>Optional second line — sales per 100 dials</dd>
+        <dt>Source</dt><dd><strong>Derived, not read from a field.</strong> Consecutive <code>Session Start (No Offset)</code> values ordered by <code>Call # for Lead</code> within each lead. The stored <code>Time between calls</code> field is wrong — see §3.4.</dd>
+      </dl>
+      <div class="reads"><b>What it reads today:</b> connect rate is 65.1% when the redial comes within the hour, 36–40% for anything between 1 hour and 7 days, and collapses to 26.5% once more than a week has passed. That last band is 4,747 dials, 29% of all consecutive attempts.</div>
+      <div class="why"><b>Decision it drives:</b> tighten the redial cadence. Note the caveat the chart should carry: sub-hour redials are often pre-agreed callbacks, so that 65.1% is flattered by selection. The reliable finding is the 7-day cliff, and it applies to nearly a third of our dialling.</div>
+    </div>
+  </div>
+
+  <div class="chart-spec">
+    <div class="head"><span class="id">C3.5</span><span class="title">Effort against return, by attempt band</span><span class="type">Paired horizontal bars</span></div>
+    <div class="body">
+      <dl>
+        <dt>X axis label</dt><dd>“Share of the total (%)”</dd>
+        <dt>X axis scale</dt><dd>Linear, 0–35%, ticks every 5%</dd>
+        <dt>Y axis label</dt><dd>“Attempt band”</dd>
+        <dt>Y axis values</dt><dd><code>1st</code>, <code>2nd</code>, <code>3rd</code>, <code>4th–5th</code>, <code>6th+</code></dd>
+        <dt>Series 1</dt><dd><span class="swatch" style="background:#9E9E9E"></span>“Share of all dialling”</dd>
+        <dt>Series 2</dt><dd><span class="swatch" style="background:#ED6961"></span>“Share of all sales”</dd>
+        <dt>Annotation</dt><dd>Where the coral bar is shorter than the grey one, label the row “under-returning”</dd>
+      </dl>
+      <div class="reads"><b>What it reads today:</b> the 4th–5th band takes 21.3% of all dialling and returns 14.1% of sales — the only clearly under-returning band. The 1st, 2nd and 3rd bands are all roughly proportional.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════ PAGE 4 -->
+<section class="card" id="p4">
+  <h2><span class="num">P4</span>When To Call</h2>
+  <div class="page-head">
+    <h3>Who it is for and what it answers</h3>
+    <p>For whoever writes the rota. Answers "what hours should we be dialling?" — and today the answer is emphatically not the hours we are dialling.</p>
+  </div>
+
+  <div class="callout bad">
+    <strong>The headline finding.</strong> The 18:00 hour receives the largest share of our dialling — 15.2%,
+    3,627 dials — and is the worst hour on every measure: 32.5% connect rate and 1.43 sales per 100 dials.
+    The 12:00 hour returns 3.79 sales per 100 dials, 2.6 times better, and gets 12.4% of dials. Both connect
+    rate and close rate deteriorate through the afternoon, so the effects compound.
+  </div>
+
+  <div class="chart-spec">
+    <div class="head"><span class="id">C4.1</span><span class="title">Hour of day — where we dial against where we win</span><span class="type">Combo: bars + two lines, dual axis</span></div>
+    <div class="body">
+      <dl>
+        <dt>X axis label</dt><dd>“Hour of day (Europe/Dublin)”</dd>
+        <dt>X axis values</dt><dd><code>10:00</code> … <code>19:00</code>, one point per clock hour. Hours with fewer than 50 dials render grey and are excluded from any "best hour" callout.</dd>
+        <dt>Y axis (left) label</dt><dd>“Dials placed (count)”</dd>
+        <dt>Y axis (left) scale</dt><dd>Linear, zero-based</dd>
+        <dt>Y axis (right) label</dt><dd>“Rate (%)”</dd>
+        <dt>Y axis (right) scale</dt><dd>Linear, 0–50%, ticks every 10%</dd>
+        <dt>Series 1</dt><dd><span class="swatch" style="background:#4CAF50"></span>Bars, left axis — dials placed in that hour</dd>
+        <dt>Series 2</dt><dd><span class="swatch" style="background:#10507C"></span>Line, right axis — connect rate, dials over 20 seconds</dd>
+        <dt>Series 3</dt><dd><span class="swatch" style="background:#ED6961"></span>Line, right axis — close rate, sales as a share of connected calls</dd>
+        <dt>Source</dt><dd>Hour extracted from <code>Session Start (No Offset)</code>, which is already local Dublin time. Do not use <code>Timestamp</code>, which is UTC and would shift every bar by an hour.</dd>
+        <dt>Tooltip</dt><dd>“18:00 · 3,627 dials · 32.5% connected · 4.4% of those closed · 1.43 sales per 100 dials”</dd>
+      </dl>
+      <div class="reads"><b>What it reads today:</b> connect rate peaks at 46.1% at midday and falls to 32.5% by 18:00. Close rate peaks at 8.2% at midday and falls to 4.4%. Dial volume does the exact opposite, rising steadily all afternoon to peak in the worst hour.</div>
+      <div class="why"><b>Why split connect from close:</b> they are different problems with different fixes. A low connect rate means people are not picking up, which is a timing and list problem. A low close rate means they pick up and say no, which is a conversation problem. Ireland has both getting worse together through the afternoon, which suggests the late-evening list is genuinely lower quality rather than the agents tiring.</div>
+    </div>
+  </div>
+
+  <div class="chart-spec">
+    <div class="head"><span class="id">C4.2</span><span class="title">The misallocation gap</span><span class="type">Diverging bars</span></div>
+    <div class="body">
+      <dl>
+        <dt>X axis label</dt><dd>“Hour of day (Europe/Dublin)”</dd>
+        <dt>Y axis label</dt><dd>“Share of dials minus share of sales (percentage points)”</dd>
+        <dt>Y axis scale</dt><dd>Linear, symmetric around zero, roughly −6 to +6</dd>
+        <dt>Series</dt><dd>One bar per hour. Positive and coral means we over-dial that hour relative to what it returns; negative and green means we under-dial it. A zero line runs through the middle.</dd>
+        <dt>Source</dt><dd>Same as C4.1</dd>
+      </dl>
+      <div class="why"><b>Decision it drives:</b> this is the rota chart. It converts C4.1 into a single ranked list of hours to move capacity out of and into, and it is the version to put in front of anyone who does not want to read two axes.</div>
+    </div>
+  </div>
+
+  <div class="chart-spec">
+    <div class="head"><span class="id">C4.3</span><span class="title">Day and hour heatmap</span><span class="type">Heatmap, 7 × 10</span></div>
+    <div class="body">
+      <dl>
+        <dt>X axis label</dt><dd>“Hour of day (Europe/Dublin)”</dd>
+        <dt>X axis values</dt><dd><code>10:00</code> … <code>19:00</code></dd>
+        <dt>Y axis label</dt><dd>“Day of week”</dd>
+        <dt>Y axis values</dt><dd><code>Monday</code> … <code>Sunday</code>, fixed order</dd>
+        <dt>Cell value</dt><dd>Sales per 100 dials. A toggle switches the whole grid to connect rate or to dial count.</dd>
+        <dt>Cell label</dt><dd>Value to two decimals, with the dial count beneath in small grey type</dd>
+        <dt>Colour scale</dt><dd>Diverging, anchored at the overall mean of 2.67 sales per 100 dials. Blue below, coral above. Cells with fewer than 50 dials render as flat grey hatching.</dd>
+        <dt>Source</dt><dd><code>Day for the week</code> crossed with the hour from <code>Session Start (No Offset)</code></dd>
+      </dl>
+      <div class="reads"><b>What the marginals read today:</b> Monday is the best day at 3.24 sales per 100 dials, Tuesday the worst weekday at 2.07, despite Tuesday receiving 24% more dials. Thursday takes the most dials of any day at 6,424 and returns a middling 2.72.</div>
+      <div class="why"><b>Decision it drives:</b> the marginals already say Monday is under-worked and Tuesday over-worked. The full grid finds the specific windows — a Monday lunchtime slot will almost certainly be the strongest cell on the board, and that is where extra capacity should go first.</div>
+    </div>
+  </div>
+
+  <div class="chart-spec">
+    <div class="head"><span class="id">C4.4</span><span class="title">Reallocation simulator</span><span class="type">Interactive slider with projection</span></div>
+    <div class="body">
+      <dl>
+        <dt>Control</dt><dd>A slider: “Move N% of dials out of the three worst-performing hours into the three best.” Range 0–50%, default 0.</dd>
+        <dt>X axis label</dt><dd>“Hour of day (Europe/Dublin)”</dd>
+        <dt>Y axis label</dt><dd>“Dials placed (count)”</dd>
+        <dt>Series 1</dt><dd><span class="swatch" style="background:#9E9E9E"></span>Today’s actual distribution</dd>
+        <dt>Series 2</dt><dd><span class="swatch" style="background:#4CAF50"></span>The simulated distribution</dd>
+        <dt>Headline readout</dt><dd>A single large figure above the chart: “Estimated +N sales per week at the same total dial volume”, calculated by applying each hour’s observed sales-per-100-dials to the reallocated volume.</dd>
+        <dt>Required caveat</dt><dd>Displayed permanently beneath: “Assumes each hour’s conversion rate holds as volume shifts. It will not hold exactly — the good hours have a finite supply of answerable leads — so treat this as an upper bound.”</dd>
+      </dl>
+      <div class="why"><b>Why include it:</b> it converts an analytical observation into a number a manager can act on and be held to. The caveat is not optional — without it the simulator will be quoted as a forecast.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════ PAGE 5 -->
+<section class="card" id="p5">
+  <h2><span class="num">P5</span>Agent Performance</h2>
+  <div class="page-head">
+    <h3>Who it is for and what it answers</h3>
+    <p>For one-to-ones and coaching. Answers "who needs what kind of help?" rather than just "who is best?"</p>
+  </div>
+
+  <div class="callout">
+    <strong>The design principle for this page.</strong> A single sales-per-dial ranking hides which of two
+    completely different jobs an agent is failing at. Megan O'Neill has the best connect rate on the team at
+    80.7% and the worst close rate at 3.3%. Holly McDonagh has the worst connect rate at 25.0% and the best
+    close rate at 8.3%. One of them needs help with the conversation and the other needs a better list or a
+    better time of day. A league table would rank them 5th and 8th and tell you nothing about either.
+  </div>
+
+  <div class="chart-spec">
+    <div class="head"><span class="id">C5.1</span><span class="title">Reaching people against converting them</span><span class="type">Bubble scatter with quadrants</span></div>
+    <div class="body">
+      <dl>
+        <dt>X axis label</dt><dd>“Connect rate — % of dials lasting over 20 seconds”</dd>
+        <dt>X axis scale</dt><dd>Linear, 20–85%, ticks every 10%</dd>
+        <dt>Y axis label</dt><dd>“Close rate — % of connected calls ending in a sale”</dd>
+        <dt>Y axis scale</dt><dd>Linear, 0–12%, ticks every 2%</dd>
+        <dt>Bubble</dt><dd>One per agent. Area proportional to dials placed. Labelled with the agent’s name.</dd>
+        <dt>Quadrant lines</dt><dd>Dashed grey at the team median on both axes, splitting the plot into four labelled zones: <em>Reaches and closes</em> (top right), <em>Closes but cannot reach</em> (top left), <em>Reaches but cannot close</em> (bottom right), <em>Needs support on both</em> (bottom left)</dd>
+        <dt>Source</dt><dd><code>Agent Name</code> normalised via the roster, <code>Call Duration</code>, <code>Lead Status</code>. Excludes <code>Greg Newton</code> and <code>Adversus Support - ndn</code>.</dd>
+        <dt>Minimum sample</dt><dd>Agents with fewer than 200 dials render hollow and are excluded from the median calculation</dd>
+      </dl>
+      <div class="reads"><b>Where the team sits today:</b> Saoirse O'Flaherty at 38.5% / 10.6% and Jack Goddard at 70.3% / 6.2% are the two strongest overall. Megan O'Neill sits far bottom-right at 80.7% / 3.3%. Holly McDonagh sits top-left at 25.0% / 8.3% while placing half of all the team's dials.</div>
+      <div class="why"><b>The important caveat to print on the chart:</b> connect rate is heavily influenced by which list and which hours an agent worked, so a low figure is not automatically the agent's fault. Holly's 25.0% is at least partly explained by her volume — 11,990 dials at 235 a day means working deeper into the stale end of the list than anyone else. Use the chart to start the conversation, not to end it.</div>
+    </div>
+  </div>
+
+  <div class="chart-spec">
+    <div class="head"><span class="id">C5.2</span><span class="title">Agent leaderboard</span><span class="type">Sortable table with inline bars</span></div>
+    <div class="body">
+      <dl>
+        <dt>Rows</dt><dd>One per agent, default sorted by sales</dd>
+        <dt>Columns</dt><dd>Agent · Days active · Dials · Dials per active day · Connect rate % · Connected calls · Close rate % · Sales · Sales per 100 dials · Talk time (hours) · Average talk per connected call (minutes)</dd>
+        <dt>Formatting</dt><dd>Every rate column carries an inline horizontal bar scaled to the team maximum. The top value in each column is bold; anything more than one standard deviation below the team mean is tinted coral.</dd>
+        <dt>Footer row</dt><dd>Team totals, with rates recomputed from the totals rather than averaged across agents — averaging rates across agents of different sizes is wrong and is a common way to get this quietly incorrect.</dd>
+        <dt>Interaction</dt><dd>Click an agent to filter the entire dashboard to them</dd>
+      </dl>
+      <div class="reads"><b>Today:</b> Jack Goddard leads on sales per 100 dials at 4.37, then Saoirse O'Flaherty at 4.08 and Kezra Powell at 3.42. Holly McDonagh has the most sales at 249 from the most dials at 11,990, at 2.08 per 100.</div>
+    </div>
+  </div>
+
+  <div class="chart-spec">
+    <div class="head"><span class="id">C5.3</span><span class="title">Agent trend over time</span><span class="type">Multi-line</span></div>
+    <div class="body">
+      <dl>
+        <dt>X axis label</dt><dd>“ISO week the call was made”</dd>
+        <dt>Y axis label</dt><dd>“Sales per 100 dials”</dd>
+        <dt>Y axis scale</dt><dd>Linear, 0–8, ticks every 1</dd>
+        <dt>Series</dt><dd>One line per agent, plus a thick brown team-average line always drawn on top. Agent lines dim to 25% opacity until hovered.</dd>
+        <dt>Suppression</dt><dd>An agent-week with fewer than 100 dials breaks the line rather than plotting a spike from a tiny denominator</dd>
+        <dt>Source</dt><dd><code>⚙️ Call Week (formula)</code>, normalised <code>Agent Name</code></dd>
+      </dl>
+      <div class="why"><b>Decision it drives:</b> it separates a genuine slump from a bad fortnight, and it shows whether a coaching intervention actually moved anything. Weeks W13 and W32 must render as gaps, not zeros.</div>
+    </div>
+  </div>
+
+  <div class="chart-spec">
+    <div class="head"><span class="id">C5.4</span><span class="title">How each agent uses their talk time</span><span class="type">Stacked 100% horizontal bars</span></div>
+    <div class="body">
+      <dl>
+        <dt>X axis label</dt><dd>“Share of that agent’s connected calls (%)”</dd>
+        <dt>X axis scale</dt><dd>Linear, fixed 0–100%</dd>
+        <dt>Y axis label</dt><dd>“Agent”</dd>
+        <dt>Series</dt><dd>Five duration bands, stacked in a fixed order: <code>21–60s</code>, <code>1–3 min</code>, <code>3–10 min</code>, <code>10–20 min</code>, <code>20 min+</code>, on a light-to-dark brown ramp</dd>
+        <dt>Reference</dt><dd>A team row pinned at the bottom for comparison</dd>
+        <dt>Source</dt><dd><code>Call Duration</code> for calls over 20 seconds only</dd>
+      </dl>
+      <div class="reads"><b>Context from the data:</b> a call that ends in a sale has a median duration of 13 minutes 39 seconds, against 50 seconds for <code>Not interested</code>. Long calls are strongly associated with sales.</div>
+      <div class="why"><b>Decision it drives:</b> an agent whose connected calls are overwhelmingly short is disqualifying too fast. Average talk per connected call already ranges from 2.8 minutes for Kerry Anderson to 4.8 for Saoirse O'Flaherty, and Saoirse has the best close rate on the team.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════ PAGE 6 -->
+<section class="card" id="p6">
+  <h2><span class="num">P6</span>Live Pipeline &amp; Callbacks</h2>
+  <div class="page-head">
+    <h3>Who it is for and what it answers</h3>
+    <p>For the team, every morning. Answers "what needs working today?" This is the page that makes the dashboard a habit rather than a monthly report.</p>
+  </div>
+
+  <div class="kpi-strip">
+    <div class="kpi"><div class="lab">Open Leads</div><div class="val">846</div><div class="def"><code>Lead open/closed</code> = Open</div></div>
+    <div class="kpi"><div class="lab">Loaded in Dialler</div><div class="val">928</div><div class="def"><code>In Adversus Open List</code> = Yes</div></div>
+    <div class="kpi"><div class="lab">On Callback</div><div class="val">167</div><div class="def">Any of the three callback states</div></div>
+    <div class="kpi"><div class="lab">Stale Callbacks</div><div class="val">111</div><div class="def">Not touched in over 7 days</div></div>
+    <div class="kpi"><div class="lab">Never Dialled</div><div class="val">30</div><div class="def"><code>⚙️ Called?</code> = No</div></div>
+    <div class="kpi"><div class="lab">On Auto Redial</div><div class="val">3,445</div><div class="def">Unresolved, neither won nor lost</div></div>
+  </div>
+
+  <div class="callout bad">
+    <strong>Found while profiling.</strong> Of the 167 leads parked on a callback, <strong>111 — two thirds —
+    have not been touched in over seven days</strong>. A callback is a customer who explicitly asked to be
+    rung back, and it is the warmest thing in the pipeline: 201 of our sales passed through a callback state
+    at some point. Nothing in the current setup surfaces that this book is going cold.
+  </div>
+
+  <div class="chart-spec">
+    <div class="head"><span class="id">C6.1</span><span class="title">Callback book, by age</span><span class="type">Bar with threshold shading</span></div>
+    <div class="body">
+      <dl>
+        <dt>X axis label</dt><dd>“Days since the lead was last contacted”</dd>
+        <dt>X axis values</dt><dd><code>0–1</code>, <code>2–3</code>, <code>4–7</code>, <code>8–14</code>, <code>15–30</code>, <code>30+</code></dd>
+        <dt>Y axis label</dt><dd>“Leads parked on a callback (count)”</dd>
+        <dt>Y axis scale</dt><dd>Linear, zero-based, integer ticks</dd>
+        <dt>Series</dt><dd>Bars coloured by state of health: green up to 3 days, amber 4–7, coral beyond 7. A vertical dashed line at day 7 is labelled “service level”.</dd>
+        <dt>Source</dt><dd><code>Adversus Lead Status (single select)</code> in the three callback states, aged on <code>Date of Latest</code></dd>
+        <dt>Interaction</dt><dd>Click any bar to open the underlying lead list with name, phone, agent and last-contact date, exportable to CSV so it can be loaded straight back into the dialler</dd>
+      </dl>
+      <div class="why"><b>Decision it drives:</b> it turns 111 forgotten warm leads into a worked list this week. This is the highest-value, lowest-effort chart in the entire plan.</div>
+    </div>
+  </div>
+
+  <div class="chart-spec">
+    <div class="head"><span class="id">C6.2</span><span class="title">Open pipeline, by age and attempts made</span><span class="type">Stacked bars</span></div>
+    <div class="body">
+      <dl>
+        <dt>X axis label</dt><dd>“Days since the lead arrived”</dd>
+        <dt>X axis values</dt><dd><code>0–1</code>, <code>2–3</code>, <code>4–7</code>, <code>8–14</code>, <code>15–28</code>, <code>29–60</code>, <code>60+</code></dd>
+        <dt>Y axis label</dt><dd>“Open leads (count)”</dd>
+        <dt>Series</dt><dd>Stacked by attempts so far — <code>0 dials</code>, <code>1–2</code>, <code>3–4</code>, <code>5+</code> — on a grey-to-brown ramp</dd>
+        <dt>Reference</dt><dd>A vertical dashed line at day 28 labelled “past the point where 90% of sales land”</dd>
+        <dt>Source</dt><dd>Leads where <code>Lead open/closed</code> = Open, aged on <code>Lead Date</code></dd>
+      </dl>
+      <div class="why"><b>Decision it drives:</b> the two cells that matter are new leads with zero dials in the leftmost bars, which are the urgent ones, and old leads beyond day 28 with five or more dials, which are the ones to retire. Read this against C2.1 — anything past day 60 has a 0.8% chance of ever converting.</div>
+    </div>
+  </div>
+
+  <div class="chart-spec">
+    <div class="head"><span class="id">C6.3</span><span class="title">Today’s working list</span><span class="type">Ranked, exportable table</span></div>
+    <div class="body">
+      <dl>
+        <dt>Rows</dt><dd>Every open lead, ranked by a priority score, top 200 shown</dd>
+        <dt>Columns</dt><dd>Priority · Name · Phone · Dog age and weight · Lead age (days) · Attempts so far · Last outcome · Last contacted · Best hour to try (from that lead's segment in C4.3) · Owning agent</dd>
+        <dt>Priority score</dt><dd>A transparent, tunable weighted sum, shown in a tooltip so nobody has to trust a black box:<br>
+          <code>+40</code> parked on a callback and overdue &nbsp;·&nbsp;
+          <code>+25</code> lead is under 7 days old &nbsp;·&nbsp;
+          <code>+15</code> has connected at least once before &nbsp;·&nbsp;
+          <code>+10</code> small or young dog, the higher-converting segments &nbsp;·&nbsp;
+          <code>−20</code> five or more dials with no connection ever &nbsp;·&nbsp;
+          <code>−30</code> lead is over 60 days old
+        </dd>
+        <dt>Interaction</dt><dd>Export to CSV in the Adversus import format</dd>
+      </dl>
+      <div class="why"><b>Why the weights are visible:</b> the team will only trust a priority list they can argue with. Exposing the scoring makes it correctable, and the weights should be revisited once the dashboard has been running long enough to test them.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════ PAGE 7 -->
+<section class="card" id="p7">
+  <h2><span class="num">P7</span>Objections &amp; Loss Reasons</h2>
+  <div class="page-head">
+    <h3>Who it is for and what it answers</h3>
+    <p>For sales training and for the marketing team. Answers "why are people saying no?"</p>
+  </div>
+
+  <div class="callout warn">
+    <strong>Build this page, but put the health warning at the top of it.</strong> Only 2,089 of 23,957 calls
+    carry a <code>Disposition</code> — 8.7%. Against the 2,560 leads lost to <code>Not interested</code> or
+    <code>Unqualified</code>, the reasons we hold could explain at most 81.6% of losses, and in practice far
+    less, because dispositions are not recorded evenly across agents. Treat everything here as directional
+    until the Adversus config change in §2 lands. The page should carry a permanent coverage banner showing
+    the current percentage.
+  </div>
+
+  <div class="chart-spec">
+    <div class="head"><span class="id">C7.1</span><span class="title">Loss reasons, ranked</span><span class="type">Pareto: bars + cumulative line</span></div>
+    <div class="body">
+      <dl>
+        <dt>X axis label</dt><dd>“Reason the lead was lost”</dd>
+        <dt>X axis values</dt><dd>The 11 <code>Disposition</code> values, sorted by frequency descending</dd>
+        <dt>Y axis (left) label</dt><dd>“Calls with that reason (count)”</dd>
+        <dt>Y axis (right) label</dt><dd>“Cumulative share of all recorded reasons (%)”</dd>
+        <dt>Y axis (right) scale</dt><dd>Linear, fixed 0–100%, ticks every 20%</dd>
+        <dt>Series 1</dt><dd><span class="swatch" style="background:#ED6961"></span>Bars, left axis</dd>
+        <dt>Series 2</dt><dd><span class="swatch" style="background:#522A10"></span>Cumulative line, right axis, with a dashed marker at 80%</dd>
+        <dt>Source</dt><dd><code>Disposition</code> on <code>Adversus Ireland</code></dd>
+      </dl>
+      <div class="reads"><b>What it reads today:</b> Hang up 468 (22.4%), Did not want to talk 343 (16.4%), Not convinced 319 (15.3%), Only entered to win free food 238 (11.4%), Too expensive 231 (11.1%), Has already been contacted 193 (9.2%). Six reasons cover 85.8%.</div>
+      <div class="why"><b>Decision it drives:</b> the top three — 54% combined — are all failures in the first fifteen seconds, not objections to the product. That points at the opening script rather than at price. "Only entered to win free food" at 11.4% is a lead-quality signal to take back to the supplier, and "Has already been contacted" at 9.2% is a duplicate-suppression problem we can fix ourselves.</div>
+    </div>
+  </div>
+
+  <div class="chart-spec">
+    <div class="head"><span class="id">C7.2</span><span class="title">Are the reasons changing?</span><span class="type">Stacked 100% area</span></div>
+    <div class="body">
+      <dl>
+        <dt>X axis label</dt><dd>“ISO week the call was made”</dd>
+        <dt>Y axis label</dt><dd>“Share of dispositioned calls that week (%)”</dd>
+        <dt>Y axis scale</dt><dd>Linear, fixed 0–100%</dd>
+        <dt>Series</dt><dd>The top six reasons individually, everything else pooled as “Other”, fixed stacking order</dd>
+        <dt>Required annotation</dt><dd>A secondary strip beneath the chart showing the disposition fill rate for each week, so a shift in the mix is never read as real when it is actually a change in tagging behaviour</dd>
+      </dl>
+      <div class="why"><b>Decision it drives:</b> price objections rising would be a pricing conversation; "already been contacted" rising would be a list-hygiene conversation. The fill-rate strip is what keeps the chart honest.</div>
+    </div>
+  </div>
+
+  <div class="chart-spec">
+    <div class="head"><span class="id">C7.3</span><span class="title">Loss reasons by agent</span><span class="type">Heatmap</span></div>
+    <div class="body">
+      <dl>
+        <dt>X axis label</dt><dd>“Reason the lead was lost”</dd>
+        <dt>Y axis label</dt><dd>“Agent”</dd>
+        <dt>Cell value</dt><dd>That reason as a share of the agent’s own dispositioned calls, so agents of different sizes are comparable</dd>
+        <dt>Cell label</dt><dd>Percentage, with the raw count beneath in grey</dd>
+        <dt>Colour scale</dt><dd>Sequential white → coral, normalised per column so the outlier agent on each reason stands out. Fewer than 20 dispositioned calls renders grey.</dd>
+        <dt>Source</dt><dd><code>Disposition</code> crossed with normalised <code>Agent Name</code></dd>
+      </dl>
+      <div class="why"><b>Two things it reveals at once:</b> a genuine coaching need, where one agent gets "too expensive" far more than the rest and needs value-framing practice; and a tagging discipline problem, where an agent records "Other" or nothing at all far more than the rest. Both are worth knowing and neither is visible today.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════ PAGE 8 -->
+<section class="card" id="p8">
+  <h2><span class="num">P8</span>Data Health</h2>
+  <div class="page-head">
+    <h3>Who it is for and what it answers</h3>
+    <p>For whoever owns the base. Answers "can I trust what the other seven pages are telling me?"</p>
+  </div>
+
+  <p>
+    Every issue in §3 was found by profiling the base rather than by anyone noticing a wrong number. That is
+    the argument for this page: without it, the next data problem gets discovered when someone acts on a bad
+    figure. It also stops the dashboard being quietly abandoned the first time a chart looks implausible.
+  </p>
+
+  <div class="chart-spec">
+    <div class="head"><span class="id">C8.1</span><span class="title">Records received per week</span><span class="type">Grouped bars with gap flags</span></div>
+    <div class="body">
+      <dl>
+        <dt>X axis label</dt><dd>“ISO week”</dd>
+        <dt>Y axis (left) label</dt><dd>“Leads received (count)”</dd>
+        <dt>Y axis (right) label</dt><dd>“Calls received (count)”</dd>
+        <dt>Series 1</dt><dd><span class="swatch" style="background:#4CAF50"></span>Bars, left axis — leads</dd>
+        <dt>Series 2</dt><dd><span class="swatch" style="background:#10507C"></span>Bars, right axis — calls</dd>
+        <dt>Alert rule</dt><dd>Any week with more than 100 leads and zero calls draws a red hatched overlay and the label “export gap — calls missing”</dd>
+      </dl>
+      <div class="reads"><b>What it flags today:</b> W13 (504 leads, 0 calls) and W32 (515 leads, 0 calls) both trip the rule. W30 has nothing on either side.</div>
+    </div>
+  </div>
+
+  <div class="chart-spec">
+    <div class="head"><span class="id">C8.2</span><span class="title">Field completeness</span><span class="type">Horizontal bars with thresholds</span></div>
+    <div class="body">
+      <dl>
+        <dt>X axis label</dt><dd>“Records with a value (%)”</dd>
+        <dt>X axis scale</dt><dd>Linear, fixed 0–100%, ticks every 20%</dd>
+        <dt>Y axis label</dt><dd>“Field”</dd>
+        <dt>Y axis values</dt><dd>Every field the dashboard actually reads, grouped by table, sorted ascending so the worst is at the top</dd>
+        <dt>Colour</dt><dd>Green at 95% and above, amber 80–95%, coral below 80%. A dashed vertical line at 95% marks the standard.</dd>
+        <dt>Extra column</dt><dd>Beside each bar, the name of the chart that depends on the field, so the cost of a gap is explicit</dd>
+      </dl>
+      <div class="reads"><b>Currently below the line:</b> <code>Disposition</code> at 8.7%, <code>Recording</code> at 24.7%, <code>Sales Team</code> at 43.5%, the stale <code>⚙️ Call Week</code> select at 77.0%, and <code>Start of Call</code> / <code>End of Call</code> at 81.8%.</div>
+    </div>
+  </div>
+
+  <div class="chart-spec">
+    <div class="head"><span class="id">C8.3</span><span class="title">Integrity checks</span><span class="type">Status table</span></div>
+    <div class="body">
+      <dl>
+        <dt>Rows</dt><dd>One per automated check, each showing a pass / warn / fail light, the current value, the threshold and when it last changed</dd>
+        <dt>Checks</dt><dd>
+          Agent names not on the approved roster &nbsp;·&nbsp;
+          Disagreement between the two outcome fields &nbsp;·&nbsp;
+          Calls that do not join to a lead &nbsp;·&nbsp;
+          Leads with sales but no connected call &nbsp;·&nbsp;
+          Calls with an end time before the start time &nbsp;·&nbsp;
+          Duplicate <code>Databowl Lead ID</code> values &nbsp;·&nbsp;
+          Hours since the most recent call record &nbsp;·&nbsp;
+          Dog age or weight values outside the three valid bands
+        </dd>
+        <dt>Behaviour</dt><dd>Any failing check raises a persistent banner on every page, so a known data problem cannot be missed by someone who only ever opens Page 1</dd>
+      </dl>
+      <div class="reads"><b>Current state:</b> three of these fail right now — 3 unrostered name spellings, 547 rows of outcome disagreement, and duplicated identifiers (<code>Databowl Lead ID</code> 861563 appears three times; <code>LLID</code> 13937502 three times and 13305779 twice).</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════ PHASE 2 -->
+<section class="card" id="phase2">
+  <h2><span class="num">P2+</span>Phase two — the pages that need new data</h2>
+  <p class="lede">
+    Specified now so that the moment the data lands, the build is a known quantity. Each page is listed with
+    its single blocking dependency.
+  </p>
+
+  <h3>Page 9 — Cost &amp; Efficiency &nbsp;<span class="tag missing">Blocked on: IE Spend Tracker table</span></h3>
+  <ul>
+    <li><strong>C9.1 — Weekly spend against sales.</strong> X: “ISO week”. Y-left: “Spend (€)”, stacked by lead spend, dialler cost, incentives. Y-right: “Sales (count)” as a line.</li>
+    <li><strong>C9.2 — Cost per acquisition trend.</strong> X: “ISO week”. Y: “Cost per acquisition (€)”. Coral actual against a dashed blue target; the band between them shaded green when under and coral when over.</li>
+    <li><strong>C9.3 — Cost per lead against conversion.</strong> Scatter, one point per week. X: “Cost per lead (€)”. Y: “Lead → sale conversion (%)”. Answers whether more expensive leads are actually better leads — the single most valuable question this page unlocks.</li>
+    <li><strong>C9.4 — Cost per acquisition by dog segment.</strong> Bars. X: “Dog segment”. Y: “Cost per acquisition (€)”. Combined with C2.4, this says where to spend the lead budget.</li>
+  </ul>
+
+  <h3>Page 10 — Productivity &nbsp;<span class="tag missing">Blocked on: IE Shift Log table</span></h3>
+  <ul>
+    <li><strong>C10.1 — Calls per hour worked.</strong> X: “ISO week”. Y: “Dials per rostered hour”. One line per agent plus a team line. This is the UK dashboard's CPH metric, finally computable.</li>
+    <li><strong>C10.2 — Sales per hour worked.</strong> Same shape, Y: “Sales per rostered hour”. The UK SPH metric.</li>
+    <li><strong>C10.3 — Occupancy.</strong> X: “ISO week”. Y: “Talk time as a share of rostered hours (%)”. Stacked into talk, wait and idle once Adversus session data is available.</li>
+    <li><strong>C10.4 — Capacity against opportunity.</strong> X: “Hour of day”. Y-left: “Agent hours rostered”. Y-right: “Sales per 100 dials”. This is the chart that proves or disproves the rota recommendation from Page 4, and it is the main reason the shift log is worth building.</li>
+  </ul>
+
+  <h3>Page 11 — Retention &nbsp;<span class="tag missing">Blocked on: IE order feed</span></h3>
+  <ul>
+    <li><strong>C11.1 — Box 2 retention by sale week.</strong> X: “ISO week of the sale”. Y: “Customers taking a second box (%)”.</li>
+    <li><strong>C11.2 — Retention by acquiring agent.</strong> Bars. X: “Agent”. Y: “Box 2 retention (%)”. This is how you catch an agent who converts well by over-promising.</li>
+    <li><strong>C11.3 — Pause reasons.</strong> Pareto, mirroring C7.1.</li>
+    <li><strong>C11.4 — Retention by dog segment and by attempt number at sale.</strong> Heatmap. Tests whether a customer won on the fifth dial stays as well as one won on the first — the question that determines whether persistent dialling is actually profitable.</li>
+  </ul>
+
+  <div class="callout">
+    <strong>Note on C11.4 and C9.3.</strong> These two are the reason Phase 2 matters more than it looks.
+    Everything in Phase 1 optimises for a sale. Neither the cost of that sale nor whether the customer stays
+    is visible anywhere in the Ireland data today, so the dashboard can only tell us how to get more sales,
+    not how to get more profitable ones.
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════ DICTIONARY -->
+<section class="card" id="dictionary">
+  <h2><span class="num">D</span>Metric dictionary</h2>
+  <p class="lede">
+    One definition per metric, used identically everywhere. Any chart that deviates must say so on its face.
+  </p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th style="width:180px">Metric</th><th style="width:300px">Definition</th><th>Source and notes</th><th style="width:90px">Today</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Lead</strong></td><td>One row in <code>Ireland Leads</code></td><td>Dated by <code>Lead Date</code>, Europe/Dublin</td><td>7,472</td></tr>
+        <tr><td><strong>Dial</strong></td><td>One row in <code>Adversus Ireland</code>, connected or not</td><td>Dated by <code>Session Start (No Offset)</code></td><td>23,957</td></tr>
+        <tr><td><strong>Connect</strong></td><td>A dial where <code>Call Duration</code> is greater than 20 seconds</td><td>The threshold is empirical: 3,162 calls last exactly 20 seconds, the dialler's ring timeout, and 73.3% of <code>Automatic redial</code> outcomes fall at or under it against 15.9% of <code>Success</code></td><td>9,279</td></tr>
+        <tr><td><strong>Connect rate</strong></td><td>Connects ÷ dials</td><td>Always recomputed from totals, never averaged across sub-groups</td><td>38.7%</td></tr>
+        <tr><td><strong>Lead reached</strong></td><td>A lead with at least one connect</td><td>Distinct on <code>Databowl Lead ID</code></td><td>5,520</td></tr>
+        <tr><td><strong>Sale</strong></td><td>A lead whose <code>Adversus Lead Status (single select)</code> is <code>Success</code></td><td>Pending the §3.2 decision. The text field would give 513 instead.</td><td>583</td></tr>
+        <tr><td><strong>Lead → sale CVR</strong></td><td>Sales ÷ leads</td><td>The headline conversion figure</td><td>7.8%</td></tr>
+        <tr><td><strong>Close rate</strong></td><td>Sales ÷ leads reached</td><td>Isolates persuasion from reachability</td><td>10.6%</td></tr>
+        <tr><td><strong>Sales per 100 dials</strong></td><td>Call-level <code>Success</code> outcomes ÷ dials × 100</td><td>The efficiency measure on Pages 3, 4 and 5. It uses the <em>call-level</em> count of 639, not the lead-level 583, because the question is what a dial returns. On the lead-level count the same figure is 2.43. Any chart mixing the two must say which it uses.</td><td>2.67</td></tr>
+        <tr><td><strong>Dials per sale</strong></td><td>Dials ÷ sales (lead-level)</td><td>The same thing inverted, for cost conversations</td><td>41.1</td></tr>
+        <tr><td><strong>Speed to lead</strong></td><td><code>⚙️ Days to First Call</code></td><td>Whole days, so “same day” means 0. Mean is 5.2, pulled up by a long tail.</td><td>median 3</td></tr>
+        <tr><td><strong>Attempt number</strong></td><td><code>Call # for Lead</code></td><td>1-indexed; 99.9% filled</td><td>1–15</td></tr>
+        <tr><td><strong>Cadence gap</strong></td><td>Elapsed time between consecutive attempts on one lead</td><td><strong>Derived</strong> from <code>Session Start (No Offset)</code>. Never read <code>Time between calls</code> — see §3.4.</td><td>median 2.0 days</td></tr>
+        <tr><td><strong>Cohort maturity</strong></td><td>Share of a lead week’s eventual sales landed by day N</td><td>Drives the greying rule in §5.3</td><td>90.2% at 28 days</td></tr>
+        <tr><td><strong>Never reached</strong></td><td>A dialled lead whose longest call never exceeded 20 seconds</td><td>The waste measure on Page 3</td><td>1,927</td></tr>
+        <tr><td><strong>Stale callback</strong></td><td>A lead in a callback state not contacted for over 7 days</td><td>Aged on <code>Date of Latest</code></td><td>111</td></tr>
+        <tr><td><strong>Talk time</strong></td><td>Sum of <code>Call Duration</code> over connected calls only</td><td>Excludes the 1,936 rows with no duration, and the 12,742 dials at 20 seconds or under. Across every dial regardless of connection it would be 520.6 hours.</td><td>486.1 hrs</td></tr>
+        <tr><td><strong>Active day</strong></td><td>A distinct date on which an agent placed at least one dial</td><td>A proxy for days worked until the shift log exists</td><td>—</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════ BUILD -->
+<section class="card" id="build">
+  <h2><span class="num">B</span>Build order</h2>
+  <p class="lede">
+    Sequenced by dependency and by value, not by page number. Each stage is shippable on its own.
+  </p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th style="width:70px">Stage</th><th style="width:250px">What gets built</th><th>Why it comes here</th><th style="width:190px">Depends on</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>0</strong></td>
+          <td>The six data fixes in §3, plus the <code>IE Agents</code> roster table</td>
+          <td>Three of them change headline numbers. Building on top of them and correcting later would cost more than doing it first, and would damage trust in the dashboard at exactly the wrong moment.</td>
+          <td>A decision on which outcome field is canonical (§3.2); a re-export of W13 and W32 (§3.3)</td>
+        </tr>
+        <tr>
+          <td><strong>1</strong></td>
+          <td>The app shell — filter bar, Airtable fetch with pagination and caching, period model, the immature-cohort and small-sample rules</td>
+          <td>Every page needs it, and the maturity and sample rules are far harder to retrofit into finished charts than to build in from the start.</td>
+          <td>Stage 0</td>
+        </tr>
+        <tr>
+          <td><strong>2</strong></td>
+          <td><a href="#p6">Page 6 — Live Pipeline</a></td>
+          <td>Deliberately first among the pages. 111 stale callbacks are worth money this week, and a page the team opens daily earns the goodwill that the analytical pages need.</td>
+          <td>Stage 1</td>
+        </tr>
+        <tr>
+          <td><strong>3</strong></td>
+          <td><a href="#p4">Page 4 — When To Call</a></td>
+          <td>The largest identified efficiency gain, and it needs no new data at all.</td>
+          <td>Stage 1</td>
+        </tr>
+        <tr>
+          <td><strong>4</strong></td>
+          <td><a href="#p1">Page 1 — Command Centre</a> and <a href="#p2">Page 2 — Funnel</a></td>
+          <td>The replication of what the UK team already has. Later than instinct suggests, because the two pages above are worth more and these depend on the cohort logic being right.</td>
+          <td>Stages 1–3</td>
+        </tr>
+        <tr>
+          <td><strong>5</strong></td>
+          <td><a href="#p3">Page 3 — Cadence</a> and <a href="#p5">Page 5 — Agents</a></td>
+          <td>The heaviest analysis, and the two pages most likely to prompt argument, so they benefit from landing after the numbers are already trusted.</td>
+          <td>Stage 4</td>
+        </tr>
+        <tr>
+          <td><strong>6</strong></td>
+          <td><a href="#p8">Page 8 — Data Health</a> and <a href="#p7">Page 7 — Objections</a></td>
+          <td>Data Health should ideally be continuous from Stage 1 as a simple banner, expanding into a full page here. Objections waits for the disposition fix to give it enough coverage to be worth reading.</td>
+          <td>The Adversus disposition config change</td>
+        </tr>
+        <tr>
+          <td><strong>7</strong></td>
+          <td><a href="#phase2">Pages 9 and 10</a> — Cost and Productivity</td>
+          <td>Unlocked by two small tables. This is where the Ireland dashboard reaches parity with the UK one.</td>
+          <td>IE Spend Tracker and IE Shift Log tables</td>
+        </tr>
+        <tr>
+          <td><strong>8</strong></td>
+          <td><a href="#phase2">Page 11</a> — Retention</td>
+          <td>Needs a real order feed, so it is genuine engineering rather than an Airtable table.</td>
+          <td>IE order data pipeline</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Open questions I need answered before Stage 0</h3>
+  <ol>
+    <li><strong>Which outcome field is canonical?</strong> The two disagree on 7.3% of leads and give sales
+      totals of 513 against 583. Whoever owns the Adversus sync needs to pick one.</li>
+    <li><strong>Can W13 and W32 call data be re-exported?</strong> If not, the dashboard permanently shows
+      those two weeks as gaps and every period total covering them is understated.</li>
+    <li><strong>Is a sale the same thing in Ireland as in the UK?</strong> IE has no order data, so
+      <code>Success</code> is an agent-entered flag rather than a confirmed order. If UK sales are counted
+      from orders, the two dashboards are not comparable and both should say so.</li>
+    <li><strong>Who owns the four new tables?</strong> Spend, targets, shift log and agent roster. They are
+      small, but they need an owner and a weekly update habit or they will be stale within a month.</li>
+    <li><strong>Should Marro be in scope?</strong> The IE base is Butternut only, while the UK dashboard
+      covers both brands. If Marro Ireland exists or is planned, the brand filter should be built now rather
+      than retrofitted.</li>
+  </ol>
+</section>
+
+<footer>
+  Ireland Telesales Dashboard — data audit and build plan.<br>
+  Every figure quoted was computed from the live base on 25 Aug 2026 by
+  <code>tools/ie_data_profile.py</code>, <code>tools/ie_metric_validation.py</code> and
+  <code>tools/ie_deep_insights.py</code>, which can be re-run to refresh them.
+</footer>
+
+</main>
+</body>
+</html>
