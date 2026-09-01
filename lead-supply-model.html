@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>How Many Fresh Leads Per Day? — A Supply Model for the IE Dialler</title>
+  <style>
+    :root {
+      --brown: #522A10;
+      --cream: #FFF6D8;
+      --gold: #FFE180;
+      --coral: #ED6961;
+      --blue: #10507C;
+      --green: #2E7D32;
+      --amber: #B8860B;
+      --red: #B3261E;
+      --paper: #FFFFFF;
+      --line: #E8D9B0;
+      --text: #2E261F;
+      --muted: #6B5B47;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--cream);
+      color: var(--text);
+      font-family: Arial, Verdana, sans-serif;
+      line-height: 1.5;
+    }
+
+    header {
+      background: var(--brown);
+      color: var(--gold);
+      padding: 28px 24px;
+    }
+    header h1 { margin: 0 0 10px; font-size: clamp(24px, 4vw, 38px); }
+    header p { max-width: 940px; margin: 0 0 6px; color: #F8D98D; font-size: 17px; }
+    header .meta { color: #C9A96B; font-size: 14px; margin-top: 12px; }
+
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: #3A1C0A;
+      padding: 10px 24px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      box-shadow: 0 2px 10px rgba(82,42,16,.3);
+    }
+    nav a {
+      color: var(--gold);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 700;
+      padding: 6px 11px;
+      border: 1px solid #7A5A3A;
+      border-radius: 999px;
+      white-space: nowrap;
+    }
+    nav a:hover { background: #5A3A1A; }
+
+    main { width: min(1240px, calc(100% - 32px)); margin: 24px auto 64px; }
+
+    .card {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      box-shadow: 0 8px 24px rgba(82,42,16,.08);
+      margin-bottom: 22px;
+      padding: 24px;
+    }
+
+    h2 {
+      color: var(--brown);
+      font-size: 25px;
+      margin: 0 0 6px;
+      padding-bottom: 10px;
+      border-bottom: 3px solid var(--gold);
+    }
+    h2 .num {
+      display: inline-block;
+      background: var(--brown);
+      color: var(--gold);
+      border-radius: 8px;
+      padding: 2px 10px;
+      margin-right: 10px;
+      font-size: 19px;
+    }
+    h3 { color: var(--brown); font-size: 19px; margin: 26px 0 8px; }
+    h4 { color: var(--blue); font-size: 16px; margin: 18px 0 6px; }
+    p { margin: 0 0 12px; }
+    .lede { font-size: 17px; color: var(--muted); margin-bottom: 18px; }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 14px;
+      margin: 18px 0;
+    }
+    .summary-box {
+      border-left: 6px solid var(--coral);
+      background: #FFF9E8;
+      border-radius: 12px;
+      padding: 14px 16px;
+    }
+    .summary-box strong { display: block; color: var(--brown); font-size: 22px; margin-bottom: 3px; }
+    .summary-box span { font-size: 13px; color: var(--muted); }
+    .summary-box.good { border-left-color: var(--green); }
+    .summary-box.warn { border-left-color: var(--amber); }
+    .summary-box.bad  { border-left-color: var(--red); }
+
+    .table-wrap { overflow-x: auto; margin: 14px 0; }
+    table { border-collapse: collapse; width: 100%; font-size: 14px; }
+    th, td { border: 1px solid var(--line); padding: 9px 11px; text-align: left; vertical-align: top; }
+    th { background: var(--brown); color: var(--gold); font-size: 13px; }
+    tbody tr:nth-child(even) { background: #FFFCF2; }
+    td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+    tr.hot td { background: #FDEDEC; }
+    tr.cool td { background: #EDF7EE; }
+    td code, p code, li code {
+      background: #F4EAD2;
+      border-radius: 4px;
+      padding: 1px 5px;
+      font-family: "SF Mono", Menlo, Consolas, monospace;
+      font-size: 12.5px;
+      color: #6B3A12;
+    }
+
+    .tag {
+      display: inline-block;
+      border-radius: 999px;
+      padding: 2px 9px;
+      font-size: 11.5px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .tag.ok      { background: #DCEDC8; color: #33691E; border: 1px solid #AED581; }
+    .tag.partial { background: #FFF3CD; color: #8A6100; border: 1px solid #FFD54D; }
+    .tag.missing { background: #FADBD8; color: #922B21; border: 1px solid #F1948A; }
+    .tag.new     { background: #D6EAF8; color: #1A5276; border: 1px solid #85C1E9; }
+
+    .callout {
+      border-left: 6px solid var(--blue);
+      background: #EAF3F9;
+      border-radius: 12px;
+      padding: 14px 18px;
+      margin: 16px 0;
+    }
+    .callout.warn { border-left-color: var(--amber); background: #FFF8E1; }
+    .callout.bad  { border-left-color: var(--red);   background: #FDEDEC; }
+    .callout.good { border-left-color: var(--green); background: #EDF7EE; }
+    .callout strong { color: var(--brown); }
+
+    .formula {
+      background: #3A1C0A;
+      color: #FFE180;
+      border-radius: 12px;
+      padding: 18px 22px;
+      margin: 16px 0;
+      font-family: "SF Mono", Menlo, Consolas, monospace;
+      font-size: 14.5px;
+      line-height: 1.9;
+      overflow-x: auto;
+    }
+    .formula .c { color: #C9A96B; }
+    .formula .hl { color: #FFF; font-weight: 700; }
+
+    .kpi-strip {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(165px, 1fr));
+      gap: 10px;
+      margin: 14px 0 20px;
+    }
+    .kpi {
+      background: #FFFCF2;
+      border: 1px solid var(--line);
+      border-top: 4px solid var(--coral);
+      border-radius: 10px;
+      padding: 11px 13px;
+    }
+    .kpi.good { border-top-color: var(--green); }
+    .kpi.bad  { border-top-color: var(--red); }
+    .kpi .lab { font-size: 11.5px; text-transform: uppercase; letter-spacing: .4px; color: var(--muted); font-weight: 700; }
+    .kpi .val { font-size: 21px; font-weight: 700; color: var(--brown); margin: 3px 0; }
+    .kpi .def { font-size: 12px; color: var(--muted); line-height: 1.35; }
+
+    ul, ol { margin: 0 0 12px; padding-left: 22px; }
+    li { margin-bottom: 6px; }
+
+    .opt {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      margin: 16px 0;
+      overflow: hidden;
+    }
+    .opt > .head {
+      background: #F4EAD2;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--line);
+    }
+    .opt > .head .id {
+      display: inline-block;
+      background: var(--brown);
+      color: var(--gold);
+      border-radius: 6px;
+      padding: 2px 9px;
+      font-size: 12.5px;
+      font-weight: 700;
+      margin-right: 9px;
+    }
+    .opt > .head .title { font-weight: 700; color: var(--brown); font-size: 16.5px; }
+    .opt > .head .verdict {
+      float: right;
+      font-size: 12.5px;
+      font-weight: 700;
+      background: #FFF;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 2px 10px;
+    }
+    .opt.pick { border-color: var(--green); border-width: 2px; }
+    .opt.pick > .head { background: #EDF7EE; }
+    .opt.pick > .head .verdict { color: #1B5E20; border-color: #AED581; }
+    .opt > .body { padding: 14px 16px; }
+    .opt .pro, .opt .con { font-size: 13.5px; margin: 4px 0; }
+    .opt .pro::before { content: "+ "; color: var(--green); font-weight: 700; }
+    .opt .con::before { content: "− "; color: var(--red); font-weight: 700; }
+
+    .bar { display: block; height: 9px; border-radius: 5px; background: var(--coral); }
+    .bar.g { background: var(--green); }
+
+    footer { text-align: center; color: var(--muted); font-size: 13px; padding: 20px; }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>How many fresh leads a day?</h1>
+  <p>A model for sizing dialler supply for the Ireland telesales team &mdash; built from what a
+     lead in your own base is actually worth on its 1st, 2nd, 3rd and 4th attempt.</p>
+  <p class="meta">
+    Source base: <code style="color:#FFE180;background:#3A1C0A">IE Telesales System</code> (appIxUjQdnPPLvSrp)
+    &nbsp;·&nbsp; 7,572 leads and 26,115 calls, 20 Mar &ndash; 1 Sep 2026
+    &nbsp;·&nbsp; Model: <code style="color:#FFE180;background:#3A1C0A">tools/ie_lead_flow_model.py</code>
+    &nbsp;·&nbsp; Sheet: <code style="color:#FFE180;background:#3A1C0A">fresh-lead-supply-planner.xlsx</code>
+  </p>
+</header>
+
+<nav>
+  <a href="#answer">The short answer</a>
+  <a href="#decay">What the data says</a>
+  <a href="#fresh">Defining "fresh"</a>
+  <a href="#models">Three ways to model it</a>
+  <a href="#recommended">The recommendation</a>
+  <a href="#cap">Where to set the cap</a>
+  <a href="#buffer">Buffer &amp; stock</a>
+  <a href="#sheet">The sheet</a>
+  <a href="#caveats">Caveats</a>
+  <a href="#decisions">Decisions needed</a>
+</nav>
+
+<main>
+
+<!-- ─────────────────────────── 1 ─────────────────────────── -->
+<section class="card" id="answer">
+  <h2><span class="num">1</span>The short answer</h2>
+  <p class="lede">Your instinct is right, and the data is blunter than you expected. You are not
+     slightly short of leads. You are running the dialler on roughly <strong>40% of the fresh
+     supply it needs</strong>, and the gap is being filled by re-dialling list that is already
+     used up.</p>
+
+  <div class="kpi-strip">
+    <div class="kpi bad">
+      <div class="lab">Fresh leads arriving</div>
+      <div class="val">44 / day</div>
+      <div class="def">Weekdays, last 8 weeks</div>
+    </div>
+    <div class="kpi good">
+      <div class="lab">Fresh leads needed</div>
+      <div class="val">107 / day</div>
+      <div class="def">To feed today's dialling at a 4-attempt cap</div>
+    </div>
+    <div class="kpi bad">
+      <div class="lab">Supply vs appetite</div>
+      <div class="val">41%</div>
+      <div class="def">The other 59% is recycled list</div>
+    </div>
+    <div class="kpi bad">
+      <div class="lab">Dials per new lead</div>
+      <div class="val">8.1</div>
+      <div class="def">A lead is spent after about 3</div>
+    </div>
+    <div class="kpi bad">
+      <div class="lab">Workable list left</div>
+      <div class="val">60 leads</div>
+      <div class="def">Open, under 4 attempts, under 30 days</div>
+    </div>
+    <div class="kpi good">
+      <div class="lab">Prize from fixing supply</div>
+      <div class="val">+26%</div>
+      <div class="def">7.0 &rarr; 8.8 sales/day, same team, same dials</div>
+    </div>
+  </div>
+
+  <p>Three things fall out of the numbers, and the third is the one that changes what you
+     should do first.</p>
+  <ol>
+    <li><strong>The decay you are seeing is real and it is steep.</strong> A 1st attempt converts
+        at 2.75 sales per 100 dials. A 5th converts at 1.14. It costs 36 dials to make a sale on
+        attempt 1 and 88 on attempt 5.</li>
+    <li><strong>But it is driven by attempt count, not by the calendar</strong> &mdash; at least for
+        the first month. A 30-day-old lead performs about as well as a day-old one on the same
+        attempt number. It is only past 30 days that the floor gives way.</li>
+    <li><strong>Capping attempts is therefore <em>not</em> your first move.</strong> Your agents
+        are at 44% occupancy. They already do not have enough to dial. Capping attempts today
+        would just leave them staring at an empty queue. Supply comes first, cap discipline
+        second &mdash; and the cap only starts paying once the list is full.</li>
+  </ol>
+
+  <div class="callout good">
+    <strong>The one number you asked for.</strong> At the team's current size, order
+    <strong>107 fresh leads per working day</strong> &mdash; about <strong>535 a week</strong> &mdash;
+    and work each to a cap of 4 attempts within 30 days. That fills the phones without recycling.
+    Going beyond that needs headcount, not leads: every additional 2.5 sales a day costs roughly
+    one more agent <em>and</em> another 34 leads a day.
+  </div>
+</section>
+
+<!-- ─────────────────────────── 2 ─────────────────────────── -->
+<section class="card" id="decay">
+  <h2><span class="num">2</span>What the data actually says</h2>
+
+  <h3>2.1 &nbsp;Each attempt is worth less than the last</h3>
+  <p>This is the survivorship-corrected cut, which matters. The naive version &mdash; conversion
+     rate by <em>total</em> attempts on a lead &mdash; is misleading, because a lead that sells
+     stops being dialled, so winners pile up in the low-attempt buckets and make early attempts
+     look better than they are. The honest question is: <em>of the leads that actually received
+     attempt N, what share converted on attempt N?</em></p>
+
+  <div class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th>Attempt</th>
+        <th class="num">Dials placed</th>
+        <th class="num">Still in play</th>
+        <th class="num">Connect rate</th>
+        <th class="num">Sales</th>
+        <th class="num">Sales per 100 dials</th>
+        <th class="num">Dials per sale</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="cool"><td>1st</td><td class="num">7,754</td><td class="num">100%</td><td class="num">45.3%</td><td class="num">213</td><td class="num"><strong>2.75</strong></td><td class="num">36</td></tr>
+      <tr class="cool"><td>2nd</td><td class="num">6,372</td><td class="num">82%</td><td class="num">40.5%</td><td class="num">183</td><td class="num"><strong>2.87</strong></td><td class="num">35</td></tr>
+      <tr><td>3rd</td><td class="num">5,134</td><td class="num">66%</td><td class="num">35.4%</td><td class="num">113</td><td class="num"><strong>2.20</strong></td><td class="num">45</td></tr>
+      <tr class="hot"><td>4th</td><td class="num">3,931</td><td class="num">51%</td><td class="num">33.8%</td><td class="num">62</td><td class="num"><strong>1.58</strong></td><td class="num">63</td></tr>
+      <tr class="hot"><td>5th</td><td class="num">2,111</td><td class="num">27%</td><td class="num">30.2%</td><td class="num">24</td><td class="num"><strong>1.14</strong></td><td class="num">88</td></tr>
+      <tr><td>6th+</td><td class="num">696</td><td class="num">9%</td><td class="num">40.4%</td><td class="num">20</td><td class="num">2.87</td><td class="num">35</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="callout warn">
+    <strong>Ignore the 6th+ row when planning.</strong> It looks strong, but almost nothing reaches
+    it by policy. Those are leads an agent personally chose to keep chasing &mdash; mostly booked
+    callbacks. That is a hand-picked group, not evidence that a 7th cold dial pays.
+  </div>
+
+  <p>Two readings worth having in your head. The <strong>connect rate</strong> slide (45% &rarr; 30%)
+     is what your agents feel day to day &mdash; the phone just stops being answered. But the
+     <strong>sales per dial</strong> slide is worse than the connect slide, because the people you
+     do reach on a 5th attempt are also less likely to buy. The two compound.</p>
+
+  <h3>2.2 &nbsp;Age only bites after 30 days &mdash; not after three</h3>
+  <p>This is the finding that surprised me, and it is the one that should shape policy. Holding
+     attempt number constant, a lead does <em>not</em> meaningfully decay over its first month.
+     Sales per 100 dials by how old the lead was on the day it was dialled:</p>
+
+  <div class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th>Lead age when dialled</th>
+        <th class="num">Dials</th>
+        <th class="num">Share of all dialling</th>
+        <th class="num">Connect rate</th>
+        <th class="num">Sales per 100 dials</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>Same day</td><td class="num">3,103</td><td class="num">12%</td><td class="num">39.2%</td><td class="num">2.58</td></tr>
+      <tr><td>1 day</td><td class="num">2,445</td><td class="num">10%</td><td class="num">38.0%</td><td class="num">2.74</td></tr>
+      <tr><td>2&ndash;3 days</td><td class="num">3,791</td><td class="num">15%</td><td class="num">41.1%</td><td class="num">2.53</td></tr>
+      <tr><td>4&ndash;7 days</td><td class="num">4,797</td><td class="num">19%</td><td class="num">42.7%</td><td class="num">2.65</td></tr>
+      <tr><td>8&ndash;14 days</td><td class="num">4,077</td><td class="num">16%</td><td class="num">44.3%</td><td class="num">2.50</td></tr>
+      <tr><td>15&ndash;30 days</td><td class="num">3,805</td><td class="num">15%</td><td class="num">37.6%</td><td class="num">2.29</td></tr>
+      <tr class="hot"><td>31&ndash;60 days</td><td class="num">2,808</td><td class="num">11%</td><td class="num">31.1%</td><td class="num"><strong>1.35</strong></td></tr>
+      <tr class="hot"><td>61+ days</td><td class="num">681</td><td class="num">3%</td><td class="num">18.4%</td><td class="num"><strong>0.59</strong></td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <p>Flat from day 0 to day 30, then it halves, then it halves again. So "old lead" in your data
+     does not mean "a few days old" &mdash; it means <em>past a month</em>. That has a practical
+     upside: you do not need leads delivered hourly, and a speed-to-lead programme is not where
+     the money is. You need <em>enough</em> leads, and you need to finish working them inside the
+     month.</p>
+
+  <p>Put the two decays on one grid and the picture is very clean. Split every dial you have
+     placed by whether it was inside the attempt budget and inside the month:</p>
+
+  <div class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th>Zone</th>
+        <th class="num">Dials</th>
+        <th class="num">Share of dialling</th>
+        <th class="num">Connect rate</th>
+        <th class="num">Share of sales</th>
+        <th class="num">Sales per 100 dials</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="cool"><td><strong>Attempts 1&ndash;3, under 30 days</strong> &mdash; the good zone</td><td class="num">17,696</td><td class="num">69.4%</td><td class="num">41.5%</td><td class="num">79.5%</td><td class="num"><strong>2.70</strong></td></tr>
+      <tr><td>Attempts 4+, under 30 days</td><td class="num">4,322</td><td class="num">16.9%</td><td class="num">37.9%</td><td class="num">13.5%</td><td class="num">1.87</td></tr>
+      <tr><td>Attempts 1&ndash;3, over 30 days</td><td class="num">1,076</td><td class="num">4.2%</td><td class="num">37.0%</td><td class="num">2.5%</td><td class="num">1.39</td></tr>
+      <tr class="hot"><td><strong>Attempts 4+, over 30 days</strong> &mdash; the dead zone</td><td class="num">2,413</td><td class="num">9.5%</td><td class="num">24.9%</td><td class="num">4.5%</td><td class="num"><strong>1.12</strong></td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <p>Just under a third of all dialling happens outside the good zone, and it returns a fifth of
+     the sales. The dead zone alone is 2,413 dials for 27 sales; the same dials aimed at fresh
+     list would have produced about 65.</p>
+
+  <h3>2.3 &nbsp;The list is not "getting old" &mdash; it is already exhausted</h3>
+  <p>Of the 1,349 leads that arrived in the last 30 days:</p>
+
+  <div class="table-wrap">
+  <table>
+    <thead><tr><th>Status</th><th class="num">Leads</th><th></th></tr></thead>
+    <tbody>
+      <tr><td>Closed &mdash; not interested</td><td class="num">565</td><td><span class="bar" style="width:56%"></span></td></tr>
+      <tr class="hot"><td><strong>Open but already on 4+ attempts</strong></td><td class="num">500</td><td><span class="bar" style="width:50%"></span></td></tr>
+      <tr><td>Closed &mdash; invalid</td><td class="num">119</td><td><span class="bar" style="width:12%"></span></td></tr>
+      <tr><td>Closed &mdash; sold</td><td class="num">76</td><td><span class="bar g" style="width:8%"></span></td></tr>
+      <tr><td>Closed &mdash; unqualified</td><td class="num">29</td><td><span class="bar" style="width:3%"></span></td></tr>
+      <tr class="cool"><td><strong>Still genuinely workable</strong></td><td class="num">60</td><td><span class="bar g" style="width:6%"></span></td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <p>Sixty leads. At 357 dials a day that is about half a day of work. Everything else the
+     team dials is either closed or already burnt through its attempt budget. And supply is
+     falling, not rising &mdash; new leads by week: 515, 378, 285, 168.</p>
+
+  <div class="callout bad">
+    <strong>This is why the connection rate is dropping.</strong> It is not that the leads went
+    stale in the calendar sense. It is that there is nothing left to dial except leads that have
+    already been dialled four times, so the <em>average attempt number</em> of the dials your
+    agents place keeps climbing. The connect rate is falling because the mix is shifting, not
+    because the leads aged.
+  </div>
+
+  <h3>2.4 &nbsp;And the agents are not the bottleneck</h3>
+  <div class="table-wrap">
+  <table>
+    <thead>
+      <tr><th>A real agent-day (172 observed)</th><th class="num">25th pct</th><th class="num">Median</th><th class="num">75th pct</th><th class="num">90th pct</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Dials</td><td class="num">82</td><td class="num"><strong>128</strong></td><td class="num">198</td><td class="num">295</td></tr>
+      <tr><td>Connects</td><td class="num">37</td><td class="num">56</td><td class="num">80</td><td class="num">100</td></tr>
+      <tr><td>Talk hours</td><td class="num">2.3</td><td class="num"><strong>3.3</strong></td><td class="num">4.4</td><td class="num">4.9</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>3.3 talk hours against a 7.5 hour shift is <strong>44% occupancy</strong>. There is real room
+     on the clock. An average of 2.5 agents are dialling on a given day. The constraint is what
+     is in the queue, not who is on the phone.</p>
+</section>
+
+<!-- ─────────────────────────── 3 ─────────────────────────── -->
+<section class="card" id="fresh">
+  <h2><span class="num">3</span>Getting "fresh" defined before we count it</h2>
+  <p class="lede">The model is only as good as this definition, so it is worth pinning down
+     explicitly rather than leaving it as a feeling.</p>
+
+  <div class="callout">
+    <strong>A lead is fresh while it is under both limits at once:</strong> fewer than 4 attempts
+    placed against it, <em>and</em> fewer than 30 days since it arrived. Cross either line and it
+    moves to a different economic bucket; cross both and it is dead list.
+  </div>
+
+  <p>Both thresholds come from the cliffs in section 2 rather than from convention, and both are
+     inputs in the sheet so you can move them as the data moves. The important discipline is that
+     "how many fresh leads do we need" is meaningless unless the denominator is fixed &mdash;
+     otherwise every conversation about lead volume quietly changes the definition to suit the
+     answer.</p>
+
+  <p>One consequence worth stating plainly: <strong>a lead you buy but do not work within 30 days
+     is worth about half what you paid for it.</strong> That is why the answer to "how many leads
+     do we need" is never simply "as many as we can get".</p>
+</section>
+
+<!-- ─────────────────────────── 4 ─────────────────────────── -->
+<section class="card" id="models">
+  <h2><span class="num">4</span>Three ways to model it</h2>
+  <p class="lede">You asked to brainstorm the options before committing. Here are the three that
+     are actually worth considering, with what each gets right and where each fails.</p>
+
+  <div class="opt">
+    <div class="head">
+      <span class="id">A</span><span class="title">Capacity-fill &mdash; "keep the dialler fed"</span>
+      <span class="verdict">Necessary, not sufficient</span>
+    </div>
+    <div class="body">
+      <div class="formula">
+        fresh leads/day &nbsp;=&nbsp; (agents &times; dials per agent-day) &nbsp;&divide;&nbsp; dials a lead absorbs
+      </div>
+      <p>Work out how many dials the team can place, and how many dials one lead soaks up before
+         it is spent. Divide. This is the number that stops recycling.</p>
+      <div class="pro">Directly targets the disease you have. Simple, hard to argue with, easy to monitor daily.</div>
+      <div class="pro">Needs only data you already hold &mdash; no cost or margin assumptions.</div>
+      <div class="con">Says nothing about whether the resulting sales number is the one the business needs.</div>
+      <div class="con">Treats current headcount as fixed, so it can quietly enshrine an under-sized team.</div>
+    </div>
+  </div>
+
+  <div class="opt">
+    <div class="head">
+      <span class="id">B</span><span class="title">Target-backwards &mdash; "hit the number"</span>
+      <span class="verdict">Right question, unsafe alone</span>
+    </div>
+    <div class="body">
+      <div class="formula">
+        fresh leads/day &nbsp;=&nbsp; sales target per day &nbsp;&divide;&nbsp; sales per lead
+      </div>
+      <p>Start from the commercial target and divide by what one lead is worth end-to-end. This is
+         how most people instinctively size a lead order.</p>
+      <div class="pro">Ties lead buying to the thing the business actually cares about.</div>
+      <div class="pro">Makes the cost of a target visible before you commit to it.</div>
+      <div class="con"><strong>Dangerous on its own.</strong> It will happily tell you to buy 272 leads a
+          day when the team can only work 107. The surplus does not wait politely &mdash; it ages past
+          30 days and loses half its value. You would be paying full price for half-price leads.</div>
+      <div class="con">Assumes sales per lead is independent of volume, which stops being true once
+          the queue is deep enough that leads wait.</div>
+    </div>
+  </div>
+
+  <div class="opt pick">
+    <div class="head">
+      <span class="id">C</span><span class="title">Constrained &mdash; run both, order the lower, and flag the gap</span>
+      <span class="verdict">Recommended</span>
+    </div>
+    <div class="body">
+      <div class="formula">
+        order &nbsp;=&nbsp; <span class="hl">MIN</span>( target-driven , capacity-driven )<br>
+        <span class="c">and if target-driven &gt; capacity-driven, you have a hiring problem, not a lead problem</span>
+      </div>
+      <p>The two formulas above answer different questions, and the gap between them is itself the
+         most useful output. Order the smaller number; report the difference as the headcount
+         shortfall.</p>
+      <div class="pro">Cannot tell you to over-buy into an ageing queue.</div>
+      <div class="pro">Separates the two failure modes cleanly, so the conversation with finance is
+          either "we need more leads" or "we need more agents", never a vague mixture.</div>
+      <div class="pro">Degrades gracefully &mdash; if either input is wrong, the answer is wrong in a
+          direction you can see.</div>
+      <div class="con">Needs both a capacity figure and a yield curve kept current. That is a monthly
+          refresh habit, not a one-off build.</div>
+    </div>
+  </div>
+
+  <h3>Two models I considered and rejected</h3>
+  <ul>
+    <li><strong>Contact-rate targeting</strong> &mdash; "buy enough leads to hold connect rate above
+        40%". Tempting because connect rate is what agents feel, but it optimises the wrong thing:
+        you can hit any connect rate you like by dialling only first attempts and throwing the rest
+        away. Connect rate is a symptom to monitor, not a target to size against.</li>
+    <li><strong>Simple ratio-of-thumb</strong> &mdash; "N leads per agent per day". This is what most
+        teams end up with, and it is not crazy; at a 4-attempt cap it lands at roughly 43 leads per
+        agent-day for you. But it hides the attempt cap inside the constant, so the moment anyone
+        changes dialling policy the ratio is silently wrong and nobody notices. Fine as a sanity
+        check, bad as the system of record.</li>
+  </ul>
+</section>
+
+<!-- ─────────────────────────── 5 ─────────────────────────── -->
+<section class="card" id="recommended">
+  <h2><span class="num">5</span>The recommended model, worked through</h2>
+
+  <h3>The two building blocks</h3>
+  <p>Everything rests on two quantities derived from the attempt curve, both a function of where
+     you set the cap <em>N</em>. Let <em>r<sub>n</sub></em> be the share of leads still in play at
+     attempt <em>n</em>, and <em>v<sub>n</sub></em> the sales per dial on attempt <em>n</em>.</p>
+
+  <div class="formula">
+    <span class="c">dials one lead absorbs</span><br>
+    D(N) &nbsp;=&nbsp; r<sub>1</sub> + r<sub>2</sub> + … + r<sub>N</sub><br><br>
+    <span class="c">sales one lead eventually produces</span><br>
+    S(N) &nbsp;=&nbsp; r<sub>1</sub>v<sub>1</sub> + r<sub>2</sub>v<sub>2</sub> + … + r<sub>N</sub>v<sub>N</sub>
+  </div>
+
+  <p>In steady state every lead you buy is eventually worked to the cap, so daily dialling equals
+     daily lead intake times <em>D(N)</em>, and daily sales equals daily intake times <em>S(N)</em>.
+     That is the whole model. Your measured values:</p>
+
+  <div class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th>Attempt cap</th>
+        <th class="num">D(N) &mdash; dials per lead</th>
+        <th class="num">S(N) &mdash; sales per lead</th>
+        <th class="num">Sales per 100 dials</th>
+        <th class="num">Leads/day to fill today's phones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>2</td><td class="num">1.82</td><td class="num">0.0511</td><td class="num">2.80</td><td class="num">176</td></tr>
+      <tr><td>3</td><td class="num">2.48</td><td class="num">0.0656</td><td class="num">2.64</td><td class="num">129</td></tr>
+      <tr class="cool"><td><strong>4</strong></td><td class="num"><strong>2.99</strong></td><td class="num"><strong>0.0736</strong></td><td class="num"><strong>2.46</strong></td><td class="num"><strong>107</strong></td></tr>
+      <tr><td>5</td><td class="num">3.26</td><td class="num">0.0767</td><td class="num">2.35</td><td class="num">98</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <p>Read the cap-4 row in plain language: a lead is worth about <strong>0.074 of a sale</strong>,
+     which is to say it takes about <strong>14 leads to make one sale</strong>, and each lead soaks
+     up <strong>3 dials</strong> on its way there.</p>
+
+  <h3>The calculation, with your numbers</h3>
+  <div class="formula">
+    <span class="c">capacity-driven &mdash; what it takes to stop recycling</span><br>
+    2.5 agents &times; 128 dials &nbsp;=&nbsp; 320 dials/day<br>
+    320 &divide; 2.99 &nbsp;=&nbsp; <span class="hl">107 fresh leads/day</span> &nbsp;&rarr;&nbsp; 7.9 sales/day<br><br>
+    <span class="c">target-driven &mdash; what a 20-a-day target would take</span><br>
+    20 &divide; 0.0736 &nbsp;=&nbsp; <span class="hl">272 fresh leads/day</span><br>
+    272 &times; 2.99 &divide; 128 &nbsp;=&nbsp; <span class="hl">6.3 agents</span> needed on the phones<br><br>
+    <span class="c">order the lower, and read the gap as headcount</span><br>
+    order <span class="hl">107/day</span> &nbsp;·&nbsp; flag a shortfall of <span class="hl">3.8 agents</span>
+  </div>
+
+  <h3>What each sales target actually costs</h3>
+  <p>At a 4-attempt cap, holding the yield curve constant:</p>
+  <div class="table-wrap">
+  <table>
+    <thead>
+      <tr><th>Sales per day</th><th class="num">Sales per week</th><th class="num">Fresh leads/day</th><th class="num">Fresh leads/week</th><th class="num">Agents on the phone</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>8 <span class="tag partial">roughly today</span></td><td class="num">40</td><td class="num">109</td><td class="num">543</td><td class="num">2.5</td></tr>
+      <tr><td>10</td><td class="num">50</td><td class="num">136</td><td class="num">680</td><td class="num">3.2</td></tr>
+      <tr><td>15</td><td class="num">75</td><td class="num">204</td><td class="num">1,020</td><td class="num">4.8</td></tr>
+      <tr class="cool"><td>20</td><td class="num">100</td><td class="num">272</td><td class="num">1,360</td><td class="num">6.3</td></tr>
+      <tr><td>25</td><td class="num">125</td><td class="num">339</td><td class="num">1,695</td><td class="num">7.9</td></tr>
+      <tr><td>30</td><td class="num">150</td><td class="num">407</td><td class="num">2,035</td><td class="num">9.5</td></tr>
+      <tr><td>40</td><td class="num">200</td><td class="num">543</td><td class="num">2,715</td><td class="num">12.7</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <p>The useful property of this table is that it makes the two levers move together. There is no
+     row where leads alone get you there, and no row where headcount alone gets you there. Whenever
+     someone asks for a higher number, this is the price in both currencies.</p>
+
+  <div class="callout">
+    <strong>A caution on scaling the yield curve.</strong> These rows assume sales per lead holds
+    as volume rises. It probably will through the 15&ndash;20 range, since you would still be buying
+    from the same sources. Past that you are likely buying from new sources or deeper into existing
+    ones, and the curve will soften. Re-measure at each step rather than extrapolating to 40.
+  </div>
+</section>
+
+<!-- ─────────────────────────── 6 ─────────────────────────── -->
+<section class="card" id="cap">
+  <h2><span class="num">6</span>Where to set the attempt cap &mdash; and why the obvious answer is wrong</h2>
+  <p class="lede">The instinct from section 2 is "attempt 5 converts at half the rate of attempt 1,
+     so stop at 3". That instinct is right only in a world where you have leads to replace those
+     attempts with. You do not.</p>
+
+  <h3>The trade, stated properly</h3>
+  <p>Cost per sale under a cap of <em>N</em> is the lead you bought plus the agent time you spent on
+     it, divided by the sales it produced:</p>
+  <div class="formula">
+    cost per sale &nbsp;=&nbsp; ( cost of a lead &nbsp;+&nbsp; cost of a dial &times; D(N) ) &nbsp;&divide;&nbsp; S(N)
+  </div>
+  <p>Rearrange that for two adjacent caps and each extra attempt band pays for itself above a
+     threshold lead price, expressed as a multiple of what one dial costs in agent time:</p>
+
+  <div class="table-wrap">
+  <table>
+    <thead>
+      <tr><th>Move</th><th class="num">Extra dials per lead</th><th class="num">Extra sales per lead</th><th class="num">Worth doing when a lead costs more than</th><th class="num">At &euro;18/hr &rarr; &euro;1.05 a dial</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Cap 3 &rarr; cap 4</td><td class="num">+0.51</td><td class="num">+0.0080</td><td class="num">1.7 &times; a dial</td><td class="num"><strong>&euro;1.77</strong></td></tr>
+      <tr><td>Cap 4 &rarr; cap 5</td><td class="num">+0.27</td><td class="num">+0.0031</td><td class="num">3.5 &times; a dial</td><td class="num"><strong>&euro;3.68</strong></td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <p>So if a fresh lead costs you more than about &euro;1.77, a 4th attempt is cheaper than buying a
+     replacement lead. Above roughly &euro;3.68, so is a 5th. Unless your leads are very cheap, the
+     arithmetic says <strong>work them to 4 or 5</strong> &mdash; the opposite of the instinct.</p>
+
+  <h3>Which regime are you in?</h3>
+  <p>The cap question really reduces to one thing: which resource is scarce.</p>
+  <div class="table-wrap">
+  <table>
+    <thead><tr><th>If the scarce thing is…</th><th>You should maximise…</th><th>Which means…</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Agent hours</strong> (phones full, leads plentiful)</td><td>sales per <em>dial</em></td><td>a tight cap of 2&ndash;3, high lead volume, retire aggressively</td></tr>
+      <tr class="cool"><td><strong>Leads</strong> (phones idle, list empty) &mdash; <span class="tag missing">you are here</span></td><td>sales per <em>lead</em></td><td>a loose cap of 4&ndash;5, squeeze each lead, fix supply urgently</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="callout warn">
+    <strong>The sequencing matters more than the cap.</strong> Today, with 44% occupancy and 60
+    workable leads on hand, tightening the cap would idle agents and cost you sales. Fix supply
+    first. Once the phones are genuinely full and leads are queuing, you flip regimes and the cap
+    becomes the right lever &mdash; at that point tighten to 3 and buy the volume instead. Build the
+    cap into the sheet as a dial you turn, not a policy you fix once.
+  </div>
+</section>
+
+<!-- ─────────────────────────── 7 ─────────────────────────── -->
+<section class="card" id="buffer">
+  <h2><span class="num">7</span>Buffer, and how big the live list should be</h2>
+  <p class="lede">A lead is not consumed on the day it lands. It occupies the dialler until it
+     closes or hits the cap, so the <em>stock</em> you need to hold is larger than the daily flow.</p>
+
+  <p>Little's law: <code>stock = arrival rate × cycle time</code>. Your median lead takes
+     <strong>9 days</strong> from first dial to last (75th percentile 27 days). At 107 leads a day
+     that is a live workable list of roughly <strong>950&ndash;1,000 leads</strong> at any moment. If
+     the dialler is holding far less than that, agents are working the same records repeatedly
+     within the week, which is exactly what the 8.1-dials-per-lead figure is telling you.</p>
+
+  <p>On top of the working stock you want a delivery buffer, because supply is lumpy &mdash; your
+     weekly intake has swung between 101 and 515. A reasonable rule is <strong>3 days of untouched
+     cover</strong>, about 320 leads, held back and not yet loaded. Less and a late delivery puts
+     agents on dead list within a day; much more and the tail of the buffer ages past 30 days
+     before anyone dials it.</p>
+
+  <h3>Working the cap inside the window</h3>
+  <p>One operational detail the model assumes and your current process does not deliver. Median
+     days from lead arrival to each attempt:</p>
+  <div class="table-wrap">
+  <table>
+    <thead><tr><th>Attempt</th><th class="num">Median day</th><th class="num">75th percentile</th><th class="num">90th percentile</th></tr></thead>
+    <tbody>
+      <tr><td>1st</td><td class="num">2</td><td class="num">5</td><td class="num">9</td></tr>
+      <tr><td>2nd</td><td class="num">5</td><td class="num">12</td><td class="num">22</td></tr>
+      <tr><td>3rd</td><td class="num">8</td><td class="num">20</td><td class="num">34</td></tr>
+      <tr class="hot"><td>4th</td><td class="num">17</td><td class="num">41</td><td class="num">54</td></tr>
+      <tr class="hot"><td>5th</td><td class="num">22</td><td class="num">54</td><td class="num">69</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>A quarter of 4th attempts happen after day 41 &mdash; past the cliff, in the dead zone. The
+     attempt budget needs to be spent <em>inside</em> the 30-day window or it is wasted. That is a
+     dialler configuration change (tighter redial intervals, and an automatic retirement rule at 30
+     days), not a supply change.</p>
+</section>
+
+<!-- ─────────────────────────── 8 ─────────────────────────── -->
+<section class="card" id="sheet">
+  <h2><span class="num">8</span>The Google Sheet</h2>
+  <p class="lede">Built and in the repo as <code>fresh-lead-supply-planner.xlsx</code>. Drop it into
+     Drive and open it with Google Sheets &mdash; every derived cell is a live formula, so nothing is
+     a frozen constant.</p>
+
+  <div class="table-wrap">
+  <table>
+    <thead><tr><th>Tab</th><th>What it does</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Start Here</strong></td><td>The model in plain language and the refresh routine.</td></tr>
+      <tr><td><strong>Planner</strong></td><td>The calculator. Yellow cells are yours to change, green cells are answers. Set target, headcount and cap; read "order this many fresh leads per day". Includes the feasibility verdict, the unit economics, and a "where you are today" block that shows the gap against current actuals.</td></tr>
+      <tr><td><strong>Scenarios</strong></td><td>Three grids: leads per day by target and cap, agents needed for the same, and cost per sale by lead price and cap &mdash; that last one tells you which cap you should be running at any given lead price.</td></tr>
+      <tr><td><strong>Yield Curve</strong></td><td>The attempt economics. Ships pre-loaded with the measured Mar&ndash;Aug baseline so it works immediately, and recalculates from your own export when you flip the source toggle to Auto.</td></tr>
+      <tr><td><strong>Capacity</strong></td><td>Sanity-checks the dials-per-agent-day assumption against talk time and wrap, and tells you whether the number you typed is physically possible.</td></tr>
+      <tr><td><strong>List Health</strong></td><td>The daily check. How much genuinely workable list is left, how many days of cover that is, and an ageing profile with what to do about each band.</td></tr>
+      <tr><td><strong>Paste Calls / Paste Leads</strong></td><td>Refresh targets. Two Airtable exports, columns already mapped to the field names in the IE base.</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="callout good">
+    <strong>The design principle worth keeping.</strong> The empirical part (the yield curve, measured
+    from data) is kept strictly separate from the planning levers (target, headcount, cap, price).
+    That is what stops the sheet rotting: when performance changes you refresh one tab, and every
+    downstream number moves on its own. Most planning sheets die because someone hard-codes a
+    conversion rate into the middle of a formula and nobody remembers it is there.
+  </div>
+
+  <h3>The refresh routine</h3>
+  <ol>
+    <li><strong>Monthly:</strong> export calls and leads from Airtable into the two paste tabs; the
+        yield curve and list health recalculate themselves.</li>
+    <li><strong>Weekly:</strong> check the ordered-leads figure against what actually arrived. That
+        one comparison is the whole early-warning system.</li>
+    <li><strong>Daily:</strong> the List Health verdict. If it says "empty", agents will be on dead
+        list before lunch.</li>
+  </ol>
+</section>
+
+<!-- ─────────────────────────── 9 ─────────────────────────── -->
+<section class="card" id="caveats">
+  <h2><span class="num">9</span>What I would want to firm up before betting the budget on this</h2>
+  <p class="lede">The direction of the answer is safe &mdash; a 41% supply ratio and 60 workable leads
+     are not marginal findings. But several inputs deserve a second look before the numbers are
+     used to size a purchase order.</p>
+
+  <div class="table-wrap">
+  <table>
+    <thead><tr><th>Issue</th><th>Effect on the model</th><th>What would settle it</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>Gaps in the call export</strong> &mdash; weeks 13 and 32 have leads but no calls at all</td>
+        <td>Understates dial volume in those weeks, and makes some leads look as though they were first dialled much later than they were</td>
+        <td>Confirm whether those are genuine dialling pauses or a sync failure. If it is a sync failure, the age analysis in 2.2 needs re-running</td>
+      </tr>
+      <tr>
+        <td><strong>Sales are stamped on the last dial</strong>, not necessarily the dial that sold</td>
+        <td>116 of 639 "Success" calls lasted under 20 seconds, so a few sales are attributed to the wrong attempt number</td>
+        <td>Low impact on the totals, but check whether Adversus can stamp the outcome on the call that produced it</td>
+      </tr>
+      <tr>
+        <td><strong>Cohort maturity</strong> &mdash; only ~90% of a lead week's sales have landed by day 28</td>
+        <td>Recent weeks always look worse than they will turn out; sales per lead is slightly understated</td>
+        <td>Judge cohorts at 45 days, and grey out anything younger on the dashboard</td>
+      </tr>
+      <tr>
+        <td><strong>Small capacity sample</strong> &mdash; 172 agent-days, with agents working sporadically</td>
+        <td>The 128 dials/agent-day planning figure could be off by 20% either way</td>
+        <td>Two clean weeks of full-team dialling would settle it. It is a direct multiplier on the answer, so it is worth the effort</td>
+      </tr>
+      <tr>
+        <td><strong>No cost or margin data in the base</strong></td>
+        <td>Cost per lead, agent cost and gross margin per sale are all assumptions in the sheet</td>
+        <td>Your actual figures. The cap recommendation in section 6 hinges on lead price, so this is the highest-value input to nail down</td>
+      </tr>
+      <tr>
+        <td><strong>Source mix is not modelled</strong></td>
+        <td>The yield curve is blended across all lead sources; if one source is much better, the average hides it</td>
+        <td>Split the curve by <code>Source</code> or <code>Campaign Name</code>. If the spread is wide, the buying question changes from "how many" to "how many of which"</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<!-- ─────────────────────────── 10 ─────────────────────────── -->
+<section class="card" id="decisions">
+  <h2><span class="num">10</span>What I need from you to finish this</h2>
+  <p class="lede">Four inputs turn this from a well-calibrated model into a purchase decision.</p>
+
+  <ol>
+    <li><strong>What does a fresh lead cost, and what is the gross margin on a sale?</strong> These
+        two numbers decide the attempt cap and tell you the most you can afford to pay per lead.
+        Everything else in the sheet works without them; the cap recommendation does not.</li>
+    <li><strong>What is the real target?</strong> The model is currently anchored on "fill the
+        phones", which lands at about 8 sales a day. If the business needs 20, that is a headcount
+        conversation as much as a lead conversation, and the table in section 5 prices both.</li>
+    <li><strong>How many agents can you actually put on the phone, and for how long?</strong> The 2.5
+        average and 128 dials/agent-day are measured, but from a sparse sample. If the intent is 6
+        FTE dialling full shifts, every number in section 5 should be rebuilt on that basis.</li>
+    <li><strong>Can supply actually go to ~535 a week?</strong> Recent intake was 168. If the sources
+        cannot deliver triple, the honest plan is to right-size the team to the leads you can get
+        rather than keep agents at 44% occupancy &mdash; which is the more expensive of the two
+        mistakes.</li>
+  </ol>
+
+  <div class="callout good">
+    <strong>Where I would start regardless of those answers.</strong> Three things pay off before any
+    purchase decision is made, and none of them need budget: retire anything past 30 days out of the
+    active list so agents stop burning dials on it; tighten redial intervals so the attempt budget is
+    spent inside the first 30 days rather than trailing to day 41; and put the List Health verdict
+    somewhere the floor manager sees it every morning. Together those recover most of the 9.5% of
+    dialling currently going into the dead zone.
+  </div>
+</section>
+
+</main>
+
+<footer>
+  Built from the IE Telesales System Airtable base, 20 March &ndash; 1 September 2026 &nbsp;·&nbsp;
+  Model: <code>tools/ie_lead_flow_model.py</code> &nbsp;·&nbsp;
+  Sheet builder: <code>tools/build_lead_supply_sheet.py</code>
+</footer>
+
+</body>
+</html>
