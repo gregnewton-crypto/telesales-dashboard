@@ -4,6 +4,9 @@
 Targets the Telesales System base (appZoN6xBB9mDv8h4), table ☘ Databowl Leads.
 Also keeps the Lead open/closed (auto) formula aligned with the attempt cap.
 
+Companion to automations/linking-leads-adversus-databowl.js (STANDARD_CALL_LIMIT)
+and the sibling automation "Databowl lead date IE".
+
 Usage:
   python tools/airtable_close_leads.py --dry-run
   python tools/airtable_close_leads.py --apply
