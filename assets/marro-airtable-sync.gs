@@ -2,12 +2,17 @@
  * Marro Data → Airtable (Google Apps Script)
  *
  * Script properties: AIRTABLE_PAT, AIRTABLE_BASE_ID, AIRTABLE_TABLE_ID, SHEET_NAME,
- *   HEADER_ROW, FIRST_DATA_ROW, COL_RECORD_ID (42), COL_LAST_SYNCED (44), COL_SYNC_ERROR (45)
+ *   FIRST_DATA_ROW, COL_RECORD_ID (42), COL_LAST_SYNCED (44), COL_SYNC_ERROR (45)
  *
- * Run: runSyncMaxRows(5) first, then runSync() for all rows.
- * Schedule: run setupDailyMorningTrigger() once (default 7:00, script timezone).
- * Optional property: SYNC_HOUR (0–23, e.g. 7 for 7am).
+ * runSyncMaxRows(5) — test
+ * runSync — full sync (auto-continues if it hits the time limit)
+ * runSyncContinue — resume after timeout (also scheduled automatically)
+ * setupDailyMorningTrigger() — once daily
  */
+
+var AIRTABLE_BATCH_SIZE_ = 10;
+/** Stop before Apps Script hard limit; next chunk via runSyncContinue */
+var MAX_RUN_MS_ = 25 * 60 * 1000;
 
 function getConfig_() {
   const p = PropertiesService.getScriptProperties();
@@ -36,7 +41,6 @@ function str_(v) {
   return String(v).trim();
 }
 
-/** Columns A–AO (1-based 4, 19, 39, 6) → sync_key */
 function buildSyncKey_(row) {
   const created = str_(row[3]);
   const cat = str_(row[18]);
@@ -107,12 +111,8 @@ function rowToFields_(row) {
   };
 }
 
-function escapeFormulaSingle_(s) {
-  return String(s).replace(/'/g, "''");
-}
-
 function airtableFetch_(cfg, method, query, body) {
-  let url =
+  const url =
     'https://api.airtable.com/v0/' +
     cfg.baseId +
     '/' +
@@ -136,58 +136,60 @@ function airtableFetch_(cfg, method, query, body) {
   throw new Error('Airtable ' + code + ': ' + text);
 }
 
-function findRecordIdBySyncKey_(cfg, syncKey) {
-  const formula =
-    "{sync_key}='" + escapeFormulaSingle_(syncKey) + "'";
-  const q =
-    '?maxRecords=1&filterByFormula=' + encodeURIComponent(formula);
-  const data = airtableFetch_(cfg, 'get', q);
-  const rec = data.records && data.records[0];
-  return rec ? rec.id : '';
+/** One-time load: sync_key → record id (avoids per-row API search) */
+function loadSyncKeyIndex_(cfg) {
+  const index = {};
+  let offset = null;
+  do {
+    let q = '?pageSize=100&fields%5B%5D=sync_key';
+    if (offset) q += '&offset=' + encodeURIComponent(offset);
+    const data = airtableFetch_(cfg, 'get', q);
+    (data.records || []).forEach(function (rec) {
+      const sk = rec.fields && rec.fields.sync_key;
+      if (sk) index[sk] = rec.id;
+    });
+    offset = data.offset;
+    if (offset) Utilities.sleep(220);
+  } while (offset);
+  return index;
 }
 
-function createRecord_(cfg, fields) {
-  const data = airtableFetch_(cfg, 'post', '', {
-    records: [{ fields: fields }],
+function pushAirtableBatch_(cfg, creates, updates, index, stats) {
+  for (let i = 0; i < updates.length; i += AIRTABLE_BATCH_SIZE_) {
+    const slice = updates.slice(i, i + AIRTABLE_BATCH_SIZE_);
+    airtableFetch_(cfg, 'patch', '', { records: slice });
+    stats.updated += slice.length;
+    Utilities.sleep(220);
+  }
+  for (let i = 0; i < creates.length; i += AIRTABLE_BATCH_SIZE_) {
+    const slice = creates.slice(i, i + AIRTABLE_BATCH_SIZE_);
+    const payload = slice.map(function (item) {
+      return { fields: item.fields };
+    });
+    const data = airtableFetch_(cfg, 'post', '', { records: payload });
+    (data.records || []).forEach(function (rec, j) {
+      index[slice[j].syncKey] = rec.id;
+      stats.created++;
+    });
+    Utilities.sleep(220);
+  }
+}
+
+function writeStatusBatch_(sheet, cfg, statusList) {
+  if (!statusList.length) return;
+  const ts = new Date().toISOString();
+  statusList.forEach(function (st) {
+    const row = st.rowNum;
+    if (st.recordId) {
+      sheet.getRange(row, cfg.colRecordId).setValue(st.recordId);
+    }
+    if (st.error) {
+      sheet.getRange(row, cfg.colSyncError).setValue(st.error);
+    } else {
+      sheet.getRange(row, cfg.colLastSynced).setValue(ts);
+      sheet.getRange(row, cfg.colSyncError).setValue('');
+    }
   });
-  return data.records[0].id;
-}
-
-function patchRecord_(cfg, recordId, fields) {
-  airtableFetch_(cfg, 'patch', '', {
-    records: [{ id: recordId, fields: fields }],
-  });
-}
-
-function processRow_(cfg, sheet, rowNum, row, stats) {
-  const syncKey = buildSyncKey_(row);
-  if (!syncKey) {
-    stats.skipped++;
-    sheet.getRange(rowNum, cfg.colSyncError).setValue(
-      'Missing sync key: need Created Date, Cat Name, and Admin User Link or Email'
-    );
-    return;
-  }
-
-  const fields = rowToFields_(row);
-  fields.sync_key = syncKey;
-
-  let recordId = str_(row[cfg.colRecordId - 1]);
-  if (!recordId) {
-    recordId = findRecordIdBySyncKey_(cfg, syncKey);
-  }
-
-  if (recordId) {
-    patchRecord_(cfg, recordId, fields);
-    stats.updated++;
-  } else {
-    recordId = createRecord_(cfg, fields);
-    stats.created++;
-  }
-
-  sheet.getRange(rowNum, cfg.colRecordId).setValue(recordId);
-  sheet.getRange(rowNum, cfg.colLastSynced).setValue(new Date().toISOString());
-  sheet.getRange(rowNum, cfg.colSyncError).setValue('');
 }
 
 function getDataSheet_(cfg) {
@@ -201,65 +203,153 @@ function getDataSheet_(cfg) {
     'Sheet not found: "' +
       cfg.sheetName +
       '". Tabs in this file: ' +
-      names.join(', ') +
-      '. Fix Script property SHEET_NAME to match exactly (or rename the tab).'
+      names.join(', ')
   );
 }
 
-/** Run once to log every tab name — pick one for SHEET_NAME */
 function listSheetNames() {
-  const ss = SpreadsheetApp.getActiveSpreadsheet();
-  ss.getSheets().forEach(function (s, i) {
+  SpreadsheetApp.getActiveSpreadsheet().getSheets().forEach(function (s, i) {
     Logger.log(i + 1 + ': "' + s.getName() + '"');
   });
 }
 
-function runSyncInternal_(maxRows) {
+function scheduleContinue_() {
+  ScriptApp.getProjectTriggers().forEach(function (t) {
+    if (t.getHandlerFunction() === 'runSyncContinue') {
+      ScriptApp.deleteTrigger(t);
+    }
+  });
+  ScriptApp.newTrigger('runSyncContinue')
+    .timeBased()
+    .after(60 * 1000)
+    .create();
+  Logger.log('Scheduled runSyncContinue in ~1 minute');
+}
+
+function runSyncInternal_(maxRows, resetFromStart) {
+  const props = PropertiesService.getScriptProperties();
+  if (resetFromStart) {
+    props.deleteProperty('SYNC_RESUME_ROW');
+  }
+
   const cfg = getConfig_();
   const sheet = getDataSheet_(cfg);
-
   const lastRow = sheet.getLastRow();
   if (lastRow < cfg.firstDataRow) {
     Logger.log('No data rows');
     return;
   }
 
+  let startRow = Number(props.getProperty('SYNC_RESUME_ROW') || cfg.firstDataRow);
+  if (startRow < cfg.firstDataRow) startRow = cfg.firstDataRow;
+
+  const t0 = Date.now();
   const stats = { created: 0, updated: 0, skipped: 0, errors: 0 };
+  const index = loadSyncKeyIndex_(cfg);
   const readWidth = Math.max(cfg.lastDataCol, cfg.colSyncError);
-
-  for (let rowNum = cfg.firstDataRow; rowNum <= lastRow; rowNum++) {
+  let rowNum = startRow;
+  while (rowNum <= lastRow) {
     if (maxRows != null && rowNum - cfg.firstDataRow >= maxRows) break;
+    if (Date.now() - t0 > MAX_RUN_MS_) {
+      props.setProperty('SYNC_RESUME_ROW', String(rowNum));
+      scheduleContinue_();
+      Logger.log(
+        'Time limit — paused at row ' +
+          rowNum +
+          '. Will continue automatically. Stats so far: ' +
+          JSON.stringify(stats)
+      );
+      return;
+    }
 
-    const row = sheet.getRange(rowNum, 1, rowNum, readWidth).getValues()[0];
-    if (!str_(row[3]) && !str_(row[18]) && !str_(row[5])) continue;
+    let chunkEnd = Math.min(rowNum + 199, lastRow);
+    if (maxRows != null) {
+      const maxEnd = cfg.firstDataRow + maxRows - 1;
+      if (chunkEnd > maxEnd) chunkEnd = maxEnd;
+    }
+
+    const rows = sheet.getRange(rowNum, 1, chunkEnd, readWidth).getValues();
+    const creates = [];
+    const updates = [];
+    const statusList = [];
+
+    for (let i = 0; i < rows.length; i++) {
+      const absoluteRow = rowNum + i;
+      const row = rows[i];
+      if (!str_(row[3]) && !str_(row[18]) && !str_(row[5])) continue;
+
+      const syncKey = buildSyncKey_(row);
+      if (!syncKey) {
+        stats.skipped++;
+        statusList.push({
+          rowNum: absoluteRow,
+          recordId: '',
+          error:
+            'Missing sync key: need Created Date, Cat Name, and Admin User Link or Email',
+        });
+        continue;
+      }
+
+      const fields = rowToFields_(row);
+      fields.sync_key = syncKey;
+
+      const recordId = str_(row[cfg.colRecordId - 1]) || index[syncKey] || '';
+
+      if (recordId) {
+        updates.push({ id: recordId, fields: fields });
+        statusList.push({ rowNum: absoluteRow, recordId: recordId, error: '' });
+      } else {
+        creates.push({ syncKey: syncKey, fields: fields });
+        statusList.push({
+          rowNum: absoluteRow,
+          recordId: '',
+          error: '',
+          syncKey: syncKey,
+        });
+      }
+    }
 
     try {
-      processRow_(cfg, sheet, rowNum, row, stats);
+      pushAirtableBatch_(cfg, creates, updates, index, stats);
+      statusList.forEach(function (st) {
+        if (!st.error && !st.recordId && st.syncKey && index[st.syncKey]) {
+          st.recordId = index[st.syncKey];
+        }
+      });
+      writeStatusBatch_(sheet, cfg, statusList);
     } catch (e) {
       stats.errors++;
-      sheet.getRange(rowNum, cfg.colSyncError).setValue(String(e.message || e));
+      Logger.log('Chunk error at row ' + rowNum + ': ' + e);
+      throw e;
     }
-    Utilities.sleep(220);
+
+    rowNum = chunkEnd + 1;
   }
 
-  Logger.log(JSON.stringify(stats));
+  props.deleteProperty('SYNC_RESUME_ROW');
+  Logger.log('Sync complete: ' + JSON.stringify(stats));
 }
 
-/** Test with first 5 data rows */
-function runSyncMaxRows(n) {
-  runSyncInternal_(n || 5);
-}
-
-/** Full sync — every data row from row 2 to the last row (all dates/history in the sheet) */
+/** Full sync from row 2 (resets any paused job) */
 function runSync() {
-  runSyncInternal_(null);
+  runSyncInternal_(null, true);
 }
 
-/**
- * Run once to schedule runSync every day in the morning.
- * Timezone = Apps Script project timezone (Project Settings → Google Cloud Platform).
- * Re-running replaces any existing runSync time triggers.
- */
+/** Resume after timeout — also runs automatically via trigger */
+function runSyncContinue() {
+  runSyncInternal_(null, false);
+}
+
+/** Clear pause pointer to start from row 2 next time */
+function runSyncResetProgress() {
+  PropertiesService.getScriptProperties().deleteProperty('SYNC_RESUME_ROW');
+  Logger.log('SYNC_RESUME_ROW cleared');
+}
+
+function runSyncMaxRows(n) {
+  runSyncInternal_(n || 5, true);
+}
+
 function setupDailyMorningTrigger() {
   const hour = Number(
     PropertiesService.getScriptProperties().getProperty('SYNC_HOUR') || '7'
@@ -269,7 +359,8 @@ function setupDailyMorningTrigger() {
   }
 
   ScriptApp.getProjectTriggers().forEach(function (t) {
-    if (t.getHandlerFunction() === 'runSync') {
+    const fn = t.getHandlerFunction();
+    if (fn === 'runSync' || fn === 'runSyncContinue') {
       ScriptApp.deleteTrigger(t);
     }
   });
@@ -280,18 +371,11 @@ function setupDailyMorningTrigger() {
     .atHour(hour)
     .create();
 
-  Logger.log(
-    'Daily trigger set: runSync every day around ' +
-      hour +
-      ':00 (script timezone). First run tomorrow unless you run runSync manually now.'
-  );
+  Logger.log('Daily trigger: runSync at hour ' + hour);
 }
 
-/** Lists scheduled triggers (Executions / Logs after run) */
 function listSyncTriggers() {
   ScriptApp.getProjectTriggers().forEach(function (t) {
-    if (t.getHandlerFunction() === 'runSync') {
-      Logger.log('runSync trigger id=' + t.getUniqueId());
-    }
+    Logger.log(t.getHandlerFunction() + ' id=' + t.getUniqueId());
   });
 }
