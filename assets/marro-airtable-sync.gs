@@ -13,7 +13,7 @@ function getConfig_() {
     pat: p.getProperty('AIRTABLE_PAT'),
     baseId: p.getProperty('AIRTABLE_BASE_ID'),
     tableId: p.getProperty('AIRTABLE_TABLE_ID'),
-    sheetName: p.getProperty('SHEET_NAME'),
+    sheetName: (p.getProperty('SHEET_NAME') || '').trim(),
     firstDataRow: Number(p.getProperty('FIRST_DATA_ROW') || '2'),
     colRecordId: Number(p.getProperty('COL_RECORD_ID') || '42'),
     colLastSynced: Number(p.getProperty('COL_LAST_SYNCED') || '44'),
@@ -188,10 +188,33 @@ function processRow_(cfg, sheet, rowNum, row, stats) {
   sheet.getRange(rowNum, cfg.colSyncError).setValue('');
 }
 
+function getDataSheet_(cfg) {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const sheet = ss.getSheetByName(cfg.sheetName);
+  if (sheet) return sheet;
+  const names = ss.getSheets().map(function (s) {
+    return '"' + s.getName() + '"';
+  });
+  throw new Error(
+    'Sheet not found: "' +
+      cfg.sheetName +
+      '". Tabs in this file: ' +
+      names.join(', ') +
+      '. Fix Script property SHEET_NAME to match exactly (or rename the tab).'
+  );
+}
+
+/** Run once to log every tab name — pick one for SHEET_NAME */
+function listSheetNames() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  ss.getSheets().forEach(function (s, i) {
+    Logger.log(i + 1 + ': "' + s.getName() + '"');
+  });
+}
+
 function runSyncInternal_(maxRows) {
   const cfg = getConfig_();
-  const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(cfg.sheetName);
-  if (!sheet) throw new Error('Sheet not found: ' + cfg.sheetName);
+  const sheet = getDataSheet_(cfg);
 
   const lastRow = sheet.getLastRow();
   if (lastRow < cfg.firstDataRow) {
