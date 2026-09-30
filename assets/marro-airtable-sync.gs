@@ -4,7 +4,9 @@
  * Script properties: AIRTABLE_PAT, AIRTABLE_BASE_ID, AIRTABLE_TABLE_ID, SHEET_NAME,
  *   HEADER_ROW, FIRST_DATA_ROW, COL_RECORD_ID (42), COL_LAST_SYNCED (44), COL_SYNC_ERROR (45)
  *
- * Run: runSyncMaxRows(5) first, then runSync()
+ * Run: runSyncMaxRows(5) first, then runSync() for all rows.
+ * Schedule: run setupDailyMorningTrigger() once (default 7:00, script timezone).
+ * Optional property: SYNC_HOUR (0–23, e.g. 7 for 7am).
  */
 
 function getConfig_() {
@@ -248,7 +250,48 @@ function runSyncMaxRows(n) {
   runSyncInternal_(n || 5);
 }
 
-/** Full sync */
+/** Full sync — every data row from row 2 to the last row (all dates/history in the sheet) */
 function runSync() {
   runSyncInternal_(null);
+}
+
+/**
+ * Run once to schedule runSync every day in the morning.
+ * Timezone = Apps Script project timezone (Project Settings → Google Cloud Platform).
+ * Re-running replaces any existing runSync time triggers.
+ */
+function setupDailyMorningTrigger() {
+  const hour = Number(
+    PropertiesService.getScriptProperties().getProperty('SYNC_HOUR') || '7'
+  );
+  if (isNaN(hour) || hour < 0 || hour > 23) {
+    throw new Error('SYNC_HOUR must be 0–23');
+  }
+
+  ScriptApp.getProjectTriggers().forEach(function (t) {
+    if (t.getHandlerFunction() === 'runSync') {
+      ScriptApp.deleteTrigger(t);
+    }
+  });
+
+  ScriptApp.newTrigger('runSync')
+    .timeBased()
+    .everyDays(1)
+    .atHour(hour)
+    .create();
+
+  Logger.log(
+    'Daily trigger set: runSync every day around ' +
+      hour +
+      ':00 (script timezone). First run tomorrow unless you run runSync manually now.'
+  );
+}
+
+/** Lists scheduled triggers (Executions / Logs after run) */
+function listSyncTriggers() {
+  ScriptApp.getProjectTriggers().forEach(function (t) {
+    if (t.getHandlerFunction() === 'runSync') {
+      Logger.log('runSync trigger id=' + t.getUniqueId());
+    }
+  });
 }
