@@ -1,0 +1,44 @@
+Sheet tab,Sheet column letter,Sheet column #,Sheet column name,Airtable base ID,Airtable table ID,Airtable table name,Airtable field name,Sync,Transform / type notes
+Marro Data,A,1,Box 1 Week,appobJQOD7gBH0JE1,tblG1YHO2Svo8S7MZ,Table 1,Box 1 Week,yes,Send as text (week label). Do not convert to date unless format is consistent.
+Marro Data,B,2,Created Week,appobJQOD7gBH0JE1,tblG1YHO2Svo8S7MZ,Table 1,Created Week,yes,Send as text (week label).
+Marro Data,C,3,Sales Rep,appobJQOD7gBH0JE1,tblG1YHO2Svo8S7MZ,Table 1,Sales Rep,yes,Text. Trim whitespace; optional normalise rep aliases in script later.
+Marro Data,D,4,Created Date,appobJQOD7gBH0JE1,tblG1YHO2Svo8S7MZ,Table 1,Created Date,yes,"Text in Airtable today. Prefer ISO YYYY-MM-DD from sheet if values are real dates."
+Marro Data,E,5,Customer Name,appobJQOD7gBH0JE1,tblG1YHO2Svo8S7MZ,Table 1,Customer Name,yes,Text.
+Marro Data,F,6,Email,appobJQOD7gBH0JE1,tblG1YHO2Svo8S7MZ,Table 1,Email,yes,Lowercase trim for matching only; store display value as in sheet.
+Marro Data,G,7,Phone,appobJQOD7gBH0JE1,tblG1YHO2Svo8S7MZ,Table 1,Phone,yes,Text (keep leading zero / country code as stored).
+Marro Data,H,8,Box 1 Date,appobJQOD7gBH0JE1,tblG1YHO2Svo8S7MZ,Table 1,Box 1 Date,yes,Text or ISO date string.
+Marro Data,I,9,Box 2 Date,appobJQOD7gBH0JE1,tblG1YHO2Svo8S7MZ,Table 1,Box 2 Date,yes,Text or ISO date string.
+Marro Data,J,10,Retained,appobJQOD7gBH0JE1,tblG1YHO2Svo8S7MZ,Table 1,Retained,yes,"Often Yes/No or 0/1; keep as text unless you standardise."
+Marro Data,K,11,Days to Box 2,appobJQOD7gBH0JE1,tblG1YHO2Svo8S7MZ,Table 1,Days to Box 2,yes,Integer as text (Airtable field is single line text).
+Marro Data,L,12,Buyers Remorse,appobJQOD7gBH0JE1,tblG1YHO2Svo8S7MZ,Table 1,Buyers Remorse,yes,Text / flag.
+Marro Data,M,13,Pause Date,appobJQOD7gBH0JE1,tblG1YHO2Svo8S7MZ,Table 1,Pause Date,yes,Text or ISO date string.
+Marro Data,N,14,Sale To Pause,appobJQOD7gBH0JE1,tblG1YHO2Svo8S7MZ,Table 1,Sale To Pause,yes,Text (metric). Note capital T in To.
+Marro Data,O,15,Box 1 to Pause,appobJQOD7gBH0JE1,tblG1YHO2Svo8S7MZ,Table 1,Box 1 to Pause,yes,Text (metric). First Box-1-to-pause column — not the v1 duplicate in AF.
+Marro Data,P,16,Reason,appobJQOD7gBH0JE1,tblG1YHO2Svo8S7MZ,Table 1,Reason,yes,Text.
+Marro Data,Q,17,Pause Reason,appobJQOD7gBH0JE1,tblG1YHO2Svo8S7MZ,Table 1,Pause Reason,yes,Text.
+Marro Data,R,18,Sub Reason,appobJQOD7gBH0JE1,tblG1YHO2Svo8S7MZ,Table 1,Sub Reason,yes,Text.
+Marro Data,S,19,Cat Name,appobJQOD7gBH0JE1,tblG1YHO2Svo8S7MZ,Table 1,Cat Name,yes,Text. Part of sync key (see README).
+Marro Data,T,20,Cat Breed,appobJQOD7gBH0JE1,tblG1YHO2Svo8S7MZ,Table 1,Cat Breed,yes,Text.
+Marro Data,U,21,Cat Weight,appobJQOD7gBH0JE1,tblG1YHO2Svo8S7MZ,Table 1,Cat Weight,yes,Text.
+Marro Data,V,22,Cat Age,appobJQOD7gBH0JE1,tblG1YHO2Svo8S7MZ,Table 1,Cat Age,yes,Text.
+Marro Data,W,23,Body Type,appobJQOD7gBH0JE1,tblG1YHO2Svo8S7MZ,Table 1,Body Type,yes,Text.
+Marro Data,X,24,Eater Type,appobJQOD7gBH0JE1,tblG1YHO2Svo8S7MZ,Table 1,Eater Type,yes,Text.
+Marro Data,Y,25,Activity Level,appobJQOD7gBH0JE1,tblG1YHO2Svo8S7MZ,Table 1,Activity Level,yes,Text.
+Marro Data,Z,26,Health Issue,appobJQOD7gBH0JE1,tblG1YHO2Svo8S7MZ,Table 1,Health Issue,yes,Text.
+Marro Data,AA,27,Postcode,appobJQOD7gBH0JE1,tblG1YHO2Svo8S7MZ,Table 1,Postcode,yes,Full postcode string as in sheet.
+Marro Data,AA,27,Postcode,appobJQOD7gBH0JE1,tblG1YHO2Svo8S7MZ,Table 1,Postcode part 1,yes,"Derived in script: outward code (e.g. SW1A from ""SW1A 1AA"")."
+Marro Data,AA,27,Postcode,appobJQOD7gBH0JE1,tblG1YHO2Svo8S7MZ,Table 1,Postcode part 2,yes,"Derived in script: inward code (e.g. 1AA from ""SW1A 1AA"")."
+Marro Data,AB,28,County,appobJQOD7gBH0JE1,tblG1YHO2Svo8S7MZ,Table 1,County,yes,Text.
+Marro Data,AC,29,PASSED,appobJQOD7gBH0JE1,tblG1YHO2Svo8S7MZ,Table 1,PASSED,yes,Text / flag.
+Marro Data,AD,30,Days to Box 1,appobJQOD7gBH0JE1,tblG1YHO2Svo8S7MZ,Table 1,Days to Box 1,yes,Integer as text.
+Marro Data,AE,31,Box 1- 2,appobJQOD7gBH0JE1,tblG1YHO2Svo8S7MZ,Table 1,Box 1- 2,yes,"Exact Airtable name includes hyphen and space: ""Box 1- 2""."
+Marro Data,AF,32,Box 1 to Pause,appobJQOD7gBH0JE1,tblG1YHO2Svo8S7MZ,Table 1,Box 1 to Pause (v1),yes,"Duplicate header in sheet (2nd ""Box 1 to Pause""). Map by column AF only — do not use header name alone in code."
+Marro Data,AG,33,Sale to Pause,appobJQOD7gBH0JE1,tblG1YHO2Svo8S7MZ,Table 1,Sale to Pause (v1),yes,"Different spelling from column N: lowercase ""to"". Maps to Sale to Pause (v1)."
+Marro Data,AH,34,BOX 1 TO PAUSE,appobJQOD7gBH0JE1,tblG1YHO2Svo8S7MZ,Table 1,BOX 1 TO PAUSE (v2),yes,Uppercase sheet header maps to v2 Airtable field.
+Marro Data,AI,35,Buyers Remorse (This ONe),appobJQOD7gBH0JE1,tblG1YHO2Svo8S7MZ,Table 1,Buyers Remorse (This ONe),yes,Exact spelling including ONe.
+Marro Data,AJ,36,Pouch Size In Grams,appobJQOD7gBH0JE1,tblG1YHO2Svo8S7MZ,Table 1,Pouch Size In Grams,yes,Text/number as text.
+Marro Data,AK,37,Admin User Link,appobJQOD7gBH0JE1,tblG1YHO2Svo8S7MZ,Table 1,Admin User Link,yes,"URL text. Extract /users/{id} for sync key (primary subscription id)."
+Marro Data,AL,38,Trial Box Duration In Days,appobJQOD7gBH0JE1,tblG1YHO2Svo8S7MZ,Table 1,Trial Box Duration In Days,yes,Integer as text.
+Marro Data,AM,39,Count Animals,appobJQOD7gBH0JE1,tblG1YHO2Svo8S7MZ,Table 1,Count Animals,yes,Integer as text.
+Marro Data,AN,40,airtable_record_id,appobJQOD7gBH0JE1,tblG1YHO2Svo8S7MZ,Table 1,,no,"Add this column to the sheet (empty at first). Script writes Airtable rec… id after create; used for PATCH updates. Not an Airtable field."
+Marro Data,AO,41,sync_key,appobJQOD7gBH0JE1,tblG1YHO2Svo8S7MZ,Table 1,,no,"Optional formula column: user_id|cat_name|created_date — used for upsert matching. Not an Airtable field."
